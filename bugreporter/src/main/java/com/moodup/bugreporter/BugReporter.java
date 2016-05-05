@@ -1,16 +1,14 @@
 package com.moodup.bugreporter;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.net.UrlQuerySanitizer;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 public class BugReporter {
 
@@ -19,7 +17,6 @@ public class BugReporter {
     private Activity activity;
     private ApiClient apiClient;
     private View reportButton;
-
 
     private String clientId;
     private String accessToken;
@@ -83,7 +80,10 @@ public class BugReporter {
         reportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo open report view
+                FragmentTransaction transaction = ((AppCompatActivity)activity).getSupportFragmentManager().beginTransaction();
+                transaction.add(android.R.id.content, new ReporterFragment(), ReporterFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
     }

@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 
 public class ReporterFragment extends Fragment {
 
+    public static final String TAG = ReporterFragment.class.getSimpleName();
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
