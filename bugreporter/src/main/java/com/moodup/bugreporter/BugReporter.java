@@ -10,12 +10,13 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 
+import butterknife.ButterKnife;
+
 public class BugReporter {
 
     private static BugReporter instance;
 
     private Activity activity;
-    private ApiClient apiClient;
     private View reportButton;
 
     private String clientId;
@@ -33,7 +34,6 @@ public class BugReporter {
     }
 
     public void init(String clientId) {
-        this.apiClient = new ApiClient();
         this.clientId = clientId;
     }
 
@@ -44,12 +44,13 @@ public class BugReporter {
     }
 
     private void authenticate() {
-        if (Utils.getString(activity, "access_token", "").isEmpty()) {
+        if (Utils.getString(activity, "accessToken", "").isEmpty()) {
             final WebView webView = new WebView(activity);
             webView.getSettings().setJavaScriptEnabled(true);
             webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 
-            final FrameLayout rootLayout = (FrameLayout) activity.findViewById(android.R.id.content);
+
+            final FrameLayout rootLayout = ButterKnife.findById(activity, android.R.id.content);
             rootLayout.addView(webView);
 
             webView.setWebViewClient(new WebViewClient() {
@@ -58,7 +59,7 @@ public class BugReporter {
                 public boolean shouldOverrideUrlLoading(WebView view, String url) {
                     if (url.contains("yolo.neze")) {
                         accessToken = Utils.getQueryMap(url).get("access_token");
-                        Utils.putString(activity, "access_token", accessToken);
+                        Utils.putString(activity, "accessToken", accessToken);
                         rootLayout.removeView(webView);
                         return true;
                     }
@@ -72,7 +73,7 @@ public class BugReporter {
     }
 
     private void addReportButton() {
-        FrameLayout rootLayout = (FrameLayout) activity.findViewById(android.R.id.content);
+        FrameLayout rootLayout = ButterKnife.findById(activity, android.R.id.content);
 
         reportButton = LayoutInflater.from(activity).inflate(R.layout.report_button_layout, rootLayout, false);
         rootLayout.addView(reportButton);
@@ -80,8 +81,8 @@ public class BugReporter {
         reportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction transaction = ((AppCompatActivity)activity).getSupportFragmentManager().beginTransaction();
-                transaction.add(android.R.id.content, new ReporterFragment(), ReporterFragment.TAG);
+                FragmentTransaction transaction = ((AppCompatActivity) activity).getSupportFragmentManager().beginTransaction();
+                transaction.add(android.R.id.content, ReporterFragment.newInstance(accessToken), ReporterFragment.TAG);
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
@@ -94,7 +95,7 @@ public class BugReporter {
     }
 
     private void removeReportButton() {
-        ((ViewGroup) activity.findViewById(android.R.id.content)).removeView(reportButton);
+        ((ViewGroup) ButterKnife.findById(activity, android.R.id.content)).removeView(reportButton);
     }
 
 }
