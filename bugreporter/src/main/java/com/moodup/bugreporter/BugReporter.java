@@ -11,7 +11,8 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 
 import com.moodup.bugreporter.utils.Utils;
-import com.moodup.bugreporter.views.ReporterFragment;
+import com.moodup.bugreporter.views.DrawFragment;
+import com.moodup.bugreporter.views.ReportFragment;
 
 import butterknife.ButterKnife;
 
@@ -84,10 +85,7 @@ public class BugReporter {
         reportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction transaction = ((AppCompatActivity) activity).getSupportFragmentManager().beginTransaction();
-                transaction.add(android.R.id.content, ReporterFragment.newInstance(accessToken), ReporterFragment.TAG);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                showDrawFragment();
             }
         });
     }
@@ -99,6 +97,20 @@ public class BugReporter {
 
     private void removeReportButton() {
         ((ViewGroup) ButterKnife.findById(activity, android.R.id.content)).removeView(reportButton);
+    }
+
+    private void showReportFragment() {
+        FragmentTransaction transaction = ((AppCompatActivity) activity).getSupportFragmentManager().beginTransaction();
+        transaction.add(android.R.id.content, ReportFragment.newInstance(accessToken), ReportFragment.TAG);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    private void showDrawFragment() {
+        FragmentTransaction transaction = ((AppCompatActivity) activity).getSupportFragmentManager().beginTransaction();
+        transaction.add(android.R.id.content, new DrawFragment(), DrawFragment.TAG);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
 }

@@ -14,17 +14,17 @@ import com.moodup.bugreporter.R;
 
 import butterknife.ButterKnife;
 
-public class ReporterFragment extends Fragment {
+public class ReportFragment extends Fragment {
 
-    public static final String TAG = ReporterFragment.class.getSimpleName();
+    public static final String TAG = ReportFragment.class.getSimpleName();
 
     private EditText title;
     private EditText content;
     private Button send;
     private ImageButton close;
 
-    public static ReporterFragment newInstance(String accessToken) {
-        ReporterFragment fragment = new ReporterFragment();
+    public static ReportFragment newInstance(String accessToken) {
+        ReportFragment fragment = new ReportFragment();
 
         Bundle bundle = new Bundle();
         bundle.putString("accessToken", accessToken);
@@ -46,7 +46,7 @@ public class ReporterFragment extends Fragment {
         title = ButterKnife.findById(view, R.id.bug_title);
         content = ButterKnife.findById(view, R.id.bug_content);
         close = ButterKnife.findById(view, R.id.bug_close);
-        send = ButterKnife.findById(view, R.id.send_button);
+        send = ButterKnife.findById(view, R.id.bug_send_button);
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
