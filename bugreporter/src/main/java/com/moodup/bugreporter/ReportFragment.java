@@ -18,10 +18,7 @@ public class ReportFragment extends Fragment {
 
     protected static final String TAG = ReportFragment.class.getSimpleName();
 
-    private EditText title;
-    private EditText content;
-    private Button send;
-    private ImageButton close;
+    private ApiClient apiClient;
 
     protected static ReportFragment newInstance(String accessToken, ArrayList<String> urls) {
         ReportFragment fragment = new ReportFragment();
@@ -38,6 +35,11 @@ public class ReportFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        apiClient = new ApiClient(
+                BugReporter.getInstance().getRepoSlug(),
+                BugReporter.getInstance().getAccountName(),
+                getArguments().getString("accessToken", "")
+        );
         return initViews(inflater, container);
     }
 
@@ -50,15 +52,19 @@ public class ReportFragment extends Fragment {
     private View initViews(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.fragment_reporter, container, false);
 
-        title = ButterKnife.findById(view, R.id.bug_title);
-        content = ButterKnife.findById(view, R.id.bug_content);
-        close = ButterKnife.findById(view, R.id.bug_close);
-        send = ButterKnife.findById(view, R.id.bug_send_button);
+        final EditText title = ButterKnife.findById(view, R.id.bug_title);
+        final EditText content = ButterKnife.findById(view, R.id.bug_content);
+
+        ImageButton close = ButterKnife.findById(view, R.id.bug_close);
+        Button send = ButterKnife.findById(view, R.id.bug_send_button);
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo send the bug report to bitbucket
+                apiClient.addIssue(
+                        title.getText().toString(),
+                        content.getText().toString()
+                );
             }
         });
 
@@ -71,4 +77,6 @@ public class ReportFragment extends Fragment {
 
         return view;
     }
+
+
 }

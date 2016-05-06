@@ -18,9 +18,10 @@ public class BugReporter {
 
     private Activity activity;
     private View reportButton;
-    private ApiClient apiClient;
 
     private String clientId;
+    private String repoSlug;
+    private String accountName;
     private String accessToken;
 
     public static BugReporter getInstance() {
@@ -34,9 +35,10 @@ public class BugReporter {
     private BugReporter() {
     }
 
-    public void init(String clientId) {
+    public void init(String clientId, String repoSlug, String accountName) {
         this.clientId = clientId;
-        this.apiClient = new ApiClient();
+        this.repoSlug = repoSlug;
+        this.accountName = accountName;
     }
 
     public void attach(Activity activity) {
@@ -50,7 +52,6 @@ public class BugReporter {
             final WebView webView = new WebView(activity);
             webView.getSettings().setJavaScriptEnabled(true);
             webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-
 
             final FrameLayout rootLayout = ButterKnife.findById(activity, android.R.id.content);
             rootLayout.addView(webView);
@@ -102,5 +103,13 @@ public class BugReporter {
         transaction.add(android.R.id.content, new DrawFragment(), DrawFragment.TAG);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    protected String getRepoSlug() {
+        return repoSlug;
+    }
+
+    protected String getAccountName() {
+        return accountName;
     }
 }

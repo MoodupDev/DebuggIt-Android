@@ -9,6 +9,6 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        BugReporter.getInstance().init("C9PnuH4fPyvUDjFwMz");
+        BugReporter.getInstance().init("C9PnuH4fPyvUDjFwMz", "bugreporter", "moodup");
     }
 }
