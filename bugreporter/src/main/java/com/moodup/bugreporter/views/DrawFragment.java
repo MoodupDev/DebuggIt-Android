@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.moodup.bugreporter.BugReporter;
 import com.moodup.bugreporter.R;
 
 import butterknife.ButterKnife;
@@ -56,7 +57,8 @@ public class DrawFragment extends Fragment {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                getActivity().getSupportFragmentManager().popBackStackImmediate();
+                BugReporter.getInstance().showReportFragment();
             }
         });
 

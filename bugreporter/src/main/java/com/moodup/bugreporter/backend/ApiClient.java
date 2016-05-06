@@ -21,15 +21,4 @@ public class ApiClient {
     public void addIssue() {
 
     }
-
-    /*
-     * throws null when input stream is null
-     */
-    public String uploadPic(InputStream inputStream) {
-        if (inputStream == null) {
-            throw new IllegalArgumentException("InputStream can't be null!");
-        }
-
-        return "";
-    }
 }

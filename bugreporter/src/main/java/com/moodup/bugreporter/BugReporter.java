@@ -10,9 +10,13 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 
+import com.cloudinary.Cloudinary;
+import com.moodup.bugreporter.backend.ApiClient;
 import com.moodup.bugreporter.utils.Utils;
 import com.moodup.bugreporter.views.DrawFragment;
 import com.moodup.bugreporter.views.ReportFragment;
+
+import java.util.HashMap;
 
 import butterknife.ButterKnife;
 
@@ -22,6 +26,8 @@ public class BugReporter {
 
     private Activity activity;
     private View reportButton;
+    private ApiClient apiClient;
+    private Cloudinary cloudinary;
 
     private String clientId;
     private String accessToken;
@@ -39,6 +45,18 @@ public class BugReporter {
 
     public void init(String clientId) {
         this.clientId = clientId;
+        this.apiClient = new ApiClient();
+        this.cloudinary = new Cloudinary(getCloudinaryConfig());
+    }
+
+    private HashMap<String, String> getCloudinaryConfig() {
+        HashMap<String, String> config = new HashMap<>();
+
+        config.put("cloud_name", "db9nesbif");
+        config.put("api_key", "235172213685627");
+        config.put("api_secret", "HyLIsCmPHA2MVuetbmV_t_YZa2M");
+
+        return config;
     }
 
     public void attach(Activity activity) {
@@ -99,18 +117,17 @@ public class BugReporter {
         ((ViewGroup) ButterKnife.findById(activity, android.R.id.content)).removeView(reportButton);
     }
 
-    private void showReportFragment() {
+    public void showReportFragment() {
         FragmentTransaction transaction = ((AppCompatActivity) activity).getSupportFragmentManager().beginTransaction();
         transaction.add(android.R.id.content, ReportFragment.newInstance(accessToken), ReportFragment.TAG);
         transaction.addToBackStack(null);
         transaction.commit();
     }
 
-    private void showDrawFragment() {
+    public void showDrawFragment() {
         FragmentTransaction transaction = ((AppCompatActivity) activity).getSupportFragmentManager().beginTransaction();
         transaction.add(android.R.id.content, new DrawFragment(), DrawFragment.TAG);
         transaction.addToBackStack(null);
         transaction.commit();
     }
-
 }
