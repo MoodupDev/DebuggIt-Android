@@ -64,6 +64,8 @@ public class ReportFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 final ProgressDialog dialog = new ProgressDialog(getActivity());
+                dialog.setTitle("Wait!");
+                dialog.setMessage("you fool");
 
                 dialog.show();
                 apiClient.addIssue(

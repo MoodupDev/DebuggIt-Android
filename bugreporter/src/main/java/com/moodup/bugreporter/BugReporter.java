@@ -60,7 +60,7 @@ public class BugReporter {
 
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                    if (url.contains("yolo.neze")) {
+                    if (url.contains(BitBucket.CALLBACK_URL)) {
                         accessToken = Utils.getQueryMap(url).get("access_token");
                         Utils.putString(activity, "accessToken", accessToken);
                         rootLayout.removeView(webView);
@@ -71,7 +71,7 @@ public class BugReporter {
                 }
             });
 
-            webView.loadUrl("https://bitbucket.org/site/oauth2/authorize?client_id=" + clientId + "&response_type=token");
+            webView.loadUrl(String.format(BitBucket.OAUTH_URL, clientId));
         }
     }
 

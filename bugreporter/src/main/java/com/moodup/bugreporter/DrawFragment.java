@@ -63,6 +63,8 @@ public class DrawFragment extends Fragment {
         confirm = ButterKnife.findById(view, R.id.draw_confirm);
 
         dialog = new ProgressDialog(getActivity());
+        dialog.setTitle("Wait!");
+        dialog.setMessage("you fool");
 
         initCloudinary();
         initDrawingSurface();
@@ -95,7 +97,6 @@ public class DrawFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 dialog.show();
-                ProgressDialog.show(getActivity(), "Wait!", "You fool...");
                 uploadScreenshotAndGetUrl();
             }
         });
