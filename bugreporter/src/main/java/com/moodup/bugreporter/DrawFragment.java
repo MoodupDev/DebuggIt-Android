@@ -1,4 +1,4 @@
-package com.moodup.bugreporter.views;
+package com.moodup.bugreporter;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -14,8 +14,6 @@ import android.widget.ImageView;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.moodup.bugreporter.R;
-import com.moodup.bugreporter.utils.Utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -30,7 +28,7 @@ import butterknife.ButterKnife;
 
 public class DrawFragment extends Fragment {
 
-    public static final String TAG = DrawFragment.class.getSimpleName();
+    protected static final String TAG = DrawFragment.class.getSimpleName();
 
     private Cloudinary cloudinary;
 
@@ -83,7 +81,7 @@ public class DrawFragment extends Fragment {
 
     private void initDrawingSurface() {
         View rootView = getActivity().findViewById(android.R.id.content);
-        surface.setImageBitmap(Bitmap.createBitmap(Utils.getBitmapFromView(rootView)));
+        surface.setImageBitmap(Utils.getBitmapFromView(rootView));
     }
 
     private void initButtons() {
@@ -135,13 +133,12 @@ public class DrawFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<String> s) {
-            super.onPostExecute(s);
-            getActivity().getSupportFragmentManager().popBackStackImmediate();
-
             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
             transaction.add(android.R.id.content, ReportFragment.newInstance(Utils.getString(getActivity(), "accessToken", ""), new ArrayList<>(s)), ReportFragment.TAG);
             transaction.addToBackStack(null);
             transaction.commit();
+
+            super.onPostExecute(s);
         }
     }
 }

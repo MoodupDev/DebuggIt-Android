@@ -1,4 +1,4 @@
-package com.moodup.bugreporter.views;
+package com.moodup.bugreporter;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,22 +10,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import com.moodup.bugreporter.R;
-
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 
 public class ReportFragment extends Fragment {
 
-    public static final String TAG = ReportFragment.class.getSimpleName();
+    protected static final String TAG = ReportFragment.class.getSimpleName();
 
     private EditText title;
     private EditText content;
     private Button send;
     private ImageButton close;
 
-    public static ReportFragment newInstance(String accessToken, ArrayList<String> urls) {
+    protected static ReportFragment newInstance(String accessToken, ArrayList<String> urls) {
         ReportFragment fragment = new ReportFragment();
 
         Bundle bundle = new Bundle();

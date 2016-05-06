@@ -1,4 +1,4 @@
-package com.moodup.bugreporter.utils;
+package com.moodup.bugreporter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class Utils {
 
-    public static Map<String, String> getQueryMap(String query) {
+    protected static Map<String, String> getQueryMap(String query) {
         String[] params = query.split("#")[1].split("&");
         Map<String, String> map = new HashMap<String, String>();
         for (String param : params) {
@@ -21,7 +21,7 @@ public class Utils {
         return map;
     }
 
-    public static void putString(Context context, String key, String value) {
+    protected static void putString(Context context, String key, String value) {
         SharedPreferences prefs = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
@@ -29,14 +29,14 @@ public class Utils {
         editor.commit();
     }
 
-    public static String getString(Context context, String key, String defValue) {
+    protected static String getString(Context context, String key, String defValue) {
         return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE).getString(key, defValue);
     }
 
-    public static Bitmap getBitmapFromView(View view) {
+    protected static Bitmap getBitmapFromView(View view) {
         view.setDrawingCacheEnabled(true);
 
-        Bitmap bmp = view.getDrawingCache();
+        Bitmap bmp = Bitmap.createBitmap(view.getDrawingCache());
 
         view.setDrawingCacheEnabled(false);
         view.destroyDrawingCache();

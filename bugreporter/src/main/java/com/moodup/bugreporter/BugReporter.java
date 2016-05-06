@@ -10,14 +10,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 
-import com.cloudinary.Cloudinary;
-import com.moodup.bugreporter.backend.ApiClient;
-import com.moodup.bugreporter.utils.Utils;
-import com.moodup.bugreporter.views.DrawFragment;
-import com.moodup.bugreporter.views.ReportFragment;
-
-import java.util.HashMap;
-
 import butterknife.ButterKnife;
 
 public class BugReporter {
