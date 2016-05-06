@@ -63,7 +63,7 @@ public class ReportFragment extends Fragment {
             public void onClick(View v) {
                 apiClient.addIssue(
                         title.getText().toString(),
-                        content.getText().toString()
+                        content.getText().toString() + getUrlAsStrings()
                 );
             }
         });
@@ -78,5 +78,23 @@ public class ReportFragment extends Fragment {
         return view;
     }
 
+
+    private String getUrlAsStrings() {
+        String screens = "";
+        ArrayList<String> urls = getArguments().getStringArrayList("urls");
+
+        if (urls != null) {
+            StringBuilder builder = new StringBuilder();
+            for (String s : urls) {
+                builder.append("![Alt text](");
+                builder.append(s);
+                builder.append(")");
+            }
+
+            screens = builder.toString();
+        }
+
+        return screens;
+    }
 
 }
