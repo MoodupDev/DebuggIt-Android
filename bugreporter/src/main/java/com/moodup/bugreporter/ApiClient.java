@@ -1,7 +1,6 @@
 package com.moodup.bugreporter;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.BufferedWriter;
 import java.io.InputStream;
