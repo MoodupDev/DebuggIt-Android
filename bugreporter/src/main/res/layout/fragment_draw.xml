@@ -6,9 +6,16 @@
     android:background="@android:color/darker_gray">
 
     <ImageView
+        android:id="@+id/image_surface"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/draw_buttons_container" />
+
+    <com.moodup.bugreporter.PaintableImageView
         android:id="@+id/draw_surface"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/transparent"
         android:layout_above="@+id/draw_buttons_container" />
 
     <LinearLayout

@@ -33,7 +33,8 @@ public class DrawFragment extends Fragment {
 
     private Cloudinary cloudinary;
 
-    private ImageView surface;
+    private ImageView screenSurface;
+    private PaintableImageView drawingSurface;
     private Button cancel;
     private Button confirm;
 
@@ -58,7 +59,8 @@ public class DrawFragment extends Fragment {
     private View initViews(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.fragment_draw, container, false);
 
-        surface = ButterKnife.findById(view, R.id.draw_surface);
+        screenSurface = ButterKnife.findById(view, R.id.image_surface);
+        drawingSurface = ButterKnife.findById(view, R.id.draw_surface);
         cancel = ButterKnife.findById(view, R.id.draw_cancel);
         confirm = ButterKnife.findById(view, R.id.draw_confirm);
 
@@ -89,7 +91,7 @@ public class DrawFragment extends Fragment {
 
     private void initDrawingSurface() {
         View rootView = getActivity().findViewById(android.R.id.content);
-        surface.setImageBitmap(Utils.getBitmapFromView(rootView));
+        screenSurface.setImageBitmap(Utils.getBitmapFromView(rootView));
     }
 
     private void initButtons() {
@@ -110,7 +112,7 @@ public class DrawFragment extends Fragment {
     }
 
     private void uploadScreenshotAndGetUrl() {
-        Bitmap bmp = Utils.getBitmapFromView(surface);
+        Bitmap bmp = Utils.getBitmapFromView(getView());
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.PNG, 0, bos);

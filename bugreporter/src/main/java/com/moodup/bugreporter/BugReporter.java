@@ -43,11 +43,15 @@ public class BugReporter {
 
     public void attach(Activity activity) {
         this.activity = activity;
-        authenticate();
+        authenticate(false);
         addReportButton();
     }
 
-    private void authenticate() {
+    protected void authenticate(boolean refresh) {
+        if (refresh) {
+            Utils.putString(activity, "accessToken", "");
+        }
+
         if (Utils.getString(activity, "accessToken", "").isEmpty()) {
             final WebView webView = new WebView(activity);
             webView.getSettings().setJavaScriptEnabled(true);

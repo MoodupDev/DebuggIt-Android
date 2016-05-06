@@ -82,6 +82,9 @@ public class ApiClient {
                 if (response == HttpsURLConnection.HTTP_OK) {
                     is = conn.getInputStream();
                     return new HttpResponse(response, Utils.getStringFromInputStream(is));
+                } else if(response == HttpsURLConnection.HTTP_UNAUTHORIZED){
+                    BugReporter.getInstance().authenticate(true);
+                    return new HttpResponse(response, "");
                 } else {
                     return new HttpResponse(response, "");
                 }
