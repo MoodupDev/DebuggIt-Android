@@ -35,17 +35,12 @@ public class ApiClient {
         this.accessToken = accessToken;
     }
 
-    protected void addIssue(String title, String content) {
+    protected void addIssue(String title, String content, HttpHandler handler) {
         HashMap<String, String> map = new HashMap<>();
         map.put("title", title);
         map.put("content", content);
 
-        new AddIssueAsyncTask(map, new HttpHandler() {
-            @Override
-            public void done(HttpResponse data) {
-                Log.e("RESPONSE", "Status code:" + Integer.toString(data.getResponseCode()) + " message:" + data.getMessage());
-            }
-        }).execute(String.format(urlString, accountName, repoSlug));
+        new AddIssueAsyncTask(map, handler).execute(String.format(urlString, accountName, repoSlug));
     }
 
     protected class AddIssueAsyncTask extends AsyncTask<String, Void, HttpResponse> {

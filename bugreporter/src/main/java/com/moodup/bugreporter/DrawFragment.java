@@ -1,5 +1,6 @@
 package com.moodup.bugreporter;
 
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ public class DrawFragment extends Fragment {
     private Button confirm;
 
     private UploadAsyncTask uploadAsyncTask;
+    private ProgressDialog dialog;
 
     @Nullable
     @Override
@@ -46,7 +48,9 @@ public class DrawFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        uploadAsyncTask.cancel(true);
+        if (uploadAsyncTask != null) {
+            uploadAsyncTask.cancel(true);
+        }
         ButterKnife.unbind(this);
         super.onDestroyView();
     }
@@ -57,6 +61,8 @@ public class DrawFragment extends Fragment {
         surface = ButterKnife.findById(view, R.id.draw_surface);
         cancel = ButterKnife.findById(view, R.id.draw_cancel);
         confirm = ButterKnife.findById(view, R.id.draw_confirm);
+
+        dialog = new ProgressDialog(getActivity());
 
         initCloudinary();
         initDrawingSurface();
@@ -88,6 +94,8 @@ public class DrawFragment extends Fragment {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialog.show();
+                ProgressDialog.show(getActivity(), "Wait!", "You fool...");
                 uploadScreenshotAndGetUrl();
             }
         });
@@ -133,6 +141,8 @@ public class DrawFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<String> s) {
+            dialog.hide();
+
             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
             transaction.add(android.R.id.content, ReportFragment.newInstance(Utils.getString(getActivity(), "accessToken", ""), new ArrayList<>(s)), ReportFragment.TAG);
             transaction.addToBackStack(null);

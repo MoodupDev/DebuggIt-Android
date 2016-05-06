@@ -1,5 +1,6 @@
 package com.moodup.bugreporter;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -40,6 +41,7 @@ public class ReportFragment extends Fragment {
                 BugReporter.getInstance().getAccountName(),
                 getArguments().getString("accessToken", "")
         );
+
         return initViews(inflater, container);
     }
 
@@ -61,9 +63,18 @@ public class ReportFragment extends Fragment {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final ProgressDialog dialog = new ProgressDialog(getActivity());
+
+                dialog.show();
                 apiClient.addIssue(
                         title.getText().toString(),
-                        content.getText().toString() + getUrlAsStrings()
+                        content.getText().toString() + getUrlAsStrings(),
+                        new ApiClient.HttpHandler() {
+                            @Override
+                            public void done(HttpResponse data) {
+                                dialog.hide();
+                            }
+                        }
                 );
             }
         });
