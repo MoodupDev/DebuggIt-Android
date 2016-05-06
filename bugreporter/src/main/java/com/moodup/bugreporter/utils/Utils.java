@@ -1,4 +1,4 @@
-package com.moodup.bugreporter;
+package com.moodup.bugreporter.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

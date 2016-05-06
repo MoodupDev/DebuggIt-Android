@@ -10,6 +10,9 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 
+import com.moodup.bugreporter.utils.Utils;
+import com.moodup.bugreporter.views.ReporterFragment;
+
 import butterknife.ButterKnife;
 
 public class BugReporter {

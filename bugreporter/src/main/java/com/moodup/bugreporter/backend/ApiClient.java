@@ -1,4 +1,4 @@
-package com.moodup.bugreporter;
+package com.moodup.bugreporter.backend;
 
 import java.io.InputStream;
 

@@ -1,4 +1,4 @@
-package com.moodup.bugreporter;
+package com.moodup.bugreporter.backend;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;

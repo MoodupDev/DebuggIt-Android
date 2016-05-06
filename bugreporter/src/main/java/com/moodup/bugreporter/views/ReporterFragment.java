@@ -1,4 +1,4 @@
-package com.moodup.bugreporter;
+package com.moodup.bugreporter.views;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+
+import com.moodup.bugreporter.R;
 
 import butterknife.ButterKnife;
 
@@ -18,8 +21,9 @@ public class ReporterFragment extends Fragment {
     private EditText title;
     private EditText content;
     private Button send;
+    private ImageButton close;
 
-    public static final ReporterFragment newInstance(String accessToken) {
+    public static ReporterFragment newInstance(String accessToken) {
         ReporterFragment fragment = new ReporterFragment();
 
         Bundle bundle = new Bundle();
@@ -38,14 +42,23 @@ public class ReporterFragment extends Fragment {
 
     private View initViews(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.fragment_reporter, container, false);
+
         title = ButterKnife.findById(view, R.id.bug_title);
         content = ButterKnife.findById(view, R.id.bug_content);
+        close = ButterKnife.findById(view, R.id.bug_close);
         send = ButterKnife.findById(view, R.id.send_button);
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //todo send the bug report to bitbucket
+            }
+        });
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().popBackStackImmediate();
             }
         });
 

@@ -6,26 +6,33 @@
     android:background="@android:color/darker_gray"
     android:orientation="vertical">
 
+    <ImageButton
+        android:id="@+id/bug_close"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="right"
+        android:layout_marginRight="@dimen/small_margin"
+        android:src="@android:drawable/ic_menu_close_clear_cancel" />
+
     <EditText
         android:id="@+id/bug_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/small_margin"
         android:hint="title" />
-
 
     <EditText
         android:id="@+id/bug_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/small_margin"
         android:hint="content" />
 
     <Button
         android:id="@+id/bug_send_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/small_margin"
         android:text="Send" />
 
 </LinearLayout>
