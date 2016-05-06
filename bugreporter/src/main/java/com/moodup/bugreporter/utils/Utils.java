@@ -2,6 +2,8 @@ package com.moodup.bugreporter.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.view.View;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,5 +31,16 @@ public class Utils {
 
     public static String getString(Context context, String key, String defValue) {
         return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE).getString(key, defValue);
+    }
+
+    public static Bitmap getBitmapFromView(View view) {
+        view.setDrawingCacheEnabled(true);
+
+        Bitmap bmp = view.getDrawingCache();
+
+        view.setDrawingCacheEnabled(false);
+        view.destroyDrawingCache();
+
+        return bmp;
     }
 }

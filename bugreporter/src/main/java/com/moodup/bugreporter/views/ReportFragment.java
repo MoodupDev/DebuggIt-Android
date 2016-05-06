@@ -12,6 +12,8 @@ import android.widget.ImageButton;
 
 import com.moodup.bugreporter.R;
 
+import java.util.ArrayList;
+
 import butterknife.ButterKnife;
 
 public class ReportFragment extends Fragment {
@@ -23,11 +25,12 @@ public class ReportFragment extends Fragment {
     private Button send;
     private ImageButton close;
 
-    public static ReportFragment newInstance(String accessToken) {
+    public static ReportFragment newInstance(String accessToken, ArrayList<String> urls) {
         ReportFragment fragment = new ReportFragment();
 
         Bundle bundle = new Bundle();
         bundle.putString("accessToken", accessToken);
+        bundle.putStringArrayList("urls", urls);
 
         fragment.setArguments(bundle);
 
@@ -38,6 +41,12 @@ public class ReportFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return initViews(inflater, container);
+    }
+
+    @Override
+    public void onDestroyView() {
+        ButterKnife.unbind(this);
+        super.onDestroyView();
     }
 
     private View initViews(LayoutInflater inflater, ViewGroup container) {
