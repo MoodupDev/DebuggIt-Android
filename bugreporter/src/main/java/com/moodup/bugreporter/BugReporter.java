@@ -110,6 +110,7 @@ public class BugReporter {
 
     public void detach() {
         removeReportButton();
+
         activity = null;
     }
 
