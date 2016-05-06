@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.moodup.bugreporter.R;
@@ -18,6 +19,8 @@ public class DrawFragment extends Fragment {
     public static final String TAG = DrawFragment.class.getSimpleName();
 
     private ImageView surface;
+    private Button cancel;
+    private Button confirm;
 
     @Nullable
     @Override
@@ -29,7 +32,16 @@ public class DrawFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_draw, container, false);
 
         surface = ButterKnife.findById(view, R.id.draw_surface);
+        cancel = ButterKnife.findById(view, R.id.draw_cancel);
+        confirm = ButterKnife.findById(view, R.id.draw_confirm);
 
+        initDrawingSurface();
+        initButtons();
+
+        return view;
+    }
+
+    private void initDrawingSurface() {
         View rootView = getActivity().findViewById(android.R.id.content);
 
         rootView.setDrawingCacheEnabled(true);
@@ -38,7 +50,21 @@ public class DrawFragment extends Fragment {
 
         rootView.setDrawingCacheEnabled(false);
         rootView.destroyDrawingCache();
+    }
 
-        return view;
+    private void initButtons() {
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().popBackStackImmediate();
+            }
+        });
     }
 }
