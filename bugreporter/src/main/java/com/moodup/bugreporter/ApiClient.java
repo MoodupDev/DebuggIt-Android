@@ -18,8 +18,6 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class ApiClient {
 
-    private String urlString = "https://api.bitbucket.org/1.0/repositories/%1$s/%2$s/issues";
-
     private String repoSlug;
     private String accountName;
     private String accessToken;
@@ -39,7 +37,7 @@ public class ApiClient {
         map.put("title", title);
         map.put("content", content);
 
-        new AddIssueAsyncTask(map, handler).execute(String.format(urlString, accountName, repoSlug));
+        new AddIssueAsyncTask(map, handler).execute(String.format(BitBucket.ISSUES_URL, accountName, repoSlug));
     }
 
     protected class AddIssueAsyncTask extends AsyncTask<String, Void, HttpResponse> {
@@ -82,7 +80,7 @@ public class ApiClient {
                 if (response == HttpsURLConnection.HTTP_OK) {
                     is = conn.getInputStream();
                     return new HttpResponse(response, Utils.getStringFromInputStream(is));
-                } else if(response == HttpsURLConnection.HTTP_UNAUTHORIZED){
+                } else if (response == HttpsURLConnection.HTTP_UNAUTHORIZED) {
                     BugReporter.getInstance().authenticate(true);
                     return new HttpResponse(response, "");
                 } else {

@@ -94,6 +94,7 @@ public class PaintableImageView extends ImageView {
     public boolean onTouchEvent(MotionEvent event) {
         float x = event.getX();
         float y = event.getY();
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 touchStart(x, y);

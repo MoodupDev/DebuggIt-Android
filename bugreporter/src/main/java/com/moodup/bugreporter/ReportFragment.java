@@ -91,7 +91,6 @@ public class ReportFragment extends Fragment {
         return view;
     }
 
-
     private String getUrlAsStrings() {
         String screens = "";
         ArrayList<String> urls = getArguments().getStringArrayList("urls");
