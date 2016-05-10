@@ -42,4 +42,11 @@
         android:layout_margin="@dimen/small_margin"
         android:text="Record" />
 
+    <Button
+        android:id="@+id/screenshot_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/small_margin"
+        android:text="Add another screenshot" />
+
 </LinearLayout>

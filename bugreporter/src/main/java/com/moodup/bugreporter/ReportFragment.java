@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,6 +76,7 @@ public class ReportFragment extends Fragment {
         ImageButton close = ButterKnife.findById(view, R.id.bug_close);
         Button send = ButterKnife.findById(view, R.id.bug_send_button);
         Button record = ButterKnife.findById(view, R.id.record_button);
+        Button addAnotherScreen = ButterKnife.findById(view, R.id.screenshot_button);
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,14 +85,13 @@ public class ReportFragment extends Fragment {
                 apiClient.addIssue(
                         title.getText().toString(),
                         content.getText().toString()
-                                + getUrlAsStrings(BugReporter.getInstance().getScreensUrls(), false)
-                                + getUrlAsStrings(BugReporter.getInstance().getAudioUrls(), true),
+                                + getUrlAsStrings(BugReporter.getInstance().getReport().getScreensUrls(), false)
+                                + getUrlAsStrings(BugReporter.getInstance().getReport().getAudioUrls(), true),
                         new ApiClient.HttpHandler() {
                             @Override
                             public void done(HttpResponse data) {
                                 dialog.hide();
-                                BugReporter.getInstance().getScreensUrls().clear();
-                                BugReporter.getInstance().getAudioUrls().clear();
+                                BugReporter.getInstance().getReport().clear();
                             }
                         }
                 );
@@ -120,12 +120,26 @@ public class ReportFragment extends Fragment {
             }
         });
 
+        addAnotherScreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BugReporter.getInstance().getReport().setTitle(title.getText().toString());
+                BugReporter.getInstance().getReport().setContent(content.getText().toString());
+
+                getActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                BugReporter.getInstance().showDrawFragment();
+            }
+        });
+
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().getSupportFragmentManager().popBackStackImmediate();
             }
         });
+
+        title.setText(BugReporter.getInstance().getReport().getTitle());
+        content.setText(BugReporter.getInstance().getReport().getContent());
 
         return view;
     }
@@ -171,7 +185,7 @@ public class ReportFragment extends Fragment {
         @Override
         protected void onPostExecute(List<String> s) {
             dialog.hide();
-            BugReporter.getInstance().getAudioUrls().addAll(s);
+            BugReporter.getInstance().getReport().getAudioUrls().addAll(s);
             super.onPostExecute(s);
         }
     }

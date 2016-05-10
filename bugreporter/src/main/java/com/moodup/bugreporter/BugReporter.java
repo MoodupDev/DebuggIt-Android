@@ -32,8 +32,7 @@ public class BugReporter {
     private String accountName;
     private String accessToken;
 
-    private List<String> audioUrls;
-    private List<String> screensUrls;
+    private Report report;
 
     public static BugReporter getInstance() {
         if (instance == null) {
@@ -52,9 +51,7 @@ public class BugReporter {
         this.repoSlug = repoSlug;
         this.accountName = accountName;
         this.cloudinary = new Cloudinary(getCloudinaryConfig());
-
-        this.audioUrls = new ArrayList<>();
-        this.screensUrls = new ArrayList<>();
+        this.report = new Report();
     }
 
     private HashMap<String, String> getCloudinaryConfig() {
@@ -131,7 +128,7 @@ public class BugReporter {
         ((ViewGroup) ButterKnife.findById(activity, android.R.id.content)).removeView(reportButton);
     }
 
-    private void showDrawFragment() {
+    protected void showDrawFragment() {
         FragmentTransaction transaction = ((AppCompatActivity) activity).getSupportFragmentManager().beginTransaction();
         transaction.add(android.R.id.content, new DrawFragment(), DrawFragment.TAG);
         transaction.addToBackStack(null);
@@ -154,11 +151,7 @@ public class BugReporter {
         return cloudinary;
     }
 
-    protected List<String> getAudioUrls() {
-        return audioUrls;
-    }
-
-    protected List<String> getScreensUrls() {
-        return screensUrls;
+    protected Report getReport() {
+        return report;
     }
 }
