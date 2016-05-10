@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
@@ -21,8 +22,22 @@ public class PaintableImageView extends ImageView {
     private float x, y;
     private static final float TOUCH_TOLERANCE = 4;
 
-    public PaintableImageView(Context c) {
-        super(c);
+    public PaintableImageView(Context context) {
+        super(context);
+        init();
+    }
+
+    public PaintableImageView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    public PaintableImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init();
+    }
+
+    private void init() {
         path = new Path();
         bitmapPaint = new Paint(Paint.DITHER_FLAG);
 
@@ -34,7 +49,6 @@ public class PaintableImageView extends ImageView {
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeCap(Paint.Cap.ROUND);
         paint.setStrokeWidth(12);
-
     }
 
     @Override
@@ -46,7 +60,7 @@ public class PaintableImageView extends ImageView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawColor(0xFFAAAAAA);
+        canvas.drawColor(0x00FFFFFF);
         canvas.drawBitmap(bitmap, 0, 0, bitmapPaint);
         canvas.drawPath(path, paint);
     }
@@ -80,6 +94,7 @@ public class PaintableImageView extends ImageView {
     public boolean onTouchEvent(MotionEvent event) {
         float x = event.getX();
         float y = event.getY();
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 touchStart(x, y);

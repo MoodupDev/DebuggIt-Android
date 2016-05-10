@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 
 import java.io.ByteArrayInputStream;
@@ -21,7 +20,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,13 +29,12 @@ public class DrawFragment extends Fragment {
 
     protected static final String TAG = DrawFragment.class.getSimpleName();
 
-    private Cloudinary cloudinary;
-
-    private ImageView surface;
+    private ImageView screenSurface;
+    private PaintableImageView drawingSurface;
     private Button cancel;
     private Button confirm;
 
-    private UploadAsyncTask uploadAsyncTask;
+    private UploadImageAsyncTask uploadImageAsyncTask;
     private ProgressDialog dialog;
 
     @Nullable
@@ -48,8 +45,8 @@ public class DrawFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        if (uploadAsyncTask != null) {
-            uploadAsyncTask.cancel(true);
+        if (uploadImageAsyncTask != null) {
+            uploadImageAsyncTask.cancel(true);
         }
         ButterKnife.unbind(this);
         super.onDestroyView();
@@ -58,7 +55,8 @@ public class DrawFragment extends Fragment {
     private View initViews(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.fragment_draw, container, false);
 
-        surface = ButterKnife.findById(view, R.id.draw_surface);
+        screenSurface = ButterKnife.findById(view, R.id.image_surface);
+        drawingSurface = ButterKnife.findById(view, R.id.draw_surface);
         cancel = ButterKnife.findById(view, R.id.draw_cancel);
         confirm = ButterKnife.findById(view, R.id.draw_confirm);
 
@@ -66,30 +64,15 @@ public class DrawFragment extends Fragment {
         dialog.setTitle("Wait!");
         dialog.setMessage("you fool");
 
-        initCloudinary();
         initDrawingSurface();
         initButtons();
 
         return view;
     }
 
-    private void initCloudinary() {
-        this.cloudinary = new Cloudinary(getCloudinaryConfig());
-    }
-
-    private HashMap<String, String> getCloudinaryConfig() {
-        HashMap<String, String> config = new HashMap<>();
-
-        config.put("cloud_name", "db9nesbif");
-        config.put("api_key", "235172213685627");
-        config.put("api_secret", "HyLIsCmPHA2MVuetbmV_t_YZa2M");
-
-        return config;
-    }
-
     private void initDrawingSurface() {
         View rootView = getActivity().findViewById(android.R.id.content);
-        surface.setImageBitmap(Utils.getBitmapFromView(rootView));
+        screenSurface.setImageBitmap(Utils.getBitmapFromView(rootView));
     }
 
     private void initButtons() {
@@ -110,7 +93,7 @@ public class DrawFragment extends Fragment {
     }
 
     private void uploadScreenshotAndGetUrl() {
-        Bitmap bmp = Utils.getBitmapFromView(surface);
+        Bitmap bmp = Utils.getBitmapFromView(getView());
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.PNG, 0, bos);
@@ -118,19 +101,19 @@ public class DrawFragment extends Fragment {
         byte[] bitmapdata = bos.toByteArray();
         ByteArrayInputStream bs = new ByteArrayInputStream(bitmapdata);
 
-        uploadAsyncTask = new UploadAsyncTask();
+        uploadImageAsyncTask = new UploadImageAsyncTask();
 
-        uploadAsyncTask.execute(bs);
+        uploadImageAsyncTask.execute(bs);
     }
 
-    private class UploadAsyncTask extends AsyncTask<InputStream, Void, List<String>> {
+    private class UploadImageAsyncTask extends AsyncTask<InputStream, Void, List<String>> {
         @Override
         protected List<String> doInBackground(InputStream... params) {
             List<String> urls = new ArrayList<>();
 
             try {
                 for (InputStream is : params) {
-                    Map map = cloudinary.uploader().upload(is, ObjectUtils.emptyMap());
+                    Map map = BugReporter.getInstance().getCloudinary().uploader().upload(is, ObjectUtils.emptyMap());
                     urls.add((String) map.get("url"));
                 }
             } catch (IOException e) {

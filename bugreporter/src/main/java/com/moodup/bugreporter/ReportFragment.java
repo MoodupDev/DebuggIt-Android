@@ -1,9 +1,11 @@
 package com.moodup.bugreporter;
 
 import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +13,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.cloudinary.utils.ObjectUtils;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 
@@ -20,6 +30,8 @@ public class ReportFragment extends Fragment {
     protected static final String TAG = ReportFragment.class.getSimpleName();
 
     private ApiClient apiClient;
+    private AudioCaptureHelper audioCaptureHelper;
+    private ProgressDialog dialog;
 
     protected static ReportFragment newInstance(String accessToken, ArrayList<String> urls) {
         ReportFragment fragment = new ReportFragment();
@@ -42,6 +54,11 @@ public class ReportFragment extends Fragment {
                 getArguments().getString("accessToken", "")
         );
 
+        audioCaptureHelper = new AudioCaptureHelper();
+        dialog = new ProgressDialog(getActivity());
+        dialog.setTitle("Wait!");
+        dialog.setMessage("you fool");
+
         return initViews(inflater, container);
     }
 
@@ -59,14 +76,11 @@ public class ReportFragment extends Fragment {
 
         ImageButton close = ButterKnife.findById(view, R.id.bug_close);
         Button send = ButterKnife.findById(view, R.id.bug_send_button);
+        Button record = ButterKnife.findById(view, R.id.record_button);
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ProgressDialog dialog = new ProgressDialog(getActivity());
-                dialog.setTitle("Wait!");
-                dialog.setMessage("you fool");
-
                 dialog.show();
                 apiClient.addIssue(
                         title.getText().toString(),
@@ -81,6 +95,28 @@ public class ReportFragment extends Fragment {
             }
         });
 
+        record.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.setSelected(!v.isSelected());
+                if (v.isSelected()) {
+                    try {
+                        audioCaptureHelper.startRecording(getActivity().getExternalCacheDir().getAbsolutePath() + "/recording.mpeg");
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    audioCaptureHelper.stopRecording();
+                    try {
+                        dialog.show();
+                        new UploadAudioAsyncTask().execute(new FileInputStream(audioCaptureHelper.getFilePath()));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,7 +126,6 @@ public class ReportFragment extends Fragment {
 
         return view;
     }
-
 
     private String getUrlAsStrings() {
         String screens = "";
@@ -110,4 +145,27 @@ public class ReportFragment extends Fragment {
         return screens;
     }
 
+    private class UploadAudioAsyncTask extends AsyncTask<InputStream, Void, List<String>> {
+        @Override
+        protected List<String> doInBackground(InputStream... params) {
+            List<String> urls = new ArrayList<>();
+
+            try {
+                for (InputStream is : params) {
+                    Map map = BugReporter.getInstance().getCloudinary().uploader().upload(is, ObjectUtils.emptyMap());
+                    urls.add((String) map.get("url"));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return urls;
+        }
+
+        @Override
+        protected void onPostExecute(List<String> s) {
+            dialog.hide();
+            super.onPostExecute(s);
+        }
+    }
 }

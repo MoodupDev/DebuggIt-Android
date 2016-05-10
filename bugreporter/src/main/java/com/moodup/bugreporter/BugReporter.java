@@ -10,6 +10,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 
+import com.cloudinary.Cloudinary;
+
+import java.util.HashMap;
+
 import butterknife.ButterKnife;
 
 public class BugReporter {
@@ -18,6 +22,7 @@ public class BugReporter {
 
     private Activity activity;
     private View reportButton;
+    private Cloudinary cloudinary;
 
     private String clientId;
     private String repoSlug;
@@ -33,21 +38,37 @@ public class BugReporter {
     }
 
     private BugReporter() {
+
     }
 
     public void init(String clientId, String repoSlug, String accountName) {
         this.clientId = clientId;
         this.repoSlug = repoSlug;
         this.accountName = accountName;
+        this.cloudinary = new Cloudinary(getCloudinaryConfig());
+    }
+
+    private HashMap<String, String> getCloudinaryConfig() {
+        HashMap<String, String> config = new HashMap<>();
+
+        config.put("cloud_name", "db9nesbif");
+        config.put("api_key", "235172213685627");
+        config.put("api_secret", "HyLIsCmPHA2MVuetbmV_t_YZa2M");
+
+        return config;
     }
 
     public void attach(Activity activity) {
         this.activity = activity;
-        authenticate();
+        authenticate(false);
         addReportButton();
     }
 
-    private void authenticate() {
+    protected void authenticate(boolean refresh) {
+        if (refresh) {
+            Utils.putString(activity, "accessToken", "");
+        }
+
         if (Utils.getString(activity, "accessToken", "").isEmpty()) {
             final WebView webView = new WebView(activity);
             webView.getSettings().setJavaScriptEnabled(true);
@@ -111,5 +132,9 @@ public class BugReporter {
 
     protected String getAccountName() {
         return accountName;
+    }
+
+    protected Cloudinary getCloudinary() {
+        return cloudinary;
     }
 }
