@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:layout_margin="@dimen/big_margin"
@@ -24,14 +24,17 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="340dp"
-        android:layout_height="430dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:background="@color/screenshot.background">
+        android:background="@color/screenshot.background"
+        android:layout_below="@+id/top_bar"
+        android:layout_above="@+id/bottom_bar">
 
         <ImageView
             style="@style/ScreenshotImage"
             android:id="@+id/image_surface"
+            android:scaleType="fitStart"
             android:background="@drawable/screenshot_background"/>
 
         <com.moodup.bugreporter.PaintableImageView
@@ -44,7 +47,9 @@
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/small_margin"
         android:background="@color/bar.background"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
         <ImageView
@@ -78,4 +83,4 @@
             android:src="@drawable/rubber"/>
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>
