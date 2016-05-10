@@ -33,9 +33,19 @@ public class ApiClient {
     }
 
     protected void addIssue(String title, String content, HttpHandler handler) {
+        addIssue(title, content, BitBucket.PRIORITY_TRIVIAL, BitBucket.KIND_BUG, handler);
+    }
+
+    protected void addIssue(String title, String content, String priority, HttpHandler handler) {
+        addIssue(title, content, priority, BitBucket.KIND_BUG, handler);
+    }
+
+    protected void addIssue(String title, String content, String priority, String kind, HttpHandler handler) {
         HashMap<String, String> map = new HashMap<>();
         map.put("title", title);
         map.put("content", content);
+        map.put("priority", priority);
+        map.put("kind", kind);
 
         new AddIssueAsyncTask(map, handler).execute(String.format(BitBucket.ISSUES_URL, accountName, repoSlug));
     }
