@@ -127,8 +127,10 @@ public class DrawFragment extends Fragment {
         protected void onPostExecute(List<String> s) {
             dialog.hide();
 
+            BugReporter.getInstance().getScreensUrls().addAll(s);
+
             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-            transaction.add(android.R.id.content, ReportFragment.newInstance(Utils.getString(getActivity(), "accessToken", ""), new ArrayList<>(s)), ReportFragment.TAG);
+            transaction.add(android.R.id.content, ReportFragment.newInstance(), ReportFragment.TAG);
             transaction.addToBackStack(null);
             transaction.commit();
 

@@ -49,7 +49,7 @@ public class ReportFragment extends Fragment {
         apiClient = new ApiClient(
                 BugReporter.getInstance().getRepoSlug(),
                 BugReporter.getInstance().getAccountName(),
-                BugReporter.getInstance().get
+                BugReporter.getInstance().getAccessToken()
         );
 
         audioCaptureHelper = new AudioCaptureHelper();
@@ -84,12 +84,14 @@ public class ReportFragment extends Fragment {
                 apiClient.addIssue(
                         title.getText().toString(),
                         content.getText().toString()
-                                + getUrlAsStrings(screensUrls, false)
-                                + getUrlAsStrings(audioUrls, true),
+                                + getUrlAsStrings(BugReporter.getInstance().getScreensUrls(), false)
+                                + getUrlAsStrings(BugReporter.getInstance().getAudioUrls(), true),
                         new ApiClient.HttpHandler() {
                             @Override
                             public void done(HttpResponse data) {
                                 dialog.hide();
+                                BugReporter.getInstance().getScreensUrls().clear();
+                                BugReporter.getInstance().getAudioUrls().clear();
                             }
                         }
                 );
@@ -169,7 +171,7 @@ public class ReportFragment extends Fragment {
         @Override
         protected void onPostExecute(List<String> s) {
             dialog.hide();
-            audioUrls.addAll(s);
+            BugReporter.getInstance().getAudioUrls().addAll(s);
             super.onPostExecute(s);
         }
     }
