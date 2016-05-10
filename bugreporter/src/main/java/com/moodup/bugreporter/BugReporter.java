@@ -3,6 +3,7 @@ package com.moodup.bugreporter;
 import android.app.Activity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,9 @@ import android.widget.FrameLayout;
 
 import com.cloudinary.Cloudinary;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import butterknife.ButterKnife;
 
@@ -28,6 +31,8 @@ public class BugReporter {
     private String repoSlug;
     private String accountName;
     private String accessToken;
+
+    private Report report;
 
     public static BugReporter getInstance() {
         if (instance == null) {
@@ -46,6 +51,7 @@ public class BugReporter {
         this.repoSlug = repoSlug;
         this.accountName = accountName;
         this.cloudinary = new Cloudinary(getCloudinaryConfig());
+        this.report = new Report();
     }
 
     private HashMap<String, String> getCloudinaryConfig() {
@@ -70,6 +76,7 @@ public class BugReporter {
         }
 
         if (Utils.getString(activity, "accessToken", "").isEmpty()) {
+            Log.e("tag", "AccessToken" + Utils.getString(activity, "accessToken", ""));
             final WebView webView = new WebView(activity);
             webView.getSettings().setJavaScriptEnabled(true);
             webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
@@ -93,6 +100,8 @@ public class BugReporter {
             });
 
             webView.loadUrl(String.format(BitBucket.OAUTH_URL, clientId));
+        } else {
+            accessToken = Utils.getString(activity, "accessToken", "");
         }
     }
 
@@ -119,11 +128,15 @@ public class BugReporter {
         ((ViewGroup) ButterKnife.findById(activity, android.R.id.content)).removeView(reportButton);
     }
 
-    private void showDrawFragment() {
+    protected void showDrawFragment() {
         FragmentTransaction transaction = ((AppCompatActivity) activity).getSupportFragmentManager().beginTransaction();
         transaction.add(android.R.id.content, new DrawFragment(), DrawFragment.TAG);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    protected String getAccessToken() {
+        return accessToken;
     }
 
     protected String getRepoSlug() {
@@ -136,5 +149,9 @@ public class BugReporter {
 
     protected Cloudinary getCloudinary() {
         return cloudinary;
+    }
+
+    protected Report getReport() {
+        return report;
     }
 }

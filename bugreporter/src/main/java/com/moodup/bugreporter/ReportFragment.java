@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,12 +33,10 @@ public class ReportFragment extends Fragment {
     private AudioCaptureHelper audioCaptureHelper;
     private ProgressDialog dialog;
 
-    protected static ReportFragment newInstance(String accessToken, ArrayList<String> urls) {
+    protected static ReportFragment newInstance() {
         ReportFragment fragment = new ReportFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putString("accessToken", accessToken);
-        bundle.putStringArrayList("urls", urls);
 
         fragment.setArguments(bundle);
 
@@ -51,10 +49,11 @@ public class ReportFragment extends Fragment {
         apiClient = new ApiClient(
                 BugReporter.getInstance().getRepoSlug(),
                 BugReporter.getInstance().getAccountName(),
-                getArguments().getString("accessToken", "")
+                BugReporter.getInstance().getAccessToken()
         );
 
         audioCaptureHelper = new AudioCaptureHelper();
+
         dialog = new ProgressDialog(getActivity());
         dialog.setTitle("Wait!");
         dialog.setMessage("you fool");
@@ -77,6 +76,7 @@ public class ReportFragment extends Fragment {
         ImageButton close = ButterKnife.findById(view, R.id.bug_close);
         Button send = ButterKnife.findById(view, R.id.bug_send_button);
         Button record = ButterKnife.findById(view, R.id.record_button);
+        Button addAnotherScreen = ButterKnife.findById(view, R.id.screenshot_button);
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,11 +84,14 @@ public class ReportFragment extends Fragment {
                 dialog.show();
                 apiClient.addIssue(
                         title.getText().toString(),
-                        content.getText().toString() + getUrlAsStrings(),
+                        content.getText().toString()
+                                + getUrlAsStrings(BugReporter.getInstance().getReport().getScreensUrls(), false)
+                                + getUrlAsStrings(BugReporter.getInstance().getReport().getAudioUrls(), true),
                         new ApiClient.HttpHandler() {
                             @Override
                             public void done(HttpResponse data) {
                                 dialog.hide();
+                                BugReporter.getInstance().getReport().clear();
                             }
                         }
                 );
@@ -117,6 +120,17 @@ public class ReportFragment extends Fragment {
             }
         });
 
+        addAnotherScreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BugReporter.getInstance().getReport().setTitle(title.getText().toString());
+                BugReporter.getInstance().getReport().setContent(content.getText().toString());
+
+                getActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                BugReporter.getInstance().showDrawFragment();
+            }
+        });
+
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,25 +138,31 @@ public class ReportFragment extends Fragment {
             }
         });
 
+        title.setText(BugReporter.getInstance().getReport().getTitle());
+        content.setText(BugReporter.getInstance().getReport().getContent());
+
         return view;
     }
 
-    private String getUrlAsStrings() {
-        String screens = "";
-        ArrayList<String> urls = getArguments().getStringArrayList("urls");
+    private String getUrlAsStrings(List<String> urls, boolean isMediaFile) {
+        String urlsString = "";
 
         if (urls != null) {
             StringBuilder builder = new StringBuilder();
             for (String s : urls) {
-                builder.append("![Alt text](");
-                builder.append(s);
-                builder.append(")");
+                if (!isMediaFile) {
+                    builder.append("![Alt text](");
+                    builder.append(s);
+                    builder.append(")");
+                } else {
+                    builder.append(s);
+                }
             }
 
-            screens = builder.toString();
+            urlsString = builder.toString();
         }
 
-        return screens;
+        return urlsString;
     }
 
     private class UploadAudioAsyncTask extends AsyncTask<InputStream, Void, List<String>> {
@@ -152,8 +172,8 @@ public class ReportFragment extends Fragment {
 
             try {
                 for (InputStream is : params) {
-                    Map map = BugReporter.getInstance().getCloudinary().uploader().upload(is, ObjectUtils.emptyMap());
-                    urls.add((String) map.get("url"));
+                    Map map = BugReporter.getInstance().getCloudinary().uploader().uploadLargeRaw(is, ObjectUtils.emptyMap());
+                    urls.add(map.get("url") + Utils.MEDIA_FILE_FORMAT);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -165,6 +185,7 @@ public class ReportFragment extends Fragment {
         @Override
         protected void onPostExecute(List<String> s) {
             dialog.hide();
+            BugReporter.getInstance().getReport().getAudioUrls().addAll(s);
             super.onPostExecute(s);
         }
     }

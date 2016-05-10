@@ -14,6 +14,8 @@ import java.util.Map;
 
 public class Utils {
 
+    public static final String MEDIA_FILE_FORMAT = ".mpeg";
+
     protected static Map<String, String> getQueryMap(String query) {
         String[] params = query.split("#")[1].split("&");
         Map<String, String> map = new HashMap<String, String>();
