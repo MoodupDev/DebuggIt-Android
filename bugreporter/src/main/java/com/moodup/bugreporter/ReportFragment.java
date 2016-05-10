@@ -33,12 +33,10 @@ public class ReportFragment extends Fragment {
     private AudioCaptureHelper audioCaptureHelper;
     private ProgressDialog dialog;
 
-    protected static ReportFragment newInstance(String accessToken, ArrayList<String> urls) {
+    protected static ReportFragment newInstance() {
         ReportFragment fragment = new ReportFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putString("accessToken", accessToken);
-        bundle.putStringArrayList("urls", urls);
 
         fragment.setArguments(bundle);
 
@@ -51,10 +49,11 @@ public class ReportFragment extends Fragment {
         apiClient = new ApiClient(
                 BugReporter.getInstance().getRepoSlug(),
                 BugReporter.getInstance().getAccountName(),
-                getArguments().getString("accessToken", "")
+                BugReporter.getInstance().get
         );
 
         audioCaptureHelper = new AudioCaptureHelper();
+
         dialog = new ProgressDialog(getActivity());
         dialog.setTitle("Wait!");
         dialog.setMessage("you fool");
@@ -84,7 +83,9 @@ public class ReportFragment extends Fragment {
                 dialog.show();
                 apiClient.addIssue(
                         title.getText().toString(),
-                        content.getText().toString() + getUrlAsStrings(),
+                        content.getText().toString()
+                                + getUrlAsStrings(screensUrls, false)
+                                + getUrlAsStrings(audioUrls, true),
                         new ApiClient.HttpHandler() {
                             @Override
                             public void done(HttpResponse data) {
@@ -127,22 +128,25 @@ public class ReportFragment extends Fragment {
         return view;
     }
 
-    private String getUrlAsStrings() {
-        String screens = "";
-        ArrayList<String> urls = getArguments().getStringArrayList("urls");
+    private String getUrlAsStrings(List<String> urls, boolean isMediaFile) {
+        String urlsString = "";
 
         if (urls != null) {
             StringBuilder builder = new StringBuilder();
             for (String s : urls) {
-                builder.append("![Alt text](");
-                builder.append(s);
-                builder.append(")");
+                if (!isMediaFile) {
+                    builder.append("![Alt text](");
+                    builder.append(s);
+                    builder.append(")");
+                } else {
+                    builder.append(s);
+                }
             }
 
-            screens = builder.toString();
+            urlsString = builder.toString();
         }
 
-        return screens;
+        return urlsString;
     }
 
     private class UploadAudioAsyncTask extends AsyncTask<InputStream, Void, List<String>> {
@@ -152,8 +156,8 @@ public class ReportFragment extends Fragment {
 
             try {
                 for (InputStream is : params) {
-                    Map map = BugReporter.getInstance().getCloudinary().uploader().upload(is, ObjectUtils.emptyMap());
-                    urls.add((String) map.get("url"));
+                    Map map = BugReporter.getInstance().getCloudinary().uploader().uploadLargeRaw(is, ObjectUtils.emptyMap());
+                    urls.add(map.get("url") + Utils.MEDIA_FILE_FORMAT);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -165,6 +169,7 @@ public class ReportFragment extends Fragment {
         @Override
         protected void onPostExecute(List<String> s) {
             dialog.hide();
+            audioUrls.addAll(s);
             super.onPostExecute(s);
         }
     }

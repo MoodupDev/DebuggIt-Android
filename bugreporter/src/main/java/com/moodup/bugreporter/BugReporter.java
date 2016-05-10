@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import com.cloudinary.Cloudinary;
 
 import java.util.HashMap;
+import java.util.List;
 
 import butterknife.ButterKnife;
 
@@ -28,6 +29,9 @@ public class BugReporter {
     private String repoSlug;
     private String accountName;
     private String accessToken;
+
+    private List<String> audioUrls;
+    private List<String> screensUrls;
 
     public static BugReporter getInstance() {
         if (instance == null) {
@@ -126,6 +130,8 @@ public class BugReporter {
         transaction.commit();
     }
 
+    protected String accessTgetA
+
     protected String getRepoSlug() {
         return repoSlug;
     }
@@ -136,5 +142,13 @@ public class BugReporter {
 
     protected Cloudinary getCloudinary() {
         return cloudinary;
+    }
+
+    protected List<String> getAudioUrls() {
+        return audioUrls;
+    }
+
+    protected List<String> getScreensUrls() {
+        return screensUrls;
     }
 }
