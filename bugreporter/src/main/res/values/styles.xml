@@ -6,7 +6,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">14dp</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/text.size.regular</item>
     </style>
 
     <style name="ScreenshotImage">
@@ -25,6 +25,8 @@
         <item name="android:padding">@dimen/report.button.padding</item>
         <item name="android:layout_marginRight">@dimen/report.button.margin.horizontal</item>
         <item name="android:background">@drawable/button_option</item>
+        <item name="android:textColor">@drawable/button_option</item>
+        <item name="android:textSize">@dimen/text.size.small</item>
     </style>
 
     <style name="ReportContentEditText">

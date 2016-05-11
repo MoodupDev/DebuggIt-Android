@@ -7,6 +7,8 @@ public class Report {
 
     private String title;
     private String content;
+    private String kind;
+    private String priority;
     private List<String> audioUrls;
     private List<String> screensUrls;
 
@@ -33,6 +35,22 @@ public class Report {
 
     protected List<String> getAudioUrls() {
         return audioUrls;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
     }
 
     protected void setAudioUrls(List<String> audioUrls) {

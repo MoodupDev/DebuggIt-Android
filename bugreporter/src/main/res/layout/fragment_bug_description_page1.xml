@@ -20,7 +20,11 @@
             android:id="@+id/kind_enhancement_button"
             style="@style/ReportButton"
             android:enabled="false"
-            android:text="@string/kind.enhancement" />
+            android:text="@string/kind.enhancement"
+            android:textColor="@drawable/button_option"
+
+            />
+
     </LinearLayout>
 
     <LinearLayout
@@ -58,7 +62,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="6"
             android:hint="@string/bug.description.hint"
-            android:textColorHint="@color/kind.button.disabled" />
+            android:textColorHint="@color/kind.button.disabled"
+            android:textSize="@dimen/text.size.regular" />
 
         <ImageView
             android:id="@+id/record_button"

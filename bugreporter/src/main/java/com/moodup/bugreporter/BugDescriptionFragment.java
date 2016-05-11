@@ -80,15 +80,43 @@ public class BugDescriptionFragment extends Fragment {
                 new AudioCaptureFragment().show(getChildFragmentManager(), AudioCaptureFragment.TAG);
             }
         });
+
         kindButtons = new ReportButton[]{
                 ButterKnife.findById(view, R.id.kind_bug_button),
                 ButterKnife.findById(view, R.id.kind_enhancement_button)
         };
+
+        initBugKindButtons(view);
+        initBugPriorityButtons(view);
+    }
+
+    private void initBugPriorityButtons(View view) {
         priorityButtons = new ReportButton[]{
                 ButterKnife.findById(view, R.id.priority_low_button),
                 ButterKnife.findById(view, R.id.priority_medium_button),
                 ButterKnife.findById(view, R.id.priority_high_button)
         };
+
+        for (ReportButton priorityButton : priorityButtons) {
+            priorityButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    v.setSelected(!v.isSelected());
+                    if (v.isSelected()) {
+                        String priority;
+                        if (v.getId() == R.id.priority_low_button) {
+                            priority = BitBucket.PRIORITY_MINOR;
+                        } else if (v.getId() == R.id.priority_medium_button) {
+                            priority = BitBucket.PRIORITY_MAJOR;
+                        } else {
+                            priority = BitBucket.PRIORITY_CRITICAL;
+                        }
+                        BugReporter.getInstance().getReport().setPriority(priority);
+                    }
+                    deselectOtherButtons(v, priorityButtons);
+                }
+            });
+        }
 
         if (getView() != null) {
             initReportItems(getView());
@@ -106,8 +134,34 @@ public class BugDescriptionFragment extends Fragment {
         for (String audioUrl : reporter.getReport().getAudioUrls()) {
 
         }
-
         //todo add new screenshot button
+    }
+
+    private void initBugKindButtons(View view) {
+        kindButtons = new ReportButton[]{
+                ButterKnife.findById(view, R.id.kind_bug_button),
+                ButterKnife.findById(view, R.id.kind_enhancement_button)
+        };
+        for (ReportButton kindButton : kindButtons) {
+            kindButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    v.setSelected(!v.isSelected());
+                    if (v.isSelected()) {
+                        BugReporter.getInstance().getReport().setKind(v.getId() == R.id.kind_bug_button ? BitBucket.KIND_BUG : BitBucket.KIND_ENHANCEMENT);
+                    }
+                    deselectOtherButtons(v, kindButtons);
+                }
+            });
+        }
+    }
+
+    private void deselectOtherButtons(View selected, ReportButton[] buttons) {
+        for (ReportButton button : buttons) {
+            if (button.getId() != selected.getId()) {
+                button.setSelected(false);
+            }
+        }
     }
 
     private void initSecondPage(View view) {
