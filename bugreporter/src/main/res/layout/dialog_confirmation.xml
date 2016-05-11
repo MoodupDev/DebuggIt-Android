@@ -11,6 +11,7 @@
     android:paddingTop="@dimen/big_padding">
 
     <ImageView
+        android:id="@+id/confirmation_dialog_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/big_margin"
@@ -18,6 +19,7 @@
         android:src="@drawable/thumbs_up" />
 
     <com.moodup.bugreporter.MontserratTextView
+        android:id="@+id/confirmation_dialog_message"
         style="@style/DialogText"
         tools:text="@string/confirmation.failure" />
 
@@ -28,13 +30,14 @@
         android:background="@color/app.gray" />
 
     <com.moodup.bugreporter.MontserratTextView
+        android:id="@+id/confirmation_dialog_ok_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="@dimen/regular_padding"
         android:text="@android:string/ok"
         android:textAllCaps="true"
-        android:textColor="@color/dialog.text.color"
+        android:textColor="@drawable/dialog_text_color"
         android:textSize="@dimen/confirmation_dialog_font_size"
         android:textStyle="bold" />
 
