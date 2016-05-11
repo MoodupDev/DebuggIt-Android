@@ -32,6 +32,7 @@ public class ReportFragment extends Fragment {
     private ApiClient apiClient;
     private AudioCaptureHelper audioCaptureHelper;
     private ProgressDialog dialog;
+    private UploadAudioAsyncTask uploadAudioAsyncTask;
 
     protected static ReportFragment newInstance() {
         ReportFragment fragment = new ReportFragment();
@@ -63,6 +64,9 @@ public class ReportFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
+        if (uploadAudioAsyncTask != null) {
+            uploadAudioAsyncTask.cancel(true);
+        }
         ButterKnife.unbind(this);
         super.onDestroyView();
     }
@@ -112,7 +116,8 @@ public class ReportFragment extends Fragment {
                     audioCaptureHelper.stopRecording();
                     try {
                         dialog.show();
-                        new UploadAudioAsyncTask().execute(new FileInputStream(audioCaptureHelper.getFilePath()));
+                        uploadAudioAsyncTask = new UploadAudioAsyncTask();
+                        uploadAudioAsyncTask.execute(new FileInputStream(audioCaptureHelper.getFilePath()));
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -172,7 +177,7 @@ public class ReportFragment extends Fragment {
 
             try {
                 for (InputStream is : params) {
-                    Map map = BugReporter.getInstance().getCloudinary().uploader().uploadLargeRaw(is, ObjectUtils.emptyMap());
+                    Map map = BugReporter.getInstance().getCloudinary().uploader().uploadLargeRaw(is, ObjectUtils.asMap("resource_type", "video"));
                     urls.add(map.get("url") + Utils.MEDIA_FILE_FORMAT);
                 }
             } catch (IOException e) {
