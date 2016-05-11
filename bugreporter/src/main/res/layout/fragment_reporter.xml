@@ -1,52 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="@dimen/big_margin"
-    android:background="@android:color/darker_gray"
-    android:orientation="vertical">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/big_margin">
 
-    <ImageButton
-        android:id="@+id/bug_close"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_gravity="right"
-        android:layout_marginRight="@dimen/small_margin"
-        android:src="@android:drawable/ic_menu_close_clear_cancel" />
-
-    <EditText
-        android:id="@+id/bug_title"
+    <RelativeLayout
+        android:id="@+id/top_bar"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/small_margin"
-        android:hint="title" />
+        android:background="@color/bar.background">
 
-    <EditText
-        android:id="@+id/bug_content"
+        <com.moodup.bugreporter.MontserratTextView
+            android:id="@+id/bug_close"
+            style="@style/BarTextButton"
+            android:layout_alignParentLeft="true"
+            android:text="@string/button.cancel"/>
+
+        <LinearLayout
+            android:id="@+id/view_pager_indicators"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"/>
+
+        <com.moodup.bugreporter.MontserratTextView
+            android:id="@+id/bug_send_button"
+            style="@style/BarTextButton"
+            android:layout_alignParentRight="true"
+            android:text="@string/button.save"/>
+    </RelativeLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/report_view_pager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/small_margin"
-        android:hint="content" />
-
-    <Button
-        android:id="@+id/bug_send_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/small_margin"
-        android:text="Send" />
-
-    <Button
-        android:id="@+id/record_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/small_margin"
-        android:text="Record" />
-
-    <Button
-        android:id="@+id/screenshot_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/small_margin"
-        android:text="Add another screenshot" />
-
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/top_bar"/>
+</RelativeLayout>

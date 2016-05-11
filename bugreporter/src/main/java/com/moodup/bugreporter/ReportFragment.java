@@ -4,19 +4,19 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.cloudinary.utils.ObjectUtils;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -25,13 +25,15 @@ import java.util.Map;
 
 import butterknife.ButterKnife;
 
-public class ReportFragment extends Fragment {
+public class ReportFragment extends DialogFragment implements ViewPager.OnPageChangeListener {
 
     protected static final String TAG = ReportFragment.class.getSimpleName();
+    private static final int DOTS_COUNT = 2;
 
     private ApiClient apiClient;
     private AudioCaptureHelper audioCaptureHelper;
     private ProgressDialog dialog;
+    private ImageView[] dots;
 
     protected static ReportFragment newInstance() {
         ReportFragment fragment = new ReportFragment();
@@ -69,24 +71,25 @@ public class ReportFragment extends Fragment {
 
     private View initViews(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.fragment_reporter, container, false);
+        initViewPager(view);
+        initButtons(view);
+        return view;
+    }
 
-        final EditText title = ButterKnife.findById(view, R.id.bug_title);
-        final EditText content = ButterKnife.findById(view, R.id.bug_content);
-
-        ImageButton close = ButterKnife.findById(view, R.id.bug_close);
-        Button send = ButterKnife.findById(view, R.id.bug_send_button);
-        Button record = ButterKnife.findById(view, R.id.record_button);
-        Button addAnotherScreen = ButterKnife.findById(view, R.id.screenshot_button);
+    private void initButtons(View view) {
+        MontserratTextView send = ButterKnife.findById(view, R.id.bug_send_button);
+        MontserratTextView cancel = ButterKnife.findById(view, R.id.bug_close);
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.show();
+                Report report = BugReporter.getInstance().getReport();
                 apiClient.addIssue(
-                        title.getText().toString(),
-                        content.getText().toString()
-                                + getUrlAsStrings(BugReporter.getInstance().getReport().getScreensUrls(), false)
-                                + getUrlAsStrings(BugReporter.getInstance().getReport().getAudioUrls(), true),
+                        report.getTitle(),
+                        report.getContent()
+                                + getUrlAsStrings(report.getScreensUrls(), false)
+                                + getUrlAsStrings(report.getAudioUrls(), true),
                         new ApiClient.HttpHandler() {
                             @Override
                             public void done(HttpResponse data) {
@@ -98,50 +101,60 @@ public class ReportFragment extends Fragment {
             }
         });
 
-        record.setOnClickListener(new View.OnClickListener() {
+        cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setSelected(!v.isSelected());
-                if (v.isSelected()) {
-                    try {
-                        audioCaptureHelper.startRecording(getActivity().getExternalCacheDir().getAbsolutePath() + "/recording.mpeg");
-                    } catch (NullPointerException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    audioCaptureHelper.stopRecording();
-                    try {
-                        dialog.show();
-                        new UploadAudioAsyncTask().execute(new FileInputStream(audioCaptureHelper.getFilePath()));
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
+                dismiss();
+                BugReporter.getInstance().getReport().clear();
             }
         });
+    }
 
-        addAnotherScreen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BugReporter.getInstance().getReport().setTitle(title.getText().toString());
-                BugReporter.getInstance().getReport().setContent(content.getText().toString());
+    private void initViewPager(View view) {
+        ViewPager viewPager = ButterKnife.findById(view, R.id.report_view_pager);
+        viewPager.addOnPageChangeListener(this);
+        initViewPagerIndicator(view);
+        ReportViewPagerAdapter adapter = new ReportViewPagerAdapter(getChildFragmentManager());
+        viewPager.setAdapter(adapter);
+    }
 
-                getActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                BugReporter.getInstance().showDrawFragment();
-            }
-        });
+    private void initViewPagerIndicator(View view) {
+        LinearLayout dotsIndicator = ButterKnife.findById(view, R.id.view_pager_indicators);
+        dots = new ImageView[DOTS_COUNT];
+        for(int i = 0; i < DOTS_COUNT; i++) {
+            dots[i] = new ImageView(getContext());
+            dots[i].setImageDrawable(getResources().getDrawable(R.drawable.circle_not_active));
 
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().getSupportFragmentManager().popBackStackImmediate();
-            }
-        });
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
 
-        title.setText(BugReporter.getInstance().getReport().getTitle());
-        content.setText(BugReporter.getInstance().getReport().getContent());
+            params.setMargins(16, 0, 16, 0);
 
-        return view;
+            dotsIndicator.addView(dots[i], params);
+        }
+
+        dots[0].setImageDrawable(getResources().getDrawable(R.drawable.cricle_active));
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        for(int i = 0; i < DOTS_COUNT; i++) {
+            dots[i].setImageDrawable(getResources().getDrawable(R.drawable.circle_not_active));
+        }
+
+        dots[position].setImageDrawable(getResources().getDrawable(R.drawable.cricle_active));
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 
     private String getUrlAsStrings(List<String> urls, boolean isMediaFile) {
@@ -187,6 +200,23 @@ public class ReportFragment extends Fragment {
             dialog.hide();
             BugReporter.getInstance().getReport().getAudioUrls().addAll(s);
             super.onPostExecute(s);
+        }
+    }
+
+    private class ReportViewPagerAdapter extends FragmentPagerAdapter {
+
+        public ReportViewPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return BugDescriptionFragment.newInstance(position);
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
         }
     }
 }

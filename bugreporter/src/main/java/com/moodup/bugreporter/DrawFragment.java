@@ -6,11 +6,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.cloudinary.utils.ObjectUtils;
@@ -129,10 +128,12 @@ public class DrawFragment extends Fragment {
 
             BugReporter.getInstance().getReport().getScreensUrls().addAll(s);
 
-            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-            transaction.add(android.R.id.content, ReportFragment.newInstance(), ReportFragment.TAG);
-            transaction.addToBackStack(null);
-            transaction.commit();
+//            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+//            transaction.add(android.R.id.content, ReportFragment.newInstance(), ReportFragment.TAG);
+//            transaction.addToBackStack(null);
+//            transaction.commit();
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            new ReportFragment().show(fm, ReportFragment.TAG);
 
             super.onPostExecute(s);
         }
