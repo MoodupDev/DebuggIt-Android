@@ -31,8 +31,8 @@ public class DrawFragment extends Fragment {
 
     private ImageView screenSurface;
     private PaintableImageView drawingSurface;
-    private Button cancel;
-    private Button confirm;
+    private MontserratTextView cancel;
+    private MontserratTextView confirm;
 
     private UploadImageAsyncTask uploadImageAsyncTask;
     private ProgressDialog dialog;

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Bugreporter</string>
+    <string name="button.cancel">Cancel</string>
+    <string name="button.save">Save</string>
 </resources>
