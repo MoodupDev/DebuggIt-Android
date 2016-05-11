@@ -1,6 +1,5 @@
 package com.moodup.bugreporter;
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,11 +16,15 @@ import android.widget.LinearLayout;
 
 import com.cloudinary.utils.ObjectUtils;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import butterknife.ButterKnife;
 
@@ -32,8 +35,9 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
     private ApiClient apiClient;
     private AudioCaptureHelper audioCaptureHelper;
-    private ProgressDialog dialog;
     private ImageView[] dots;
+    private LoadingDialog dialog;
+    private UploadAudioAsyncTask uploadAudioAsyncTask;
 
     protected static ReportFragment newInstance() {
         ReportFragment fragment = new ReportFragment();
@@ -56,15 +60,16 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
         audioCaptureHelper = new AudioCaptureHelper();
 
-        dialog = new ProgressDialog(getActivity());
-        dialog.setTitle("Wait!");
-        dialog.setMessage("you fool");
+        dialog = new LoadingDialog();
 
         return initViews(inflater, container);
     }
 
     @Override
     public void onDestroyView() {
+        if (uploadAudioAsyncTask != null) {
+            uploadAudioAsyncTask.cancel(true);
+        }
         ButterKnife.unbind(this);
         super.onDestroyView();
     }
@@ -83,8 +88,10 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.show();
+
                 Report report = BugReporter.getInstance().getReport();
+
+                dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
                 apiClient.addIssue(
                         report.getTitle(),
                         report.getContent()
@@ -95,8 +102,13 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                         new ApiClient.HttpHandler() {
                             @Override
                             public void done(HttpResponse data) {
-                                dialog.hide();
-                                BugReporter.getInstance().getReport().clear();
+                                dialog.dismiss();
+                                if (data.responseCode == HttpsURLConnection.HTTP_OK) {
+                                    BugReporter.getInstance().getReport().clear();
+                                    ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_SUCCESS).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                } else {
+                                    ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_FAILURE).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                }
                             }
                         }
                 );
@@ -108,6 +120,23 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
             public void onClick(View v) {
                 dismiss();
                 BugReporter.getInstance().getReport().clear();
+                v.setSelected(!v.isSelected());
+                if (v.isSelected()) {
+                    try {
+                        audioCaptureHelper.startRecording(getActivity().getExternalCacheDir().getAbsolutePath() + "/recording.mpeg");
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    audioCaptureHelper.stopRecording();
+                    try {
+                        dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
+                        uploadAudioAsyncTask = new UploadAudioAsyncTask();
+                        uploadAudioAsyncTask.execute(new FileInputStream(audioCaptureHelper.getFilePath()));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
     }
@@ -123,7 +152,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     private void initViewPagerIndicator(View view) {
         LinearLayout dotsIndicator = ButterKnife.findById(view, R.id.view_pager_indicators);
         dots = new ImageView[DOTS_COUNT];
-        for(int i = 0; i < DOTS_COUNT; i++) {
+        for (int i = 0; i < DOTS_COUNT; i++) {
             dots[i] = new ImageView(getContext());
             dots[i].setImageDrawable(getResources().getDrawable(R.drawable.circle_not_active));
 
@@ -147,7 +176,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
     @Override
     public void onPageSelected(int position) {
-        for(int i = 0; i < DOTS_COUNT; i++) {
+        for (int i = 0; i < DOTS_COUNT; i++) {
             dots[i].setImageDrawable(getResources().getDrawable(R.drawable.circle_not_active));
         }
 
@@ -187,7 +216,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
             try {
                 for (InputStream is : params) {
-                    Map map = BugReporter.getInstance().getCloudinary().uploader().uploadLargeRaw(is, ObjectUtils.emptyMap());
+                    Map map = BugReporter.getInstance().getCloudinary().uploader().uploadLargeRaw(is, ObjectUtils.asMap("resource_type", "video"));
                     urls.add(map.get("url") + Utils.MEDIA_FILE_FORMAT);
                 }
             } catch (IOException e) {
@@ -199,7 +228,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
         @Override
         protected void onPostExecute(List<String> s) {
-            dialog.hide();
+            dialog.dismiss();
             BugReporter.getInstance().getReport().getAudioUrls().addAll(s);
             super.onPostExecute(s);
         }

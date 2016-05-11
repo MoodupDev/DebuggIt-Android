@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="@dimen/big_margin"
+    android:background="@drawable/dialog_background"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/big_padding">
+
+    <ImageView
+        android:id="@+id/confirmation_dialog_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/big_margin"
+        android:layout_marginTop="@dimen/small_margin"
+        android:src="@drawable/thumbs_up" />
+
+    <com.moodup.bugreporter.MontserratTextView
+        android:id="@+id/confirmation_dialog_message"
+        style="@style/DialogText"
+        tools:text="@string/confirmation.failure" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/small_margin"
+        android:background="@color/app.gray" />
+
+    <com.moodup.bugreporter.MontserratTextView
+        android:id="@+id/confirmation_dialog_ok_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/regular_padding"
+        android:text="@android:string/ok"
+        android:textAllCaps="true"
+        android:textColor="@drawable/dialog_text_color"
+        android:textSize="@dimen/confirmation_dialog_font_size"
+        android:textStyle="bold" />
+
+</LinearLayout>

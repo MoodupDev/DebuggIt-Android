@@ -1,6 +1,5 @@
 package com.moodup.bugreporter;
 
-import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,9 +31,9 @@ public class DrawFragment extends Fragment {
     private PaintableImageView drawingSurface;
     private MontserratTextView cancel;
     private MontserratTextView confirm;
+    private LoadingDialog dialog;
 
     private UploadImageAsyncTask uploadImageAsyncTask;
-    private ProgressDialog dialog;
 
     @Nullable
     @Override
@@ -59,9 +58,7 @@ public class DrawFragment extends Fragment {
         cancel = ButterKnife.findById(view, R.id.draw_cancel);
         confirm = ButterKnife.findById(view, R.id.draw_confirm);
 
-        dialog = new ProgressDialog(getActivity());
-        dialog.setTitle("Wait!");
-        dialog.setMessage("you fool");
+        dialog = new LoadingDialog();
 
         initDrawingSurface();
         initButtons();
@@ -78,7 +75,7 @@ public class DrawFragment extends Fragment {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.show();
+                dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
                 uploadScreenshotAndGetUrl();
             }
         });
@@ -124,8 +121,7 @@ public class DrawFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<String> s) {
-            dialog.hide();
-
+            dialog.dismiss();
             BugReporter.getInstance().getReport().getScreensUrls().addAll(s);
 
 //            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
