@@ -70,39 +70,43 @@ public class BugReporter {
         addReportButton();
     }
 
-    protected void authenticate(boolean refresh) {
-        if (refresh) {
-            Utils.putString(activity, "accessToken", "");
-        }
-
-        if (Utils.getString(activity, "accessToken", "").isEmpty()) {
-            Log.e("tag", "AccessToken" + Utils.getString(activity, "accessToken", ""));
-            final WebView webView = new WebView(activity);
-            webView.getSettings().setJavaScriptEnabled(true);
-            webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-
-            final FrameLayout rootLayout = ButterKnife.findById(activity, android.R.id.content);
-            rootLayout.addView(webView);
-
-            webView.setWebViewClient(new WebViewClient() {
-
-                @Override
-                public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                    if (url.contains(BitBucket.CALLBACK_URL)) {
-                        accessToken = Utils.getQueryMap(url).get("access_token");
-                        Utils.putString(activity, "accessToken", accessToken);
-                        rootLayout.removeView(webView);
-                        return true;
-                    }
-
-                    return false;
+    protected void authenticate(final boolean refresh) {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (refresh) {
+                    Utils.putString(activity, "accessToken", "");
                 }
-            });
 
-            webView.loadUrl(String.format(BitBucket.OAUTH_URL, clientId));
-        } else {
-            accessToken = Utils.getString(activity, "accessToken", "");
-        }
+                if (Utils.getString(activity, "accessToken", "").isEmpty()) {
+                    final WebView webView = new WebView(activity);
+                    webView.getSettings().setJavaScriptEnabled(true);
+                    webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+
+                    final FrameLayout rootLayout = ButterKnife.findById(activity, android.R.id.content);
+                    rootLayout.addView(webView);
+
+                    webView.setWebViewClient(new WebViewClient() {
+
+                        @Override
+                        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                            if (url.contains(BitBucket.CALLBACK_URL)) {
+                                accessToken = Utils.getQueryMap(url).get("access_token");
+                                Utils.putString(activity, "accessToken", accessToken);
+                                rootLayout.removeView(webView);
+                                return true;
+                            }
+
+                            return false;
+                        }
+                    });
+
+                    webView.loadUrl(String.format(BitBucket.OAUTH_URL, clientId));
+                } else {
+                    accessToken = Utils.getString(activity, "accessToken", "");
+                }
+            }
+        });
     }
 
     private void addReportButton() {
