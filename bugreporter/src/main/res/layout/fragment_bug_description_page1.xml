@@ -13,10 +13,12 @@
 
         <com.moodup.bugreporter.ReportButton
             style="@style/ReportButton"
+            android:id="@+id/kind_bug_button"
             android:text="@string/kind.bug"/>
 
         <com.moodup.bugreporter.ReportButton
             style="@style/ReportButton"
+            android:id="@+id/kind_enhancement_button"
             android:enabled="false"
             android:text="@string/kind.enhancement"/>
     </LinearLayout>
@@ -29,14 +31,17 @@
 
         <com.moodup.bugreporter.ReportButton
             style="@style/ReportButton"
+            android:id="@+id/priority_low_button"
             android:text="@string/priority.low"/>
 
         <com.moodup.bugreporter.ReportButton
             style="@style/ReportButton"
+            android:id="@+id/priority_medium_button"
             android:text="@string/priority.medium"/>
 
         <com.moodup.bugreporter.ReportButton
             style="@style/ReportButton"
+            android:id="@+id/priority_high_button"
             android:text="@string/priority.high"/>
     </LinearLayout>
 
@@ -48,7 +53,7 @@
         android:weightSum="7">
 
         <com.moodup.bugreporter.MontserratEditText
-            android:id="@+id/bug_description"
+            android:id="@+id/bug_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="6"
@@ -56,6 +61,7 @@
             android:textColorHint="@color/kind.button.disabled"/>
 
         <ImageView
+            android:id="@+id/record_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
