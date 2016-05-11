@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import butterknife.ButterKnife;
 
@@ -41,7 +42,7 @@ public class BugDescriptionFragment extends Fragment {
 
     private View initViews(LayoutInflater inflater, ViewGroup container, int position) {
         View view;
-        switch(position) {
+        switch (position) {
             case 0:
                 view = inflater.inflate(R.layout.fragment_bug_description_page1, container, false);
                 initFirstPage(view);
@@ -79,15 +80,34 @@ public class BugDescriptionFragment extends Fragment {
                 new AudioCaptureFragment().show(getChildFragmentManager(), AudioCaptureFragment.TAG);
             }
         });
-        kindButtons = new ReportButton[] {
+        kindButtons = new ReportButton[]{
                 ButterKnife.findById(view, R.id.kind_bug_button),
                 ButterKnife.findById(view, R.id.kind_enhancement_button)
         };
-        priorityButtons = new ReportButton[] {
+        priorityButtons = new ReportButton[]{
                 ButterKnife.findById(view, R.id.priority_low_button),
                 ButterKnife.findById(view, R.id.priority_medium_button),
                 ButterKnife.findById(view, R.id.priority_high_button)
         };
+
+        if (getView() != null) {
+            initReportItems(getView());
+        }
+    }
+
+    private void initReportItems(View view) {
+        LinearLayout itemsContainer = ButterKnife.findById(view, R.id.bug_items_container);
+        BugReporter reporter = BugReporter.getInstance();
+
+        for (String screenshotUrl : reporter.getReport().getScreensUrls()) {
+
+        }
+
+        for (String audioUrl : reporter.getReport().getAudioUrls()) {
+
+        }
+
+        //todo add new screenshot button
     }
 
     private void initSecondPage(View view) {

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="small_margin">8dp</dimen>
+    <dimen name="tiny_padding">4dp</dimen>
     <dimen name="small_padding">8dp</dimen>
     <dimen name="regular_padding">12dp</dimen>
     <dimen name="big_padding">16dp</dimen>
@@ -12,4 +13,6 @@
     <dimen name="report.layout.padding.horizontal">15dp</dimen>
     <dimen name="confirmation_dialog_font_size">16sp</dimen>
     <dimen name="confirmation_dialog_width">280dp</dimen>
+    <dimen name="report.item.height">130dp</dimen>
+    <dimen name="report.item.width">80dp</dimen>
 </resources>

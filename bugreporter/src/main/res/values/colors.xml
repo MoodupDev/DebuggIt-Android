@@ -8,4 +8,5 @@
     <color name="app.gray">#d5d5d5</color>
     <color name="dialog.text.color.transparent">#88353535</color>
     <color name="dialog.text.color">#353535</color>
+    <color name="report.item.stroke.gray">#c8c7cc</color>
 </resources>

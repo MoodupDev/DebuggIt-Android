@@ -88,7 +88,6 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Report report = BugReporter.getInstance().getReport();
 
                 dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
@@ -146,6 +145,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         ReportViewPagerAdapter adapter = new ReportViewPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
     }
+
 
     private void initViewPagerIndicator(View view) {
         LinearLayout dotsIndicator = ButterKnife.findById(view, R.id.view_pager_indicators);

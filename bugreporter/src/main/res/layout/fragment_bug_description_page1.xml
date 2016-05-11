@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/bar.background"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bar.background"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -12,15 +12,15 @@
         android:padding="@dimen/report.layout.padding">
 
         <com.moodup.bugreporter.ReportButton
-            style="@style/ReportButton"
             android:id="@+id/kind_bug_button"
-            android:text="@string/kind.bug"/>
+            style="@style/ReportButton"
+            android:text="@string/kind.bug" />
 
         <com.moodup.bugreporter.ReportButton
-            style="@style/ReportButton"
             android:id="@+id/kind_enhancement_button"
+            style="@style/ReportButton"
             android:enabled="false"
-            android:text="@string/kind.enhancement"/>
+            android:text="@string/kind.enhancement" />
     </LinearLayout>
 
     <LinearLayout
@@ -30,19 +30,19 @@
         android:padding="@dimen/report.layout.padding">
 
         <com.moodup.bugreporter.ReportButton
-            style="@style/ReportButton"
             android:id="@+id/priority_low_button"
-            android:text="@string/priority.low"/>
+            style="@style/ReportButton"
+            android:text="@string/priority.low" />
 
         <com.moodup.bugreporter.ReportButton
-            style="@style/ReportButton"
             android:id="@+id/priority_medium_button"
-            android:text="@string/priority.medium"/>
+            style="@style/ReportButton"
+            android:text="@string/priority.medium" />
 
         <com.moodup.bugreporter.ReportButton
-            style="@style/ReportButton"
             android:id="@+id/priority_high_button"
-            android:text="@string/priority.high"/>
+            style="@style/ReportButton"
+            android:text="@string/priority.high" />
     </LinearLayout>
 
     <LinearLayout
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="6"
             android:hint="@string/bug.description.hint"
-            android:textColorHint="@color/kind.button.disabled"/>
+            android:textColorHint="@color/kind.button.disabled" />
 
         <ImageView
             android:id="@+id/record_button"
@@ -66,6 +66,20 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
-            android:src="@drawable/record_micro"/>
+            android:src="@drawable/record_micro" />
     </LinearLayout>
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/small_margin"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/bug_items_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
 </LinearLayout>
