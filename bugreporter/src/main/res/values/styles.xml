@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="BarTextButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -32,5 +33,25 @@
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">top</item>
         <item name="android:textColorHint">@color/kind.button.disabled</item>
+    </style>
+
+    <style name="DialogText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/big_margin</item>
+        <item name="android:layout_marginTop">@dimen/small_margin</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/dialog.text.color</item>
+        <item name="android:textSize">@dimen/confirmation_dialog_font_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="CustomDialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:minWidth">@dimen/confirmation_dialog_width</item>
     </style>
 </resources>

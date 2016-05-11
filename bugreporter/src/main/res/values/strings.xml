@@ -2,6 +2,7 @@
     <string name="app_name">Bugreporter</string>
     <string name="button.cancel">Cancel</string>
     <string name="button.save">Save</string>
+
     <string name="kind.bug">Bug</string>
     <string name="kind.enhancement">Enhancement</string>
     <string name="priority.low">Low</string>
@@ -11,4 +12,8 @@
     <string name="report.steps">Steps to reproduce</string>
     <string name="report.behaviour.actual">Actual behaviour</string>
     <string name="report.behaviour.expected">Expected behaviour</string>
+
+    <string name="confirmation.failure">Report isn\'t sent!\nCheck your Internet connection</string>
+    <string name="confirmation.success">Great report!\nEverything went smoothly</string>
+    <string name="loading.dialog.message">Sending report...</string>
 </resources>
