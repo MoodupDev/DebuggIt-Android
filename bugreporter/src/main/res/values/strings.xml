@@ -2,4 +2,6 @@
     <string name="app_name">Bugreporter</string>
     <string name="button.cancel">Cancel</string>
     <string name="button.save">Save</string>
+    <string name="confirmation.failure">Report isn\'t sent!\nCheck your Internet connection</string>
+    <string name="confirmation.success">Great report!\nEverything went smoothly</string>
 </resources>
