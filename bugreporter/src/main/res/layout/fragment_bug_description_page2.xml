@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:padding="@dimen/report.layout.padding.horizontal"
+              android:background="@color/bar.background"
+              android:layout_height="match_parent">
+    <com.moodup.bugreporter.MontserratEditText
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:hint="@string/report.steps"
+        android:gravity="top"
+        android:textColorHint="@color/kind.button.disabled"/>
+    <com.moodup.bugreporter.MontserratEditText
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:hint="@string/report.behaviour.actual"
+        android:gravity="top"
+        android:textColorHint="@color/kind.button.disabled"/>
+    <com.moodup.bugreporter.MontserratEditText
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:hint="@string/report.behaviour.expected"
+        android:gravity="top"
+        android:textColorHint="@color/kind.button.disabled"/>
+</LinearLayout>

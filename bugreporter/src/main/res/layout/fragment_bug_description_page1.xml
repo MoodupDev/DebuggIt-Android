@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/bar.background"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="@dimen/report.layout.padding">
+
+        <com.moodup.bugreporter.ReportButton
+            style="@style/ReportButton"
+            android:text="@string/kind.bug"/>
+
+        <com.moodup.bugreporter.ReportButton
+            style="@style/ReportButton"
+            android:enabled="false"
+            android:text="@string/kind.enhancement"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="@dimen/report.layout.padding">
+
+        <com.moodup.bugreporter.ReportButton
+            style="@style/ReportButton"
+            android:text="@string/priority.low"/>
+
+        <com.moodup.bugreporter.ReportButton
+            style="@style/ReportButton"
+            android:text="@string/priority.medium"/>
+
+        <com.moodup.bugreporter.ReportButton
+            style="@style/ReportButton"
+            android:text="@string/priority.high"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="@dimen/report.layout.padding.horizontal"
+        android:weightSum="7">
+
+        <com.moodup.bugreporter.MontserratEditText
+            android:id="@+id/bug_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:hint="@string/bug.description.hint"
+            android:textColorHint="@color/kind.button.disabled"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:src="@drawable/record_micro"/>
+    </LinearLayout>
+</LinearLayout>

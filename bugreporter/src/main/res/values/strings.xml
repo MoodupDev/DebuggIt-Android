@@ -2,4 +2,13 @@
     <string name="app_name">Bugreporter</string>
     <string name="button.cancel">Cancel</string>
     <string name="button.save">Save</string>
+    <string name="kind.bug">Bug</string>
+    <string name="kind.enhancement">Enhancement</string>
+    <string name="priority.low">Low</string>
+    <string name="priority.medium">Medium</string>
+    <string name="priority.high">High</string>
+    <string name="bug.description.hint">What went wrong?</string>
+    <string name="report.steps">Steps to reproduce</string>
+    <string name="report.behaviour.actual">Actual behaviour</string>
+    <string name="report.behaviour.expected">Expected behaviour</string>
 </resources>

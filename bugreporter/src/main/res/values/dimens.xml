@@ -2,4 +2,9 @@
 <resources>
     <dimen name="small_margin">8dp</dimen>
     <dimen name="big_margin">24dp</dimen>
+    <dimen name="kind.button.radius">5dp</dimen>
+    <dimen name="report.button.padding">16dp</dimen>
+    <dimen name="report.button.margin.horizontal">10dp</dimen>
+    <dimen name="report.layout.padding">10dp</dimen>
+    <dimen name="report.layout.padding.horizontal">15dp</dimen>
 </resources>
