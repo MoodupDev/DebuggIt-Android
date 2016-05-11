@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import butterknife.ButterKnife;
 
@@ -128,13 +129,17 @@ public class BugDescriptionFragment extends Fragment {
         BugReporter reporter = BugReporter.getInstance();
 
         for (String screenshotUrl : reporter.getReport().getScreensUrls()) {
-
+            RelativeLayout itemScreenParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_screenshot, itemsContainer, false);
+            itemsContainer.addView(itemScreenParent);
         }
 
         for (String audioUrl : reporter.getReport().getAudioUrls()) {
-
+            RelativeLayout itemAudioParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_audio, itemsContainer, false);
+            itemsContainer.addView(itemAudioParent);
         }
-        //todo add new screenshot button
+
+        RelativeLayout itemAddNewScreenshot = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_new_screenshot, itemsContainer, false);
+        itemsContainer.addView(itemAddNewScreenshot);
     }
 
     private void initBugKindButtons(View view) {

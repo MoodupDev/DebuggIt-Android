@@ -16,4 +16,5 @@ public class ReportButton extends MontserratTextView {
     public ReportButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
+
 }

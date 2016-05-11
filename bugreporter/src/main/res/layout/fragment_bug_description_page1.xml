@@ -20,10 +20,7 @@
             android:id="@+id/kind_enhancement_button"
             style="@style/ReportButton"
             android:enabled="false"
-            android:text="@string/kind.enhancement"
-            android:textColor="@drawable/button_option"
-
-            />
+            android:text="@string/kind.enhancement" />
 
     </LinearLayout>
 
