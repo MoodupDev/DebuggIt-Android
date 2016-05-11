@@ -6,5 +6,5 @@
     <dimen name="big_padding">16dp</dimen>
     <dimen name="big_margin">24dp</dimen>
     <dimen name="confirmation_dialog_font_size">16sp</dimen>
-    <dimen name="confirmation_dialog_width">306dp</dimen>
+    <dimen name="confirmation_dialog_width">280dp</dimen>
 </resources>

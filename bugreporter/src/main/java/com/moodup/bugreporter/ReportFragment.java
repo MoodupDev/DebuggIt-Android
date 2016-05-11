@@ -1,10 +1,8 @@
 package com.moodup.bugreporter;
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -20,7 +18,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +32,7 @@ public class ReportFragment extends Fragment {
 
     private ApiClient apiClient;
     private AudioCaptureHelper audioCaptureHelper;
-    private ProgressDialog dialog;
+    private LoadingDialog dialog;
     private UploadAudioAsyncTask uploadAudioAsyncTask;
 
     protected static ReportFragment newInstance() {
@@ -59,9 +56,7 @@ public class ReportFragment extends Fragment {
 
         audioCaptureHelper = new AudioCaptureHelper();
 
-        dialog = new ProgressDialog(getActivity());
-        dialog.setTitle("Wait!");
-        dialog.setMessage("you fool");
+        dialog = new LoadingDialog();
 
         return initViews(inflater, container);
     }
@@ -89,7 +84,7 @@ public class ReportFragment extends Fragment {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.show();
+                dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
                 apiClient.addIssue(
                         title.getText().toString(),
                         content.getText().toString()
@@ -98,7 +93,7 @@ public class ReportFragment extends Fragment {
                         new ApiClient.HttpHandler() {
                             @Override
                             public void done(HttpResponse data) {
-                                dialog.hide();
+                                dialog.dismiss();
                                 if (data.responseCode == HttpsURLConnection.HTTP_OK) {
                                     BugReporter.getInstance().getReport().clear();
                                     ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_SUCCESS).show(getChildFragmentManager(), ConfirmationDialog.TAG);
@@ -124,7 +119,7 @@ public class ReportFragment extends Fragment {
                 } else {
                     audioCaptureHelper.stopRecording();
                     try {
-                        dialog.show();
+                        dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
                         uploadAudioAsyncTask = new UploadAudioAsyncTask();
                         uploadAudioAsyncTask.execute(new FileInputStream(audioCaptureHelper.getFilePath()));
                     } catch (FileNotFoundException e) {
@@ -198,7 +193,7 @@ public class ReportFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<String> s) {
-            dialog.hide();
+            dialog.dismiss();
             BugReporter.getInstance().getReport().getAudioUrls().addAll(s);
             super.onPostExecute(s);
         }

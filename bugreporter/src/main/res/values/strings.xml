@@ -4,4 +4,5 @@
     <string name="button.save">Save</string>
     <string name="confirmation.failure">Report isn\'t sent!\nCheck your Internet connection</string>
     <string name="confirmation.success">Great report!\nEverything went smoothly</string>
+    <string name="loading.dialog.message">Sending report...</string>
 </resources>
