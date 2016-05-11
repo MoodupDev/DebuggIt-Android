@@ -3,6 +3,7 @@ package com.moodup.bugreporter;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -51,7 +52,7 @@ public class ConfirmationDialog extends DialogFragment {
     }
 
     private void initViews(View view) {
-        int type = getArguments().getInt("type", TYPE_SUCCESS);
+        final int type = getArguments().getInt("type", TYPE_SUCCESS);
 
         ImageView icon = ButterKnife.findById(view, R.id.confirmation_dialog_icon);
         MontserratTextView message = ButterKnife.findById(view, R.id.confirmation_dialog_message);
@@ -60,6 +61,9 @@ public class ConfirmationDialog extends DialogFragment {
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (type == TYPE_SUCCESS) {
+                    getActivity().getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
                 dismiss();
             }
         });
