@@ -1,8 +1,8 @@
 package com.moodup.bugreporter;
 
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,8 +11,9 @@ import butterknife.ButterKnife;
 
 public class ConfirmationDialog extends DialogFragment {
     //region Consts
-    public static final int TYPE_FAILURE = 0;
-    public static final int TYPE_SUCCESS = 1;
+    protected static final String TAG = ConfirmationDialog.class.getSimpleName();
+    protected static final int TYPE_FAILURE = 0;
+    protected static final int TYPE_SUCCESS = 1;
     //endregion
     //region Fields
     //endregion
@@ -28,7 +29,7 @@ public class ConfirmationDialog extends DialogFragment {
 
         initViews(v);
 
-        return super.onCreateDialog(savedInstanceState);
+        return dialog;
     }
 
     //endregion
@@ -38,7 +39,7 @@ public class ConfirmationDialog extends DialogFragment {
     //endregion
 
     //region Methods
-    public static final ConfirmationDialog newInstance(int type) {
+    protected static ConfirmationDialog newInstance(int type) {
         ConfirmationDialog dialog = new ConfirmationDialog();
 
         Bundle bundle = new Bundle();

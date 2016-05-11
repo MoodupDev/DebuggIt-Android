@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -19,9 +20,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import butterknife.ButterKnife;
 
@@ -95,7 +99,12 @@ public class ReportFragment extends Fragment {
                             @Override
                             public void done(HttpResponse data) {
                                 dialog.hide();
-                                BugReporter.getInstance().getReport().clear();
+                                if (data.responseCode == HttpsURLConnection.HTTP_OK) {
+                                    BugReporter.getInstance().getReport().clear();
+                                    ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_SUCCESS).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                } else {
+                                    ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_FAILURE).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                }
                             }
                         }
                 );
