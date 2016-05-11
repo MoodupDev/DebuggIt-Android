@@ -2,6 +2,8 @@
 <resources>
     <dimen name="small_margin">8dp</dimen>
     <dimen name="big_margin">24dp</dimen>
+    <dimen name="text.size.regular">16sp</dimen>
+    <dimen name="text.size.small">12sp</dimen>
     <dimen name="kind.button.radius">5dp</dimen>
     <dimen name="report.button.padding">16dp</dimen>
     <dimen name="report.button.margin.horizontal">10dp</dimen>

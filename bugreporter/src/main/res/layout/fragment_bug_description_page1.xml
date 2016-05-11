@@ -18,8 +18,8 @@
 
         <com.moodup.bugreporter.ReportButton
             style="@style/ReportButton"
+            android:textColor="@drawable/button_option"
             android:id="@+id/kind_enhancement_button"
-            android:enabled="false"
             android:text="@string/kind.enhancement"/>
     </LinearLayout>
 
@@ -57,6 +57,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="6"
+            android:textSize="@dimen/text.size.regular"
             android:hint="@string/bug.description.hint"
             android:textColorHint="@color/kind.button.disabled"/>
 
