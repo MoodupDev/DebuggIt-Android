@@ -147,7 +147,6 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         if (urls != null) {
             StringBuilder builder = new StringBuilder();
             for (String s : urls) {
-            for(String s : urls) {
                 if (!isMediaFile) {
                     builder.append("![Alt text](");
                     builder.append(s);
