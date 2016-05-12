@@ -57,7 +57,7 @@ public class AudioCaptureFragment extends DialogFragment {
         initRecording();
         setCancelable(false);
         timer = ButterKnife.findById(view, R.id.timer_text);
-        dialog = new LoadingDialog();
+        dialog = LoadingDialog.newInstance(getString(R.string.loading_dialog_message_record));
         return view;
     }
 

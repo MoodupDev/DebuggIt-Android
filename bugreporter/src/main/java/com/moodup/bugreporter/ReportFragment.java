@@ -49,7 +49,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
         audioCaptureHelper = new AudioCaptureHelper();
 
-        dialog = new LoadingDialog();
+        dialog = LoadingDialog.newInstance(getString(R.string.loading_dialog_message_report));
         dots = new ArrayList<>();
 
         return initViews(inflater, container);
@@ -173,6 +173,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
         return urlsString;
     }
+
     private class ReportViewPagerAdapter extends FragmentPagerAdapter {
 
         public ReportViewPagerAdapter(FragmentManager fm) {

@@ -1,5 +1,7 @@
 package com.moodup.bugreporter;
 
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,11 +10,15 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
 
 import butterknife.ButterKnife;
 
@@ -20,6 +26,7 @@ public class BugDescriptionFragment extends Fragment {
 
     public static final String POSITION = "position";
 
+    private LinearLayout itemsContainer;
     private ImageView recordButton;
     private ReportButton[] kindButtons;
     private ReportButton[] priorityButtons;
@@ -28,6 +35,8 @@ public class BugDescriptionFragment extends Fragment {
     private MontserratEditText stepsToReproduce;
     private MontserratEditText actualBehaviour;
     private MontserratEditText expectedBehaviour;
+
+    private MediaPlayer mediaPlayer;
 
     public static BugDescriptionFragment newInstance(int position) {
         BugDescriptionFragment fragment = new BugDescriptionFragment();
@@ -61,6 +70,7 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     private void initFirstPage(View view) {
+        mediaPlayer = new MediaPlayer();
         bugTitle = ButterKnife.findById(view, R.id.bug_title);
         bugTitle.addTextChangedListener(new TextWatcher() {
             @Override
@@ -85,12 +95,12 @@ public class BugDescriptionFragment extends Fragment {
                 AudioCaptureFragment.newInstance(new AudioCaptureFragment.AudioRecordListener() {
                     @Override
                     public void onRecordUploaded(String audioUrl) {
-
+                        addAudioMiniature(itemsContainer, audioUrl);
                     }
 
                     @Override
                     public void onFailed() {
-
+                        Toast.makeText(getActivity(), "Audio upload failed!", Toast.LENGTH_LONG).show();
                     }
                 }).show(getChildFragmentManager(), AudioCaptureFragment.TAG);
             }
@@ -137,29 +147,15 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     private void initReportItems(View view) {
-        final LinearLayout itemsContainer = ButterKnife.findById(view, R.id.bug_items_container);
+        itemsContainer = ButterKnife.findById(view, R.id.bug_items_container);
         BugReporter reporter = BugReporter.getInstance();
 
         for (String screenshotUrl : reporter.getReport().getScreensUrls()) {
-            final RelativeLayout itemScreenParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_screenshot, itemsContainer, false);
-            ImageView itemScreenshot = ButterKnife.findById(itemScreenParent, R.id.item_screenshot_image);
-            ImageView itemScreenshotRemove = ButterKnife.findById(itemScreenParent, R.id.item_screenshot_close);
-
-            Picasso.with(getActivity()).load(screenshotUrl).into(itemScreenshot);
-            itemScreenshotRemove.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    itemsContainer.removeView(itemScreenParent);
-                    itemsContainer.invalidate();
-                }
-            });
-
-            itemsContainer.addView(itemScreenParent);
+            addScreenshotMiniature(itemsContainer, screenshotUrl);
         }
 
         for (String audioUrl : reporter.getReport().getAudioUrls()) {
-            RelativeLayout itemAudioParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_audio, itemsContainer, false);
-            itemsContainer.addView(itemAudioParent);
+            addAudioMiniature(itemsContainer, audioUrl);
         }
 
         RelativeLayout itemAddNewScreenshot = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_new_screenshot, itemsContainer, false);
@@ -171,6 +167,74 @@ public class BugDescriptionFragment extends Fragment {
         });
 
         itemsContainer.addView(itemAddNewScreenshot);
+    }
+
+    private void addScreenshotMiniature(final ViewGroup parent, String screenUrl) {
+        final RelativeLayout itemScreenParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_screenshot, parent, false);
+        ImageView itemScreenshot = ButterKnife.findById(itemScreenParent, R.id.item_screenshot_image);
+        ImageView itemScreenshotRemove = ButterKnife.findById(itemScreenParent, R.id.item_screenshot_close);
+
+        Picasso.with(getActivity()).load(screenUrl).into(itemScreenshot);
+        itemScreenshotRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                parent.removeView(itemScreenParent);
+                parent.invalidate();
+            }
+        });
+
+        parent.addView(itemScreenParent);
+    }
+
+    private void addAudioMiniature(final ViewGroup parent, final String audioUrl) {
+        final RelativeLayout itemAudioParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_audio, parent, false);
+        ImageButton playButton = ButterKnife.findById(itemAudioParent, R.id.item_audio_button);
+        final ImageView itemAudioRemove = ButterKnife.findById(itemAudioParent, R.id.item_audio_close);
+
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.setSelected(!v.isSelected());
+
+                if (v.isSelected()) {
+                    playFromUrl(audioUrl);
+                } else {
+                    stopPlaying();
+                }
+            }
+        });
+
+        itemAudioRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                parent.removeView(itemAudioRemove);
+                parent.invalidate();
+            }
+        });
+
+        parent.addView(itemAudioParent);
+    }
+
+    private void playFromUrl(String url) {
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        try {
+            mediaPlayer.setDataSource(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mediaPlayer.prepareAsync();
+        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mediaPlayer.start();
+            }
+        });
+    }
+
+    public void stopPlaying() {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+        }
     }
 
     private void initBugKindButtons(View view) {

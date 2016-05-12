@@ -76,7 +76,7 @@ public class DrawFragment extends DialogFragment {
         cancel = ButterKnife.findById(view, R.id.draw_cancel);
         confirm = ButterKnife.findById(view, R.id.draw_confirm);
 
-        dialog = new LoadingDialog();
+        dialog = LoadingDialog.newInstance(getString(R.string.loading_dialog_message_screenshot));
 
         initDrawingSurface();
         initButtons();
