@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -29,7 +28,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
     private ApiClient apiClient;
     private AudioCaptureHelper audioCaptureHelper;
-    private List<ImageView> dots;
+    private ImageView viewPagerIndicator;
     private LoadingDialog dialog;
 
     @NonNull
@@ -50,7 +49,6 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         audioCaptureHelper = new AudioCaptureHelper();
 
         dialog = new LoadingDialog();
-        dots = new ArrayList<>();
 
         return initViews(inflater, container);
     }
@@ -121,19 +119,11 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     }
 
     private void initViewPager(View view) {
-        initViewPagerIndicator(view);
+        viewPagerIndicator = ButterKnife.findById(view, R.id.view_pager_indicator);
         ViewPager viewPager = ButterKnife.findById(view, R.id.report_view_pager);
         viewPager.addOnPageChangeListener(this);
         ReportViewPagerAdapter adapter = new ReportViewPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
-    }
-
-    private void initViewPagerIndicator(View view) {
-        ViewGroup dotsContainer = ButterKnife.findById(view, R.id.view_pager_indicators);
-        for (int i = 0; i < dotsContainer.getChildCount(); ++i) {
-            dots.add((ImageView) dotsContainer.getChildAt(i));
-            dots.get(i).setSelected(i == 0);
-        }
     }
 
     @Override
@@ -143,9 +133,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
     @Override
     public void onPageSelected(int position) {
-        for (int i = 0; i < DOTS_COUNT; i++) {
-            dots.get(i).setSelected(position == i);
-        }
+        viewPagerIndicator.setRotation(position == 0 ? 0 : 180);
     }
 
     @Override
@@ -159,6 +147,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         if (urls != null) {
             StringBuilder builder = new StringBuilder();
             for (String s : urls) {
+            for(String s : urls) {
                 if (!isMediaFile) {
                     builder.append("![Alt text](");
                     builder.append(s);
@@ -173,6 +162,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
         return urlsString;
     }
+
     private class ReportViewPagerAdapter extends FragmentPagerAdapter {
 
         public ReportViewPagerAdapter(FragmentManager fm) {
