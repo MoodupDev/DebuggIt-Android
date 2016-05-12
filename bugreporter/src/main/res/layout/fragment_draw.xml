@@ -51,9 +51,11 @@
         android:padding="@dimen/small_margin">
 
         <ImageView
+            android:id="@+id/draw_rectangles"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:alpha="0.5"
             android:src="@drawable/rectangle" />
 
         <View
@@ -62,6 +64,7 @@
             android:layout_weight="1" />
 
         <ImageView
+            android:id="@+id/draw_free"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -73,6 +76,7 @@
             android:layout_weight="1" />
 
         <ImageView
+            android:id="@+id/draw_rubber"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
