@@ -24,7 +24,6 @@ import butterknife.ButterKnife;
 public class ReportFragment extends DialogFragment implements ViewPager.OnPageChangeListener {
 
     protected static final String TAG = ReportFragment.class.getSimpleName();
-    private static final int DOTS_COUNT = 2;
 
     private ApiClient apiClient;
     private AudioCaptureHelper audioCaptureHelper;
@@ -48,7 +47,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
         audioCaptureHelper = new AudioCaptureHelper();
 
-        dialog = new LoadingDialog();
+        dialog = LoadingDialog.newInstance(getString(R.string.loading_dialog_message_report));
 
         return initViews(inflater, container);
     }
