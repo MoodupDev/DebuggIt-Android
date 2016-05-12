@@ -62,7 +62,7 @@ public class ConfirmationDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if (type == TYPE_SUCCESS) {
-                    getActivity().getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    ((DialogFragment)getParentFragment()).dismiss();
                 }
                 dismiss();
             }

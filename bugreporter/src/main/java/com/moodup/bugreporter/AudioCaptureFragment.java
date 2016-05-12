@@ -10,6 +10,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.cloudinary.utils.ObjectUtils;
 
@@ -57,12 +59,27 @@ public class AudioCaptureFragment extends DialogFragment {
         initRecording();
         setCancelable(false);
         timer = ButterKnife.findById(view, R.id.timer_text);
+
+        ImageView recordButton = ButterKnife.findById(view, R.id.record_btn);
+
+        recordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                countDownTimer.onFinish();
+            }
+        });
+
         dialog = LoadingDialog.newInstance(getString(R.string.loading_dialog_message_record));
+
         return view;
     }
 
     @Override
     public void onDestroyView() {
+        if (countDownTimer != null) {
+            countDownTimer = null;
+        }
+
         if (uploadAudioAsyncTask != null) {
             uploadAudioAsyncTask.cancel(true);
         }
@@ -71,9 +88,11 @@ public class AudioCaptureFragment extends DialogFragment {
     }
 
     private void initRecording() {
-        audioCaptureHelper = new AudioCaptureHelper();
         String filePath = getActivity().getFilesDir() + TEMP_FILE_NAME + Utils.MEDIA_FILE_FORMAT;
+
+        audioCaptureHelper = new AudioCaptureHelper();
         audioCaptureHelper.startRecording(filePath);
+
         initTimer();
     }
 
@@ -92,13 +111,15 @@ public class AudioCaptureFragment extends DialogFragment {
 
             @Override
             public void onFinish() {
-                dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
-                audioCaptureHelper.stopRecording();
-                try {
-                    uploadAudioAsyncTask = new UploadAudioAsyncTask();
-                    uploadAudioAsyncTask.execute(new FileInputStream(audioCaptureHelper.getFilePath()));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                if (getActivity() != null && !isRemoving()) {
+                    dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
+                    audioCaptureHelper.stopRecording();
+                    try {
+                        uploadAudioAsyncTask = new UploadAudioAsyncTask();
+                        uploadAudioAsyncTask.execute(new FileInputStream(audioCaptureHelper.getFilePath()));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }.start();
@@ -129,7 +150,7 @@ public class AudioCaptureFragment extends DialogFragment {
             try {
                 for (InputStream is : params) {
                     Map map = BugReporter.getInstance().getCloudinary().uploader().uploadLargeRaw(is, ObjectUtils.asMap("resource_type", "video"));
-                    urls.add(map.get("url") + Utils.MEDIA_FILE_FORMAT);
+                    urls.add((String) map.get("url"));
                 }
             } catch (IOException e) {
                 e.printStackTrace();

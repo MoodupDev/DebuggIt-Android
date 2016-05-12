@@ -3,7 +3,6 @@
     android:layout_width="@dimen/report.item.width"
     android:layout_height="@dimen/report.item.height"
     android:layout_margin="@dimen/small_margin"
-    android:background="@drawable/item_background"
     android:gravity="center">
 
     <ImageView

@@ -26,7 +26,6 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     protected static final String TAG = ReportFragment.class.getSimpleName();
 
     private ApiClient apiClient;
-    private AudioCaptureHelper audioCaptureHelper;
     private ImageView viewPagerIndicator;
     private LoadingDialog dialog;
 
@@ -44,8 +43,6 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                 BugReporter.getInstance().getAccountName(),
                 BugReporter.getInstance().getAccessToken()
         );
-
-        audioCaptureHelper = new AudioCaptureHelper();
 
         dialog = LoadingDialog.newInstance(getString(R.string.loading_dialog_message_report));
 
