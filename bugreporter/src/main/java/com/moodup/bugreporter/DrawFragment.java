@@ -32,6 +32,7 @@ public class DrawFragment extends DialogFragment {
     protected static final String TAG = DrawFragment.class.getSimpleName();
 
     private View rootView;
+    private View surfaceRoot;
     private ImageView screenSurface;
     private PaintableImageView drawingSurface;
     private MontserratTextView cancel;
@@ -73,6 +74,7 @@ public class DrawFragment extends DialogFragment {
     }
 
     private void initViews(View view) {
+        surfaceRoot = ButterKnife.findById(view, R.id.surface_root);
         screenSurface = ButterKnife.findById(view, R.id.image_surface);
         drawingSurface = ButterKnife.findById(view, R.id.draw_surface);
         cancel = ButterKnife.findById(view, R.id.draw_cancel);
@@ -123,7 +125,7 @@ public class DrawFragment extends DialogFragment {
     }
 
     private void uploadScreenshotAndGetUrl() {
-        Bitmap bmp = Utils.getBitmapFromView(rootView);
+        Bitmap bmp = Utils.getBitmapFromView(surfaceRoot);
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.PNG, 0, bos);
