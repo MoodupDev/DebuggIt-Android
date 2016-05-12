@@ -161,9 +161,9 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
     @Override
     public void onPageSelected(int position) {
-        /*for (int i = 0; i < DOTS_COUNT; i++) {
+        for (int i = 0; i < DOTS_COUNT; i++) {
             dots.get(i).setSelected(position == i);
-        }*/
+        }
     }
 
     @Override
