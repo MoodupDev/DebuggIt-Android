@@ -40,7 +40,6 @@
         android:gravity="center"
         android:padding="@dimen/regular_padding"
         android:text="@string/button.cancel"
-        android:textAllCaps="true"
         android:textColor="@drawable/dialog_text_color"
         android:textSize="@dimen/confirmation_dialog_font_size"
         android:textStyle="bold" />
