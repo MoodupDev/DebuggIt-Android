@@ -1,5 +1,6 @@
 package com.moodup.bugreporter;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
@@ -10,8 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.cloudinary.utils.ObjectUtils;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
@@ -25,24 +33,22 @@ public class AudioCaptureFragment extends DialogFragment {
     private AudioCaptureHelper audioCaptureHelper;
     private CountDownTimer countDownTimer;
     private MontserratTextView timer;
+    private AudioRecordListener listener;
+    private UploadAudioAsyncTask uploadAudioAsyncTask;
+    private LoadingDialog dialog;
 
-    /*v.setSelected(!v.isSelected());
-    if (v.isSelected()) {
-        try {
-            audioCaptureHelper.startRecording(getActivity().getExternalCacheDir().getAbsolutePath() + "/recording.mpeg");
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-    } else {
-        audioCaptureHelper.stopRecording();
-        try {
-            dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
-            uploadAudioAsyncTask = new UploadAudioAsyncTask();
-            uploadAudioAsyncTask.execute(new FileInputStream(audioCaptureHelper.getFilePath()));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }*/
+    public interface AudioRecordListener {
+        void onRecordUploaded(String audioUrl);
+
+        void onFailed();
+    }
+
+    public static AudioCaptureFragment newInstance(AudioRecordListener listener) {
+        AudioCaptureFragment fragment = new AudioCaptureFragment();
+        fragment.setListener(listener);
+
+        return fragment;
+    }
 
     @Nullable
     @Override
@@ -51,7 +57,17 @@ public class AudioCaptureFragment extends DialogFragment {
         initRecording();
         setCancelable(false);
         timer = ButterKnife.findById(view, R.id.timer_text);
+        dialog = new LoadingDialog();
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (uploadAudioAsyncTask != null) {
+            uploadAudioAsyncTask.cancel(true);
+        }
+        ButterKnife.unbind(this);
+        super.onDestroyView();
     }
 
     private void initRecording() {
@@ -68,23 +84,30 @@ public class AudioCaptureFragment extends DialogFragment {
             public void onTick(long millisUntilFinished) {
                 timer.setText(
                         String.format("%02d:%02d",
-                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
-                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished))
+                                TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
+                                TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished))
                 );
                 // TODO: 11.05.2016 blink red dot
             }
 
             @Override
             public void onFinish() {
-                // TODO: 11.05.2016 finish recording, upload file
+                dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
+                audioCaptureHelper.stopRecording();
+                try {
+                    uploadAudioAsyncTask = new UploadAudioAsyncTask();
+                    uploadAudioAsyncTask.execute(new FileInputStream(audioCaptureHelper.getFilePath()));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         }.start();
     }
 
     @Override
     public void onDetach() {
-        super.onDetach();
         audioCaptureHelper.stopRecording();
+        super.onDetach();
     }
 
     @Override
@@ -92,6 +115,38 @@ public class AudioCaptureFragment extends DialogFragment {
         FragmentTransaction ft = manager.beginTransaction();
         ft.add(this, tag);
         ft.commitAllowingStateLoss();
+    }
+
+    public void setListener(AudioRecordListener listener) {
+        this.listener = listener;
+    }
+
+    private class UploadAudioAsyncTask extends AsyncTask<InputStream, Void, List<String>> {
+        @Override
+        protected List<String> doInBackground(InputStream... params) {
+            List<String> urls = new ArrayList<>();
+
+            try {
+                for (InputStream is : params) {
+                    Map map = BugReporter.getInstance().getCloudinary().uploader().uploadLargeRaw(is, ObjectUtils.asMap("resource_type", "video"));
+                    urls.add(map.get("url") + Utils.MEDIA_FILE_FORMAT);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                listener.onFailed();
+            }
+
+            return urls;
+        }
+
+        @Override
+        protected void onPostExecute(List<String> s) {
+            dialog.dismiss();
+            BugReporter.getInstance().getReport().getAudioUrls().addAll(s);
+            listener.onRecordUploaded(s.get(0));
+            dismiss();
+            super.onPostExecute(s);
+        }
     }
 }
 

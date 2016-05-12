@@ -1,7 +1,6 @@
 package com.moodup.bugreporter;
 
 import android.app.Dialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,15 +15,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-import com.cloudinary.utils.ObjectUtils;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -39,7 +31,6 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     private AudioCaptureHelper audioCaptureHelper;
     private List<ImageView> dots;
     private LoadingDialog dialog;
-    private UploadAudioAsyncTask uploadAudioAsyncTask;
 
     @NonNull
     @Override
@@ -76,9 +67,6 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
     @Override
     public void onDestroyView() {
-        if (uploadAudioAsyncTask != null) {
-            uploadAudioAsyncTask.cancel(true);
-        }
         ButterKnife.unbind(this);
         super.onDestroyView();
     }
@@ -185,32 +173,6 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
         return urlsString;
     }
-
-    private class UploadAudioAsyncTask extends AsyncTask<InputStream, Void, List<String>> {
-        @Override
-        protected List<String> doInBackground(InputStream... params) {
-            List<String> urls = new ArrayList<>();
-
-            try {
-                for (InputStream is : params) {
-                    Map map = BugReporter.getInstance().getCloudinary().uploader().uploadLargeRaw(is, ObjectUtils.asMap("resource_type", "video"));
-                    urls.add(map.get("url") + Utils.MEDIA_FILE_FORMAT);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return urls;
-        }
-
-        @Override
-        protected void onPostExecute(List<String> s) {
-            dialog.dismiss();
-            BugReporter.getInstance().getReport().getAudioUrls().addAll(s);
-            super.onPostExecute(s);
-        }
-    }
-
     private class ReportViewPagerAdapter extends FragmentPagerAdapter {
 
         public ReportViewPagerAdapter(FragmentManager fm) {

@@ -82,7 +82,17 @@ public class BugDescriptionFragment extends Fragment {
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AudioCaptureFragment().show(getChildFragmentManager(), AudioCaptureFragment.TAG);
+                AudioCaptureFragment.newInstance(new AudioCaptureFragment.AudioRecordListener() {
+                    @Override
+                    public void onRecordUploaded(String audioUrl) {
+
+                    }
+
+                    @Override
+                    public void onFailed() {
+
+                    }
+                }).show(getChildFragmentManager(), AudioCaptureFragment.TAG);
             }
         });
 
