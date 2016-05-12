@@ -23,6 +23,12 @@
             style="@style/BarTextButton"
             android:layout_alignParentRight="true"
             android:text="@string/button.save" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/small_margin"
+            android:layout_below="@id/draw_cancel"
+            android:background="@color/app.gray" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -42,6 +48,12 @@
             style="@style/ScreenshotImage"
             android:background="@android:color/transparent" />
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/small_margin"
+        android:background="@color/app.gray" />
 
     <LinearLayout
         android:id="@+id/bottom_bar"
