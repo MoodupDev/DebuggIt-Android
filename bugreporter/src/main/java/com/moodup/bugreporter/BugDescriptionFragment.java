@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.squareup.picasso.Picasso;
+
 import butterknife.ButterKnife;
 
 public class BugDescriptionFragment extends Fragment {
@@ -123,11 +125,22 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     private void initReportItems(View view) {
-        LinearLayout itemsContainer = ButterKnife.findById(view, R.id.bug_items_container);
+        final LinearLayout itemsContainer = ButterKnife.findById(view, R.id.bug_items_container);
         BugReporter reporter = BugReporter.getInstance();
 
         for (String screenshotUrl : reporter.getReport().getScreensUrls()) {
             RelativeLayout itemScreenParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_screenshot, itemsContainer, false);
+            final ImageView itemScreenshot = ButterKnife.findById(itemScreenParent, R.id.item_screenshot_image);
+            ImageView itemScreenshotRemove = ButterKnife.findById(itemScreenParent, R.id.item_screenshot_close);
+
+            Picasso.with(getActivity()).load(screenshotUrl).into(itemScreenshot);
+            itemScreenshotRemove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemsContainer.removeView(itemScreenshot);
+                }
+            });
+
             itemsContainer.addView(itemScreenParent);
         }
 
@@ -137,6 +150,13 @@ public class BugDescriptionFragment extends Fragment {
         }
 
         RelativeLayout itemAddNewScreenshot = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_new_screenshot, itemsContainer, false);
+        itemAddNewScreenshot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DrawFragment().show(getActivity().getSupportFragmentManager(), DrawFragment.TAG);
+            }
+        });
+
         itemsContainer.addView(itemAddNewScreenshot);
     }
 

@@ -7,16 +7,17 @@
     android:gravity="center">
 
     <ImageView
+        android:id="@+id/item_screenshot_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/tiny_padding"
+        android:scaleType="fitXY" />
+
+    <ImageView
         android:id="@+id/item_screenshot_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:src="@drawable/attach_delete" />
-
-    <ImageView
-        android:id="@+id/item_screenshot_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/tiny_padding" />
 
 </RelativeLayout>

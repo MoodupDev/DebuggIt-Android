@@ -128,13 +128,7 @@ public class DrawFragment extends DialogFragment {
         protected void onPostExecute(List<String> s) {
             dialog.dismiss();
             BugReporter.getInstance().getReport().getScreensUrls().addAll(s);
-
-//            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-//            transaction.add(android.R.id.content, ReportFragment.newInstance(), ReportFragment.TAG);
-//            transaction.addToBackStack(null);
-//            transaction.commit();
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            new ReportFragment().show(fm, ReportFragment.TAG);
+            new ReportFragment().show(getActivity().getSupportFragmentManager(), ReportFragment.TAG);
 
             super.onPostExecute(s);
         }

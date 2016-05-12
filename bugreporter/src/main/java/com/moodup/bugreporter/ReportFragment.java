@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.cloudinary.utils.ObjectUtils;
 
@@ -37,7 +36,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
     private ApiClient apiClient;
     private AudioCaptureHelper audioCaptureHelper;
-    private ImageView[] dots;
+    private List<ImageView> dots;
     private LoadingDialog dialog;
     private UploadAudioAsyncTask uploadAudioAsyncTask;
 
@@ -59,6 +58,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         audioCaptureHelper = new AudioCaptureHelper();
 
         dialog = new LoadingDialog();
+        dots = new ArrayList<>();
 
         return initViews(inflater, container);
     }
@@ -80,8 +80,8 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     }
 
     private void initButtons(View view) {
-        MontserratTextView send = ButterKnife.findById(view, R.id.bug_send_button);
-        MontserratTextView cancel = ButterKnife.findById(view, R.id.bug_close);
+        MontserratTextView send = ButterKnife.findById(view, R.id.report_confirm);
+        MontserratTextView cancel = ButterKnife.findById(view, R.id.report_cancel);
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,32 +139,19 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     }
 
     private void initViewPager(View view) {
+        initViewPagerIndicator(view);
         ViewPager viewPager = ButterKnife.findById(view, R.id.report_view_pager);
         viewPager.addOnPageChangeListener(this);
-        initViewPagerIndicator(view);
         ReportViewPagerAdapter adapter = new ReportViewPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
     }
 
-
     private void initViewPagerIndicator(View view) {
-        LinearLayout dotsIndicator = ButterKnife.findById(view, R.id.view_pager_indicators);
-        dots = new ImageView[DOTS_COUNT];
-        for (int i = 0; i < DOTS_COUNT; i++) {
-            dots[i] = new ImageView(getContext());
-            dots[i].setImageDrawable(getResources().getDrawable(R.drawable.circle_not_active));
-
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            );
-
-            params.setMargins(16, 0, 16, 0);
-
-            dotsIndicator.addView(dots[i], params);
+        ViewGroup dotsContainer = ButterKnife.findById(view, R.id.view_pager_indicators);
+        for (int i = 0; i < dotsContainer.getChildCount(); ++i) {
+            dots.add((ImageView) dotsContainer.getChildAt(i));
+            dots.get(i).setSelected(i == 0);
         }
-
-        dots[0].setImageDrawable(getResources().getDrawable(R.drawable.cricle_active));
     }
 
     @Override
@@ -174,11 +161,9 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
     @Override
     public void onPageSelected(int position) {
-        for (int i = 0; i < DOTS_COUNT; i++) {
-            dots[i].setImageDrawable(getResources().getDrawable(R.drawable.circle_not_active));
-        }
-
-        dots[position].setImageDrawable(getResources().getDrawable(R.drawable.cricle_active));
+        /*for (int i = 0; i < DOTS_COUNT; i++) {
+            dots.get(i).setSelected(position == i);
+        }*/
     }
 
     @Override
