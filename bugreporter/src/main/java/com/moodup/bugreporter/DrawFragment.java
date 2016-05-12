@@ -31,7 +31,6 @@ public class DrawFragment extends DialogFragment {
 
     protected static final String TAG = DrawFragment.class.getSimpleName();
 
-    private View rootView;
     private View surfaceRoot;
     private ImageView screenSurface;
     private PaintableImageView drawingSurface;
@@ -46,7 +45,7 @@ public class DrawFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         CustomDialog dialog = new CustomDialog(getActivity(), R.style.CustomDialog);
-        rootView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_draw, null);
+        View rootView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_draw, null);
         ButterKnife.bind(this, rootView);
         dialog.setContentView(rootView);
         initViews(rootView);

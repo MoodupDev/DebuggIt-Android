@@ -4,6 +4,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -163,13 +164,14 @@ public class BugDescriptionFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 new DrawFragment().show(getActivity().getSupportFragmentManager(), DrawFragment.TAG);
+                ((DialogFragment) getParentFragment()).dismiss();
             }
         });
 
         itemsContainer.addView(itemAddNewScreenshot);
     }
 
-    private void addScreenshotMiniature(final ViewGroup parent, String screenUrl) {
+    private void addScreenshotMiniature(final ViewGroup parent, final String screenUrl) {
         final RelativeLayout itemScreenParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_screenshot, parent, false);
         ImageView itemScreenshot = ButterKnife.findById(itemScreenParent, R.id.item_screenshot_image);
         ImageView itemScreenshotRemove = ButterKnife.findById(itemScreenParent, R.id.item_screenshot_close);
@@ -180,6 +182,7 @@ public class BugDescriptionFragment extends Fragment {
             public void onClick(View v) {
                 parent.removeView(itemScreenParent);
                 parent.invalidate();
+                BugReporter.getInstance().getReport().getScreensUrls().remove(screenUrl);
             }
         });
 
@@ -207,12 +210,13 @@ public class BugDescriptionFragment extends Fragment {
         itemAudioRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                parent.removeView(itemAudioRemove);
+                parent.removeView(itemAudioParent);
                 parent.invalidate();
+                BugReporter.getInstance().getReport().getAudioUrls().remove(audioUrl);
             }
         });
 
-        parent.addView(itemAudioParent);
+        parent.addView(itemAudioParent, 0);
     }
 
     private void playFromUrl(String url) {
