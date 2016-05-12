@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/confirmation_dialog_width"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -27,16 +27,15 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_bar"
-        android:layout_below="@+id/top_bar"
-        android:layout_gravity="center">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center">
 
         <ImageView
             android:id="@+id/image_surface"
             style="@style/ScreenshotImage"
             android:background="@drawable/screenshot_background"
-            android:scaleType="fitStart" />
+            android:scaleType="fitXY" />
 
         <com.moodup.bugreporter.PaintableImageView
             android:id="@+id/draw_surface"
@@ -48,7 +47,6 @@
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:padding="@dimen/small_margin">
 
@@ -81,4 +79,4 @@
             android:src="@drawable/rubber" />
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>
