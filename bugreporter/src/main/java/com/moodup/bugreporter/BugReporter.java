@@ -1,9 +1,7 @@
 package com.moodup.bugreporter;
 
 import android.app.Activity;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +11,7 @@ import android.widget.FrameLayout;
 
 import com.cloudinary.Cloudinary;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import butterknife.ButterKnife;
 
@@ -133,10 +129,7 @@ public class BugReporter {
     }
 
     protected void showDrawFragment() {
-        FragmentTransaction transaction = ((AppCompatActivity) activity).getSupportFragmentManager().beginTransaction();
-        transaction.add(android.R.id.content, new DrawFragment(), DrawFragment.TAG);
-        transaction.addToBackStack(null);
-        transaction.commit();
+        new DrawFragment().show(((AppCompatActivity) activity).getSupportFragmentManager(), DrawFragment.TAG);
     }
 
     protected String getAccessToken() {

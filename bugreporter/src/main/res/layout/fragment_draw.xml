@@ -1,86 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:layout_margin="@dimen/big_margin"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/big_margin"
+    android:background="@drawable/main_background"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/bar.background"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        android:layout_height="wrap_content">
+
         <com.moodup.bugreporter.MontserratTextView
-            style="@style/BarTextButton"
             android:id="@+id/draw_cancel"
-            android:text="@string/button.cancel"
-            android:layout_alignParentLeft="true"/>
-        <com.moodup.bugreporter.MontserratTextView
             style="@style/BarTextButton"
+            android:layout_alignParentLeft="true"
+            android:text="@string/button.cancel" />
+
+        <com.moodup.bugreporter.MontserratTextView
             android:id="@+id/draw_confirm"
-            android:text="@string/button.save"
-            android:layout_alignParentRight="true"/>
+            style="@style/BarTextButton"
+            android:layout_alignParentRight="true"
+            android:text="@string/button.save" />
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:background="@color/screenshot.background"
+        android:layout_above="@+id/bottom_bar"
         android:layout_below="@+id/top_bar"
-        android:layout_above="@+id/bottom_bar">
+        android:layout_gravity="center">
 
         <ImageView
-            style="@style/ScreenshotImage"
             android:id="@+id/image_surface"
-            android:scaleType="fitStart"
-            android:background="@drawable/screenshot_background"/>
+            style="@style/ScreenshotImage"
+            android:background="@drawable/screenshot_background"
+            android:scaleType="fitStart" />
 
         <com.moodup.bugreporter.PaintableImageView
-            style="@style/ScreenshotImage"
             android:id="@+id/draw_surface"
-            android:background="@android:color/transparent"/>
+            style="@style/ScreenshotImage"
+            android:background="@android:color/transparent" />
     </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/small_margin"
-        android:background="@color/bar.background"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="@dimen/small_margin">
 
         <ImageView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/rectangle"
-            />
+            android:src="@drawable/rectangle" />
 
         <View
             android:layout_width="0dp"
             android:layout_height="37dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <ImageView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/draw"
-            />
+            android:src="@drawable/draw" />
 
         <View
             android:layout_width="0dp"
             android:layout_height="37dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <ImageView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/rubber"/>
+            android:src="@drawable/rubber" />
     </LinearLayout>
 
 </RelativeLayout>

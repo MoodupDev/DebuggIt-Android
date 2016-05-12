@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/big_margin">
+    android:layout_margin="@dimen/big_margin"
+    android:background="@drawable/main_background">
 
     <RelativeLayout
         android:id="@+id/top_bar"
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/bar.background">
+        android:layout_height="wrap_content">
 
         <com.moodup.bugreporter.MontserratTextView
             android:id="@+id/bug_close"
             style="@style/BarTextButton"
             android:layout_alignParentLeft="true"
-            android:text="@string/button.cancel"/>
+            android:text="@string/button.cancel" />
 
         <LinearLayout
             android:id="@+id/view_pager_indicators"
@@ -24,18 +22,18 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center_horizontal"
-            android:orientation="horizontal"/>
+            android:orientation="horizontal" />
 
         <com.moodup.bugreporter.MontserratTextView
             android:id="@+id/bug_send_button"
             style="@style/BarTextButton"
             android:layout_alignParentRight="true"
-            android:text="@string/button.save"/>
+            android:text="@string/button.save" />
     </RelativeLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/report_view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/top_bar"/>
+        android:layout_below="@+id/top_bar" />
 </RelativeLayout>

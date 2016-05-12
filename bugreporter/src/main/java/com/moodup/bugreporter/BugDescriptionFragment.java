@@ -119,9 +119,7 @@ public class BugDescriptionFragment extends Fragment {
             });
         }
 
-        if (getView() != null) {
-            initReportItems(getView());
-        }
+        initReportItems(view);
     }
 
     private void initReportItems(View view) {

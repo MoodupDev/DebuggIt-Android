@@ -1,7 +1,9 @@
 package com.moodup.bugreporter;
 
+import android.app.Dialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -39,14 +41,10 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     private LoadingDialog dialog;
     private UploadAudioAsyncTask uploadAudioAsyncTask;
 
-    protected static ReportFragment newInstance() {
-        ReportFragment fragment = new ReportFragment();
-
-        Bundle bundle = new Bundle();
-
-        fragment.setArguments(bundle);
-
-        return fragment;
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return new CustomDialog(getActivity(), R.style.CustomDialog);
     }
 
     @Nullable

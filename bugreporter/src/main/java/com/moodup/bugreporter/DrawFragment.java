@@ -1,9 +1,12 @@
 package com.moodup.bugreporter;
 
+import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -23,10 +26,11 @@ import java.util.Map;
 
 import butterknife.ButterKnife;
 
-public class DrawFragment extends Fragment {
+public class DrawFragment extends DialogFragment {
 
     protected static final String TAG = DrawFragment.class.getSimpleName();
 
+    private View rootView;
     private ImageView screenSurface;
     private PaintableImageView drawingSurface;
     private MontserratTextView cancel;
@@ -35,10 +39,15 @@ public class DrawFragment extends Fragment {
 
     private UploadImageAsyncTask uploadImageAsyncTask;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return initViews(inflater, container);
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        CustomDialog dialog = new CustomDialog(getActivity(), R.style.CustomDialog);
+        rootView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_draw, null);
+        ButterKnife.bind(this, rootView);
+        dialog.setContentView(rootView);
+        initViews(rootView);
+
+        return dialog;
     }
 
     @Override
@@ -50,9 +59,7 @@ public class DrawFragment extends Fragment {
         super.onDestroyView();
     }
 
-    private View initViews(LayoutInflater inflater, ViewGroup container) {
-        View view = inflater.inflate(R.layout.fragment_draw, container, false);
-
+    private void initViews(View view) {
         screenSurface = ButterKnife.findById(view, R.id.image_surface);
         drawingSurface = ButterKnife.findById(view, R.id.draw_surface);
         cancel = ButterKnife.findById(view, R.id.draw_cancel);
@@ -62,8 +69,6 @@ public class DrawFragment extends Fragment {
 
         initDrawingSurface();
         initButtons();
-
-        return view;
     }
 
     private void initDrawingSurface() {
@@ -89,7 +94,7 @@ public class DrawFragment extends Fragment {
     }
 
     private void uploadScreenshotAndGetUrl() {
-        Bitmap bmp = Utils.getBitmapFromView(getView());
+        Bitmap bmp = Utils.getBitmapFromView(rootView);
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.PNG, 0, bos);
