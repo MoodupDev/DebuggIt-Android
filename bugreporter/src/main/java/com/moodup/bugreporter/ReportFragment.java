@@ -102,6 +102,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                                 if (data.responseCode == HttpsURLConnection.HTTP_OK) {
                                     BugReporter.getInstance().getReport().clear();
                                     ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_SUCCESS).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                    dismiss();
                                 } else {
                                     ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_FAILURE).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                                 }
