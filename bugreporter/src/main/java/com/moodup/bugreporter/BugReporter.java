@@ -3,6 +3,7 @@ package com.moodup.bugreporter;
 import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
@@ -111,10 +112,35 @@ public class BugReporter {
         reportButton = LayoutInflater.from(activity).inflate(R.layout.report_button_layout, rootLayout, false);
         rootLayout.addView(reportButton);
 
-        reportButton.setOnClickListener(new View.OnClickListener() {
+        reportButton.setOnTouchListener(new View.OnTouchListener() {
+            float dY;
+            boolean isMoving = false;
+
             @Override
-            public void onClick(View v) {
-                showDrawFragment();
+            public boolean onTouch(View view, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        dY = view.getY() - event.getRawY();
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        if (!isMoving) {
+                            showDrawFragment();
+                        }
+                        isMoving = false;
+                        break;
+
+                    case MotionEvent.ACTION_MOVE:
+                        isMoving = true;
+                        view.animate()
+                                .y(event.getRawY() + dY)
+                                .setDuration(0)
+                                .start();
+                        break;
+                    default:
+                        return false;
+                }
+                return true;
             }
         });
     }
