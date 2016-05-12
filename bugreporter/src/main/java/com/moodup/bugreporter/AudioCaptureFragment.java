@@ -150,7 +150,7 @@ public class AudioCaptureFragment extends DialogFragment {
             try {
                 for (InputStream is : params) {
                     Map map = BugReporter.getInstance().getCloudinary().uploader().uploadLargeRaw(is, ObjectUtils.asMap("resource_type", "video"));
-                    urls.add(map.get("url") + Utils.MEDIA_FILE_FORMAT);
+                    urls.add((String) map.get("url"));
                 }
             } catch (IOException e) {
                 e.printStackTrace();

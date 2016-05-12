@@ -101,7 +101,12 @@ public class BugDescriptionFragment extends Fragment {
 
                     @Override
                     public void onFailed() {
-                        Toast.makeText(getActivity(), "Audio upload failed!", Toast.LENGTH_LONG).show();
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getActivity(), "Audio upload failed!", Toast.LENGTH_LONG).show();
+                            }
+                        });
                     }
                 }).show(getChildFragmentManager(), AudioCaptureFragment.TAG);
             }
@@ -200,7 +205,7 @@ public class BugDescriptionFragment extends Fragment {
                 v.setSelected(!v.isSelected());
 
                 if (v.isSelected()) {
-                    playFromUrl(audioUrl);
+                    playFromUrl(v, audioUrl);
                 } else {
                     stopPlaying();
                 }
@@ -219,7 +224,7 @@ public class BugDescriptionFragment extends Fragment {
         parent.addView(itemAudioParent, 0);
     }
 
-    private void playFromUrl(String url) {
+    private void playFromUrl(final View playView, String url) {
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
             mediaPlayer.setDataSource(url);
@@ -233,11 +238,20 @@ public class BugDescriptionFragment extends Fragment {
                 mediaPlayer.start();
             }
         });
+
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                playView.setSelected(false);
+                mediaPlayer.reset();
+            }
+        });
     }
 
     public void stopPlaying() {
         if (mediaPlayer != null) {
-            mediaPlayer.stop();
+            mediaPlayer.pause();
+            mediaPlayer.reset();
         }
     }
 
