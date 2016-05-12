@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.cloudinary.utils.ObjectUtils;
@@ -48,6 +49,16 @@ public class DrawFragment extends DialogFragment {
         initViews(rootView);
 
         return dialog;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getDialog() == null) {
+            return;
+        }
+
+        getDialog().getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.confirmation_dialog_width), WindowManager.LayoutParams.WRAP_CONTENT);
     }
 
     @Override
@@ -88,7 +99,7 @@ public class DrawFragment extends DialogFragment {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().popBackStackImmediate();
+                dismiss();
             }
         });
     }
@@ -129,6 +140,7 @@ public class DrawFragment extends DialogFragment {
             dialog.dismiss();
             BugReporter.getInstance().getReport().getScreensUrls().addAll(s);
             new ReportFragment().show(getActivity().getSupportFragmentManager(), ReportFragment.TAG);
+            dismiss();
 
             super.onPostExecute(s);
         }

@@ -13,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.cloudinary.utils.ObjectUtils;
@@ -61,6 +62,16 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         dots = new ArrayList<>();
 
         return initViews(inflater, container);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getDialog() == null) {
+            return;
+        }
+
+        getDialog().getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.confirmation_dialog_width), WindowManager.LayoutParams.WRAP_CONTENT);
     }
 
     @Override
