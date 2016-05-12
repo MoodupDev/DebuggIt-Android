@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
@@ -24,9 +26,23 @@ public class AudioCaptureFragment extends DialogFragment {
     private CountDownTimer countDownTimer;
     private MontserratTextView timer;
 
-    public static AudioCaptureFragment newInstance() {
-        return new AudioCaptureFragment();
-    }
+    /*v.setSelected(!v.isSelected());
+    if (v.isSelected()) {
+        try {
+            audioCaptureHelper.startRecording(getActivity().getExternalCacheDir().getAbsolutePath() + "/recording.mpeg");
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+    } else {
+        audioCaptureHelper.stopRecording();
+        try {
+            dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
+            uploadAudioAsyncTask = new UploadAudioAsyncTask();
+            uploadAudioAsyncTask.execute(new FileInputStream(audioCaptureHelper.getFilePath()));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }*/
 
     @Nullable
     @Override

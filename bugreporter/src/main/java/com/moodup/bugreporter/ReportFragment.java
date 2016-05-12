@@ -126,25 +126,8 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dismiss();
                 BugReporter.getInstance().getReport().clear();
-                v.setSelected(!v.isSelected());
-                if (v.isSelected()) {
-                    try {
-                        audioCaptureHelper.startRecording(getActivity().getExternalCacheDir().getAbsolutePath() + "/recording.mpeg");
-                    } catch (NullPointerException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    audioCaptureHelper.stopRecording();
-                    try {
-                        dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
-                        uploadAudioAsyncTask = new UploadAudioAsyncTask();
-                        uploadAudioAsyncTask.execute(new FileInputStream(audioCaptureHelper.getFilePath()));
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
+                dismiss();
             }
         });
     }

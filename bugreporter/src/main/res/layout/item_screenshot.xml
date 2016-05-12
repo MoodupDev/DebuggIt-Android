@@ -10,7 +10,6 @@
         android:id="@+id/item_screenshot_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/tiny_padding"
         android:scaleType="fitXY" />
 
     <ImageView

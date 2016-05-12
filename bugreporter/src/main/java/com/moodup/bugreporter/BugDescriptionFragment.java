@@ -30,10 +30,12 @@ public class BugDescriptionFragment extends Fragment {
     private MontserratEditText expectedBehaviour;
 
     public static BugDescriptionFragment newInstance(int position) {
-        Bundle args = new Bundle();
-        args.putInt(POSITION, position);
         BugDescriptionFragment fragment = new BugDescriptionFragment();
-        fragment.setArguments(args);
+
+        Bundle bundle = new Bundle();
+        bundle.putInt(POSITION, position);
+
+        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -129,15 +131,16 @@ public class BugDescriptionFragment extends Fragment {
         BugReporter reporter = BugReporter.getInstance();
 
         for (String screenshotUrl : reporter.getReport().getScreensUrls()) {
-            RelativeLayout itemScreenParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_screenshot, itemsContainer, false);
-            final ImageView itemScreenshot = ButterKnife.findById(itemScreenParent, R.id.item_screenshot_image);
+            final RelativeLayout itemScreenParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_screenshot, itemsContainer, false);
+            ImageView itemScreenshot = ButterKnife.findById(itemScreenParent, R.id.item_screenshot_image);
             ImageView itemScreenshotRemove = ButterKnife.findById(itemScreenParent, R.id.item_screenshot_close);
 
             Picasso.with(getActivity()).load(screenshotUrl).into(itemScreenshot);
             itemScreenshotRemove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    itemsContainer.removeView(itemScreenshot);
+                    itemsContainer.removeView(itemScreenParent);
+                    itemsContainer.invalidate();
                 }
             });
 
