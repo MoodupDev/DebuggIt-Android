@@ -36,9 +36,22 @@ public class LoadingDialog extends DialogFragment {
     //endregion
 
     //region Methods
+    protected static LoadingDialog newInstance(String message) {
+        LoadingDialog dialog = new LoadingDialog();
+
+        Bundle bundle = new Bundle();
+        bundle.putString("message", message);
+
+        dialog.setArguments(bundle);
+
+        return dialog;
+    }
+
     private void initViews(View view) {
+        MontserratTextView message = ButterKnife.findById(view, R.id.confirmation_dialog_message);
         MontserratTextView cancelButton = ButterKnife.findById(view, R.id.loading_dialog_cancel_button);
 
+        message.setText(getArguments().getString("message", ""));
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

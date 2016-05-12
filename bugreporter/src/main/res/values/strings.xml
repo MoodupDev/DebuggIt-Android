@@ -15,5 +15,8 @@
 
     <string name="confirmation.failure">Report isn\'t sent!\nCheck your Internet connection</string>
     <string name="confirmation.success">Great report!\nEverything went smoothly</string>
-    <string name="loading.dialog.message">Sending report...</string>
+    <string name="loading.dialog.message.report">Sending report...</string>
+    <string name="loading.dialog.message.screenshot">Sending screenshot...</string>
+    <string name="loading.dialog.message.record">Sending record...</string>
+
 </resources>

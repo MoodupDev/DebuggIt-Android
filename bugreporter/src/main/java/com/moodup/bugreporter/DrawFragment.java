@@ -36,6 +36,8 @@ public class DrawFragment extends DialogFragment {
     private PaintableImageView drawingSurface;
     private MontserratTextView cancel;
     private MontserratTextView confirm;
+    private ImageView rubber;
+    private ImageView freeDraw;
     private LoadingDialog dialog;
 
     private UploadImageAsyncTask uploadImageAsyncTask;
@@ -75,8 +77,10 @@ public class DrawFragment extends DialogFragment {
         drawingSurface = ButterKnife.findById(view, R.id.draw_surface);
         cancel = ButterKnife.findById(view, R.id.draw_cancel);
         confirm = ButterKnife.findById(view, R.id.draw_confirm);
+        rubber = ButterKnife.findById(view, R.id.draw_rubber);
+        freeDraw = ButterKnife.findById(view, R.id.draw_free);
 
-        dialog = new LoadingDialog();
+        dialog = LoadingDialog.newInstance(getString(R.string.loading_dialog_message_screenshot));
 
         initDrawingSurface();
         initButtons();
@@ -100,6 +104,20 @@ public class DrawFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 dismiss();
+            }
+        });
+
+        rubber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawingSurface.clear();
+            }
+        });
+
+        freeDraw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.setSelected(!v.isSelected());
             }
         });
     }

@@ -82,6 +82,14 @@ public class PaintableImageView extends ImageView {
         }
     }
 
+    protected void clear() {
+        int w = bitmap.getWidth();
+        int h = bitmap.getHeight();
+        bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        canvas = new Canvas(bitmap);
+        invalidate();
+    }
+
     private void touchUp() {
         path.lineTo(x, y);
         // commit the path to our offscreen
