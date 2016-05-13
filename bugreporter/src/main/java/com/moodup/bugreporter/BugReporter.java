@@ -114,17 +114,20 @@ public class BugReporter {
 
         reportButton.setOnTouchListener(new View.OnTouchListener() {
             float dY;
+            float previousY;
             boolean isMoving = false;
+            final int MOVE_TOLERANCE = 5;
 
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         dY = view.getY() - event.getRawY();
+                        previousY = view.getY();
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        if (!isMoving) {
+                        if (!isMoving || Math.abs(previousY - view.getY()) <= MOVE_TOLERANCE) {
                             showDrawFragment();
                         }
                         isMoving = false;
