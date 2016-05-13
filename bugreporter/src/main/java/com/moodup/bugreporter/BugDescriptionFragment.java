@@ -61,14 +61,17 @@ public class BugDescriptionFragment extends Fragment {
             case 0:
                 view = inflater.inflate(R.layout.fragment_bug_description_page1, container, false);
                 initFirstPage(view);
+                initReport();
                 break;
             default:
                 view = inflater.inflate(R.layout.fragment_bug_description_page2, container, false);
                 initSecondPage(view);
+                initReportContent();
                 break;
         }
         return view;
     }
+
 
     private void initFirstPage(View view) {
         mediaPlayer = new MediaPlayer();
@@ -112,7 +115,7 @@ public class BugDescriptionFragment extends Fragment {
             }
         });
 
-        kindButtons = new ReportButton[]{
+        kindButtons = new ReportButton[] {
                 ButterKnife.findById(view, R.id.kind_bug_button),
                 ButterKnife.findById(view, R.id.kind_enhancement_button)
         };
@@ -122,7 +125,7 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     private void initBugPriorityButtons(View view) {
-        priorityButtons = new ReportButton[]{
+        priorityButtons = new ReportButton[] {
                 ButterKnife.findById(view, R.id.priority_low_button),
                 ButterKnife.findById(view, R.id.priority_medium_button),
                 ButterKnife.findById(view, R.id.priority_high_button)
@@ -174,6 +177,40 @@ public class BugDescriptionFragment extends Fragment {
         });
 
         itemsContainer.addView(itemAddNewScreenshot);
+    }
+
+    private void initReport() {
+        Report report = BugReporter.getInstance().getReport();
+        if (!report.getTitle().isEmpty()) {
+            bugTitle.setText(report.getTitle());
+        }
+        if (!report.getKind().isEmpty()) {
+            kindButtons[(report.getKind().equalsIgnoreCase(BitBucket.KIND_BUG) ? 0 : 1)].setSelected(true);
+        }
+        if (!report.getPriority().isEmpty()) {
+            int index;
+            if (report.getPriority().equalsIgnoreCase(BitBucket.PRIORITY_MINOR)) {
+                index = 0;
+            } else if (report.getPriority().equalsIgnoreCase(BitBucket.PRIORITY_MAJOR)) {
+                index = 1;
+            } else {
+                index = 2;
+            }
+            priorityButtons[index].setSelected(true);
+        }
+    }
+
+    private void initReportContent() {
+        Report report = BugReporter.getInstance().getReport();
+        if (!report.getActualBehaviour().isEmpty()) {
+            actualBehaviour.setText(report.getActualBehaviour());
+        }
+        if(!report.getStepsToReproduce().isEmpty()) {
+            stepsToReproduce.setText(report.getStepsToReproduce());
+        }
+        if(!report.getExpectedBehaviour().isEmpty()) {
+            expectedBehaviour.setText(report.getExpectedBehaviour());
+        }
     }
 
     private void addScreenshotMiniature(final ViewGroup parent, final String screenUrl) {
@@ -256,7 +293,7 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     private void initBugKindButtons(View view) {
-        kindButtons = new ReportButton[]{
+        kindButtons = new ReportButton[] {
                 ButterKnife.findById(view, R.id.kind_bug_button),
                 ButterKnife.findById(view, R.id.kind_enhancement_button)
         };
@@ -286,7 +323,11 @@ public class BugDescriptionFragment extends Fragment {
         stepsToReproduce = ButterKnife.findById(view, R.id.steps_text);
         actualBehaviour = ButterKnife.findById(view, R.id.actual_behaviour_text);
         expectedBehaviour = ButterKnife.findById(view, R.id.expected_behaviour_text);
-        TextWatcher textWatcher = new TextWatcher() {
+        initTextWatchers();
+    }
+
+    private void initTextWatchers() {
+        TextWatcher watcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -299,19 +340,18 @@ public class BugDescriptionFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                BugReporter.getInstance().getReport().setContent(getContent());
+                if(s == stepsToReproduce.getEditableText()) {
+                    BugReporter.getInstance().getReport().setStepsToReproduce(stepsToReproduce.getText().toString());
+                } else if(s == actualBehaviour.getEditableText()) {
+                    BugReporter.getInstance().getReport().setActualBehaviour(actualBehaviour.getText().toString());
+                } else {
+                    BugReporter.getInstance().getReport().setExpectedBehaviour(expectedBehaviour.getText().toString());
+                }
             }
         };
-        stepsToReproduce.addTextChangedListener(textWatcher);
-        actualBehaviour.addTextChangedListener(textWatcher);
-        expectedBehaviour.addTextChangedListener(textWatcher);
-    }
-
-    private String getContent() {
-        // TODO: 11.05.2016 format content from 2nd screen to markdown template
-        return "**Steps to reproduce**: " + stepsToReproduce.getText().toString() + "\n\n" +
-                "**Actual behaviour**: " + actualBehaviour.getText().toString() + "\n\n" +
-                "**Expected behaviour**: " + expectedBehaviour.getText().toString() + "\n\n";
+        stepsToReproduce.addTextChangedListener(watcher);
+        actualBehaviour.addTextChangedListener(watcher);
+        expectedBehaviour.addTextChangedListener(watcher);
     }
 
 }
