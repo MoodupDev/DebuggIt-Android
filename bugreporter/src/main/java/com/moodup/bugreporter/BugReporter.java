@@ -149,12 +149,7 @@ public class BugReporter {
     }
 
     public void detach() {
-        removeReportButton();
         activity = null;
-    }
-
-    private void removeReportButton() {
-        ((ViewGroup) ButterKnife.findById(activity, android.R.id.content)).removeView(reportButton);
     }
 
     protected void showDrawFragment() {
