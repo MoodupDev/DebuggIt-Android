@@ -28,9 +28,9 @@ public class Report {
     }
 
     protected String getContent() {
-        return "**Steps to reproduce**: " + stepsToReproduce + "\n\n" +
-                "**Actual behaviour**: " + actualBehaviour + "\n\n" +
-                "**Expected behaviour**: " + expectedBehaviour + "\n\n";
+        return "**Steps to reproduce**: " + getStepsToReproduce() + "\n\n" +
+                "**Actual behaviour**: " + getActualBehaviour() + "\n\n" +
+                "**Expected behaviour**: " + getExpectedBehaviour() + "\n\n";
     }
 
     protected List<String> getAudioUrls() {
