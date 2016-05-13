@@ -69,7 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:alpha="0.5"
-            android:src="@drawable/rectangle" />
+            android:src="@drawable/button_rectangle" />
 
         <View
             android:layout_width="0dp"
@@ -81,7 +81,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/draw" />
+            android:src="@drawable/button_free_draw" />
 
         <View
             android:layout_width="0dp"
