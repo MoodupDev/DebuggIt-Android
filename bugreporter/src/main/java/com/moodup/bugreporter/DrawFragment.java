@@ -119,6 +119,7 @@ public class DrawFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 v.setSelected(!v.isSelected());
+                drawingSurface.setEnabled(v.isSelected());
             }
         });
     }

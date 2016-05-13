@@ -49,6 +49,7 @@ public class PaintableImageView extends ImageView {
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeCap(Paint.Cap.ROUND);
         paint.setStrokeWidth(12);
+        setEnabled(false);
     }
 
     @Override
@@ -100,24 +101,26 @@ public class PaintableImageView extends ImageView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        float x = event.getX();
-        float y = event.getY();
+        if (isEnabled()) {
+            float x = event.getX();
+            float y = event.getY();
 
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                touchStart(x, y);
-                invalidate();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                touchMove(x, y);
-                invalidate();
-                break;
-            case MotionEvent.ACTION_UP:
-                touchUp();
-                invalidate();
-                break;
+            switch(event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    touchStart(x, y);
+                    invalidate();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    touchMove(x, y);
+                    invalidate();
+                    break;
+                case MotionEvent.ACTION_UP:
+                    touchUp();
+                    invalidate();
+                    break;
+            }
+            return true;
         }
-        return true;
+        return false;
     }
-
 }
