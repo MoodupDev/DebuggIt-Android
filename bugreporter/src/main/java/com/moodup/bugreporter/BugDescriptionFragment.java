@@ -206,6 +206,9 @@ public class BugDescriptionFragment extends Fragment {
         }
         if (!report.getKind().isEmpty()) {
             kindButtons[(report.getKind().equalsIgnoreCase(BitBucket.KIND_BUG) ? 0 : 1)].setSelected(true);
+        } else {
+            kindButtons[0].setSelected(true);
+            report.setKind(BitBucket.KIND_BUG);
         }
         if (!report.getPriority().isEmpty()) {
             int index;
@@ -217,6 +220,9 @@ public class BugDescriptionFragment extends Fragment {
                 index = 2;
             }
             priorityButtons[index].setSelected(true);
+        } else {
+            priorityButtons[0].setSelected(true);
+            report.setPriority(BitBucket.PRIORITY_MINOR);
         }
     }
 
