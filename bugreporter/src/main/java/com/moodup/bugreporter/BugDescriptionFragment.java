@@ -171,7 +171,6 @@ public class BugDescriptionFragment extends Fragment {
         itemAddNewScreenshot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DrawFragment().show(getActivity().getSupportFragmentManager(), DrawFragment.TAG);
                 ((DialogFragment) getParentFragment()).dismiss();
             }
         });
