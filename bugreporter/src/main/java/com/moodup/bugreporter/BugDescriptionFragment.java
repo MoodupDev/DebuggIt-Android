@@ -1,9 +1,14 @@
 package com.moodup.bugreporter;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -26,6 +31,7 @@ import butterknife.ButterKnife;
 public class BugDescriptionFragment extends Fragment {
 
     public static final String POSITION = "position";
+    public static final int RECORD_PERMISSIONS_REQUEST = 100;
 
     private LinearLayout itemsContainer;
     private ImageView recordButton;
@@ -96,22 +102,26 @@ public class BugDescriptionFragment extends Fragment {
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AudioCaptureFragment.newInstance(new AudioCaptureFragment.AudioRecordListener() {
-                    @Override
-                    public void onRecordUploaded(String audioUrl) {
-                        addAudioMiniature(itemsContainer, audioUrl);
-                    }
+                if(!areRecordPermissionsGranted(getActivity())) {
+                    requestRecordPermissions(getActivity());
+                } else {
+                    AudioCaptureFragment.newInstance(new AudioCaptureFragment.AudioRecordListener() {
+                        @Override
+                        public void onRecordUploaded(String audioUrl) {
+                            addAudioMiniature(itemsContainer, audioUrl);
+                        }
 
-                    @Override
-                    public void onFailed() {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getActivity(), "Audio upload failed!", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }
-                }).show(getChildFragmentManager(), AudioCaptureFragment.TAG);
+                        @Override
+                        public void onFailed() {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity(), "Audio upload failed!", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+                    }).show(getChildFragmentManager(), AudioCaptureFragment.TAG);
+                }
             }
         });
 
@@ -122,6 +132,17 @@ public class BugDescriptionFragment extends Fragment {
 
         initBugKindButtons(view);
         initBugPriorityButtons(view);
+    }
+
+    public void requestRecordPermissions(Activity activity) {
+        ActivityCompat.requestPermissions(activity,
+                new String[] { Manifest.permission.RECORD_AUDIO },
+                RECORD_PERMISSIONS_REQUEST);
+    }
+
+    public boolean areRecordPermissionsGranted(Activity activity) {
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M
+                || ActivityCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED;
     }
 
     private void initBugPriorityButtons(View view) {
