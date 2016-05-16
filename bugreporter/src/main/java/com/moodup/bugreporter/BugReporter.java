@@ -113,42 +113,45 @@ public class BugReporter {
         FrameLayout rootLayout = ButterKnife.findById(activity, android.R.id.content);
 
         reportButton = LayoutInflater.from(activity).inflate(R.layout.report_button_layout, rootLayout, false);
-        rootLayout.addView(reportButton);
+        boolean buttonAdded = rootLayout.findViewById(R.id.report_button) != null;
+        if(!buttonAdded) {
+            rootLayout.addView(reportButton);
 
-        reportButton.setOnTouchListener(new View.OnTouchListener() {
-            float dY;
-            float previousY;
-            boolean isMoving = false;
-            final int MOVE_TOLERANCE = 5;
+            reportButton.setOnTouchListener(new View.OnTouchListener() {
+                float dY;
+                float previousY;
+                boolean isMoving = false;
+                final int MOVE_TOLERANCE = 5;
 
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        dY = view.getY() - event.getRawY();
-                        previousY = view.getY();
-                        break;
+                @Override
+                public boolean onTouch(View view, MotionEvent event) {
+                    switch(event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            dY = view.getY() - event.getRawY();
+                            previousY = view.getY();
+                            break;
 
-                    case MotionEvent.ACTION_UP:
-                        if (!isMoving || Math.abs(previousY - view.getY()) <= MOVE_TOLERANCE) {
-                            showDrawFragment();
-                        }
-                        isMoving = false;
-                        break;
+                        case MotionEvent.ACTION_UP:
+                            if (!isMoving || Math.abs(previousY - view.getY()) <= MOVE_TOLERANCE) {
+                                showDrawFragment();
+                            }
+                            isMoving = false;
+                            break;
 
-                    case MotionEvent.ACTION_MOVE:
-                        isMoving = true;
-                        view.animate()
-                                .y(event.getRawY() + dY)
-                                .setDuration(0)
-                                .start();
-                        break;
-                    default:
-                        return false;
+                        case MotionEvent.ACTION_MOVE:
+                            isMoving = true;
+                            view.animate()
+                                    .y(event.getRawY() + dY)
+                                    .setDuration(0)
+                                    .start();
+                            break;
+                        default:
+                            return false;
+                    }
+                    return true;
                 }
-                return true;
-            }
-        });
+            });
+        }
     }
 
     public void detach() {
