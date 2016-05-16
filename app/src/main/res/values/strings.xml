@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">BugTracker</string>
+    <string name="lib_name">BugTracker</string>
     <string name="title_activity_main">MainActivity</string>
 </resources>
