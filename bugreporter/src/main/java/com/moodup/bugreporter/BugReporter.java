@@ -98,7 +98,10 @@ public class BugReporter {
                         }
                     });
 
-                    webView.loadUrl(String.format(BitBucket.OAUTH_URL, clientId));
+                    Map<String, String> extraHeaders = new HashMap<>();
+                    extraHeaders.put("Referer", BitBucket.REFERER_URL);
+
+                    webView.loadUrl(String.format(BitBucket.OAUTH_URL, clientId), extraHeaders);
                 } else {
                     accessToken = Utils.getString(activity, "accessToken", "");
                 }
