@@ -2,25 +2,42 @@ package com.moodup.bugreporter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Point;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ImageView;
+
+import java.util.ArrayList;
 
 public class PaintableImageView extends ImageView {
 
     private static final float MINP = 0.25f;
     private static final float MAXP = 0.75f;
+    private static final float TOUCH_TOLERANCE = 4;
+    public static final int GROUP_HORIZONTAL = 2;
+    public static final int GROUP_VERTICAL = 1;
+
+    public static int TYPE_FREE_DRAW = 0;
+    public static int TYPE_RECTANGLE_DRAW = 1;
+
+    private Point[] points;
+    private int groupId = -1;
+    private int cornerId = 0;
+    private ArrayList<Corner> corners = new ArrayList<>();
+
+    private int type;
     private Bitmap bitmap;
     private Canvas canvas;
     private Path path;
     private Paint bitmapPaint;
     private Paint paint;
     private float x, y;
-    private static final float TOUCH_TOLERANCE = 4;
 
     public PaintableImageView(Context context) {
         super(context);
@@ -50,6 +67,12 @@ public class PaintableImageView extends ImageView {
         paint.setStrokeCap(Paint.Cap.ROUND);
         paint.setStrokeWidth(12);
         setEnabled(false);
+
+        points = new Point[4];
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     @Override
@@ -64,16 +87,44 @@ public class PaintableImageView extends ImageView {
         canvas.drawColor(0x00FFFFFF);
         canvas.drawBitmap(bitmap, 0, 0, bitmapPaint);
         canvas.drawPath(path, paint);
+
+        if (points[3] == null)
+            return;
+
+        int left, top, right, bottom;
+        left = points[0].x;
+        top = points[0].y;
+        right = points[0].x;
+        bottom = points[0].y;
+        for(int i = 0; i < points.length; i++) {
+            left = left > points[i].x ? points[i].x : left;
+            top = top > points[i].y ? points[i].y : top;
+            right = right < points[i].x ? points[i].x : right;
+            bottom = bottom < points[i].y ? points[i].y : bottom;
+        }
+
+        canvas.drawRect(
+                left + corners.get(0).getCornerImageWidth() / 2,
+                top + corners.get(0).getCornerImageWidth() / 2,
+                right + corners.get(2).getCornerImageWidth() / 2,
+                bottom + corners.get(2).getCornerImageWidth() / 2, paint);
+
+        for (int i =0; i < corners.size(); i ++) {
+            Corner corner = corners.get(i);
+            canvas.drawBitmap(corner.getBitmap(), corner.getX(), corner.getY(),
+                    paint);
+        }
+
     }
 
-    private void touchStart(float x, float y) {
+    private void freeDrawTouchStart(float x, float y) {
         path.reset();
         path.moveTo(x, y);
         this.x = x;
         this.y = y;
     }
 
-    private void touchMove(float x, float y) {
+    private void freeDrawTouchMove(float x, float y) {
         float dx = Math.abs(x - this.x);
         float dy = Math.abs(y - this.y);
         if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
@@ -84,6 +135,10 @@ public class PaintableImageView extends ImageView {
     }
 
     protected void clear() {
+        points = new Point[4];
+        corners = new ArrayList<>();
+        Corner.count = 0;
+
         int w = bitmap.getWidth();
         int h = bitmap.getHeight();
         bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
@@ -91,7 +146,7 @@ public class PaintableImageView extends ImageView {
         invalidate();
     }
 
-    private void touchUp() {
+    private void freeDrawTouchUp() {
         path.lineTo(x, y);
         // commit the path to our offscreen
         canvas.drawPath(path, paint);
@@ -105,22 +160,195 @@ public class PaintableImageView extends ImageView {
             float x = event.getX();
             float y = event.getY();
 
-            switch(event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    touchStart(x, y);
-                    invalidate();
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    touchMove(x, y);
-                    invalidate();
-                    break;
-                case MotionEvent.ACTION_UP:
-                    touchUp();
-                    invalidate();
-                    break;
+            if (type == TYPE_FREE_DRAW) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        freeDrawTouchStart(x, y);
+                        invalidate();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        freeDrawTouchMove(x, y);
+                        invalidate();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        freeDrawTouchUp();
+                        invalidate();
+                        break;
+                }
+            } else if (type == TYPE_RECTANGLE_DRAW) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        rectanglesDrawTouchStart(x, y);
+                        invalidate();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        rectanglesDrawTouchMove(x, y);
+                        invalidate();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        rectanglesDrawTouchUp();
+                        invalidate();
+                        break;
+                }
             }
             return true;
         }
         return false;
     }
+
+    private void rectanglesDrawTouchUp() {
+
+    }
+
+    private void rectanglesDrawTouchMove(float x, float y) {
+        if (cornerId > -1 && cornerId < corners.size()) {
+            String TAG = "DrawingRectangle";
+            Log.d(TAG, "rectanglesDrawTouchMove: cornerId: " + cornerId);
+            Log.d(TAG, "rectanglesDrawTouchMove: corners.size(): " + corners.size());
+            corners.get(cornerId).setX((int) x);
+            corners.get(cornerId).setY((int) y);
+
+            if (groupId == GROUP_VERTICAL) {
+                corners.get(1).setX(corners.get(0).getX());
+                corners.get(1).setY(corners.get(2).getY());
+                corners.get(3).setX(corners.get(2).getX());
+                corners.get(3).setY(corners.get(0).getY());
+            } else if(groupId == GROUP_HORIZONTAL) {
+                corners.get(0).setX(corners.get(1).getX());
+                corners.get(0).setY(corners.get(3).getY());
+                corners.get(2).setX(corners.get(3).getX());
+                corners.get(2).setY(corners.get(1).getY());
+            }
+        }
+    }
+
+    private void rectanglesDrawTouchStart(float x, float y) {
+        if (points[0] == null) {
+            initPoints(x, y);
+            initCorners();
+        } else {
+            cornerId = -1;
+            groupId = -1;
+            for(Corner corner : corners) {
+                // check if inside the bounds of the corner
+                int centerX = corner.getX() + corner.getCornerImageWidth();
+                int centerY = corner.getY() + corner.getCornerImageHeight();
+                // calculate the radius from the touch to the center of the corner
+                double radCircle = Math
+                        .sqrt((double) (((centerX - x) * (centerX - x)) + (centerY - y)
+                                * (centerY - y)));
+                Log.d("", "rectanglesDrawTouchStart: radCircle: " + radCircle);
+                Log.d("", "rectanglesDrawTouchStart: corner.getCornerImageWidth(): " + corner.getCornerImageWidth());
+
+                if (radCircle < corner.getCornerImageWidth()) {
+
+                    cornerId = corner.getID();
+                    if (cornerId == 1 || cornerId == 3) {
+                        groupId = GROUP_HORIZONTAL;
+                    } else {
+                        groupId = GROUP_VERTICAL;
+                    }
+                    break;
+                } else if(radCircle > 10 * corner.getCornerImageWidth()) {
+                    int left, top, right, bottom;
+                    left = points[0].x;
+                    top = points[0].y;
+                    right = points[0].x;
+                    bottom = points[0].y;
+                    for(int i = 0; i < points.length; i++) {
+                        left = left > points[i].x ? points[i].x : left;
+                        top = top > points[i].y ? points[i].y : top;
+                        right = right < points[i].x ? points[i].x : right;
+                        bottom = bottom < points[i].y ? points[i].y : bottom;
+                    }
+
+                    canvas.drawRect(
+                            left + corners.get(0).getCornerImageWidth() / 2,
+                            top + corners.get(0).getCornerImageWidth() / 2,
+                            right + corners.get(2).getCornerImageWidth() / 2,
+                            bottom + corners.get(2).getCornerImageWidth() / 2, paint);
+                    points = new Point[4];
+                    corners = new ArrayList<>();
+                    Corner.count = 0;
+                    break;
+                }
+            }
+        }
+
+    }
+
+    private void initCorners() {
+        for(Point point : points) {
+            corners.add(new Corner(getContext(), R.drawable.corner, point));
+        }
+    }
+
+    private void initPoints(float x, float y) {
+        points[0] = new Point();
+        points[0].x = (int) x;
+        points[0].y = (int) y;
+
+        points[1] = new Point();
+        points[1].x = (int) x;
+        points[1].y = (int) (y + 30);
+
+        points[2] = new Point();
+        points[2].x = (int) (x + 30);
+        points[2].y = (int) (y + 30);
+
+        points[3] = new Point();
+        points[3].x = (int) (x + 30);
+        points[3].y = (int) y;
+
+        cornerId = 2;
+        groupId = 1;
+    }
+
+    static class Corner {
+
+        static int count;
+
+        private Bitmap bitmap;
+        private Point point;
+        int id;
+
+        public Corner(Context context, int resourceId, Point point) {
+            this.bitmap = BitmapFactory.decodeResource(context.getResources(), resourceId);
+            this.point = point;
+            this.id = count++;
+        }
+
+        public int getCornerImageWidth() {
+            return bitmap.getWidth();
+        }
+
+        public int getCornerImageHeight() {
+            return bitmap.getHeight();
+        }
+
+        public Bitmap getBitmap() {
+            return bitmap;
+        }
+
+        public int getX() {
+            return point.x;
+        }
+
+        public int getY() {
+            return point.y;
+        }
+
+        public int getID() {
+            return id;
+        }
+
+        public void setX(int x) {
+            point.x = x;
+        }
+
+        public void setY(int y) {
+            point.y = y;
+        }
+    }
+
 }
