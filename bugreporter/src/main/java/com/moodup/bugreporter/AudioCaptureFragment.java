@@ -37,6 +37,7 @@ public class AudioCaptureFragment extends DialogFragment {
     private AudioRecordListener listener;
     private UploadAudioAsyncTask uploadAudioAsyncTask;
     private LoadingDialog dialog;
+    private ImageView recordDot;
 
     public interface AudioRecordListener {
         void onRecordUploaded(String audioUrl);
@@ -58,6 +59,7 @@ public class AudioCaptureFragment extends DialogFragment {
         initRecording();
         setCancelable(false);
         timer = ButterKnife.findById(view, R.id.timer_text);
+        recordDot = ButterKnife.findById(view, R.id.record_dot);
 
         ImageView recordButton = ButterKnife.findById(view, R.id.record_btn);
 
@@ -105,7 +107,7 @@ public class AudioCaptureFragment extends DialogFragment {
                                 TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
                                 TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished))
                 );
-                // TODO: 11.05.2016 blink red dot
+                recordDot.setVisibility(TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % 2 == 0 ? View.INVISIBLE : View.VISIBLE);
             }
 
             @Override
