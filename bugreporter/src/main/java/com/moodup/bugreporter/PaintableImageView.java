@@ -231,16 +231,7 @@ public class PaintableImageView extends ImageView {
             groupId = -1;
             for(Corner corner : corners) {
                 // check if inside the bounds of the corner
-                int centerX = corner.getX() + corner.getCornerImageWidth();
-                int centerY = corner.getY() + corner.getCornerImageHeight();
-                // calculate the radius from the touch to the center of the corner
-                double radCircle = Math
-                        .sqrt((double) (((centerX - x) * (centerX - x)) + (centerY - y)
-                                * (centerY - y)));
-                Log.d("", "rectanglesDrawTouchStart: radCircle: " + radCircle);
-                Log.d("", "rectanglesDrawTouchStart: corner.getCornerImageWidth(): " + corner.getCornerImageWidth());
-
-                if (radCircle < corner.getCornerImageWidth()) {
+                if (isNearCorner(x, y, corner)) {
 
                     cornerId = corner.getID();
                     if (cornerId == 1 || cornerId == 3) {
@@ -249,24 +240,8 @@ public class PaintableImageView extends ImageView {
                         groupId = GROUP_VERTICAL;
                     }
                     break;
-                } else if(radCircle > 10 * corner.getCornerImageWidth()) {
-                    int left, top, right, bottom;
-                    left = points[0].x;
-                    top = points[0].y;
-                    right = points[0].x;
-                    bottom = points[0].y;
-                    for(int i = 0; i < points.length; i++) {
-                        left = left > points[i].x ? points[i].x : left;
-                        top = top > points[i].y ? points[i].y : top;
-                        right = right < points[i].x ? points[i].x : right;
-                        bottom = bottom < points[i].y ? points[i].y : bottom;
-                    }
-
-                    canvas.drawRect(
-                            left + corners.get(0).getCornerImageWidth() / 2,
-                            top + corners.get(0).getCornerImageWidth() / 2,
-                            right + corners.get(2).getCornerImageWidth() / 2,
-                            bottom + corners.get(2).getCornerImageWidth() / 2, paint);
+                } else if(!isNearCorners(x,y)) {
+                    drawRectangle();
                     points = new Point[4];
                     corners = new ArrayList<>();
                     Corner.count = 0;
@@ -274,7 +249,46 @@ public class PaintableImageView extends ImageView {
                 }
             }
         }
+    }
 
+    private boolean isNearCorner(float x, float y, Corner corner) {
+        int centerX = corner.getX() + corner.getCornerImageWidth();
+        int centerY = corner.getY() + corner.getCornerImageHeight();
+        double radius = Math
+                .sqrt((double) (((centerX - x) * (centerX - x)) + (centerY - y)
+                        * (centerY - y)));
+        return radius < (3 * corner.getCornerImageWidth());
+    }
+
+    private boolean isNearCorners(float x, float y) {
+        boolean near = false;
+        for(Corner corner : corners) {
+            if(isNearCorner(x, y, corner)) {
+                near = true;
+                break;
+            }
+        }
+        return near;
+    }
+
+    private void drawRectangle() {
+        int left, top, right, bottom;
+        left = points[0].x;
+        top = points[0].y;
+        right = points[0].x;
+        bottom = points[0].y;
+        for(int i = 0; i < points.length; i++) {
+            left = left > points[i].x ? points[i].x : left;
+            top = top > points[i].y ? points[i].y : top;
+            right = right < points[i].x ? points[i].x : right;
+            bottom = bottom < points[i].y ? points[i].y : bottom;
+        }
+
+        canvas.drawRect(
+                left + corners.get(0).getCornerImageWidth() / 2,
+                top + corners.get(0).getCornerImageWidth() / 2,
+                right + corners.get(2).getCornerImageWidth() / 2,
+                bottom + corners.get(2).getCornerImageWidth() / 2, paint);
     }
 
     private void initCorners() {
