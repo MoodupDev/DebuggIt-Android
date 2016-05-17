@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.cloudinary.utils.ObjectUtils;
@@ -55,7 +54,7 @@ public class AudioCaptureFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_audio_capture, container, false);
+        View view = inflater.inflate(R.layout.fragment_report_audio_capture, container, false);
         initRecording();
         setCancelable(false);
         timer = ButterKnife.findById(view, R.id.timer_text);
