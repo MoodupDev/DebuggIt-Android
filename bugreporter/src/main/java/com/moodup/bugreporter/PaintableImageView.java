@@ -200,25 +200,26 @@ public class PaintableImageView extends ImageView {
 
     private void rectanglesDrawTouchMove(float x, float y) {
         if (cornerId > -1 && cornerId < corners.size()) {
-            String TAG = "DrawingRectangle";
-            Log.d(TAG, "rectanglesDrawTouchMove: cornerId: " + cornerId);
-            Log.d(TAG, "rectanglesDrawTouchMove: corners.size(): " + corners.size());
             int cornerImageSize = corners.get(0).getCornerImageWidth();
-            if(x < bitmap.getWidth() - cornerImageSize && x > 0 && y < bitmap.getHeight() - cornerImageSize && y > 0) {
-                corners.get(cornerId).setX((int) x);
-                corners.get(cornerId).setY((int) y);
 
-                if (groupId == GROUP_VERTICAL) {
-                    corners.get(1).setX(corners.get(0).getX());
-                    corners.get(1).setY(corners.get(2).getY());
-                    corners.get(3).setX(corners.get(2).getX());
-                    corners.get(3).setY(corners.get(0).getY());
-                } else if (groupId == GROUP_HORIZONTAL) {
-                    corners.get(0).setX(corners.get(1).getX());
-                    corners.get(0).setY(corners.get(3).getY());
-                    corners.get(2).setX(corners.get(3).getX());
-                    corners.get(2).setY(corners.get(1).getY());
-                }
+            x = x > bitmap.getWidth() - cornerImageSize ? bitmap.getWidth() - cornerImageSize : x;
+            x = x < 0 ? 0 : x;
+            y = y > bitmap.getHeight() - cornerImageSize ? bitmap.getHeight() - cornerImageSize : y;
+            y = y < 0 ? 0 : y;
+
+            corners.get(cornerId).setX((int) x);
+            corners.get(cornerId).setY((int) y);
+
+            if (groupId == GROUP_VERTICAL) {
+                corners.get(1).setX(corners.get(0).getX());
+                corners.get(1).setY(corners.get(2).getY());
+                corners.get(3).setX(corners.get(2).getX());
+                corners.get(3).setY(corners.get(0).getY());
+            } else if (groupId == GROUP_HORIZONTAL) {
+                corners.get(0).setX(corners.get(1).getX());
+                corners.get(0).setY(corners.get(3).getY());
+                corners.get(2).setX(corners.get(3).getX());
+                corners.get(2).setY(corners.get(1).getY());
             }
         }
     }
