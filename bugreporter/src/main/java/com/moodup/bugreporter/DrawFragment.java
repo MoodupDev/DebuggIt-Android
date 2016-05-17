@@ -4,14 +4,9 @@ import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
@@ -38,6 +33,7 @@ public class DrawFragment extends DialogFragment {
     private MontserratTextView confirm;
     private ImageView rubber;
     private ImageView freeDraw;
+    private ImageView rectanglesDraw;
     private LoadingDialog dialog;
 
     private UploadImageAsyncTask uploadImageAsyncTask;
@@ -80,6 +76,7 @@ public class DrawFragment extends DialogFragment {
         confirm = ButterKnife.findById(view, R.id.draw_confirm);
         rubber = ButterKnife.findById(view, R.id.draw_rubber);
         freeDraw = ButterKnife.findById(view, R.id.draw_free);
+        rectanglesDraw = ButterKnife.findById(view, R.id.draw_rectangles);
 
         dialog = LoadingDialog.newInstance(getString(R.string.loading_dialog_message_screenshot));
 
@@ -118,10 +115,30 @@ public class DrawFragment extends DialogFragment {
         freeDraw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setSelected(!v.isSelected());
-                drawingSurface.setEnabled(v.isSelected());
+                setDrawingSurfaceEnabled(v);
             }
         });
+
+        rectanglesDraw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setDrawingSurfaceEnabled(v);
+            }
+        });
+    }
+
+    private void setDrawingSurfaceEnabled(View v) {
+        boolean isFreeDrawClicked = v.getId() == R.id.draw_free;
+        if(isFreeDrawClicked) {
+            rectanglesDraw.setSelected(false);
+        } else {
+            freeDraw.setSelected(false);
+        }
+        v.setSelected(!v.isSelected());
+        drawingSurface.setEnabled(v.isSelected());
+        if(v.isSelected()) {
+            drawingSurface.setType(isFreeDrawClicked ? PaintableImageView.TYPE_FREE_DRAW : PaintableImageView.TYPE_RECTANGLE_DRAW);
+        }
     }
 
     private void uploadScreenshotAndGetUrl() {
