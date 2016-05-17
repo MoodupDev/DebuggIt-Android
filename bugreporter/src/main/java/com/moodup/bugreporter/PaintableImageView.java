@@ -135,9 +135,7 @@ public class PaintableImageView extends ImageView {
     }
 
     protected void clear() {
-        points = new Point[4];
-        corners = new ArrayList<>();
-        Corner.count = 0;
+        clearRectangle();
 
         int w = bitmap.getWidth();
         int h = bitmap.getHeight();
@@ -205,19 +203,22 @@ public class PaintableImageView extends ImageView {
             String TAG = "DrawingRectangle";
             Log.d(TAG, "rectanglesDrawTouchMove: cornerId: " + cornerId);
             Log.d(TAG, "rectanglesDrawTouchMove: corners.size(): " + corners.size());
-            corners.get(cornerId).setX((int) x);
-            corners.get(cornerId).setY((int) y);
+            int cornerImageSize = corners.get(0).getCornerImageWidth();
+            if(x < bitmap.getWidth() - cornerImageSize && x > 0 && y < bitmap.getHeight() - cornerImageSize && y > 0) {
+                corners.get(cornerId).setX((int) x);
+                corners.get(cornerId).setY((int) y);
 
-            if (groupId == GROUP_VERTICAL) {
-                corners.get(1).setX(corners.get(0).getX());
-                corners.get(1).setY(corners.get(2).getY());
-                corners.get(3).setX(corners.get(2).getX());
-                corners.get(3).setY(corners.get(0).getY());
-            } else if(groupId == GROUP_HORIZONTAL) {
-                corners.get(0).setX(corners.get(1).getX());
-                corners.get(0).setY(corners.get(3).getY());
-                corners.get(2).setX(corners.get(3).getX());
-                corners.get(2).setY(corners.get(1).getY());
+                if (groupId == GROUP_VERTICAL) {
+                    corners.get(1).setX(corners.get(0).getX());
+                    corners.get(1).setY(corners.get(2).getY());
+                    corners.get(3).setX(corners.get(2).getX());
+                    corners.get(3).setY(corners.get(0).getY());
+                } else if (groupId == GROUP_HORIZONTAL) {
+                    corners.get(0).setX(corners.get(1).getX());
+                    corners.get(0).setY(corners.get(3).getY());
+                    corners.get(2).setX(corners.get(3).getX());
+                    corners.get(2).setY(corners.get(1).getY());
+                }
             }
         }
     }
@@ -242,13 +243,17 @@ public class PaintableImageView extends ImageView {
                     break;
                 } else if(!isNearCorners(x,y)) {
                     drawRectangle();
-                    points = new Point[4];
-                    corners = new ArrayList<>();
-                    Corner.count = 0;
+                    clearRectangle();
                     break;
                 }
             }
         }
+    }
+
+    private void clearRectangle() {
+        points = new Point[4];
+        corners = new ArrayList<>();
+        Corner.count = 0;
     }
 
     private boolean isNearCorner(float x, float y, Corner corner) {
