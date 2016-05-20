@@ -66,7 +66,6 @@ public class PaintableImageView extends ImageView {
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeCap(Paint.Cap.ROUND);
         paint.setStrokeWidth(12);
-        setEnabled(false);
 
         points = new Point[4];
     }

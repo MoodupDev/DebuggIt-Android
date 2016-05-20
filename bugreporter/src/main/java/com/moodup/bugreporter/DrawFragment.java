@@ -1,6 +1,7 @@
 package com.moodup.bugreporter;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,6 +26,8 @@ import butterknife.ButterKnife;
 public class DrawFragment extends DialogFragment {
 
     protected static final String TAG = DrawFragment.class.getSimpleName();
+    public static final String DRAW_FRAGMENT_BUTTONS = "draw_fragment_buttons";
+    public static final String FREE_DRAW_ACTIVE = "free_draw_active";
 
     private View surfaceRoot;
     private ImageView screenSurface;
@@ -77,13 +80,20 @@ public class DrawFragment extends DialogFragment {
         rubber = ButterKnife.findById(view, R.id.draw_rubber);
         freeDraw = ButterKnife.findById(view, R.id.draw_free);
         rectanglesDraw = ButterKnife.findById(view, R.id.draw_rectangles);
-
         dialog = LoadingDialog.newInstance(getString(R.string.loading_dialog_message_screenshot));
 
         initDrawingSurface();
         initButtons();
+        initButtonsState();
 
         setCancelable(false);
+    }
+
+    private void initButtonsState() {
+        boolean isFreeDrawActive = getActivity().getSharedPreferences(DRAW_FRAGMENT_BUTTONS, Context.MODE_PRIVATE).getBoolean(FREE_DRAW_ACTIVE, false);
+        freeDraw.setSelected(isFreeDrawActive);
+        rectanglesDraw.setSelected(!isFreeDrawActive);
+        drawingSurface.setType(isFreeDrawActive ? PaintableImageView.TYPE_FREE_DRAW : PaintableImageView.TYPE_RECTANGLE_DRAW);
     }
 
     private void initDrawingSurface() {
@@ -118,6 +128,7 @@ public class DrawFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 setDrawingSurfaceEnabled(v);
+                saveActiveButton(v);
             }
         });
 
@@ -125,8 +136,15 @@ public class DrawFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 setDrawingSurfaceEnabled(v);
+                saveActiveButton(v);
             }
         });
+    }
+
+    private void saveActiveButton(View view) {
+        getActivity().getSharedPreferences(DRAW_FRAGMENT_BUTTONS, Context.MODE_PRIVATE)
+                .edit().putBoolean(FREE_DRAW_ACTIVE, view.getId() == R.id.draw_free)
+                .commit();
     }
 
     private void setDrawingSurfaceEnabled(View v) {
