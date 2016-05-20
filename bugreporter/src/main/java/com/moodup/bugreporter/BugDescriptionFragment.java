@@ -156,19 +156,21 @@ public class BugDescriptionFragment extends Fragment {
             priorityButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    v.setSelected(!v.isSelected());
-                    if (v.isSelected()) {
-                        String priority;
-                        if (v.getId() == R.id.priority_low_button) {
-                            priority = BitBucket.PRIORITY_MINOR;
-                        } else if (v.getId() == R.id.priority_medium_button) {
-                            priority = BitBucket.PRIORITY_MAJOR;
-                        } else {
-                            priority = BitBucket.PRIORITY_CRITICAL;
+                    if (!v.isSelected()) {
+                        v.setSelected(!v.isSelected());
+                        if (v.isSelected()) {
+                            String priority;
+                            if (v.getId() == R.id.priority_low_button) {
+                                priority = BitBucket.PRIORITY_MINOR;
+                            } else if (v.getId() == R.id.priority_medium_button) {
+                                priority = BitBucket.PRIORITY_MAJOR;
+                            } else {
+                                priority = BitBucket.PRIORITY_CRITICAL;
+                            }
+                            BugReporter.getInstance().getReport().setPriority(priority);
                         }
-                        BugReporter.getInstance().getReport().setPriority(priority);
+                        deselectOtherButtons(v, priorityButtons);
                     }
-                    deselectOtherButtons(v, priorityButtons);
                 }
             });
         }
@@ -327,11 +329,13 @@ public class BugDescriptionFragment extends Fragment {
             kindButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    v.setSelected(!v.isSelected());
-                    if (v.isSelected()) {
-                        BugReporter.getInstance().getReport().setKind(v.getId() == R.id.kind_bug_button ? BitBucket.KIND_BUG : BitBucket.KIND_ENHANCEMENT);
+                    if(!v.isSelected()) {
+                        v.setSelected(!v.isSelected());
+                        if (v.isSelected()) {
+                            BugReporter.getInstance().getReport().setKind(v.getId() == R.id.kind_bug_button ? BitBucket.KIND_BUG : BitBucket.KIND_ENHANCEMENT);
+                        }
+                        deselectOtherButtons(v, kindButtons);
                     }
-                    deselectOtherButtons(v, kindButtons);
                 }
             });
         }
