@@ -18,4 +18,5 @@
     <dimen name="confirmation_dialog_width">280dp</dimen>
     <dimen name="report.item.height">130dp</dimen>
     <dimen name="report.item.width">80dp</dimen>
+    <dimen name="draw.line.width">3dp</dimen>
 </resources>

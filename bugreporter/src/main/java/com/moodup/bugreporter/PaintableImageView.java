@@ -41,20 +41,20 @@ public class PaintableImageView extends ImageView {
 
     public PaintableImageView(Context context) {
         super(context);
-        init();
+        init(context);
     }
 
     public PaintableImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context);
     }
 
     public PaintableImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(context);
     }
 
-    private void init() {
+    private void init(Context context) {
         path = new Path();
         bitmapPaint = new Paint(Paint.DITHER_FLAG);
 
@@ -65,7 +65,7 @@ public class PaintableImageView extends ImageView {
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeCap(Paint.Cap.ROUND);
-        paint.setStrokeWidth(12);
+        paint.setStrokeWidth(context.getResources().getDimensionPixelSize(R.dimen.draw_line_width));
 
         points = new Point[4];
     }
