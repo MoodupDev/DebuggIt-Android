@@ -113,7 +113,7 @@ public class BugReporter {
     }
 
     private void addReportButton() {
-        FrameLayout rootLayout = ButterKnife.findById(activity, android.R.id.content);
+        final FrameLayout rootLayout = ButterKnife.findById(activity, android.R.id.content);
         reportButton = LayoutInflater.from(activity).inflate(R.layout.report_button_layout, rootLayout, false);
         boolean buttonAdded = rootLayout.findViewById(R.id.report_button) != null;
         float buttonPosition = Utils.getFloat(reportButton.getContext(), BUTTON_POSITION, 0);
@@ -152,10 +152,10 @@ public class BugReporter {
                             isMoving = true;
                             float newY = event.getRawY() + dY;
                             float buttonHeight = view.getMeasuredHeight();
-                            Rect visibleFrame = new Rect();
-                            activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(visibleFrame);
-                            newY = newY < visibleFrame.top ? visibleFrame.top : newY;
-                            newY = newY > visibleFrame.bottom - buttonHeight ? visibleFrame.bottom - buttonHeight : newY;
+                            int statusBarHeight = getStatusBarHeight();
+                            newY = newY < statusBarHeight ? statusBarHeight : newY;
+                            newY = newY > rootLayout.getBottom() - buttonHeight - statusBarHeight ?
+                                            rootLayout.getBottom() - buttonHeight - statusBarHeight : newY;
                             view.animate()
                                     .y(newY)
                                     .setDuration(0)
@@ -166,6 +166,15 @@ public class BugReporter {
                             return false;
                     }
                     return true;
+                }
+
+                private int getStatusBarHeight() {
+                    int resourceId = rootLayout.getContext().getResources().getIdentifier("status_bar_height", "dimen", "android");
+                    int statusBarHeight = 0;
+                    if (resourceId > 0) {
+                        statusBarHeight = rootLayout.getContext().getResources().getDimensionPixelSize(resourceId);
+                    }
+                    return statusBarHeight;
                 }
             });
         }
