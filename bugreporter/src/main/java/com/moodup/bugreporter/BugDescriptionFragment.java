@@ -223,7 +223,7 @@ public class BugDescriptionFragment extends Fragment {
             }
             priorityButtons[index].setSelected(true);
         } else {
-            priorityButtons[0].setSelected(true);
+            priorityButtons[1].setSelected(true);
             report.setPriority(BitBucket.PRIORITY_MINOR);
         }
     }
