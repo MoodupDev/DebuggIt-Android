@@ -39,6 +39,18 @@ public class Utils {
         return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE).getString(key, defValue);
     }
 
+    protected static void putBoolean(Context context, String key, boolean value) {
+        SharedPreferences prefs = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putBoolean(key, value);
+        editor.commit();
+    }
+
+    protected static boolean getBoolean(Context context, String key, boolean defValue) {
+        return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE).getBoolean(key, defValue);
+    }
+
     protected static Bitmap getBitmapFromView(View view) {
         view.setDrawingCacheEnabled(true);
 

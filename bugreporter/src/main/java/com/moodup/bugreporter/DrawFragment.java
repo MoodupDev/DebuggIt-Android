@@ -26,7 +26,6 @@ import butterknife.ButterKnife;
 public class DrawFragment extends DialogFragment {
 
     protected static final String TAG = DrawFragment.class.getSimpleName();
-    public static final String DRAW_FRAGMENT_BUTTONS = "draw_fragment_buttons";
     public static final String FREE_DRAW_ACTIVE = "free_draw_active";
 
     private View surfaceRoot;
@@ -90,7 +89,7 @@ public class DrawFragment extends DialogFragment {
     }
 
     private void initButtonsState() {
-        boolean isFreeDrawActive = getActivity().getSharedPreferences(DRAW_FRAGMENT_BUTTONS, Context.MODE_PRIVATE).getBoolean(FREE_DRAW_ACTIVE, false);
+        boolean isFreeDrawActive = Utils.getBoolean(getContext(), FREE_DRAW_ACTIVE, false);
         freeDraw.setSelected(isFreeDrawActive);
         rectanglesDraw.setSelected(!isFreeDrawActive);
         drawingSurface.setType(isFreeDrawActive ? PaintableImageView.TYPE_FREE_DRAW : PaintableImageView.TYPE_RECTANGLE_DRAW);
@@ -142,9 +141,7 @@ public class DrawFragment extends DialogFragment {
     }
 
     private void saveActiveButton(View view) {
-        getActivity().getSharedPreferences(DRAW_FRAGMENT_BUTTONS, Context.MODE_PRIVATE)
-                .edit().putBoolean(FREE_DRAW_ACTIVE, view.getId() == R.id.draw_free)
-                .commit();
+        Utils.putBoolean(getContext(), FREE_DRAW_ACTIVE, view.getId() == R.id.draw_free);
     }
 
     private void setDrawingSurfaceEnabled(View v) {
