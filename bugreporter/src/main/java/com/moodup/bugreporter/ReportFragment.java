@@ -147,8 +147,10 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                     builder.append("![Alt text](");
                     builder.append(s);
                     builder.append(")");
+                    builder.append('\n');
                 } else {
                     builder.append(s);
+                    builder.append('\n');
                 }
             }
 
