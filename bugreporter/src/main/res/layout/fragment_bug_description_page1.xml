@@ -1,86 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/bar.background"
-    android:orientation="vertical">
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:padding="@dimen/report.layout.padding">
-
-        <com.moodup.bugreporter.ReportButton
-            android:id="@+id/kind_bug_button"
-            style="@style/ReportButton"
-            android:text="@string/kind.bug" />
-
-        <com.moodup.bugreporter.ReportButton
-            android:id="@+id/kind_enhancement_button"
-            style="@style/ReportButton"
-            android:text="@string/kind.enhancement" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:padding="@dimen/report.layout.padding">
-
-        <com.moodup.bugreporter.ReportButton
-            android:id="@+id/priority_low_button"
-            style="@style/ReportButton"
-            android:text="@string/priority.low" />
-
-        <com.moodup.bugreporter.ReportButton
-            android:id="@+id/priority_medium_button"
-            style="@style/ReportButton"
-            android:text="@string/priority.medium" />
-
-        <com.moodup.bugreporter.ReportButton
-            android:id="@+id/priority_high_button"
-            style="@style/ReportButton"
-            android:text="@string/priority.high" />
-    </LinearLayout>
+    android:background="@color/bar.background">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:padding="@dimen/report.layout.padding.horizontal"
-        android:weightSum="7">
-
-        <com.moodup.bugreporter.MontserratEditText
-            android:id="@+id/bug_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="6"
-            android:hint="@string/bug.description.hint"
-            android:textColorHint="@color/kind.button.disabled"
-            android:textSize="@dimen/text.size.regular" />
-
-        <ImageView
-            android:id="@+id/record_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:src="@drawable/record_micro" />
-    </LinearLayout>
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/small_margin"
-        android:fillViewport="true">
+        android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/bug_items_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" />
-    </HorizontalScrollView>
-</LinearLayout>
+            android:layout_gravity="center_horizontal"
+            android:padding="@dimen/report.layout.padding">
+
+            <com.moodup.bugreporter.ReportButton
+                android:id="@+id/kind_bug_button"
+                style="@style/ReportButton"
+                android:text="@string/kind.bug"/>
+
+            <com.moodup.bugreporter.ReportButton
+                android:id="@+id/kind_enhancement_button"
+                style="@style/ReportButton"
+                android:text="@string/kind.enhancement"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="@dimen/report.layout.padding">
+
+            <com.moodup.bugreporter.ReportButton
+                android:id="@+id/priority_low_button"
+                style="@style/ReportButton"
+                android:text="@string/priority.low"/>
+
+            <com.moodup.bugreporter.ReportButton
+                android:id="@+id/priority_medium_button"
+                style="@style/ReportButton"
+                android:text="@string/priority.medium"/>
+
+            <com.moodup.bugreporter.ReportButton
+                android:id="@+id/priority_high_button"
+                style="@style/ReportButton"
+                android:text="@string/priority.high"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="@dimen/report.layout.padding.horizontal"
+            android:weightSum="7">
+
+            <com.moodup.bugreporter.MontserratEditText
+                android:id="@+id/bug_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:hint="@string/bug.description.hint"
+                android:textColorHint="@color/kind.button.disabled"
+                android:textSize="@dimen/text.size.regular"/>
+
+            <ImageView
+                android:id="@+id/record_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:src="@drawable/record_micro"/>
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/small_margin"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:id="@+id/bug_items_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"/>
+        </HorizontalScrollView>
+    </LinearLayout>
+</ScrollView>
