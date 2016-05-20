@@ -18,6 +18,8 @@ import java.util.Map;
 import butterknife.ButterKnife;
 
 public class BugReporter {
+    
+    public static final String BUTTON_POSITION = "button_position";
 
     private static BugReporter instance;
 
@@ -112,10 +114,17 @@ public class BugReporter {
 
     private void addReportButton() {
         FrameLayout rootLayout = ButterKnife.findById(activity, android.R.id.content);
-
         reportButton = LayoutInflater.from(activity).inflate(R.layout.report_button_layout, rootLayout, false);
         boolean buttonAdded = rootLayout.findViewById(R.id.report_button) != null;
-        if(!buttonAdded) {
+        float buttonPosition = Utils.getFloat(reportButton.getContext(), BUTTON_POSITION, 0);
+        if (buttonPosition == 0) {
+            Rect visibleFrame = new Rect();
+            activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(visibleFrame);
+            reportButton.setY(visibleFrame.bottom / 2);
+        } else {
+            reportButton.setY(buttonPosition);
+        }
+        if (!buttonAdded) {
             rootLayout.addView(reportButton);
 
             reportButton.setOnTouchListener(new View.OnTouchListener() {
@@ -151,6 +160,7 @@ public class BugReporter {
                                     .y(newY)
                                     .setDuration(0)
                                     .start();
+                            Utils.putFloat(view.getContext(), BUTTON_POSITION, newY);
                             break;
                         default:
                             return false;

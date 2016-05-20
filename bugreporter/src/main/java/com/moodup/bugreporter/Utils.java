@@ -51,6 +51,18 @@ public class Utils {
         return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE).getBoolean(key, defValue);
     }
 
+    protected static void putFloat(Context context, String key, float value) {
+        SharedPreferences prefs = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putFloat(key, value);
+        editor.commit();
+    }
+
+    protected static float getFloat(Context context, String key, float defValue) {
+        return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE).getFloat(key, defValue);
+    }
+
     protected static Bitmap getBitmapFromView(View view) {
         view.setDrawingCacheEnabled(true);
 
