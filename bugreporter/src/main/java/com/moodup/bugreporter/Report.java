@@ -1,5 +1,9 @@
 package com.moodup.bugreporter;
 
+import android.os.Build;
+
+import com.jaredrummler.android.device.DeviceName;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +32,9 @@ public class Report {
     }
 
     protected String getContent() {
-        return "**Steps to reproduce**: " + getStepsToReproduce() + "\n\n" +
+        return "**Device**: " + DeviceName.getDeviceName() + "\n\n" +
+                String.format("**Android version**: %s (API %d)\n\n", Build.VERSION.RELEASE, Build.VERSION.SDK_INT) +
+                "**Steps to reproduce**: " + getStepsToReproduce() + "\n\n" +
                 "**Actual behaviour**: " + getActualBehaviour() + "\n\n" +
                 "**Expected behaviour**: " + getExpectedBehaviour() + "\n\n";
     }
