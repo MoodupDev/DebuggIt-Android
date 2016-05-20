@@ -192,9 +192,13 @@ public class DrawFragment extends DialogFragment {
         @Override
         protected void onPostExecute(List<String> s) {
             dialog.dismiss();
-            BugReporter.getInstance().getReport().getScreensUrls().addAll(s);
-            new ReportFragment().show(getActivity().getSupportFragmentManager(), ReportFragment.TAG);
-            dismiss();
+            if(s.size() != 0) {
+                BugReporter.getInstance().getReport().getScreensUrls().addAll(s);
+                new ReportFragment().show(getActivity().getSupportFragmentManager(), ReportFragment.TAG);
+                dismiss();
+            } else {
+                ConfirmationDialog.newInstance(getString(R.string.screenshot_upload_error)).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+            }
 
             super.onPostExecute(s);
         }
