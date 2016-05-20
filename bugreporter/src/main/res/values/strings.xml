@@ -18,5 +18,6 @@
     <string name="loading.dialog.message.report">Sending report...</string>
     <string name="loading.dialog.message.screenshot">Sending screenshot...</string>
     <string name="loading.dialog.message.record">Sending record...</string>
+    <string name="title.empty">Issue title can\'t be empty!</string>
 
 </resources>

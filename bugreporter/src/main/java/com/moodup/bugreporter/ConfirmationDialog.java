@@ -51,6 +51,17 @@ public class ConfirmationDialog extends DialogFragment {
         return dialog;
     }
 
+    protected static ConfirmationDialog newInstance(String errorMessage) {
+        ConfirmationDialog dialog = new ConfirmationDialog();
+
+        Bundle bundle = new Bundle();
+        bundle.putString("error", errorMessage);
+        bundle.putInt("type", TYPE_FAILURE);
+
+        dialog.setArguments(bundle);
+        return dialog;
+    }
+
     private void initViews(View view) {
         final int type = getArguments().getInt("type", TYPE_SUCCESS);
 
@@ -69,7 +80,12 @@ public class ConfirmationDialog extends DialogFragment {
         });
 
         icon.setRotation(type == TYPE_SUCCESS ? 0 : 180.0f);
-        message.setText(getString(type == TYPE_SUCCESS ? R.string.confirmation_success : R.string.confirmation_failure));
+        String errorMessage = getArguments().getString("error", "");
+        if(errorMessage.isEmpty()) {
+            message.setText(getString(type == TYPE_SUCCESS ? R.string.confirmation_success : R.string.confirmation_failure));
+        } else {
+            message.setText(errorMessage);
+        }
     }
     //endregion
 
