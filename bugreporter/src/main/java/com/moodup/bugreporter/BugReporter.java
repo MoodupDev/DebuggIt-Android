@@ -1,11 +1,11 @@
 package com.moodup.bugreporter;
 
 import android.app.Activity;
+import android.graphics.Rect;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
@@ -141,8 +141,14 @@ public class BugReporter {
 
                         case MotionEvent.ACTION_MOVE:
                             isMoving = true;
+                            float newY = event.getRawY() + dY;
+                            float buttonHeight = view.getMeasuredHeight();
+                            Rect visibleFrame = new Rect();
+                            activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(visibleFrame);
+                            newY = newY < visibleFrame.top ? visibleFrame.top : newY;
+                            newY = newY > visibleFrame.bottom - buttonHeight ? visibleFrame.bottom - buttonHeight : newY;
                             view.animate()
-                                    .y(event.getRawY() + dY)
+                                    .y(newY)
                                     .setDuration(0)
                                     .start();
                             break;
