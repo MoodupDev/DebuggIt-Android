@@ -82,6 +82,8 @@ public class DrawFragment extends DialogFragment {
 
         initDrawingSurface();
         initButtons();
+
+        setCancelable(false);
     }
 
     private void initDrawingSurface() {

@@ -45,7 +45,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         );
 
         dialog = LoadingDialog.newInstance(getString(R.string.loading_dialog_message_report));
-
+        setCancelable(false);
         return initViews(inflater, container);
     }
 
