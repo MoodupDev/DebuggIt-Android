@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import com.cloudinary.Cloudinary;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 
