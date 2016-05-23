@@ -7,14 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 public class LoadingDialog extends DialogFragment {
     //region Consts
     protected static final String TAG = LoadingDialog.class.getSimpleName();
     //endregion
     //region Fields
-    private Unbinder unbinder;
     //endregion
 
     //region Override Methods
@@ -23,18 +21,12 @@ public class LoadingDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         CustomDialog dialog = new CustomDialog(getActivity(), R.style.CustomDialog);
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_loading, null);
-        unbinder = ButterKnife.bind(this, v);
+        ButterKnife.bind(this, v);
         dialog.setContentView(v);
 
         initViews(v);
 
         return dialog;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
     }
 
     //endregion
