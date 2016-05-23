@@ -144,26 +144,22 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     }
 
     private String getUrlAsStrings(List<String> urls, boolean isMediaFile) {
-        String urlsString = "";
-
+        StringBuilder builder = new StringBuilder();
         if (urls != null) {
-            StringBuilder builder = new StringBuilder();
             for (String s : urls) {
                 if (!isMediaFile) {
-                    builder.append("![Alt text](");
-                    builder.append(s);
-                    builder.append(")");
-                    builder.append('\n');
+                    builder.append("![Alt text](")
+                            .append(s)
+                            .append(")")
+                            .append('\n');
                 } else {
-                    builder.append(s);
-                    builder.append('\n');
+                    builder.append(s)
+                            .append('\n');
                 }
             }
-
-            urlsString = builder.toString();
         }
 
-        return urlsString;
+        return builder.toString();
     }
 
     private class ReportViewPagerAdapter extends FragmentPagerAdapter {
