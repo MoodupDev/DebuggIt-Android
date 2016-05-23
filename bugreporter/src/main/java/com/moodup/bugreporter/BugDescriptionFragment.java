@@ -38,8 +38,8 @@ public class BugDescriptionFragment extends Fragment {
 
     private LinearLayout itemsContainer;
     private ImageView recordButton;
-    private ReportButton[] kindButtons;
-    private ReportButton[] priorityButtons;
+    private MontserratTextView[] kindButtons;
+    private MontserratTextView[] priorityButtons;
     private MontserratEditText bugTitle;
 
     private MontserratEditText stepsToReproduce;
@@ -142,7 +142,7 @@ public class BugDescriptionFragment extends Fragment {
             }
         });
 
-        kindButtons = new ReportButton[] {
+        kindButtons = new MontserratTextView[] {
                 ButterKnife.findById(view, R.id.kind_bug_button),
                 ButterKnife.findById(view, R.id.kind_enhancement_button)
         };
@@ -163,13 +163,13 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     private void initBugPriorityButtons(View view) {
-        priorityButtons = new ReportButton[] {
+        priorityButtons = new MontserratTextView[] {
                 ButterKnife.findById(view, R.id.priority_low_button),
                 ButterKnife.findById(view, R.id.priority_medium_button),
                 ButterKnife.findById(view, R.id.priority_high_button)
         };
 
-        for (ReportButton priorityButton : priorityButtons) {
+        for (MontserratTextView priorityButton : priorityButtons) {
             priorityButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -349,11 +349,11 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     private void initBugKindButtons(View view) {
-        kindButtons = new ReportButton[] {
+        kindButtons = new MontserratTextView[] {
                 ButterKnife.findById(view, R.id.kind_bug_button),
                 ButterKnife.findById(view, R.id.kind_enhancement_button)
         };
-        for (ReportButton kindButton : kindButtons) {
+        for (MontserratTextView kindButton : kindButtons) {
             kindButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -369,8 +369,8 @@ public class BugDescriptionFragment extends Fragment {
         }
     }
 
-    private void deselectOtherButtons(View selected, ReportButton[] buttons) {
-        for (ReportButton button : buttons) {
+    private void deselectOtherButtons(View selected, MontserratTextView[] buttons) {
+        for (MontserratTextView button : buttons) {
             if (button.getId() != selected.getId()) {
                 button.setSelected(false);
             }

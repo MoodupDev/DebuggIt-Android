@@ -16,12 +16,12 @@
             android:layout_gravity="center_horizontal"
             android:padding="@dimen/report.layout.padding">
 
-            <com.moodup.bugreporter.ReportButton
+            <com.moodup.bugreporter.MontserratTextView
                 android:id="@+id/kind_bug_button"
                 style="@style/ReportButton"
                 android:text="@string/kind.bug"/>
 
-            <com.moodup.bugreporter.ReportButton
+            <com.moodup.bugreporter.MontserratTextView
                 android:id="@+id/kind_enhancement_button"
                 style="@style/ReportButton"
                 android:text="@string/kind.enhancement"/>
@@ -34,17 +34,17 @@
             android:layout_gravity="center_horizontal"
             android:padding="@dimen/report.layout.padding">
 
-            <com.moodup.bugreporter.ReportButton
+            <com.moodup.bugreporter.MontserratTextView
                 android:id="@+id/priority_low_button"
                 style="@style/ReportButton"
                 android:text="@string/priority.low"/>
 
-            <com.moodup.bugreporter.ReportButton
+            <com.moodup.bugreporter.MontserratTextView
                 android:id="@+id/priority_medium_button"
                 style="@style/ReportButton"
                 android:text="@string/priority.medium"/>
 
-            <com.moodup.bugreporter.ReportButton
+            <com.moodup.bugreporter.MontserratTextView
                 android:id="@+id/priority_high_button"
                 style="@style/ReportButton"
                 android:text="@string/priority.high"/>
