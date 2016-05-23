@@ -2,14 +2,17 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape>
-            <corners android:radius="5dp"/>
-            <solid android:color="@color/app.orange"/>
-            <padding android:top="2dp" android:bottom="2dp"/>
+            <corners android:radius="7dp"/>
+            <gradient
+                android:startColor="@color/app.red"
+                android:endColor="@color/app.orange"
+                android:angle="270"/>
+            <padding android:top="4dp" android:bottom="4dp"/>
         </shape>
     </item>
     <item>
         <shape>
-            <corners android:radius="5dp" />
+            <corners android:radius="7dp" />
             <solid android:color="@android:color/white" />
         </shape>
     </item>
