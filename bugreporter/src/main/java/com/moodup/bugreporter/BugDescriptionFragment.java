@@ -2,6 +2,7 @@ package com.moodup.bugreporter;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -13,9 +14,11 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -98,6 +101,18 @@ public class BugDescriptionFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 BugReporter.getInstance().getReport().setTitle(bugTitle.getText().toString());
+            }
+        });
+        bugTitle.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode == KeyEvent.KEYCODE_ENTER) {
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    v.clearFocus();
+                    return true;
+                }
+                return false;
             }
         });
         recordButton = ButterKnife.findById(view, R.id.record_button);
@@ -207,6 +222,7 @@ public class BugDescriptionFragment extends Fragment {
         Report report = BugReporter.getInstance().getReport();
         if (!report.getTitle().isEmpty()) {
             bugTitle.setText(report.getTitle());
+            bugTitle.setSelection(report.getTitle().length());
         }
         if (!report.getKind().isEmpty()) {
             kindButtons[(report.getKind().equalsIgnoreCase(BitBucket.KIND_BUG) ? 0 : 1)].setSelected(true);
