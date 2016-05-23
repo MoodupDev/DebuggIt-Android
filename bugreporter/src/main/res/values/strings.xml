@@ -18,6 +18,7 @@
     <string name="loading.dialog.message.report">Sending report...</string>
     <string name="loading.dialog.message.screenshot">Sending screenshot...</string>
     <string name="loading.dialog.message.record">Sending record...</string>
+    <string name="loading.dialog.message.play.audio">Loading recording...</string>
     <string name="title.empty">Issue title can\'t be empty!</string>
     <string name="screenshot.upload.error">Screenshot isn’t saved!\nCheck your Internet connection</string>
 
