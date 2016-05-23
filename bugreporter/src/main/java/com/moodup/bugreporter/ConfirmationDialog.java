@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class ConfirmationDialog extends DialogFragment {
     //region Consts
@@ -16,7 +17,9 @@ public class ConfirmationDialog extends DialogFragment {
     protected static final int TYPE_FAILURE = 0;
     protected static final int TYPE_SUCCESS = 1;
     //endregion
+
     //region Fields
+    private Unbinder unbinder;
     //endregion
 
     //region Override Methods
@@ -25,12 +28,18 @@ public class ConfirmationDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         CustomDialog dialog = new CustomDialog(getActivity(), R.style.CustomDialog);
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_confirmation, null);
-        ButterKnife.bind(this, v);
+        unbinder = ButterKnife.bind(this, v);
         dialog.setContentView(v);
 
         initViews(v);
 
         return dialog;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     //endregion

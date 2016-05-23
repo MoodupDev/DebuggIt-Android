@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class DrawFragment extends DialogFragment {
 
@@ -40,11 +41,13 @@ public class DrawFragment extends DialogFragment {
 
     private UploadImageAsyncTask uploadImageAsyncTask;
 
+    private Unbinder unbinder;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         CustomDialog dialog = new CustomDialog(getActivity(), R.style.CustomDialog);
         View rootView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_draw, null);
-        ButterKnife.bind(this, rootView);
+        unbinder = ButterKnife.bind(this, rootView);
         dialog.setContentView(rootView);
         initViews(rootView);
 
@@ -66,7 +69,8 @@ public class DrawFragment extends DialogFragment {
         if (uploadImageAsyncTask != null) {
             uploadImageAsyncTask.cancel(true);
         }
-        ButterKnife.unbind(this);
+
+        unbinder.unbind();
         super.onDestroyView();
     }
 
