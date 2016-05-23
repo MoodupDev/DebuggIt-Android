@@ -6,4 +6,4 @@
            android:layout_gravity="right"
            android:background="@drawable/report_button_background"
            android:padding="@dimen/report.layout.padding.horizontal"
-           android:src="@drawable/next_screenshoot"/>
+           android:src="@drawable/logo_bug_small"/>
