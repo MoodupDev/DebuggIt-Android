@@ -9,6 +9,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.cloudinary.Cloudinary;
 
@@ -185,6 +186,9 @@ public class BugReporter {
     }
 
     protected void showDrawFragment() {
+        View rootView = activity.findViewById(android.R.id.content);
+        ImageView reportButton = ButterKnife.findById(rootView, R.id.report_button);
+        reportButton.setImageDrawable(activity.getResources().getDrawable(R.drawable.next_screenshoot));
         new DrawFragment().show(((AppCompatActivity) activity).getSupportFragmentManager(), DrawFragment.TAG);
     }
 

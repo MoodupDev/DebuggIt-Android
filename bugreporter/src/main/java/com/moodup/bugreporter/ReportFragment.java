@@ -112,6 +112,9 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
             @Override
             public void onClick(View v) {
                 BugReporter.getInstance().getReport().clear();
+                View rootView = getActivity().findViewById(android.R.id.content);
+                ImageView reportButton = ButterKnife.findById(rootView, R.id.report_button);
+                reportButton.setImageDrawable(getResources().getDrawable(R.drawable.logo_bug_small));
                 dismiss();
             }
         });
