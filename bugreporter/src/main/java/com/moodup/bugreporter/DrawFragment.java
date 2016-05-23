@@ -97,7 +97,10 @@ public class DrawFragment extends DialogFragment {
 
     private void initDrawingSurface() {
         View rootView = getActivity().findViewById(android.R.id.content);
+        ImageView reportButton = ButterKnife.findById(rootView, R.id.report_button);
+        reportButton.setVisibility(View.INVISIBLE);
         screenSurface.setImageBitmap(Utils.getBitmapFromView(rootView));
+        reportButton.setVisibility(View.VISIBLE);
     }
 
     private void initButtons() {
