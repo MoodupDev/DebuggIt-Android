@@ -97,6 +97,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                                     dialog.dismiss();
                                     if (data.responseCode == HttpsURLConnection.HTTP_OK) {
                                         BugReporter.getInstance().getReport().clear();
+                                        resetReportButtonImage();
                                         ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_SUCCESS).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                                     } else {
                                         ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_FAILURE).show(getChildFragmentManager(), ConfirmationDialog.TAG);
@@ -112,9 +113,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
             @Override
             public void onClick(View v) {
                 BugReporter.getInstance().getReport().clear();
-                View rootView = getActivity().findViewById(android.R.id.content);
-                ImageView reportButton = ButterKnife.findById(rootView, R.id.report_button);
-                reportButton.setImageDrawable(getResources().getDrawable(R.drawable.logo_bug_small));
+                resetReportButtonImage();
                 dismiss();
             }
         });
@@ -126,6 +125,12 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         viewPager.addOnPageChangeListener(this);
         ReportViewPagerAdapter adapter = new ReportViewPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
+    }
+
+    private void resetReportButtonImage() {
+        View rootView = getActivity().findViewById(android.R.id.content);
+        ImageView reportButton = ButterKnife.findById(rootView, R.id.report_button);
+        reportButton.setImageDrawable(getResources().getDrawable(R.drawable.logo_bug_small));
     }
 
     @Override
