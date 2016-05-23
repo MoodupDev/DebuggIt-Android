@@ -45,6 +45,8 @@ public class BugDescriptionFragment extends Fragment {
 
     private MediaPlayer mediaPlayer;
 
+    private View lastPlayButton;
+
     public static BugDescriptionFragment newInstance(int position) {
         BugDescriptionFragment fragment = new BugDescriptionFragment();
 
@@ -290,6 +292,12 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     private void playFromUrl(final View playView, String url) {
+        if(mediaPlayer.isPlaying() && lastPlayButton != null) {
+            stopPlaying();
+            lastPlayButton.setSelected(false);
+            playView.setSelected(false);
+            return;
+        }
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
             mediaPlayer.setDataSource(url);
