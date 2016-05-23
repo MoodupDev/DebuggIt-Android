@@ -211,6 +211,9 @@ public class BugDescriptionFragment extends Fragment {
         itemAddNewScreenshot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                View rootView = getActivity().findViewById(android.R.id.content);
+                ImageView reportButton = ButterKnife.findById(rootView, R.id.report_button);
+                reportButton.setImageDrawable(getResources().getDrawable(R.drawable.next_screenshoot));
                 ((DialogFragment) getParentFragment()).dismiss();
             }
         });
