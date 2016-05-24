@@ -24,6 +24,8 @@ public class BugReporter {
     
     public static final String BUTTON_POSITION = "button_position";
     public static final String CODE = "code=";
+    public static final String ACCESS_TOKEN = "accessToken";
+    public static final String REFRESH_TOKEN = "refreshToken";
 
     private static BugReporter instance;
 
@@ -82,7 +84,7 @@ public class BugReporter {
             refreshAccessToken();
             return;
         }
-        if (Utils.getString(activity, "accessToken", "").isEmpty()) {
+        if (Utils.getString(activity, ACCESS_TOKEN, "").isEmpty()) {
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -90,7 +92,7 @@ public class BugReporter {
                 }
             });
         } else {
-            accessToken = Utils.getString(activity, "accessToken", "");
+            accessToken = Utils.getString(activity, ACCESS_TOKEN, "");
         }
     }
 
@@ -134,8 +136,8 @@ public class BugReporter {
 
     private void refreshAccessToken() {
         ApiClient apiClient = new ApiClient(repoSlug, accountName, accessToken);
-        Utils.putString(activity, "accessToken", "");
-        apiClient.authorize(Utils.getString(activity, "refreshToken", ""), clientId, clientSecret, true, new ApiClient.HttpHandler() {
+        Utils.putString(activity, ACCESS_TOKEN, "");
+        apiClient.authorize(Utils.getString(activity, REFRESH_TOKEN, ""), clientId, clientSecret, true, new ApiClient.HttpHandler() {
             @Override
             public void done(HttpResponse data) {
                 if(data.responseCode == HttpURLConnection.HTTP_OK) {
@@ -153,8 +155,8 @@ public class BugReporter {
         JSONObject json = new JSONObject(data.getMessage());
         accessToken = json.getString("access_token");
         refreshToken = json.getString("refresh_token");
-        Utils.putString(activity, "accessToken", accessToken);
-        Utils.putString(activity, "refreshToken", refreshToken);
+        Utils.putString(activity, ACCESS_TOKEN, accessToken);
+        Utils.putString(activity, REFRESH_TOKEN, refreshToken);
     }
 
     private void addReportButton() {
