@@ -12,6 +12,10 @@ import android.widget.FrameLayout;
 
 import com.cloudinary.Cloudinary;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,9 +32,11 @@ public class BugReporter {
     private Cloudinary cloudinary;
 
     private String clientId;
+    private String clientSecret;
     private String repoSlug;
     private String accountName;
     private String accessToken;
+    private String refreshToken;
 
     private Report report;
 
@@ -46,8 +52,9 @@ public class BugReporter {
 
     }
 
-    public void init(String clientId, String repoSlug, String accountName) {
+    public void init(String clientId, String clientSecret, String repoSlug, String accountName) {
         this.clientId = clientId;
+        this.clientSecret = clientSecret;
         this.repoSlug = repoSlug;
         this.accountName = accountName;
         this.cloudinary = new Cloudinary(getCloudinaryConfig());
@@ -74,8 +81,22 @@ public class BugReporter {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                final ApiClient apiClient = new ApiClient(repoSlug, accountName, accessToken);
                 if (refresh) {
                     Utils.putString(activity, "accessToken", "");
+                    apiClient.authorize(Utils.getString(activity, "refreshToken", ""), clientId, clientSecret, true, new ApiClient.HttpHandler() {
+                        @Override
+                        public void done(HttpResponse data) {
+                            if(data.responseCode == HttpURLConnection.HTTP_OK) {
+                                try {
+                                    saveTokens(data);
+                                } catch(JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    });
+                    return;
                 }
 
                 if (Utils.getString(activity, "accessToken", "").isEmpty()) {
@@ -91,8 +112,19 @@ public class BugReporter {
                         @Override
                         public boolean shouldOverrideUrlLoading(WebView view, String url) {
                             if (url.contains(BitBucket.CALLBACK_URL)) {
-                                accessToken = Utils.getQueryMap(url).get("access_token");
-                                Utils.putString(activity, "accessToken", accessToken);
+                                String code = url.substring(url.indexOf("code=") + "code=".length());
+                                apiClient.authorize(code, clientId, clientSecret, false, new ApiClient.HttpHandler() {
+                                    @Override
+                                    public void done(HttpResponse data) {
+                                        if(data.responseCode == HttpURLConnection.HTTP_OK) {
+                                            try {
+                                                saveTokens(data);
+                                            } catch(JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }
+                                });
                                 rootLayout.removeView(webView);
                                 return true;
                             }
@@ -110,6 +142,14 @@ public class BugReporter {
                 }
             }
         });
+    }
+
+    private void saveTokens(HttpResponse data) throws JSONException {
+        JSONObject json = new JSONObject(data.getMessage());
+        accessToken = json.getString("access_token");
+        refreshToken = json.getString("refresh_token");
+        Utils.putString(activity, "accessToken", accessToken);
+        Utils.putString(activity, "refreshToken", refreshToken);
     }
 
     private void addReportButton() {

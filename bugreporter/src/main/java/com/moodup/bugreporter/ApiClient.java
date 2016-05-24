@@ -51,11 +51,11 @@ public class ApiClient {
         new AddIssueAsyncTask(map, handler).execute(String.format(BitBucket.ISSUES_URL, accountName, repoSlug));
     }
 
-    protected void authorize(String token, String clientId, String secret, boolean refresh, HttpHandler handler) {
+    protected void authorize(String token, String clientId, String clientSecret, boolean refresh, HttpHandler handler) {
         HashMap<String, String> map = new HashMap<>();
         map.put("grant_type", refresh ? "refresh_token" : "authorization_code");
         map.put("client_id", clientId);
-        map.put("secret", secret);
+        map.put("secret", clientSecret);
         map.put(refresh ? "refresh_token" : "code", token);
 
         new ApiClient.AuthorizeAsyncTask(map, handler).execute(BitBucket.AUTHORIZE_URL);
@@ -83,9 +83,8 @@ public class ApiClient {
                 conn.setConnectTimeout(15000);
                 conn.setDoInput(true);
                 conn.setDoOutput(true);
-//                conn.addRequestProperty("Authorization", "Bearer " + URLDecoder.decode(accessToken, "UTF-8"));
                 conn.setRequestProperty("Authorization", "Basic " + Base64.encodeToString((postParams.get("client_id") + ":" + postParams.get("secret")).getBytes(), Base64.DEFAULT));
-                conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded"); //add the content type of the request, most post data is of this type
+                conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
                 conn.setRequestMethod("POST");
 
