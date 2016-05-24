@@ -10,27 +10,30 @@
     <RelativeLayout
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="@dimen/top.bar.height">
 
         <com.moodup.bugreporter.MontserratTextView
             android:id="@+id/draw_cancel"
             style="@style/BarTextButton"
             android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/report.button.margin.horizontal"
             android:text="@string/button.cancel" />
 
         <com.moodup.bugreporter.MontserratTextView
             android:id="@+id/draw_confirm"
             style="@style/BarTextButton"
             android:layout_alignParentRight="true"
+            android:background="@drawable/button_send"
+            android:textColor="@android:color/white"
+            android:layout_marginRight="@dimen/report.button.margin.horizontal"
             android:text="@string/button.send" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/draw_cancel"
-            android:layout_marginTop="@dimen/small_margin"
-            android:background="@color/app.gray" />
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/top_bar"
+        android:background="@color/app.gray" />
 
     <RelativeLayout
         android:id="@+id/surface_root"

@@ -36,13 +36,13 @@
             android:background="@drawable/button_send"
             android:textColor="@android:color/white"
             android:text="@string/button.send" />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="@dimen/small_margin"
-            android:layout_below="@+id/report_cancel"
-            android:background="@color/app.gray" />
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/top_bar"
+        android:background="@color/app.gray" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/report_view_pager"
