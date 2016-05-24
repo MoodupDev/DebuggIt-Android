@@ -22,7 +22,7 @@
             android:id="@+id/draw_confirm"
             style="@style/BarTextButton"
             android:layout_alignParentRight="true"
-            android:text="@string/button.save" />
+            android:text="@string/button.send" />
 
         <View
             android:layout_width="match_parent"

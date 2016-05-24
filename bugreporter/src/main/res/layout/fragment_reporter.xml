@@ -9,13 +9,14 @@
     <RelativeLayout
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="@dimen/top.bar.height">
 
         <com.moodup.bugreporter.MontserratTextView
             android:id="@+id/report_cancel"
             style="@style/BarTextButton"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/button.margin.horizontal"
             android:text="@string/button.cancel" />
 
         <ImageView
@@ -28,10 +29,13 @@
         <com.moodup.bugreporter.MontserratTextView
             android:id="@+id/report_confirm"
             style="@style/BarTextButton"
-            android:layout_width="100dp"
+            android:layout_width="@dimen/button.send.width"
             android:layout_alignParentRight="true"
             android:gravity="right"
-            android:text="@string/button.save" />
+            android:layout_marginRight="@dimen/button.margin.horizontal"
+            android:background="@drawable/button_send"
+            android:textColor="@android:color/white"
+            android:text="@string/button.send" />
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

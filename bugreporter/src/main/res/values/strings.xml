@@ -1,7 +1,7 @@
 <resources>
     <string name="lib_name">Bugreporter</string>
     <string name="button.cancel">Cancel</string>
-    <string name="button.save">Save</string>
+    <string name="button.send">Send</string>
 
     <string name="kind.bug">Bug</string>
     <string name="kind.enhancement">Enhancement</string>

@@ -20,4 +20,7 @@
     <dimen name="report.item.width">80dp</dimen>
     <dimen name="draw.line.width">3dp</dimen>
     <dimen name="stop.icon.size">60dp</dimen>
+    <dimen name="button.send.width">70dp</dimen>
+    <dimen name="button.margin.horizontal">8dp</dimen>
+    <dimen name="top.bar.height">50dp</dimen>
 </resources>
