@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.ButterKnife;
-
 public class AudioCaptureFragment extends DialogFragment {
     public static final String TAG = AudioCaptureFragment.class.getSimpleName();
     public static final String TEMP_FILE_NAME = "recording";
@@ -58,10 +56,10 @@ public class AudioCaptureFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_report_audio_capture, container, false);
         initRecording();
         setCancelable(false);
-        timer = ButterKnife.findById(view, R.id.timer_text);
-        recordDot = ButterKnife.findById(view, R.id.record_dot);
+        timer = (MontserratTextView) view.findViewById(R.id.timer_text);
+        recordDot = (ImageView) view.findViewById(R.id.record_dot);
 
-        ImageView recordButton = ButterKnife.findById(view, R.id.record_btn);
+        ImageView recordButton = (ImageView) view.findViewById(R.id.record_btn);
 
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +82,6 @@ public class AudioCaptureFragment extends DialogFragment {
         if (uploadAudioAsyncTask != null) {
             uploadAudioAsyncTask.cancel(true);
         }
-        ButterKnife.unbind(this);
         super.onDestroyView();
     }
 

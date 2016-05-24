@@ -6,7 +6,6 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import butterknife.ButterKnife;
 
 public class LoadingDialog extends DialogFragment {
     //region Consts
@@ -21,7 +20,6 @@ public class LoadingDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         CustomDialog dialog = new CustomDialog(getActivity(), R.style.CustomDialog);
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_loading, null);
-        ButterKnife.bind(this, v);
         dialog.setContentView(v);
 
         initViews(v);
@@ -48,8 +46,8 @@ public class LoadingDialog extends DialogFragment {
     }
 
     private void initViews(View view) {
-        MontserratTextView message = ButterKnife.findById(view, R.id.confirmation_dialog_message);
-        MontserratTextView cancelButton = ButterKnife.findById(view, R.id.loading_dialog_cancel_button);
+        MontserratTextView message = (MontserratTextView) view.findViewById(R.id.confirmation_dialog_message);
+        MontserratTextView cancelButton = (MontserratTextView) view.findViewById(R.id.loading_dialog_cancel_button);
 
         message.setText(getArguments().getString("message", ""));
         cancelButton.setOnClickListener(new View.OnClickListener() {

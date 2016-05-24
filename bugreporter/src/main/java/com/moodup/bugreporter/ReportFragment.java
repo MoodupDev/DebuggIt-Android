@@ -19,8 +19,6 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import butterknife.ButterKnife;
-
 public class ReportFragment extends DialogFragment implements ViewPager.OnPageChangeListener {
 
     protected static final String TAG = ReportFragment.class.getSimpleName();
@@ -61,7 +59,6 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
     @Override
     public void onDestroyView() {
-        ButterKnife.unbind(this);
         super.onDestroyView();
     }
 
@@ -73,8 +70,8 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     }
 
     private void initButtons(View view) {
-        MontserratTextView send = ButterKnife.findById(view, R.id.report_confirm);
-        MontserratTextView cancel = ButterKnife.findById(view, R.id.report_cancel);
+        MontserratTextView send = (MontserratTextView) view.findViewById(R.id.report_confirm);
+        MontserratTextView cancel = (MontserratTextView) view.findViewById(R.id.report_cancel);
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,8 +117,8 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     }
 
     private void initViewPager(View view) {
-        viewPagerIndicator = ButterKnife.findById(view, R.id.view_pager_indicator);
-        ViewPager viewPager = ButterKnife.findById(view, R.id.report_view_pager);
+        viewPagerIndicator = (ImageView) view.findViewById(R.id.view_pager_indicator);
+        ViewPager viewPager = (ViewPager) view.findViewById(R.id.report_view_pager);
         viewPager.addOnPageChangeListener(this);
         ReportViewPagerAdapter adapter = new ReportViewPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
@@ -129,7 +126,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
     private void resetReportButtonImage() {
         View rootView = getActivity().findViewById(android.R.id.content);
-        ImageView reportButton = ButterKnife.findById(rootView, R.id.report_button);
+        ImageView reportButton = (ImageView) rootView.findViewById(R.id.report_button);
         reportButton.setImageDrawable(getResources().getDrawable(R.drawable.logo_bug_small));
     }
 

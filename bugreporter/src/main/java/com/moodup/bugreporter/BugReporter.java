@@ -18,8 +18,6 @@ import org.json.JSONObject;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 
-import butterknife.ButterKnife;
-
 public class BugReporter {
     
     public static final String BUTTON_POSITION = "button_position";
@@ -101,7 +99,7 @@ public class BugReporter {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 
-        final FrameLayout rootLayout = ButterKnife.findById(activity, android.R.id.content);
+        final FrameLayout rootLayout = (FrameLayout) activity.findViewById(android.R.id.content);;
         rootLayout.addView(webView);
 
         webView.setWebViewClient(new WebViewClient() {
@@ -158,7 +156,7 @@ public class BugReporter {
     }
 
     private void addReportButton() {
-        final FrameLayout rootLayout = ButterKnife.findById(activity, android.R.id.content);
+        final FrameLayout rootLayout = (FrameLayout) activity.findViewById(android.R.id.content);
         reportButton = LayoutInflater.from(activity).inflate(R.layout.report_button_layout, rootLayout, false);
         boolean buttonAdded = rootLayout.findViewById(R.id.report_button) != null;
         float buttonPosition = Utils.getFloat(reportButton.getContext(), BUTTON_POSITION, 0);

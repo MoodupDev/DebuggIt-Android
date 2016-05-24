@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.ButterKnife;
-
 public class DrawFragment extends DialogFragment {
 
     protected static final String TAG = DrawFragment.class.getSimpleName();
@@ -44,7 +42,6 @@ public class DrawFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         CustomDialog dialog = new CustomDialog(getActivity(), R.style.CustomDialog);
         View rootView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_draw, null);
-        ButterKnife.bind(this, rootView);
         dialog.setContentView(rootView);
         initViews(rootView);
 
@@ -66,19 +63,18 @@ public class DrawFragment extends DialogFragment {
         if (uploadImageAsyncTask != null) {
             uploadImageAsyncTask.cancel(true);
         }
-        ButterKnife.unbind(this);
         super.onDestroyView();
     }
 
     private void initViews(View view) {
-        surfaceRoot = ButterKnife.findById(view, R.id.surface_root);
-        screenSurface = ButterKnife.findById(view, R.id.image_surface);
-        drawingSurface = ButterKnife.findById(view, R.id.draw_surface);
-        cancel = ButterKnife.findById(view, R.id.draw_cancel);
-        confirm = ButterKnife.findById(view, R.id.draw_confirm);
-        rubber = ButterKnife.findById(view, R.id.draw_rubber);
-        freeDraw = ButterKnife.findById(view, R.id.draw_free);
-        rectanglesDraw = ButterKnife.findById(view, R.id.draw_rectangles);
+        surfaceRoot = view.findViewById(R.id.surface_root);
+        screenSurface = (ImageView) view.findViewById(R.id.image_surface);
+        drawingSurface = (PaintableImageView) view.findViewById(R.id.draw_surface);
+        cancel = (MontserratTextView) view.findViewById(R.id.draw_cancel);
+        confirm = (MontserratTextView) view.findViewById(R.id.draw_confirm);
+        rubber = (ImageView) view.findViewById(R.id.draw_rubber);
+        freeDraw = (ImageView) view.findViewById(R.id.draw_free);
+        rectanglesDraw = (ImageView) view.findViewById(R.id.draw_rectangles);
         dialog = LoadingDialog.newInstance(getString(R.string.loading_dialog_message_screenshot));
 
         initDrawingSurface();
@@ -97,7 +93,7 @@ public class DrawFragment extends DialogFragment {
 
     private void initDrawingSurface() {
         View rootView = getActivity().findViewById(android.R.id.content);
-        ImageView reportButton = ButterKnife.findById(rootView, R.id.report_button);
+        ImageView reportButton = (ImageView) rootView.findViewById(R.id.report_button);
         reportButton.setVisibility(View.INVISIBLE);
         screenSurface.setImageBitmap(Utils.getBitmapFromView(rootView));
         reportButton.setVisibility(View.VISIBLE);

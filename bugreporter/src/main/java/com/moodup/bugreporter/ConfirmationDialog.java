@@ -8,8 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 
-import butterknife.ButterKnife;
-
 public class ConfirmationDialog extends DialogFragment {
     //region Consts
     protected static final String TAG = ConfirmationDialog.class.getSimpleName();
@@ -25,7 +23,6 @@ public class ConfirmationDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         CustomDialog dialog = new CustomDialog(getActivity(), R.style.CustomDialog);
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_confirmation, null);
-        ButterKnife.bind(this, v);
         dialog.setContentView(v);
 
         initViews(v);
@@ -65,9 +62,9 @@ public class ConfirmationDialog extends DialogFragment {
     private void initViews(View view) {
         final int type = getArguments().getInt("type", TYPE_SUCCESS);
 
-        ImageView icon = ButterKnife.findById(view, R.id.confirmation_dialog_icon);
-        MontserratTextView message = ButterKnife.findById(view, R.id.confirmation_dialog_message);
-        MontserratTextView okButton = ButterKnife.findById(view, R.id.confirmation_dialog_ok_button);
+        ImageView icon = (ImageView) view.findViewById(R.id.confirmation_dialog_icon);
+        MontserratTextView message = (MontserratTextView) view.findViewById(R.id.confirmation_dialog_message);
+        MontserratTextView okButton = (MontserratTextView) view.findViewById(R.id.confirmation_dialog_ok_button);
 
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override

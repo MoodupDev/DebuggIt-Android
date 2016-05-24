@@ -29,8 +29,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
-import butterknife.ButterKnife;
-
 public class BugDescriptionFragment extends Fragment {
 
     public static final String POSITION = "position";
@@ -86,7 +84,7 @@ public class BugDescriptionFragment extends Fragment {
 
     private void initFirstPage(View view) {
         mediaPlayer = new MediaPlayer();
-        bugTitle = ButterKnife.findById(view, R.id.bug_title);
+        bugTitle = (MontserratEditText) view.findViewById(R.id.bug_title);
         bugTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -115,7 +113,7 @@ public class BugDescriptionFragment extends Fragment {
                 return false;
             }
         });
-        recordButton = ButterKnife.findById(view, R.id.record_button);
+        recordButton = (ImageView) view.findViewById(R.id.record_button);
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,8 +141,8 @@ public class BugDescriptionFragment extends Fragment {
         });
 
         kindButtons = new MontserratTextView[] {
-                ButterKnife.findById(view, R.id.kind_bug_button),
-                ButterKnife.findById(view, R.id.kind_enhancement_button)
+                (MontserratTextView) view.findViewById(R.id.kind_bug_button),
+                (MontserratTextView) view.findViewById(R.id.kind_enhancement_button)
         };
 
         initBugKindButtons(view);
@@ -164,9 +162,9 @@ public class BugDescriptionFragment extends Fragment {
 
     private void initBugPriorityButtons(View view) {
         priorityButtons = new MontserratTextView[] {
-                ButterKnife.findById(view, R.id.priority_low_button),
-                ButterKnife.findById(view, R.id.priority_medium_button),
-                ButterKnife.findById(view, R.id.priority_high_button)
+                (MontserratTextView) view.findViewById(R.id.priority_low_button),
+                (MontserratTextView) view.findViewById(R.id.priority_medium_button),
+                (MontserratTextView) view.findViewById(R.id.priority_high_button),
         };
 
         for (MontserratTextView priorityButton : priorityButtons) {
@@ -196,7 +194,7 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     private void initReportItems(View view) {
-        itemsContainer = ButterKnife.findById(view, R.id.bug_items_container);
+        itemsContainer = (LinearLayout) view.findViewById(R.id.bug_items_container);
         BugReporter reporter = BugReporter.getInstance();
 
         for (String screenshotUrl : reporter.getReport().getScreensUrls()) {
@@ -212,7 +210,7 @@ public class BugDescriptionFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 View rootView = getActivity().findViewById(android.R.id.content);
-                ImageView reportButton = ButterKnife.findById(rootView, R.id.report_button);
+                ImageView reportButton = (ImageView) rootView.findViewById(R.id.report_button);
                 reportButton.setImageDrawable(getResources().getDrawable(R.drawable.next_screenshoot));
                 ((DialogFragment) getParentFragment()).dismiss();
             }
@@ -264,8 +262,8 @@ public class BugDescriptionFragment extends Fragment {
 
     private void addScreenshotMiniature(final ViewGroup parent, final String screenUrl) {
         final RelativeLayout itemScreenParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_screenshot, parent, false);
-        ImageView itemScreenshot = ButterKnife.findById(itemScreenParent, R.id.item_screenshot_image);
-        ImageView itemScreenshotRemove = ButterKnife.findById(itemScreenParent, R.id.item_screenshot_close);
+        ImageView itemScreenshot = (ImageView) itemScreenParent.findViewById(R.id.item_screenshot_image);
+        ImageView itemScreenshotRemove = (ImageView) itemScreenParent.findViewById(R.id.item_screenshot_close);
 
         Picasso.with(getActivity()).load(screenUrl).into(itemScreenshot);
         itemScreenshotRemove.setOnClickListener(new View.OnClickListener() {
@@ -282,8 +280,8 @@ public class BugDescriptionFragment extends Fragment {
 
     private void addAudioMiniature(final ViewGroup parent, final String audioUrl) {
         final RelativeLayout itemAudioParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_audio, parent, false);
-        ImageButton playButton = ButterKnife.findById(itemAudioParent, R.id.item_audio_button);
-        final ImageView itemAudioRemove = ButterKnife.findById(itemAudioParent, R.id.item_audio_close);
+        ImageButton playButton = (ImageButton) itemAudioParent.findViewById(R.id.item_audio_button);
+        final ImageView itemAudioRemove = (ImageView) itemAudioParent.findViewById(R.id.item_audio_close);
 
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -353,8 +351,8 @@ public class BugDescriptionFragment extends Fragment {
 
     private void initBugKindButtons(View view) {
         kindButtons = new MontserratTextView[] {
-                ButterKnife.findById(view, R.id.kind_bug_button),
-                ButterKnife.findById(view, R.id.kind_enhancement_button)
+                (MontserratTextView) view.findViewById(R.id.kind_bug_button),
+                (MontserratTextView) view.findViewById(R.id.kind_enhancement_button)
         };
         for (MontserratTextView kindButton : kindButtons) {
             kindButton.setOnClickListener(new View.OnClickListener() {
@@ -381,9 +379,9 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     private void initSecondPage(View view) {
-        stepsToReproduce = ButterKnife.findById(view, R.id.steps_text);
-        actualBehaviour = ButterKnife.findById(view, R.id.actual_behaviour_text);
-        expectedBehaviour = ButterKnife.findById(view, R.id.expected_behaviour_text);
+        stepsToReproduce = (MontserratEditText) view.findViewById(R.id.steps_text);
+        actualBehaviour = (MontserratEditText) view.findViewById(R.id.actual_behaviour_text);
+        expectedBehaviour = (MontserratEditText) view.findViewById(R.id.expected_behaviour_text);
         initTextWatchers();
     }
 
