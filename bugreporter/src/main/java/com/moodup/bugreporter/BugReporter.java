@@ -17,13 +17,13 @@ import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
 import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.ButterKnife;
 
 public class BugReporter {
     
     public static final String BUTTON_POSITION = "button_position";
+    public static final String CODE = "code=";
 
     private static BugReporter instance;
 
@@ -77,14 +77,39 @@ public class BugReporter {
         addReportButton();
     }
 
-    protected void authenticate(final boolean refresh) {
-        activity.runOnUiThread(new Runnable() {
+    protected void authenticate(boolean refresh) {
+        if(refresh) {
+            refreshAccessToken();
+            return;
+        }
+        if (Utils.getString(activity, "accessToken", "").isEmpty()) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    getBitBucketAccessToken();
+                }
+            });
+        } else {
+            accessToken = Utils.getString(activity, "accessToken", "");
+        }
+    }
+
+    private void getBitBucketAccessToken() {
+        final ApiClient apiClient = new ApiClient(repoSlug, accountName, accessToken);
+        final WebView webView = new WebView(activity);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+
+        final FrameLayout rootLayout = ButterKnife.findById(activity, android.R.id.content);
+        rootLayout.addView(webView);
+
+        webView.setWebViewClient(new WebViewClient() {
+
             @Override
-            public void run() {
-                final ApiClient apiClient = new ApiClient(repoSlug, accountName, accessToken);
-                if (refresh) {
-                    Utils.putString(activity, "accessToken", "");
-                    apiClient.authorize(Utils.getString(activity, "refreshToken", ""), clientId, clientSecret, true, new ApiClient.HttpHandler() {
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (url.contains(BitBucket.CALLBACK_URL)) {
+                    String code = url.substring(url.indexOf(CODE) + CODE.length());
+                    apiClient.authorize(code, clientId, clientSecret, false, new ApiClient.HttpHandler() {
                         @Override
                         public void done(HttpResponse data) {
                             if(data.responseCode == HttpURLConnection.HTTP_OK) {
@@ -96,49 +121,29 @@ public class BugReporter {
                             }
                         }
                     });
-                    return;
+                    rootLayout.removeView(webView);
+                    return true;
                 }
 
-                if (Utils.getString(activity, "accessToken", "").isEmpty()) {
-                    final WebView webView = new WebView(activity);
-                    webView.getSettings().setJavaScriptEnabled(true);
-                    webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+                return false;
+            }
+        });
 
-                    final FrameLayout rootLayout = ButterKnife.findById(activity, android.R.id.content);
-                    rootLayout.addView(webView);
+        webView.loadUrl(String.format(BitBucket.OAUTH_URL, clientId));
+    }
 
-                    webView.setWebViewClient(new WebViewClient() {
-
-                        @Override
-                        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                            if (url.contains(BitBucket.CALLBACK_URL)) {
-                                String code = url.substring(url.indexOf("code=") + "code=".length());
-                                apiClient.authorize(code, clientId, clientSecret, false, new ApiClient.HttpHandler() {
-                                    @Override
-                                    public void done(HttpResponse data) {
-                                        if(data.responseCode == HttpURLConnection.HTTP_OK) {
-                                            try {
-                                                saveTokens(data);
-                                            } catch(JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    }
-                                });
-                                rootLayout.removeView(webView);
-                                return true;
-                            }
-
-                            return false;
-                        }
-                    });
-
-                    Map<String, String> extraHeaders = new HashMap<>();
-                    extraHeaders.put("Referer", BitBucket.REFERER_URL);
-
-                    webView.loadUrl(String.format(BitBucket.OAUTH_URL, clientId), extraHeaders);
-                } else {
-                    accessToken = Utils.getString(activity, "accessToken", "");
+    private void refreshAccessToken() {
+        ApiClient apiClient = new ApiClient(repoSlug, accountName, accessToken);
+        Utils.putString(activity, "accessToken", "");
+        apiClient.authorize(Utils.getString(activity, "refreshToken", ""), clientId, clientSecret, true, new ApiClient.HttpHandler() {
+            @Override
+            public void done(HttpResponse data) {
+                if(data.responseCode == HttpURLConnection.HTTP_OK) {
+                    try {
+                        saveTokens(data);
+                    } catch(JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
