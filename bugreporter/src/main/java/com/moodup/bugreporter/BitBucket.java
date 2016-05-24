@@ -3,7 +3,8 @@ package com.moodup.bugreporter;
 public interface BitBucket {
     String REFERER_URL = "https://bitbucket.org";
     String CALLBACK_URL = "http://callback.moodup.com";
-    String OAUTH_URL = "https://bitbucket.org/site/oauth2/authorize?client_id=%1$s&response_type=token";
+    String OAUTH_URL = "https://bitbucket.org/site/oauth2/authorize?client_id=%1$s&response_type=code";
+    String AUTHORIZE_URL = "https://bitbucket.org/site/oauth2/access_token";
     String ISSUES_URL = "https://api.bitbucket.org/1.0/repositories/%1$s/%2$s/issues";
     // PRIORITIES
     String PRIORITY_TRIVIAL = "trivial";
