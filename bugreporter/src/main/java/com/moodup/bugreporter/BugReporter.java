@@ -38,7 +38,6 @@ public class BugReporter {
     private String repoSlug;
     private String accountName;
     private String accessToken;
-    private String refreshToken;
 
     private Report report;
 
@@ -154,9 +153,8 @@ public class BugReporter {
     private void saveTokens(HttpResponse data) throws JSONException {
         JSONObject json = new JSONObject(data.getMessage());
         accessToken = json.getString("access_token");
-        refreshToken = json.getString("refresh_token");
         Utils.putString(activity, ACCESS_TOKEN, accessToken);
-        Utils.putString(activity, REFRESH_TOKEN, refreshToken);
+        Utils.putString(activity, REFRESH_TOKEN, json.getString("refresh_token"));
     }
 
     private void addReportButton() {
