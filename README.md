@@ -18,12 +18,12 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        BugReporter.getInstance().init("clientId", "repoName", "ownerName");
+        BugReporter.getInstance().init("clientId", "secret", "repoName", "ownerName");
     }
 }
 ```
 
-To get your client ID, you must create **OAuth consumer** for your team (or individual user). You can find it in:
+To get your client ID and secret key, you must create **OAuth consumer** for your team (or individual user). You can find it in:
 
 `Your Profile -> BitBucket settings -> ACCESS MANAGEMENT -> OAuth`
 
@@ -33,7 +33,7 @@ Owner name it's your team (or user) name.
 
 For example, if you want to add issues to this repository, your `init()` should looks like
 ```java
-BugReporter.getInstance().init("C9PnuH4fPyvUDjFwMz", "bugreporter", "moodup");
+BugReporter.getInstance().init("C9PnuH4fPyvUDjFwMz", "JBeNHPJwYeHRLdnnsBCNU84ZLk5DFL7a", "bugreporter", "moodup");
 ```
 
 Attach BugReporter to your activities in `onStart()` method (it's perfect if your activities extends some `BaseActivity` class)
