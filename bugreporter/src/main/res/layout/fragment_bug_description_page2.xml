@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:padding="@dimen/report.layout.padding.horizontal"
+              android:background="@color/bar.background"
+              android:layout_height="match_parent">
+    <com.moodup.bugreporter.MontserratEditText
+        style="@style/ReportContentEditText"
+        android:id="@+id/steps_text"
+        android:hint="@string/report.steps"/>
+    <com.moodup.bugreporter.MontserratEditText
+        style="@style/ReportContentEditText"
+        android:id="@+id/actual_behaviour_text"
+        android:hint="@string/report.behaviour.actual"/>
+    <com.moodup.bugreporter.MontserratEditText
+        style="@style/ReportContentEditText"
+        android:id="@+id/expected_behaviour_text"
+        android:hint="@string/report.behaviour.expected"/>
+</LinearLayout>

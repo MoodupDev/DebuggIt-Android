@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/report.item.width"
+    android:layout_height="@dimen/report.item.height"
+    android:layout_margin="@dimen/small_margin"
+    android:background="@drawable/item_background"
+    android:gravity="center">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/tiny_padding"
+        android:src="@drawable/record_background" />
+
+    <ImageButton
+        android:id="@+id/item_audio_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@null"
+        android:src="@drawable/button_play_orange" />
+
+    <ImageView
+        android:id="@+id/item_audio_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/attach_delete" />
+
+</RelativeLayout>
