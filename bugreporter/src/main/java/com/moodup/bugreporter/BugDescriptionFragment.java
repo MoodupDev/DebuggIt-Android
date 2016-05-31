@@ -32,7 +32,7 @@ import java.io.IOException;
 public class BugDescriptionFragment extends Fragment {
 
     public static final String POSITION = "position";
-    public static final int RECORD_PERMISSIONS_REQUEST = 100;
+    public static final int RECORD_PERMISSIONS_REQUEST = 145;
 
     private LinearLayout itemsContainer;
     private ImageView recordButton;
