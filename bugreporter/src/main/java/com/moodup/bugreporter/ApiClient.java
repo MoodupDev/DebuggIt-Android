@@ -32,6 +32,8 @@ public class ApiClient {
     public static final String CODE = "code";
     public static final String METHOD_POST = "POST";
     public static final String CHARSET_UTF8 = "UTF-8";
+    public static final String CONTENT_TYPE = "Content-Type";
+    public static final String CONTENT_TYPE_FORM = "application/x-www-form-urlencoded";
 
     private String repoSlug;
     private String accountName;
@@ -136,7 +138,7 @@ public class ApiClient {
                     authorization ?
                             "Basic " + Base64.encodeToString((postParams.get(CLIENT_ID) + ":" + postParams.get(SECRET)).getBytes(), Base64.DEFAULT)
                             : "Bearer " + URLDecoder.decode(accessToken, CHARSET_UTF8));
-            conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded"); //add the content type of the request, most post data is of this type
+            conn.addRequestProperty(CONTENT_TYPE, CONTENT_TYPE_FORM); //add the content type of the request, most post data is of this type
 
             conn.setRequestMethod(METHOD_POST);
 
