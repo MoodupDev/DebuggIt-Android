@@ -149,7 +149,7 @@ public class ApiClient {
                 return new HttpResponse(response, Utils.getStringFromInputStream(is));
             } else if (response == HttpsURLConnection.HTTP_UNAUTHORIZED) {
                 BugReporter.getInstance().authenticate(true);
-                return new HttpResponse(response, "");
+                return new HttpResponse(response, Utils.getStringFromInputStream(conn.getInputStream()));
             } else {
                 return new HttpResponse(response, "");
             }

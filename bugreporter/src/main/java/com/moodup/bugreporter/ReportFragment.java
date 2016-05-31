@@ -99,6 +99,8 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                                         BugReporter.getInstance().getReport().clear();
                                         resetReportButtonImage();
                                         ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_SUCCESS).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                    } else if(data.responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
+                                        ConfirmationDialog.newInstance(data.message).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                                     } else {
                                         ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_FAILURE).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                                     }
