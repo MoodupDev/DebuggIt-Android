@@ -21,9 +21,8 @@ import java.util.HashMap;
 public class BugReporter {
     
     public static final String BUTTON_POSITION = "button_position";
-    public static final String CODE = "code=";
-    public static final String ACCESS_TOKEN = "accessToken";
-    public static final String REFRESH_TOKEN = "refreshToken";
+    public static final String CODE_PARAM = "code=";
+    public static final String ACCESS_TOKEN = "access_token";
 
     private static BugReporter instance;
 
@@ -107,7 +106,7 @@ public class BugReporter {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.contains(BitBucket.CALLBACK_URL)) {
-                    String code = url.substring(url.indexOf(CODE) + CODE.length());
+                    String code = url.substring(url.indexOf(CODE_PARAM) + CODE_PARAM.length());
                     apiClient.authorize(code, clientId, clientSecret, false, new ApiClient.HttpHandler() {
                         @Override
                         public void done(HttpResponse data) {
@@ -134,7 +133,7 @@ public class BugReporter {
     private void refreshAccessToken() {
         ApiClient apiClient = new ApiClient(repoSlug, accountName, accessToken);
         Utils.putString(activity, ACCESS_TOKEN, "");
-        apiClient.authorize(Utils.getString(activity, REFRESH_TOKEN, ""), clientId, clientSecret, true, new ApiClient.HttpHandler() {
+        apiClient.authorize(Utils.getString(activity, ApiClient.REFRESH_TOKEN, ""), clientId, clientSecret, true, new ApiClient.HttpHandler() {
             @Override
             public void done(HttpResponse data) {
                 if(data.responseCode == HttpURLConnection.HTTP_OK) {
@@ -150,9 +149,9 @@ public class BugReporter {
 
     private void saveTokens(HttpResponse data) throws JSONException {
         JSONObject json = new JSONObject(data.getMessage());
-        accessToken = json.getString("access_token");
+        accessToken = json.getString(ACCESS_TOKEN);
         Utils.putString(activity, ACCESS_TOKEN, accessToken);
-        Utils.putString(activity, REFRESH_TOKEN, json.getString("refresh_token"));
+        Utils.putString(activity, ApiClient.REFRESH_TOKEN, json.getString(ApiClient.REFRESH_TOKEN));
     }
 
     private void addReportButton() {
