@@ -49,14 +49,6 @@ public class ApiClient {
         this.accessToken = accessToken;
     }
 
-    protected void addIssue(String title, String content, HttpHandler handler) {
-        addIssue(title, content, BitBucket.PRIORITY_TRIVIAL, BitBucket.KIND_BUG, handler);
-    }
-
-    protected void addIssue(String title, String content, String priority, HttpHandler handler) {
-        addIssue(title, content, priority, BitBucket.KIND_BUG, handler);
-    }
-
     protected void addIssue(String title, String content, String priority, String kind, HttpHandler handler) {
         HashMap<String, String> map = new HashMap<>();
         map.put(TITLE, title);
