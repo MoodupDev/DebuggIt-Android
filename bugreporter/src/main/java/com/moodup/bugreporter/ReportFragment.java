@@ -123,7 +123,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         PackageManager manager = activity.getPackageManager();
         try {
             PackageInfo info = manager.getPackageInfo(activity.getPackageName(), 0);
-            BugReporter.getInstance().getReport().setApplicationVerison(String.format("%s (version code: %d)", info.versionName, info.versionCode));
+            BugReporter.getInstance().getReport().setApplicationVersion(String.format("%s (version code: %d)", info.versionName, info.versionCode));
         } catch(PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

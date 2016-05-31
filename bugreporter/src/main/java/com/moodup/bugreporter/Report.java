@@ -15,7 +15,7 @@ public class Report {
     private String stepsToReproduce;
     private String actualBehaviour;
     private String expectedBehaviour;
-    private String applicationVerison;
+    private String applicationVersion;
     private List<String> audioUrls;
     private List<String> screensUrls;
 
@@ -35,7 +35,7 @@ public class Report {
     protected String getContent() {
         return "**Device**: " + DeviceName.getDeviceName() + "\n\n" +
                 String.format("**Android version**: %s (API %d)\n\n", Build.VERSION.RELEASE, Build.VERSION.SDK_INT) +
-                "**Application version**: " + getApplicationVerison() + "\n\n" +
+                "**Application version**: " + getApplicationVersion() + "\n\n" +
                 "**Steps to reproduce**: " + getStepsToReproduce() + "\n\n" +
                 "**Actual behaviour**: " + getActualBehaviour() + "\n\n" +
                 "**Expected behaviour**: " + getExpectedBehaviour() + "\n\n";
@@ -85,12 +85,12 @@ public class Report {
         this.expectedBehaviour = expectedBehaviour;
     }
 
-    public String getApplicationVerison() {
-        return applicationVerison == null ? "" : applicationVerison;
+    public String getApplicationVersion() {
+        return applicationVersion == null ? "" : applicationVersion;
     }
 
-    public void setApplicationVerison(String version) {
-        this.applicationVerison = version;
+    public void setApplicationVersion(String version) {
+        this.applicationVersion = version;
     }
 
     protected void setAudioUrls(List<String> audioUrls) {
