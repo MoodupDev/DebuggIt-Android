@@ -1,9 +1,17 @@
 package com.moodup.bugreporter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.os.Build;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
+import com.jaredrummler.android.device.DeviceName;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -100,5 +108,44 @@ public class Utils {
 
         return sb.toString();
 
+    }
+
+    protected static String getApplicationVersion(Activity activity) {
+        try {
+            PackageInfo info = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0);
+            return String.format("%s (%d)", info.versionName, info.versionCode);
+        } catch(PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    protected static String getActiveFragmentName(Activity activity) {
+        FragmentManager fragmentManager = ((AppCompatActivity) activity).getSupportFragmentManager();
+        if(fragmentManager.getBackStackEntryCount() == 0) {
+            return "";
+        }
+        return fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
+    }
+
+    // TODO: 31.05.2016 refactor
+    protected static String getDeviceInfo(Activity activity) {
+        StringBuilder builder = new StringBuilder();
+        String activeFragmentName = getActiveFragmentName(activity);
+        builder.append("\n  |  |  | \n")
+                .append("--------|--------|------|-----\n")
+                .append("**Device** | ")
+                .append(DeviceName.getDeviceName())
+                .append(" | ")
+                .append("**Android version** | ")
+                .append(String.format("%s (API %d)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT))
+                .append("\n")
+                .append("**App version** | ")
+                .append(getApplicationVersion(activity))
+                .append(" | ")
+                .append("**Current view** | ")
+                .append(activeFragmentName.isEmpty() ? activity.getClass().getSimpleName() : activeFragmentName)
+                .append('\n');
+        return builder.toString();
     }
 }

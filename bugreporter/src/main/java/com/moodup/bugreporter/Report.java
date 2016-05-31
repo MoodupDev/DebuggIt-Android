@@ -33,10 +33,7 @@ public class Report {
     }
 
     protected String getContent() {
-        return "**Device**: " + DeviceName.getDeviceName() + "\n\n" +
-                String.format("**Android version**: %s (API %d)\n\n", Build.VERSION.RELEASE, Build.VERSION.SDK_INT) +
-                "**Application version**: " + getApplicationVersion() + "\n\n" +
-                "**Steps to reproduce**: " + getStepsToReproduce() + "\n\n" +
+        return "**Steps to reproduce**: " + getStepsToReproduce() + "\n\n" +
                 "**Actual behaviour**: " + getActualBehaviour() + "\n\n" +
                 "**Expected behaviour**: " + getExpectedBehaviour() + "\n\n";
     }
