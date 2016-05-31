@@ -23,7 +23,6 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
     protected static final String TAG = ReportFragment.class.getSimpleName();
 
-    private ApiClient apiClient;
     private ImageView viewPagerIndicator;
     private LoadingDialog dialog;
 
@@ -36,12 +35,6 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        apiClient = new ApiClient(
-                BugReporter.getInstance().getRepoSlug(),
-                BugReporter.getInstance().getAccountName(),
-                BugReporter.getInstance().getAccessToken()
-        );
-
         dialog = LoadingDialog.newInstance(getString(R.string.loading_dialog_message_report));
         setCancelable(false);
         return initViews(inflater, container);
@@ -81,6 +74,11 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                     ConfirmationDialog.newInstance(getString(R.string.title_empty)).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                 } else {
                     dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
+                    ApiClient apiClient = new ApiClient(
+                            BugReporter.getInstance().getRepoSlug(),
+                            BugReporter.getInstance().getAccountName(),
+                            BugReporter.getInstance().getAccessToken()
+                    );
                     apiClient.addIssue(
                             report.getTitle(),
                             report.getContent()
