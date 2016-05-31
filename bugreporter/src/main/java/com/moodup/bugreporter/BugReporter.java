@@ -250,4 +250,8 @@ public class BugReporter {
     protected Report getReport() {
         return report;
     }
+
+    protected Activity getActivity() {
+        return activity;
+    }
 }
