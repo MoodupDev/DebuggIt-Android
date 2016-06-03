@@ -31,6 +31,8 @@ public class PaintableImageView extends ImageView {
     private int cornerId = 0;
     private ArrayList<Corner> corners = new ArrayList<>();
 
+    private ArrayList<Bitmap> drawingHistory = new ArrayList<>();
+
     private int type;
     private Bitmap bitmap;
     private Canvas canvas;
@@ -149,6 +151,22 @@ public class PaintableImageView extends ImageView {
         canvas.drawPath(path, paint);
         // kill this so we don't double draw
         path.reset();
+        drawingHistory.add(bitmap);
+    }
+
+    protected void previousDrawing() {
+        if(drawingHistory.size() > 1) {
+            bitmap = drawingHistory.get(drawingHistory.size() - 2);
+            drawingHistory.remove(drawingHistory.size() - 1);
+            canvas = new Canvas(bitmap);
+            invalidate();
+        } else {
+            clear();
+        }
+    }
+
+    private Bitmap getBitmapFromCanvas() {
+        return this.getDrawingCache();
     }
 
     @Override
@@ -194,7 +212,7 @@ public class PaintableImageView extends ImageView {
     }
 
     private void rectanglesDrawTouchUp() {
-
+        drawingHistory.add(bitmap);
     }
 
     private void rectanglesDrawTouchMove(float x, float y) {

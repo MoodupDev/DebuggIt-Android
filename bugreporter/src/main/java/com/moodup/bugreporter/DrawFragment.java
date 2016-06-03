@@ -118,7 +118,7 @@ public class DrawFragment extends DialogFragment {
         rubber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                drawingSurface.clear();
+                drawingSurface.previousDrawing();
             }
         });
 
