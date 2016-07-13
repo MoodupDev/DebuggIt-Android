@@ -28,12 +28,11 @@ public class ApiClient {
     public static final String CLIENT_ID = "client_id";
     public static final String SECRET = "secret";
     public static final String REFRESH_TOKEN = "refresh_token";
-    public static final String AUTHORIZATION_CODE = "authorization_code";
-    public static final String CODE = "code";
     public static final String METHOD_POST = "POST";
     public static final String CHARSET_UTF8 = "UTF-8";
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String CONTENT_TYPE_FORM = "application/x-www-form-urlencoded";
+    public static final String CLIENT_CREDENTIALS = "client_credentials";
 
     private String repoSlug;
     private String accountName;
@@ -59,12 +58,14 @@ public class ApiClient {
         new AddIssueAsyncTask(map, handler).execute(String.format(BitBucket.ISSUES_URL, accountName, repoSlug));
     }
 
-    protected void authorize(String token, String clientId, String clientSecret, boolean refresh, HttpHandler handler) {
+    protected void authorize(String clientId, String clientSecret, String refreshToken, HttpHandler handler) {
         HashMap<String, String> map = new HashMap<>();
-        map.put(GRANT_TYPE, refresh ? REFRESH_TOKEN : AUTHORIZATION_CODE);
+        map.put(GRANT_TYPE, !refreshToken.isEmpty() ? REFRESH_TOKEN : CLIENT_CREDENTIALS);
         map.put(CLIENT_ID, clientId);
         map.put(SECRET, clientSecret);
-        map.put(refresh ? REFRESH_TOKEN : CODE, token);
+        if(!refreshToken.isEmpty()) {
+            map.put(REFRESH_TOKEN, refreshToken);
+        }
 
         new ApiClient.AuthorizeAsyncTask(map, handler).execute(BitBucket.AUTHORIZE_URL);
     }
@@ -157,21 +158,22 @@ public class ApiClient {
             e.printStackTrace();
         }
 
-        return new HttpResponse();
+        return new HttpResponse(-1, "No internet connection");
     }
 
     private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
         StringBuilder result = new StringBuilder();
         boolean first = true;
         for (Map.Entry<String, String> entry : params.entrySet()) {
-            if (first)
+            if (first) {
                 first = false;
-            else
+            } else {
                 result.append("&");
+            }
 
-            result.append(URLEncoder.encode(entry.getKey(), CHARSET_UTF8));
-            result.append("=");
-            result.append(URLEncoder.encode(entry.getValue(), CHARSET_UTF8));
+            result.append(URLEncoder.encode(entry.getKey(), CHARSET_UTF8))
+                    .append("=")
+                    .append(URLEncoder.encode(entry.getValue(), CHARSET_UTF8));
         }
 
         return result.toString();

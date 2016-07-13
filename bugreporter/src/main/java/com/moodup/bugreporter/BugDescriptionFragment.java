@@ -131,7 +131,7 @@ public class BugDescriptionFragment extends Fragment {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(getActivity(), "Audio upload failed!", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getActivity(), R.string.upload_audio_failed, Toast.LENGTH_LONG).show();
                                 }
                             });
                         }

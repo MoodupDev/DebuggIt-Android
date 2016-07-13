@@ -24,7 +24,7 @@ import java.util.Map;
 public class DrawFragment extends DialogFragment {
 
     protected static final String TAG = DrawFragment.class.getSimpleName();
-    public static final String FREE_DRAW_ACTIVE = "free_draw_active";
+    protected static final String FREE_DRAW_ACTIVE = "free_draw_active";
 
     private View surfaceRoot;
     private ImageView screenSurface;

@@ -23,8 +23,8 @@ public class PaintableImageView extends ImageView {
     public static final int GROUP_HORIZONTAL = 2;
     public static final int GROUP_VERTICAL = 1;
 
-    public static int TYPE_FREE_DRAW = 0;
-    public static int TYPE_RECTANGLE_DRAW = 1;
+    public static final int TYPE_FREE_DRAW = 0;
+    public static final int TYPE_RECTANGLE_DRAW = 1;
 
     private Point[] points;
     private int groupId = -1;
