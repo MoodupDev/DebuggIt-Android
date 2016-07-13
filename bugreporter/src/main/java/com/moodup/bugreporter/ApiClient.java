@@ -51,12 +51,14 @@ public class ApiClient {
         new AddIssueAsyncTask(map, handler).execute(String.format(BitBucket.ISSUES_URL, accountName, repoSlug));
     }
 
-    protected void authorize(String token, String clientId, String clientSecret, boolean refresh, HttpHandler handler) {
+    protected void authorize(String clientId, String clientSecret, String refreshToken, HttpHandler handler) {
         HashMap<String, String> map = new HashMap<>();
-        map.put("grant_type", refresh ? "refresh_token" : "authorization_code");
+        map.put("grant_type", !refreshToken.isEmpty() ? "refresh_token" : "client_credentials");
         map.put("client_id", clientId);
         map.put("secret", clientSecret);
-        map.put(refresh ? "refresh_token" : "code", token);
+        if(!refreshToken.isEmpty()) {
+            map.put("refresh_token", refreshToken);
+        }
 
         new ApiClient.AuthorizeAsyncTask(map, handler).execute(BitBucket.AUTHORIZE_URL);
     }
