@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -28,6 +29,7 @@ public class AudioCaptureFragment extends DialogFragment {
     public static final String TEMP_FILE_NAME = "recording";
     public static final int DURATION = 1000 * 60;
     public static final int COUNT_DOWN_INTERVAL = 1000;
+    public static final String TIME_FORMAT = "%02d:%02d";
 
     private AudioCaptureHelper audioCaptureHelper;
     private CountDownTimer countDownTimer;
@@ -100,7 +102,7 @@ public class AudioCaptureFragment extends DialogFragment {
             @Override
             public void onTick(long millisUntilFinished) {
                 timer.setText(
-                        String.format("%02d:%02d",
+                        String.format(Locale.getDefault(), TIME_FORMAT,
                                 TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
                                 TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished))
                 );
