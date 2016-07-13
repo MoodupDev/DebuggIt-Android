@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.ImageView;
@@ -32,7 +33,7 @@ public class PaintableImageView extends ImageView {
 
     private ArrayList<Path> pathHistory = new ArrayList<>();
 
-    private ArrayList<Rectangle> rectanglesHistory = new ArrayList<>();
+    private ArrayList<RectF> rectanglesHistory = new ArrayList<>();
 
     private int type;
     private Bitmap bitmap;
@@ -150,9 +151,7 @@ public class PaintableImageView extends ImageView {
 
     private void freeDrawTouchUp() {
         path.lineTo(x, y);
-        // commit the path to our offscreen
         canvas.drawPath(path, paint);
-        // kill this so we don't double draw
         pathHistory.add(path);
         path = new Path();
         lastDrawings.add(TYPE_FREE_DRAW);
@@ -164,44 +163,39 @@ public class PaintableImageView extends ImageView {
             switch(lastDrawings.get(lastDrawings.size() - 1)) {
                 case TYPE_FREE_DRAW:
                     pathHistory.remove(pathHistory.size() - 1);
-                    for(Path pathToDraw : pathHistory) {
-                        canvas.drawPath(pathToDraw, paint);
-                    }
-                    for(Rectangle rectangle : rectanglesHistory) {
-                        canvas.drawRect(
-                                rectangle.left,
-                                rectangle.top,
-                                rectangle.right,
-                                rectangle.bottom,
-                                paint
-                        );
-                    }
-                    invalidate();
                     break;
                 case TYPE_RECTANGLE_DRAW:
                     rectanglesHistory.remove(rectanglesHistory.size() - 1);
-                    for(Rectangle rectangle : rectanglesHistory) {
-                        canvas.drawRect(
-                                rectangle.left,
-                                rectangle.top,
-                                rectangle.right,
-                                rectangle.bottom,
-                                paint
-                        );
-                    }
-                    for(Path pathToDraw : pathHistory) {
-                        canvas.drawPath(pathToDraw, paint);
-                    }
-                    invalidate();
                     break;
                 default:
                     break;
             }
+            redrawRectangles();
+            redrawPaths();
+            invalidate();
             lastDrawings.remove(lastDrawings.size() -  1);
         } else {
             lastDrawings.clear();
             rectanglesHistory.clear();
             pathHistory.clear();
+        }
+    }
+
+    private void redrawRectangles() {
+        for(RectF rectangle : rectanglesHistory) {
+            canvas.drawRect(
+                    rectangle.left,
+                    rectangle.top,
+                    rectangle.right,
+                    rectangle.bottom,
+                    paint
+            );
+        }
+    }
+
+    private void redrawPaths() {
+        for(Path pathToDraw : pathHistory) {
+            canvas.drawPath(pathToDraw, paint);
         }
     }
 
@@ -348,7 +342,7 @@ public class PaintableImageView extends ImageView {
             bottom = bottom < points[i].y ? points[i].y : bottom;
         }
 
-        Rectangle rectangle = new Rectangle(
+        RectF rectangle = new RectF(
                 left + corners.get(0).getCornerImageWidth() / 2,
                 top + corners.get(0).getCornerImageWidth() / 2,
                 right + corners.get(2).getCornerImageWidth() / 2,
@@ -391,20 +385,6 @@ public class PaintableImageView extends ImageView {
 
         cornerId = 2;
         groupId = 1;
-    }
-
-    private class Rectangle {
-        private float left;
-        private float top;
-        private float right;
-        private float bottom;
-
-        public Rectangle(float left, float top, float right, float bottom) {
-            this.left = left;
-            this.top = top;
-            this.right = right;
-            this.bottom = bottom;
-        }
     }
 
     static class Corner {
