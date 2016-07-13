@@ -9,7 +9,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
@@ -31,7 +30,9 @@ public class PaintableImageView extends ImageView {
     private int cornerId = 0;
     private ArrayList<Corner> corners = new ArrayList<>();
 
-    private ArrayList<Path> paths = new ArrayList<>();
+    private ArrayList<Path> pathHistory = new ArrayList<>();
+
+    private ArrayList<Rectangle> rectanglesHistory = new ArrayList<>();
 
     private int type;
     private Bitmap bitmap;
@@ -40,6 +41,8 @@ public class PaintableImageView extends ImageView {
     private Paint bitmapPaint;
     private Paint paint;
     private float x, y;
+
+    private ArrayList<Integer> lastDrawings = new ArrayList<>();
 
     public PaintableImageView(Context context) {
         super(context);
@@ -150,20 +153,55 @@ public class PaintableImageView extends ImageView {
         // commit the path to our offscreen
         canvas.drawPath(path, paint);
         // kill this so we don't double draw
-        paths.add(path);
+        pathHistory.add(path);
         path = new Path();
+        lastDrawings.add(TYPE_FREE_DRAW);
     }
 
     protected void previousDrawing() {
         clear();
-        if(paths.size() > 1) {
-            paths.remove(paths.size() - 1);
-            for(Path pathToDraw : paths) {
-                canvas.drawPath(pathToDraw, paint);
+        if(pathHistory.size() > 0 || rectanglesHistory.size() > 0) {
+            switch(lastDrawings.get(lastDrawings.size() - 1)) {
+                case TYPE_FREE_DRAW:
+                    pathHistory.remove(pathHistory.size() - 1);
+                    for(Path pathToDraw : pathHistory) {
+                        canvas.drawPath(pathToDraw, paint);
+                    }
+                    for(Rectangle rectangle : rectanglesHistory) {
+                        canvas.drawRect(
+                                rectangle.left,
+                                rectangle.top,
+                                rectangle.right,
+                                rectangle.bottom,
+                                paint
+                        );
+                    }
+                    invalidate();
+                    break;
+                case TYPE_RECTANGLE_DRAW:
+                    rectanglesHistory.remove(rectanglesHistory.size() - 1);
+                    for(Rectangle rectangle : rectanglesHistory) {
+                        canvas.drawRect(
+                                rectangle.left,
+                                rectangle.top,
+                                rectangle.right,
+                                rectangle.bottom,
+                                paint
+                        );
+                    }
+                    for(Path pathToDraw : pathHistory) {
+                        canvas.drawPath(pathToDraw, paint);
+                    }
+                    invalidate();
+                    break;
+                default:
+                    break;
             }
-            invalidate();
+            lastDrawings.remove(lastDrawings.size() -  1);
         } else {
-            paths.clear();
+            lastDrawings.clear();
+            rectanglesHistory.clear();
+            pathHistory.clear();
         }
     }
 
@@ -264,6 +302,7 @@ public class PaintableImageView extends ImageView {
                 } else if(!isNearCorners(x,y)) {
                     drawRectangle();
                     clearRectangle();
+                    lastDrawings.add(TYPE_RECTANGLE_DRAW);
                     break;
                 }
             }
@@ -309,11 +348,22 @@ public class PaintableImageView extends ImageView {
             bottom = bottom < points[i].y ? points[i].y : bottom;
         }
 
-        canvas.drawRect(
+        Rectangle rectangle = new Rectangle(
                 left + corners.get(0).getCornerImageWidth() / 2,
                 top + corners.get(0).getCornerImageWidth() / 2,
                 right + corners.get(2).getCornerImageWidth() / 2,
-                bottom + corners.get(2).getCornerImageWidth() / 2, paint);
+                bottom + corners.get(2).getCornerImageWidth() / 2
+        );
+
+        rectanglesHistory.add(rectangle);
+
+        canvas.drawRect(
+                rectangle.left,
+                rectangle.top,
+                rectangle.right,
+                rectangle.bottom,
+                paint
+        );
     }
 
     private void initCorners() {
