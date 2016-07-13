@@ -72,6 +72,18 @@
         android:padding="@dimen/small_margin">
 
         <ImageView
+            android:id="@+id/draw_rubber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/button_rubber" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="37dp"
+            android:layout_weight="1" />
+
+        <ImageView
             android:id="@+id/draw_rectangles"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -90,17 +102,6 @@
             android:layout_weight="1"
             android:src="@drawable/button_free_draw" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="37dp"
-            android:layout_weight="1" />
-
-        <ImageView
-            android:id="@+id/draw_rubber"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/button_rubber" />
     </LinearLayout>
 
 </RelativeLayout>
