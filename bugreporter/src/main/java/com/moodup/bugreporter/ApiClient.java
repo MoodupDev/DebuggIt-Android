@@ -113,7 +113,7 @@ public class ApiClient {
                 e.printStackTrace();
             }
 
-            return new HttpResponse();
+            return new HttpResponse(-1, "No internet connection");
         }
 
         @Override

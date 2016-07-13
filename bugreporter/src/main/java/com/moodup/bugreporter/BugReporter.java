@@ -101,6 +101,9 @@ public class BugReporter {
                     } catch(JSONException e) {
                         e.printStackTrace();
                     }
+                } else if(data.getResponseCode() < 0) {
+                    // TODO: 13.07.2016 refresh token on connection back 
+                    ConfirmationDialog.newInstance(data.getMessage()).show(((AppCompatActivity) activity).getSupportFragmentManager(), "");
                 }
             }
         });
