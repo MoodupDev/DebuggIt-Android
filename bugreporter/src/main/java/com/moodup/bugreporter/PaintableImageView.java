@@ -343,6 +343,20 @@ public class PaintableImageView extends ImageView {
         groupId = 1;
     }
 
+    private class Rectangle {
+        private float left;
+        private float top;
+        private float right;
+        private float bottom;
+
+        public Rectangle(float left, float top, float right, float bottom) {
+            this.left = left;
+            this.top = top;
+            this.right = right;
+            this.bottom = bottom;
+        }
+    }
+
     static class Corner {
 
         static int count;
