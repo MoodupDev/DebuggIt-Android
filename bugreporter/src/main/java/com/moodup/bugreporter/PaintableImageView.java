@@ -197,10 +197,6 @@ public class PaintableImageView extends ImageView {
         }
     }
 
-    private Bitmap getBitmapFromCanvas() {
-        return this.getDrawingCache();
-    }
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if(isEnabled()) {
