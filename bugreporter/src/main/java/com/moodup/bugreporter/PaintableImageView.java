@@ -31,7 +31,7 @@ public class PaintableImageView extends ImageView {
     private int cornerId = 0;
     private ArrayList<Corner> corners = new ArrayList<>();
 
-    private ArrayList<Bitmap> drawingHistory = new ArrayList<>();
+    private ArrayList<Path> paths = new ArrayList<>();
 
     private int type;
     private Bitmap bitmap;
@@ -110,7 +110,7 @@ public class PaintableImageView extends ImageView {
                 right + corners.get(2).getCornerImageWidth() / 2,
                 bottom + corners.get(2).getCornerImageWidth() / 2, paint);
 
-        for (int i =0; i < corners.size(); i ++) {
+        for (int i = 0; i < corners.size(); i ++) {
             Corner corner = corners.get(i);
             canvas.drawBitmap(corner.getBitmap(), corner.getX(), corner.getY(),
                     paint);
@@ -150,18 +150,20 @@ public class PaintableImageView extends ImageView {
         // commit the path to our offscreen
         canvas.drawPath(path, paint);
         // kill this so we don't double draw
-        path.reset();
-        drawingHistory.add(bitmap);
+        paths.add(path);
+        path = new Path();
     }
 
     protected void previousDrawing() {
-        if(drawingHistory.size() > 1) {
-            bitmap = drawingHistory.get(drawingHistory.size() - 2);
-            drawingHistory.remove(drawingHistory.size() - 1);
-            canvas = new Canvas(bitmap);
+        clear();
+        if(paths.size() > 1) {
+            paths.remove(paths.size() - 1);
+            for(Path pathToDraw : paths) {
+                canvas.drawPath(pathToDraw, paint);
+            }
             invalidate();
         } else {
-            clear();
+            paths.clear();
         }
     }
 
@@ -212,7 +214,7 @@ public class PaintableImageView extends ImageView {
     }
 
     private void rectanglesDrawTouchUp() {
-        drawingHistory.add(bitmap);
+
     }
 
     private void rectanglesDrawTouchMove(float x, float y) {
