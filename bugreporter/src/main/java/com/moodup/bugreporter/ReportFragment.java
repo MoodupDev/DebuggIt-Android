@@ -72,41 +72,12 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Report report = BugReporter.getInstance().getReport();
                 setApplicationVersion();
                 if (BugReporter.getInstance().getReport().getTitle().isEmpty()) {
                     ConfirmationDialog.newInstance(getString(R.string.title_empty)).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                 } else {
                     dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
-                    ApiClient apiClient = new ApiClient(
-                            BugReporter.getInstance().getRepoSlug(),
-                            BugReporter.getInstance().getAccountName(),
-                            BugReporter.getInstance().getAccessToken()
-                    );
-                    apiClient.addIssue(
-                            report.getTitle(),
-                            report.getContent()
-                                    + getUrlAsStrings(report.getScreensUrls(), false)
-                                    + getUrlAsStrings(report.getAudioUrls(), true)
-                                    + Utils.getDeviceInfo(getActivity()),
-                            report.getPriority(),
-                            report.getKind(),
-                            new ApiClient.HttpHandler() {
-                                @Override
-                                public void done(HttpResponse data) {
-                                    dialog.dismiss();
-                                    if (data.responseCode == HttpsURLConnection.HTTP_OK) {
-                                        BugReporter.getInstance().getReport().clear();
-                                        resetReportButtonImage();
-                                        ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_SUCCESS).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                                    } else if(data.responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-                                        ConfirmationDialog.newInstance(data.message).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                                    } else {
-                                        ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_FAILURE).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                                    }
-                                }
-                            }
-                    );
+                    sendIssue();
                 }
             }
         });
@@ -119,6 +90,39 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                 dismiss();
             }
         });
+    }
+
+    private void sendIssue() {
+        Report report = BugReporter.getInstance().getReport();
+        ApiClient apiClient = new ApiClient(
+                BugReporter.getInstance().getRepoSlug(),
+                BugReporter.getInstance().getAccountName(),
+                BugReporter.getInstance().getAccessToken()
+        );
+        apiClient.addIssue(
+                report.getTitle(),
+                report.getContent()
+                        + getUrlAsStrings(report.getScreensUrls(), false)
+                        + getUrlAsStrings(report.getAudioUrls(), true)
+                        + Utils.getDeviceInfo(getActivity()),
+                report.getPriority(),
+                report.getKind(),
+                new ApiClient.HttpHandler() {
+                    @Override
+                    public void done(HttpResponse data) {
+                        dialog.dismiss();
+                        if (data.responseCode == HttpsURLConnection.HTTP_OK) {
+                            BugReporter.getInstance().getReport().clear();
+                            resetReportButtonImage();
+                            ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_SUCCESS).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                        } else if(data.responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
+                            ConfirmationDialog.newInstance(data.message).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                        } else {
+                            ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_FAILURE).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                        }
+                    }
+                }
+        );
     }
 
     private void setApplicationVersion() {
