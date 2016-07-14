@@ -153,4 +153,13 @@ public class Utils {
     protected static boolean isOrientationLandscape(Activity activity) {
         return activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
+
+    protected static int getStatusBarHeight(Context context) {
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        int statusBarHeight = 0;
+        if(resourceId > 0) {
+            statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
+        }
+        return statusBarHeight;
+    }
 }

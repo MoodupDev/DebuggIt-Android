@@ -169,7 +169,7 @@ public class BugReporter {
             private void setNewPosition(View view, MotionEvent event) {
                 float newY = event.getRawY() + dY;
                 float buttonHeight = view.getMeasuredHeight();
-                int statusBarHeight = getStatusBarHeight();
+                int statusBarHeight = Utils.getStatusBarHeight(view.getContext());
                 newY = newY < statusBarHeight ? statusBarHeight : newY;
                 newY = newY > rootLayout.getBottom() - buttonHeight - statusBarHeight ?
                         rootLayout.getBottom() - buttonHeight - statusBarHeight : newY;
@@ -178,15 +178,6 @@ public class BugReporter {
                         .setDuration(0)
                         .start();
                 Utils.putFloat(view.getContext(), Utils.isOrientationLandscape(activity) ? BUTTON_POSITION_LANDSCAPE : BUTTON_POSITION_PORTRAIT, newY);
-            }
-
-            private int getStatusBarHeight() {
-                int resourceId = rootLayout.getContext().getResources().getIdentifier("status_bar_height", "dimen", "android");
-                int statusBarHeight = 0;
-                if(resourceId > 0) {
-                    statusBarHeight = rootLayout.getContext().getResources().getDimensionPixelSize(resourceId);
-                }
-                return statusBarHeight;
             }
         });
     }
