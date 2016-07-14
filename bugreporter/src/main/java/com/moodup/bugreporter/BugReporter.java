@@ -79,7 +79,9 @@ public class BugReporter {
             return;
         }
         if (Utils.getString(activity, ACCESS_TOKEN, "").isEmpty()) {
-            getBitBucketAccessToken();
+            ApiClient apiClient = new ApiClient(repoSlug, accountName, accessToken);
+            LoginDialog.newInstance(apiClient).show(((AppCompatActivity) activity).getSupportFragmentManager(), LoginDialog.TAG);
+//            getBitBucketAccessToken();
         } else {
             accessToken = Utils.getString(activity, ACCESS_TOKEN, "");
         }
@@ -121,7 +123,7 @@ public class BugReporter {
         });
     }
 
-    private void saveTokens(HttpResponse data) throws JSONException {
+    public void saveTokens(HttpResponse data) throws JSONException {
         JSONObject json = new JSONObject(data.getMessage());
         accessToken = json.getString(ACCESS_TOKEN);
         Utils.putString(activity, ACCESS_TOKEN, accessToken);
@@ -226,5 +228,13 @@ public class BugReporter {
 
     protected Activity getActivity() {
         return activity;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public String getClientSecret() {
+        return clientSecret;
     }
 }

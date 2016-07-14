@@ -70,6 +70,17 @@ public class ApiClient {
         new ApiClient.AuthorizeAsyncTask(map, handler).execute(BitBucket.AUTHORIZE_URL);
     }
 
+    protected void login(String clientId, String clientSecret, String email, String password, HttpHandler handler) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put(GRANT_TYPE, "password");
+        map.put(CLIENT_ID, clientId);
+        map.put(SECRET, clientSecret);
+        map.put("username", email);
+        map.put("password", password);
+
+        new ApiClient.AuthorizeAsyncTask(map, handler).execute(BitBucket.AUTHORIZE_URL);
+    }
+
     protected class AuthorizeAsyncTask extends AsyncTask<String, Void, HttpResponse> {
 
         private HashMap<String, String> postParams;
