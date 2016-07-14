@@ -19,7 +19,6 @@ public class LoginDialog extends DialogFragment {
     //region Fields
 
     private static LoginDialog instance;
-    protected static boolean shown;
 
     protected ApiClient apiClient;
 
@@ -63,7 +62,7 @@ public class LoginDialog extends DialogFragment {
         final MontserratEditText password = (MontserratEditText) view.findViewById(R.id.bitbucket_password);
         MontserratTextView loginButton = (MontserratTextView) view.findViewById(R.id.bitbucket_login_button);
 
-        shown = true;
+        setCancelable(false);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +80,6 @@ public class LoginDialog extends DialogFragment {
                                     try {
                                         BugReporter.getInstance().saveTokens(data);
                                         LoginDialog.this.dismiss();
-                                        shown = false;
                                     } catch(JSONException e) {
                                         e.printStackTrace();
                                     }
