@@ -46,7 +46,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     @Override
     public void onResume() {
         super.onResume();
-        if (getDialog() == null) {
+        if(getDialog() == null) {
             return;
         }
 
@@ -73,7 +73,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
             @Override
             public void onClick(View v) {
                 setApplicationVersion();
-                if (BugReporter.getInstance().getReport().getTitle().isEmpty()) {
+                if(BugReporter.getInstance().getReport().getTitle().isEmpty()) {
                     ConfirmationDialog.newInstance(getString(R.string.title_empty)).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                 } else {
                     dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
@@ -167,9 +167,9 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
     private String getUrlAsStrings(List<String> urls, boolean isMediaFile) {
         StringBuilder builder = new StringBuilder();
-        if (urls != null) {
-            for (String s : urls) {
-                if (!isMediaFile) {
+        if(urls != null) {
+            for(String s : urls) {
+                if(!isMediaFile) {
                     builder.append("![Alt text](")
                             .append(s)
                             .append(")")

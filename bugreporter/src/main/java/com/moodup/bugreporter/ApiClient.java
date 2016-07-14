@@ -145,16 +145,18 @@ public class ApiClient {
             os.close();
             int response = conn.getResponseCode();
 
-            if (response == HttpsURLConnection.HTTP_OK) {
+            if(response == HttpsURLConnection.HTTP_OK) {
                 is = conn.getInputStream();
                 return new HttpResponse(response, Utils.getStringFromInputStream(is));
-            } else if (response == HttpsURLConnection.HTTP_UNAUTHORIZED) {
+            } else if(response == HttpsURLConnection.HTTP_UNAUTHORIZED) {
                 BugReporter.getInstance().authenticate(true);
-                return new HttpResponse(response, Utils.getStringFromInputStream(conn.getInputStream()));
+                return new HttpResponse(response, "");
+            } else if(response == HttpURLConnection.HTTP_FORBIDDEN) {
+                return new HttpResponse(response, Utils.getStringFromInputStream(conn.getErrorStream()));
             } else {
                 return new HttpResponse(response, "");
             }
-        } catch (Exception e) {
+        } catch(Exception e) {
             e.printStackTrace();
         }
 
@@ -164,8 +166,8 @@ public class ApiClient {
     private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
         StringBuilder result = new StringBuilder();
         boolean first = true;
-        for (Map.Entry<String, String> entry : params.entrySet()) {
-            if (first) {
+        for(Map.Entry<String, String> entry : params.entrySet()) {
+            if(first) {
                 first = false;
             } else {
                 result.append("&");
