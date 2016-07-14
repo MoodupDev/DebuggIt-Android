@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
-                android:src="@drawable/record_micro"/>
+                android:src="@drawable/button_micro"/>
         </LinearLayout>
 
         <HorizontalScrollView

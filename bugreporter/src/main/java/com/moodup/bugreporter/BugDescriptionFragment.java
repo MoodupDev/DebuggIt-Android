@@ -116,14 +116,16 @@ public class BugDescriptionFragment extends Fragment {
         recordButton = (ImageView) view.findViewById(R.id.record_button);
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 if(!areRecordPermissionsGranted(getActivity())) {
                     requestRecordPermissions(getActivity());
                 } else {
+                    v.setSelected(!v.isSelected());
                     AudioCaptureFragment.newInstance(new AudioCaptureFragment.AudioRecordListener() {
                         @Override
                         public void onRecordUploaded(String audioUrl) {
                             addAudioMiniature(itemsContainer, audioUrl);
+                            v.setSelected(!v.isSelected());
                         }
 
                         @Override
@@ -132,6 +134,7 @@ public class BugDescriptionFragment extends Fragment {
                                 @Override
                                 public void run() {
                                     Toast.makeText(getActivity(), R.string.upload_audio_failed, Toast.LENGTH_LONG).show();
+                                    v.setSelected(!v.isSelected());
                                 }
                             });
                         }
