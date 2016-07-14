@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.v4.app.FragmentManager;
@@ -147,5 +148,9 @@ public class Utils {
                 .append(activeFragmentName.isEmpty() ? activity.getClass().getSimpleName() : activeFragmentName)
                 .append('\n');
         return builder.toString();
+    }
+
+    protected static boolean isOrientationLandscape(Activity activity) {
+        return activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 }

@@ -18,7 +18,8 @@ import java.util.HashMap;
 
 public class BugReporter {
     
-    public static final String BUTTON_POSITION = "button_position";
+    public static final String BUTTON_POSITION_PORTRAIT = "button_position_portrait";
+    public static final String BUTTON_POSITION_LANDSCAPE = "button_position_landscape";
     public static final String ACCESS_TOKEN = "access_token";
     public static final String REFRESH_TOKEN = "refresh_token";
 
@@ -123,7 +124,7 @@ public class BugReporter {
     }
 
     private void initButtonPosition() {
-        float buttonPosition = Utils.getFloat(reportButton.getContext(), BUTTON_POSITION, 0);
+        float buttonPosition = Utils.getFloat(reportButton.getContext(), Utils.isOrientationLandscape(activity) ? BUTTON_POSITION_LANDSCAPE : BUTTON_POSITION_PORTRAIT, 0);
         if (buttonPosition == 0) {
             Rect visibleFrame = new Rect();
             activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(visibleFrame);
@@ -176,7 +177,7 @@ public class BugReporter {
                         .y(newY)
                         .setDuration(0)
                         .start();
-                Utils.putFloat(view.getContext(), BUTTON_POSITION, newY);
+                Utils.putFloat(view.getContext(), Utils.isOrientationLandscape(activity) ? BUTTON_POSITION_LANDSCAPE : BUTTON_POSITION_PORTRAIT, newY);
             }
 
             private int getStatusBarHeight() {
