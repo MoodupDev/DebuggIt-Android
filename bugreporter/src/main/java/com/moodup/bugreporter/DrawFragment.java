@@ -1,7 +1,6 @@
 package com.moodup.bugreporter;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,6 +24,7 @@ public class DrawFragment extends DialogFragment {
 
     protected static final String TAG = DrawFragment.class.getSimpleName();
     protected static final String FREE_DRAW_ACTIVE = "free_draw_active";
+    public static final String SCREENSHOT = "screenshot";
 
     private View surfaceRoot;
     private ImageView screenSurface;
@@ -36,6 +36,8 @@ public class DrawFragment extends DialogFragment {
     private ImageView rectanglesDraw;
     private LoadingDialog dialog;
 
+    private Bitmap screenshot;
+
     private UploadImageAsyncTask uploadImageAsyncTask;
 
     @Override
@@ -43,6 +45,9 @@ public class DrawFragment extends DialogFragment {
         CustomDialog dialog = new CustomDialog(getActivity(), R.style.CustomDialog);
         View rootView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_draw, null);
         dialog.setContentView(rootView);
+        if(savedInstanceState != null) {
+            screenshot = savedInstanceState.getParcelable(SCREENSHOT);
+        }
         initViews(rootView);
 
         return dialog;
@@ -65,6 +70,14 @@ public class DrawFragment extends DialogFragment {
         }
         super.onDestroyView();
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(SCREENSHOT, screenshot);
+        super.onSaveInstanceState(outState);
+    }
+
+
 
     private void initViews(View view) {
         surfaceRoot = view.findViewById(R.id.surface_root);
@@ -94,9 +107,16 @@ public class DrawFragment extends DialogFragment {
     private void initDrawingSurface() {
         View rootView = getActivity().findViewById(android.R.id.content);
         ImageView reportButton = (ImageView) rootView.findViewById(R.id.report_button);
-        reportButton.setVisibility(View.INVISIBLE);
-        screenSurface.setImageBitmap(Utils.getBitmapFromView(rootView));
-        reportButton.setVisibility(View.VISIBLE);
+        if(reportButton != null) {
+            reportButton.setVisibility(View.INVISIBLE);
+        }
+        if(screenshot == null) {
+            screenshot = Utils.getBitmapFromView(rootView);
+        }
+        screenSurface.setImageBitmap(screenshot);
+        if(reportButton != null) {
+            reportButton.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initButtons() {
