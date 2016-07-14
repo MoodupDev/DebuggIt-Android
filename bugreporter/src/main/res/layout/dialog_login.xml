@@ -1,44 +1,55 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="@dimen/confirmation_dialog_width"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/big_margin"
-                android:background="@drawable/main_background">
-    <ImageView
-        android:id="@+id/bitbucket_logo"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/bitbucket_logo"/>
-    <LinearLayout
-        android:layout_below="@id/bitbucket_logo"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/confirmation_dialog_width"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="@dimen/big_margin"
+    android:background="@drawable/main_background">
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="@dimen/big_padding">
-        <com.moodup.bugreporter.MontserratEditText
-            android:id="@+id/bitbucket_email"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/bitbucket_logo"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/bitbucket_logo"/>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="@color/button.not.selected"
-            android:inputType="textEmailAddress"
-            android:hint="Email"/>
-        <com.moodup.bugreporter.MontserratEditText
-            android:id="@+id/bitbucket_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColorHint="@color/button.not.selected"
-            android:inputType="textPassword"
-            android:hint="Password"/>
-        <com.moodup.bugreporter.MontserratTextView
-            android:id="@+id/bitbucket_login_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sign in"
-            android:padding="15dp"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center"
-            android:textColor="@android:color/white"
-            android:background="@drawable/button_send"/>
-    </LinearLayout>
-</RelativeLayout>
+            android:layout_below="@id/bitbucket_logo"
+            android:layout_margin="@dimen/big_padding"
+            android:orientation="vertical">
+
+            <com.moodup.bugreporter.MontserratEditText
+                android:id="@+id/bitbucket_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:textColorHint="@color/button.not.selected"/>
+
+            <com.moodup.bugreporter.MontserratEditText
+                android:id="@+id/bitbucket_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:textColorHint="@color/button.not.selected"/>
+
+            <com.moodup.bugreporter.MontserratTextView
+                android:id="@+id/bitbucket_login_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/button_send"
+                android:padding="15dp"
+                android:text="Sign in"
+                android:textColor="@android:color/white"/>
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>
