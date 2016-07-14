@@ -79,8 +79,9 @@ public class BugReporter {
             return;
         }
         if (Utils.getString(activity, ACCESS_TOKEN, "").isEmpty()) {
-            ApiClient apiClient = new ApiClient(repoSlug, accountName, accessToken);
-            LoginDialog.newInstance(apiClient).show(((AppCompatActivity) activity).getSupportFragmentManager(), LoginDialog.TAG);
+            if(!LoginDialog.shown) {
+                LoginDialog.getInstance().show(((AppCompatActivity) activity).getSupportFragmentManager(), LoginDialog.TAG);
+            }
 //            getBitBucketAccessToken();
         } else {
             accessToken = Utils.getString(activity, ACCESS_TOKEN, "");

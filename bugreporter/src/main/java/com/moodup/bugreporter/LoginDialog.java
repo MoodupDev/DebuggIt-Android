@@ -18,6 +18,9 @@ public class LoginDialog extends DialogFragment {
 
     //region Fields
 
+    private static LoginDialog instance;
+    protected static boolean shown;
+
     protected ApiClient apiClient;
 
     //endregion
@@ -36,14 +39,36 @@ public class LoginDialog extends DialogFragment {
         return dialog;
     }
 
+    //endregion
+
+    //region Events
+
+    //endregion
+
+    //region Methods
+
+    public LoginDialog() {
+        // Required empty public constructor
+    }
+
+    protected static LoginDialog getInstance() {
+        if(instance == null) {
+            instance = new LoginDialog();
+        }
+        return instance;
+    }
+
     private void initView(View view) {
         final MontserratEditText email = (MontserratEditText) view.findViewById(R.id.bitbucket_email);
         final MontserratEditText password = (MontserratEditText) view.findViewById(R.id.bitbucket_password);
         MontserratTextView loginButton = (MontserratTextView) view.findViewById(R.id.bitbucket_login_button);
 
+        shown = true;
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                initApiClient();
                 apiClient.login(
                         BugReporter.getInstance().getClientId(),
                         BugReporter.getInstance().getClientSecret(),
@@ -56,6 +81,7 @@ public class LoginDialog extends DialogFragment {
                                     try {
                                         BugReporter.getInstance().saveTokens(data);
                                         LoginDialog.this.dismiss();
+                                        shown = false;
                                     } catch(JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -69,22 +95,12 @@ public class LoginDialog extends DialogFragment {
         });
     }
 
-    //endregion
-
-    //region Events
-
-    //endregion
-
-    //region Methods
-
-    public LoginDialog() {
-        // Required empty public constructor
-    }
-
-    protected static LoginDialog newInstance(ApiClient apiClient) {
-        LoginDialog dialog = new LoginDialog();
-        dialog.apiClient = apiClient;
-        return dialog;
+    private void initApiClient() {
+        apiClient = new ApiClient(
+                BugReporter.getInstance().getRepoSlug(),
+                BugReporter.getInstance().getAccountName(),
+                ""
+        );
     }
 
     //endregion
