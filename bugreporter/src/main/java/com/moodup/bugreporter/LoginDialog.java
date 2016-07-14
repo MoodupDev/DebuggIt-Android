@@ -9,6 +9,8 @@ import android.view.View;
 
 import org.json.JSONException;
 
+import javax.net.ssl.HttpsURLConnection;
+
 public class LoginDialog extends DialogFragment {
     //region Consts
 
@@ -17,8 +19,6 @@ public class LoginDialog extends DialogFragment {
     //endregion
 
     //region Fields
-
-    private static LoginDialog instance;
 
     protected ApiClient apiClient;
 
@@ -50,11 +50,8 @@ public class LoginDialog extends DialogFragment {
         // Required empty public constructor
     }
 
-    protected static LoginDialog getInstance() {
-        if(instance == null) {
-            instance = new LoginDialog();
-        }
-        return instance;
+    protected static LoginDialog newInstance() {
+        return new LoginDialog();
     }
 
     private void initView(View view) {
@@ -83,8 +80,10 @@ public class LoginDialog extends DialogFragment {
                                     } catch(JSONException e) {
                                         e.printStackTrace();
                                     }
-                                } else {
+                                } else if(data.responseCode == HttpsURLConnection.HTTP_BAD_REQUEST) {
                                     ConfirmationDialog.newInstance("Wrong email or password").show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                } else {
+                                    ConfirmationDialog.newInstance("No internet connection").show(getChildFragmentManager(), ConfirmationDialog.TAG);
                                 }
                             }
                         }
