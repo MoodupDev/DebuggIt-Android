@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:background="@null"
-        android:src="@drawable/button_play_orange" />
+        android:src="@drawable/button_play" />
 
     <ImageView
         android:id="@+id/item_audio_close"

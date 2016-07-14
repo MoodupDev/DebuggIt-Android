@@ -19,8 +19,8 @@ import java.util.HashMap;
 public class BugReporter {
     
     public static final String BUTTON_POSITION = "button_position";
-    public static final String ACCESS_TOKEN = "accessToken";
-    public static final String REFRESH_TOKEN = "refreshToken";
+    public static final String ACCESS_TOKEN = "access_token";
+    public static final String REFRESH_TOKEN = "refresh_token";
 
     private static BugReporter instance;
 
