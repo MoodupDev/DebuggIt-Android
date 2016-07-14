@@ -111,11 +111,11 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                     @Override
                     public void done(HttpResponse data) {
                         dialog.dismiss();
-                        if (data.responseCode == HttpsURLConnection.HTTP_OK) {
+                        if(data.responseCode == HttpsURLConnection.HTTP_OK) {
                             BugReporter.getInstance().getReport().clear();
                             resetReportButtonImage();
                             ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_SUCCESS).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                        } else if(data.responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
+                        } else if(data.responseCode == HttpsURLConnection.HTTP_FORBIDDEN) {
                             ConfirmationDialog.newInstance(data.message).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                         } else {
                             ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_FAILURE).show(getChildFragmentManager(), ConfirmationDialog.TAG);
