@@ -114,7 +114,15 @@ public class BugReporter {
     private void addReportButton() {
         final FrameLayout rootLayout = (FrameLayout) activity.findViewById(android.R.id.content);
         reportButton = LayoutInflater.from(activity).inflate(R.layout.report_button_layout, rootLayout, false);
+        initButtonPosition();
         boolean buttonAdded = rootLayout.findViewById(R.id.report_button) != null;
+        if (!buttonAdded) {
+            rootLayout.addView(reportButton);
+            initReportButtonOnTouchListener(rootLayout);
+        }
+    }
+
+    private void initButtonPosition() {
         float buttonPosition = Utils.getFloat(reportButton.getContext(), BUTTON_POSITION, 0);
         if (buttonPosition == 0) {
             Rect visibleFrame = new Rect();
@@ -123,60 +131,63 @@ public class BugReporter {
         } else {
             reportButton.setY(buttonPosition);
         }
-        if (!buttonAdded) {
-            rootLayout.addView(reportButton);
+    }
 
-            reportButton.setOnTouchListener(new View.OnTouchListener() {
-                float dY;
-                float previousY;
-                boolean isMoving = false;
-                final int MOVE_TOLERANCE = 5;
+    private void initReportButtonOnTouchListener(final FrameLayout rootLayout) {
+        reportButton.setOnTouchListener(new View.OnTouchListener() {
+            float dY;
+            float previousY;
+            boolean isMoving = false;
+            final int MOVE_TOLERANCE = 5;
 
-                @Override
-                public boolean onTouch(View view, MotionEvent event) {
-                    switch(event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            dY = view.getY() - event.getRawY();
-                            previousY = view.getY();
-                            break;
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        dY = view.getY() - event.getRawY();
+                        previousY = view.getY();
+                        break;
 
-                        case MotionEvent.ACTION_UP:
-                            if (!isMoving || Math.abs(previousY - view.getY()) <= MOVE_TOLERANCE) {
-                                showDrawFragment();
-                            }
-                            isMoving = false;
-                            break;
+                    case MotionEvent.ACTION_UP:
+                        if(!isMoving || Math.abs(previousY - view.getY()) <= MOVE_TOLERANCE) {
+                            showDrawFragment();
+                        }
+                        isMoving = false;
+                        break;
 
-                        case MotionEvent.ACTION_MOVE:
-                            isMoving = true;
-                            float newY = event.getRawY() + dY;
-                            float buttonHeight = view.getMeasuredHeight();
-                            int statusBarHeight = getStatusBarHeight();
-                            newY = newY < statusBarHeight ? statusBarHeight : newY;
-                            newY = newY > rootLayout.getBottom() - buttonHeight - statusBarHeight ?
-                                            rootLayout.getBottom() - buttonHeight - statusBarHeight : newY;
-                            view.animate()
-                                    .y(newY)
-                                    .setDuration(0)
-                                    .start();
-                            Utils.putFloat(view.getContext(), BUTTON_POSITION, newY);
-                            break;
-                        default:
-                            return false;
-                    }
-                    return true;
+                    case MotionEvent.ACTION_MOVE:
+                        isMoving = true;
+                        setNewPosition(view, event);
+                        break;
+                    default:
+                        return false;
                 }
+                return true;
+            }
 
-                private int getStatusBarHeight() {
-                    int resourceId = rootLayout.getContext().getResources().getIdentifier("status_bar_height", "dimen", "android");
-                    int statusBarHeight = 0;
-                    if (resourceId > 0) {
-                        statusBarHeight = rootLayout.getContext().getResources().getDimensionPixelSize(resourceId);
-                    }
-                    return statusBarHeight;
+            private void setNewPosition(View view, MotionEvent event) {
+                float newY = event.getRawY() + dY;
+                float buttonHeight = view.getMeasuredHeight();
+                int statusBarHeight = getStatusBarHeight();
+                newY = newY < statusBarHeight ? statusBarHeight : newY;
+                newY = newY > rootLayout.getBottom() - buttonHeight - statusBarHeight ?
+                        rootLayout.getBottom() - buttonHeight - statusBarHeight : newY;
+                view.animate()
+                        .y(newY)
+                        .setDuration(0)
+                        .start();
+                Utils.putFloat(view.getContext(), BUTTON_POSITION, newY);
+            }
+
+            private int getStatusBarHeight() {
+                int resourceId = rootLayout.getContext().getResources().getIdentifier("status_bar_height", "dimen", "android");
+                int statusBarHeight = 0;
+                if(resourceId > 0) {
+                    statusBarHeight = rootLayout.getContext().getResources().getDimensionPixelSize(resourceId);
                 }
-            });
-        }
+                return statusBarHeight;
+            }
+        });
     }
 
     public void detach() {
