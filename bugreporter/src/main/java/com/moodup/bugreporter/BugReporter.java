@@ -82,29 +82,9 @@ public class BugReporter {
             if(!LoginDialog.shown) {
                 LoginDialog.getInstance().show(((AppCompatActivity) activity).getSupportFragmentManager(), LoginDialog.TAG);
             }
-//            getBitBucketAccessToken();
         } else {
             accessToken = Utils.getString(activity, ACCESS_TOKEN, "");
         }
-    }
-
-    private void getBitBucketAccessToken() {
-        ApiClient apiClient = new ApiClient(repoSlug, accountName, accessToken);
-        apiClient.authorize(clientId, clientSecret, "", new ApiClient.HttpHandler() {
-            @Override
-            public void done(HttpResponse data) {
-                if(data.responseCode == HttpURLConnection.HTTP_OK) {
-                    try {
-                        saveTokens(data);
-                    } catch(JSONException e) {
-                        e.printStackTrace();
-                    }
-                } else if(data.getResponseCode() < 0) {
-                    // TODO: 13.07.2016 refresh token on connection back
-                    ConfirmationDialog.newInstance(data.getMessage()).show(((AppCompatActivity) activity).getSupportFragmentManager(), "");
-                }
-            }
-        });
     }
 
     private void refreshAccessToken() {
