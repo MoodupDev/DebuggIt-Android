@@ -27,12 +27,11 @@ public class ApiClient {
     public static final String GRANT_TYPE = "grant_type";
     public static final String CLIENT_ID = "client_id";
     public static final String SECRET = "secret";
-    public static final String REFRESH_TOKEN = "refresh_token";
     public static final String METHOD_POST = "POST";
     public static final String CHARSET_UTF8 = "UTF-8";
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String CONTENT_TYPE_FORM = "application/x-www-form-urlencoded";
-    public static final String CLIENT_CREDENTIALS = "client_credentials";
+    public static final String USERNAME = "username";
 
     private String repoSlug;
     private String accountName;
@@ -58,25 +57,23 @@ public class ApiClient {
         new AddIssueAsyncTask(map, handler).execute(String.format(BitBucket.ISSUES_URL, accountName, repoSlug));
     }
 
-    protected void authorize(String clientId, String clientSecret, String refreshToken, HttpHandler handler) {
+    protected void refreshToken(String clientId, String clientSecret, String refreshToken, HttpHandler handler) {
         HashMap<String, String> map = new HashMap<>();
-        map.put(GRANT_TYPE, !refreshToken.isEmpty() ? REFRESH_TOKEN : CLIENT_CREDENTIALS);
+        map.put(GRANT_TYPE, BitBucket.GRANT_TYPE_REFRESH_TOKEN);
         map.put(CLIENT_ID, clientId);
         map.put(SECRET, clientSecret);
-        if(!refreshToken.isEmpty()) {
-            map.put(REFRESH_TOKEN, refreshToken);
-        }
+        map.put(BitBucket.GRANT_TYPE_REFRESH_TOKEN, refreshToken);
 
         new ApiClient.AuthorizeAsyncTask(map, handler).execute(BitBucket.AUTHORIZE_URL);
     }
 
     protected void login(String clientId, String clientSecret, String email, String password, HttpHandler handler) {
         HashMap<String, String> map = new HashMap<>();
-        map.put(GRANT_TYPE, "password");
+        map.put(GRANT_TYPE, BitBucket.GRANT_TYPE_PASSWORD);
         map.put(CLIENT_ID, clientId);
         map.put(SECRET, clientSecret);
-        map.put("username", email);
-        map.put("password", password);
+        map.put(USERNAME, email);
+        map.put(BitBucket.GRANT_TYPE_PASSWORD, password);
 
         new ApiClient.AuthorizeAsyncTask(map, handler).execute(BitBucket.AUTHORIZE_URL);
     }

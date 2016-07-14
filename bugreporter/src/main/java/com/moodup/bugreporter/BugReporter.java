@@ -90,7 +90,7 @@ public class BugReporter {
     private void refreshAccessToken() {
         ApiClient apiClient = new ApiClient(repoSlug, accountName, accessToken);
         Utils.putString(activity, ACCESS_TOKEN, "");
-        apiClient.authorize(clientId, clientSecret, Utils.getString(activity, REFRESH_TOKEN, ""), new ApiClient.HttpHandler() {
+        apiClient.refreshToken(clientId, clientSecret, Utils.getString(activity, REFRESH_TOKEN, ""), new ApiClient.HttpHandler() {
             @Override
             public void done(HttpResponse data) {
                 if(data.responseCode == HttpURLConnection.HTTP_OK) {
@@ -108,7 +108,7 @@ public class BugReporter {
         JSONObject json = new JSONObject(data.getMessage());
         accessToken = json.getString(ACCESS_TOKEN);
         Utils.putString(activity, ACCESS_TOKEN, accessToken);
-        Utils.putString(activity, REFRESH_TOKEN, json.getString(ApiClient.REFRESH_TOKEN));
+        Utils.putString(activity, REFRESH_TOKEN, json.getString(REFRESH_TOKEN));
     }
 
     private void addReportButton() {
