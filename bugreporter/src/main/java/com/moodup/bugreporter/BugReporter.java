@@ -70,7 +70,6 @@ public class BugReporter {
 
     public void attach(Activity activity) {
         this.activity = activity;
-        authenticate(false);
         addReportButton();
     }
 
@@ -79,13 +78,17 @@ public class BugReporter {
             refreshAccessToken();
             return;
         }
-        if (Utils.getString(activity, ACCESS_TOKEN, "").isEmpty()) {
+        if (!hasAccessToken()) {
             if(((AppCompatActivity) activity).getSupportFragmentManager().findFragmentByTag(LoginDialog.TAG) == null) {
                 LoginDialog.newInstance().show(((AppCompatActivity) activity).getSupportFragmentManager(), LoginDialog.TAG);
             }
         } else {
             accessToken = Utils.getString(activity, ACCESS_TOKEN, "");
         }
+    }
+
+    private boolean hasAccessToken() {
+        return !Utils.getString(activity, ACCESS_TOKEN, "").isEmpty();
     }
 
     private void refreshAccessToken() {
@@ -151,7 +154,11 @@ public class BugReporter {
 
                     case MotionEvent.ACTION_UP:
                         if(!isMoving || Math.abs(previousY - view.getY()) <= MOVE_TOLERANCE) {
-                            showDrawFragment();
+                            if(!hasAccessToken()) {
+                                authenticate(false);
+                            } else {
+                                showDrawFragment();
+                            }
                         }
                         isMoving = false;
                         break;
