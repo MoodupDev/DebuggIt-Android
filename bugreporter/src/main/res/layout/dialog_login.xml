@@ -12,8 +12,8 @@
 
         <ImageView
             android:id="@+id/bitbucket_logo"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="@dimen/bitbucket.logo.size"
+            android:layout_height="@dimen/bitbucket.logo.size"
             android:layout_centerHorizontal="true"
             android:src="@drawable/bitbucket_logo"/>
 
@@ -28,7 +28,7 @@
                 android:id="@+id/bitbucket_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Email"
+                android:hint="@string/bitbucket.login.email"
                 android:inputType="textEmailAddress"
                 android:textColorHint="@color/button.not.selected"/>
 
@@ -36,7 +36,7 @@
                 android:id="@+id/bitbucket_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Password"
+                android:hint="@string/bitbucket.login.password"
                 android:inputType="textPassword"
                 android:textColorHint="@color/button.not.selected"/>
 
@@ -45,10 +45,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/big_margin"
                 android:background="@drawable/button_send"
-                android:padding="15dp"
-                android:text="Sign in"
+                android:padding="@dimen/regular_padding"
+                android:text="@string/bitbucket.login.sign.in"
                 android:textColor="@android:color/white"/>
         </LinearLayout>
     </RelativeLayout>

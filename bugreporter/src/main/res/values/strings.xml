@@ -22,6 +22,9 @@
     <string name="title.empty">Issue title can\'t be empty!</string>
     <string name="screenshot.upload.error">Screenshot isn’t saved!\nCheck your Internet connection</string>
     <string name="upload.audio.failed">Audio upload failed!</string>
+    <string name="bitbucket.login.password">Password</string>
+    <string name="bitbucket.login.email">Email</string>
+    <string name="bitbucket.login.sign.in">Sign in</string>
 
 
 </resources>
