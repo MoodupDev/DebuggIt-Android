@@ -102,7 +102,7 @@ public class DrawFragment extends DialogFragment {
     }
 
     private void initButtonsState() {
-        boolean isFreeDrawActive = Utils.getBoolean(getContext(), FREE_DRAW_ACTIVE, false);
+        boolean isFreeDrawActive = Utils.getBoolean(getContext(), FREE_DRAW_ACTIVE, true);
         freeDraw.setSelected(isFreeDrawActive);
         rectanglesDraw.setSelected(!isFreeDrawActive);
         drawingSurface.setType(isFreeDrawActive ? PaintableImageView.TYPE_FREE_DRAW : PaintableImageView.TYPE_RECTANGLE_DRAW);
@@ -174,11 +174,8 @@ public class DrawFragment extends DialogFragment {
         } else {
             freeDraw.setSelected(false);
         }
-        v.setSelected(!v.isSelected());
-        drawingSurface.setEnabled(v.isSelected());
-        if(v.isSelected()) {
-            drawingSurface.setType(isFreeDrawClicked ? PaintableImageView.TYPE_FREE_DRAW : PaintableImageView.TYPE_RECTANGLE_DRAW);
-        }
+        v.setSelected(true);
+        drawingSurface.setType(isFreeDrawClicked ? PaintableImageView.TYPE_FREE_DRAW : PaintableImageView.TYPE_RECTANGLE_DRAW);
     }
 
     private void uploadScreenshotAndGetUrl() {
