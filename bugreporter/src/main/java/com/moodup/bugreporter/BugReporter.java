@@ -182,10 +182,6 @@ public class BugReporter {
         });
     }
 
-    public void detach() {
-        activity = null;
-    }
-
     protected void showDrawFragment() {
         new DrawFragment().show(((AppCompatActivity) activity).getSupportFragmentManager(), DrawFragment.TAG);
     }
