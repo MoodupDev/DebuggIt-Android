@@ -150,8 +150,8 @@ public class Utils {
         return builder.toString();
     }
 
-    protected static boolean isOrientationLandscape(Activity activity) {
-        return activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+    protected static boolean isOrientationLandscape(Context context) {
+        return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     protected static int getStatusBarHeight(Context context) {

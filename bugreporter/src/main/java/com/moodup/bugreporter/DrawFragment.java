@@ -1,6 +1,7 @@
 package com.moodup.bugreporter;
 
 import android.app.Dialog;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -59,8 +60,11 @@ public class DrawFragment extends DialogFragment {
         if (getDialog() == null) {
             return;
         }
-
-        getDialog().getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.confirmation_dialog_width), WindowManager.LayoutParams.WRAP_CONTENT);
+        if(Utils.isOrientationLandscape(getContext())) {
+            getDialog().getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.confirmation_dialog_width_landscape), WindowManager.LayoutParams.WRAP_CONTENT);
+        } else {
+            getDialog().getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.confirmation_dialog_width), WindowManager.LayoutParams.WRAP_CONTENT);
+        }
     }
 
     @Override
