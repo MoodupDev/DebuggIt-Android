@@ -18,10 +18,10 @@ import java.util.HashMap;
 
 public class BugReporter {
     
-    public static final String BUTTON_POSITION_PORTRAIT = "button_position_portrait";
-    public static final String BUTTON_POSITION_LANDSCAPE = "button_position_landscape";
-    public static final String ACCESS_TOKEN = "access_token";
-    public static final String REFRESH_TOKEN = "refresh_token";
+    protected static final String BUTTON_POSITION_PORTRAIT = "button_position_portrait";
+    protected static final String BUTTON_POSITION_LANDSCAPE = "button_position_landscape";
+    protected static final String ACCESS_TOKEN = "access_token";
+    protected static final String REFRESH_TOKEN = "refresh_token";
 
     private static BugReporter instance;
 
@@ -105,7 +105,7 @@ public class BugReporter {
         });
     }
 
-    public void saveTokens(HttpResponse data) throws JSONException {
+    protected void saveTokens(HttpResponse data) throws JSONException {
         JSONObject json = new JSONObject(data.getMessage());
         accessToken = json.getString(ACCESS_TOKEN);
         Utils.putString(activity, ACCESS_TOKEN, accessToken);
@@ -214,11 +214,11 @@ public class BugReporter {
         return activity;
     }
 
-    public String getClientId() {
+    protected String getClientId() {
         return clientId;
     }
 
-    public String getClientSecret() {
+    protected String getClientSecret() {
         return clientSecret;
     }
 }
