@@ -32,6 +32,7 @@ public class ApiClient {
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String CONTENT_TYPE_FORM = "application/x-www-form-urlencoded";
     public static final String USERNAME = "username";
+    public static final String NO_INTERNET_MESSAGE = "No internet connection";
 
     private String repoSlug;
     private String accountName;
@@ -168,7 +169,7 @@ public class ApiClient {
             e.printStackTrace();
         }
 
-        return new HttpResponse(-1, "No internet connection");
+        return new HttpResponse(-1, NO_INTERNET_MESSAGE);
     }
 
     private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {

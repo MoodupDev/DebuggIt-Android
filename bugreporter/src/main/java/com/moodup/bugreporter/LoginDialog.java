@@ -81,9 +81,9 @@ public class LoginDialog extends DialogFragment {
                                         e.printStackTrace();
                                     }
                                 } else if(data.responseCode == HttpsURLConnection.HTTP_BAD_REQUEST) {
-                                    ConfirmationDialog.newInstance("Wrong email or password").show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                    ConfirmationDialog.newInstance(getContext().getString(R.string.login_error_wrong_credentials)).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                                 } else {
-                                    ConfirmationDialog.newInstance("No internet connection").show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                    ConfirmationDialog.newInstance(getContext().getString(R.string.error_no_internet)).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                                 }
                             }
                         }
