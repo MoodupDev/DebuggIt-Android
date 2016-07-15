@@ -19,3 +19,4 @@
 -keep class com.moodup.bugreporter.BugReporter {
     public <methods>;
 }
+-keep class com.cloudinary.** { *; }
