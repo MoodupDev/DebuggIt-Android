@@ -24,6 +24,14 @@
             android:layout_margin="@dimen/big_padding"
             android:orientation="vertical">
 
+            <com.moodup.bugreporter.MontserratTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/login.bitbucket.info"
+                android:layout_margin="@dimen/small_margin"
+                android:textColor="@color/bitbucket.color"/>
+
             <com.moodup.bugreporter.MontserratEditText
                 android:id="@+id/bitbucket_email"
                 android:layout_width="match_parent"

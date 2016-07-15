@@ -27,6 +27,7 @@
     <string name="bitbucket.login.sign.in">Sign in</string>
     <string name="login.error.wrong.credentials">Wrong email or password</string>
     <string name="error.no.internet">No internet connection</string>
+    <string name="login.bitbucket.info">Sign in with Bitbucket account</string>
 
 
 </resources>
