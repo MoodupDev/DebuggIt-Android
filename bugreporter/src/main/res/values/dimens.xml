@@ -16,6 +16,7 @@
     <dimen name="report.layout.padding.horizontal">15dp</dimen>
     <dimen name="confirmation_dialog_font_size">16sp</dimen>
     <dimen name="confirmation_dialog_width">280dp</dimen>
+    <dimen name="confirmation.dialog.width.landscape">400dp</dimen>
     <dimen name="report.item.height">130dp</dimen>
     <dimen name="report.item.width">80dp</dimen>
     <dimen name="draw.line.width">3dp</dimen>
