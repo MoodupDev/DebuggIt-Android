@@ -34,6 +34,8 @@ public class ApiClient {
     public static final String USERNAME = "username";
     public static final String NO_INTERNET_MESSAGE = "No internet connection";
 
+    public static final String HEROKU_UPLOAD_URL = "https://bugreporter.herokuapp.com/upload";
+
     private String repoSlug;
     private String accountName;
     private String accessToken;

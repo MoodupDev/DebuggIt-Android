@@ -1,11 +1,12 @@
 package com.moodup.bugreporter;
 
 import android.app.Dialog;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -13,13 +14,23 @@ import android.widget.ImageView;
 
 import com.cloudinary.utils.ObjectUtils;
 
+import org.json.JSONObject;
+
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class DrawFragment extends DialogFragment {
 
@@ -185,41 +196,66 @@ public class DrawFragment extends DialogFragment {
         bmp.compress(Bitmap.CompressFormat.PNG, 0, bos);
 
         byte[] bitmapdata = bos.toByteArray();
-        ByteArrayInputStream bs = new ByteArrayInputStream(bitmapdata);
 
-        uploadImageAsyncTask = new UploadImageAsyncTask();
+        HashMap<String, String> params = new HashMap<>();
+        params.put("file", Base64.encodeToString(bitmapdata, Base64.URL_SAFE));
+        params.put("mimetype", "image/png");
 
-        uploadImageAsyncTask.execute(bs);
+        uploadImageAsyncTask = new UploadImageAsyncTask(params);
+        uploadImageAsyncTask.execute(ApiClient.HEROKU_UPLOAD_URL);
     }
 
-    private class UploadImageAsyncTask extends AsyncTask<InputStream, Void, List<String>> {
-        @Override
-        protected List<String> doInBackground(InputStream... params) {
-            List<String> urls = new ArrayList<>();
+    private class UploadImageAsyncTask extends AsyncTask<String, Void, String> {
 
-            try {
-                for (InputStream is : params) {
-                    Map map = BugReporter.getInstance().getCloudinary().uploader().upload(is, ObjectUtils.emptyMap());
-                    urls.add((String) map.get("url"));
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        private HashMap<String, String> postParams;
 
-            return urls;
+        public UploadImageAsyncTask(HashMap<String, String> params) {
+            this.postParams = params;
         }
 
         @Override
-        protected void onPostExecute(List<String> s) {
+        protected String doInBackground(String... params) {
+            URL url;
+            try {
+                url = new URL(params[0]);
+
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(15000);
+                conn.setConnectTimeout(15000);
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+
+                conn.setRequestMethod("POST");
+
+                OutputStream os = conn.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+                writer.write(Utils.getPostDataString(postParams));
+
+                writer.flush();
+                writer.close();
+                os.close();
+                int response = conn.getResponseCode();
+                if(response == HttpsURLConnection.HTTP_OK) {
+                    JSONObject json = new JSONObject(Utils.getStringFromInputStream(conn.getInputStream()));
+                    return json.getString("Location");
+                }
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
             dialog.dismiss();
-            if(s.size() != 0) {
-                BugReporter.getInstance().getReport().getScreensUrls().addAll(s);
+            if(s != null && !s.isEmpty()) {
+                BugReporter.getInstance().getReport().getScreensUrls().add(s);
                 new ReportFragment().show(getActivity().getSupportFragmentManager(), ReportFragment.TAG);
                 dismiss();
             } else {
                 ConfirmationDialog.newInstance(getString(R.string.screenshot_upload_error)).show(getChildFragmentManager(), ConfirmationDialog.TAG);
             }
-
             super.onPostExecute(s);
         }
     }
