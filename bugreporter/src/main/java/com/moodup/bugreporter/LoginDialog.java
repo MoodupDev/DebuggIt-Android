@@ -59,8 +59,6 @@ public class LoginDialog extends DialogFragment {
         final MontserratEditText password = (MontserratEditText) view.findViewById(R.id.bitbucket_password);
         MontserratTextView loginButton = (MontserratTextView) view.findViewById(R.id.bitbucket_login_button);
 
-        setCancelable(false);
-
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
