@@ -147,7 +147,7 @@ public class ApiClient {
             OutputStream os = conn.getOutputStream();
             BufferedWriter writer = new BufferedWriter(
                     new OutputStreamWriter(os, CHARSET_UTF8));
-            writer.write(getPostDataString(postParams));
+            writer.write(Utils.getPostDataString(postParams));
 
             writer.flush();
             writer.close();
@@ -172,21 +172,4 @@ public class ApiClient {
         return new HttpResponse(-1, NO_INTERNET_MESSAGE);
     }
 
-    private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
-        StringBuilder result = new StringBuilder();
-        boolean first = true;
-        for(Map.Entry<String, String> entry : params.entrySet()) {
-            if(first) {
-                first = false;
-            } else {
-                result.append("&");
-            }
-
-            result.append(URLEncoder.encode(entry.getKey(), CHARSET_UTF8))
-                    .append("=")
-                    .append(URLEncoder.encode(entry.getValue(), CHARSET_UTF8));
-        }
-
-        return result.toString();
-    }
 }

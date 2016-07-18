@@ -18,6 +18,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -161,5 +163,23 @@ public class Utils {
             statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
         }
         return statusBarHeight;
+    }
+
+    protected static String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
+        StringBuilder result = new StringBuilder();
+        boolean first = true;
+        for(Map.Entry<String, String> entry : params.entrySet()) {
+            if(first) {
+                first = false;
+            } else {
+                result.append("&");
+            }
+
+            result.append(URLEncoder.encode(entry.getKey(), ApiClient.CHARSET_UTF8))
+                    .append("=")
+                    .append(URLEncoder.encode(entry.getValue(), ApiClient.CHARSET_UTF8));
+        }
+
+        return result.toString();
     }
 }
