@@ -194,6 +194,9 @@ public class BugReporter {
     }
 
     protected String getAccessToken() {
+        if(accessToken == null) {
+            accessToken = Utils.getString(activity, ACCESS_TOKEN, "");
+        }
         return accessToken;
     }
 
