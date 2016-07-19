@@ -75,7 +75,17 @@ public class PaintableImageView extends ImageView {
     }
 
     public void setType(int type) {
+        drawActiveRectangle();
         this.type = type;
+    }
+
+    private void drawActiveRectangle() {
+        if(isRectangleActive()) {
+            drawRectangle();
+            clearRectangle();
+            lastDrawings.add(TYPE_RECTANGLE_DRAW);
+            invalidate();
+        }
     }
 
     @Override
@@ -156,6 +166,7 @@ public class PaintableImageView extends ImageView {
     }
 
     protected void previousDrawing() {
+        drawActiveRectangle();
         clear();
         if(pathHistory.size() > 0 || rectanglesHistory.size() > 0) {
             switch(lastDrawings.get(lastDrawings.size() - 1)) {
@@ -301,6 +312,10 @@ public class PaintableImageView extends ImageView {
         points = new Point[4];
         corners = new ArrayList<>();
         Corner.count = 0;
+    }
+
+    private boolean isRectangleActive() {
+        return Corner.count != 0;
     }
 
     private boolean isNearCorner(float x, float y, Corner corner) {
