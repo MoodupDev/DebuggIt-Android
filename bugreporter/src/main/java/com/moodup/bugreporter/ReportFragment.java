@@ -74,7 +74,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
             public void onClick(View v) {
                 setApplicationVersion();
                 if(BugReporter.getInstance().getReport().getTitle().isEmpty()) {
-                    ConfirmationDialog.newInstance(getString(R.string.title_empty)).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                    ConfirmationDialog.newInstance(getString(R.string.title_empty), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                 } else {
                     dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
                     sendIssue();
@@ -116,7 +116,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                             resetReportButtonImage();
                             ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_SUCCESS).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                         } else if(data.responseCode == HttpsURLConnection.HTTP_FORBIDDEN) {
-                            ConfirmationDialog.newInstance(data.message).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                            ConfirmationDialog.newInstance(data.message, true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                         } else {
                             ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_FAILURE).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                         }

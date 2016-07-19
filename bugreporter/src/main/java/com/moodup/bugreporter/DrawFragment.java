@@ -254,7 +254,7 @@ public class DrawFragment extends DialogFragment {
                 new ReportFragment().show(getActivity().getSupportFragmentManager(), ReportFragment.TAG);
                 dismiss();
             } else {
-                ConfirmationDialog.newInstance(getString(R.string.screenshot_upload_error)).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                ConfirmationDialog.newInstance(getString(R.string.screenshot_upload_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
             }
             super.onPostExecute(s);
         }
