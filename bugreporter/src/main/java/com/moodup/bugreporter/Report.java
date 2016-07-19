@@ -1,9 +1,5 @@
 package com.moodup.bugreporter;
 
-import android.os.Build;
-
-import com.jaredrummler.android.device.DeviceName;
-
 import java.util.ArrayList;
 import java.util.List;
 

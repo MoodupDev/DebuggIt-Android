@@ -9,8 +9,6 @@ import android.view.View;
 
 import org.json.JSONException;
 
-import javax.net.ssl.HttpsURLConnection;
-
 public class LoginDialog extends DialogFragment {
     //region Consts
 
