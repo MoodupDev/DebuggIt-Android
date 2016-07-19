@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -105,6 +106,9 @@ public class BugReporter {
         reportButton = LayoutInflater.from(activity).inflate(R.layout.report_button_layout, rootLayout, false);
         initButtonPosition();
         boolean buttonAdded = rootLayout.findViewById(R.id.report_button) != null;
+        if(!report.getScreensUrls().isEmpty()) {
+            ((ImageView) reportButton).setImageDrawable(activity.getResources().getDrawable(R.drawable.next_screenshoot));
+        }
         if (!buttonAdded) {
             rootLayout.addView(reportButton);
             initReportButtonOnTouchListener(rootLayout);
