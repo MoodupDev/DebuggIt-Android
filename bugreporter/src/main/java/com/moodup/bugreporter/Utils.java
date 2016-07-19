@@ -15,6 +15,9 @@ import android.view.View;
 import com.jaredrummler.android.device.DeviceName;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -30,7 +33,7 @@ public class Utils {
     protected static Map<String, String> getQueryMap(String query) {
         String[] params = query.split("#")[1].split("&");
         Map<String, String> map = new HashMap<String, String>();
-        for (String param : params) {
+        for(String param : params) {
             String name = param.split("=")[0];
             String value = param.split("=")[1];
             map.put(name, value);
@@ -94,16 +97,16 @@ public class Utils {
         try {
 
             br = new BufferedReader(new InputStreamReader(is));
-            while ((line = br.readLine()) != null) {
+            while((line = br.readLine()) != null) {
                 sb.append(line);
             }
-        } catch (IOException e) {
+        } catch(IOException e) {
             e.printStackTrace();
         } finally {
-            if (br != null) {
+            if(br != null) {
                 try {
                     br.close();
-                } catch (IOException e) {
+                } catch(IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -182,4 +185,23 @@ public class Utils {
 
         return result.toString();
     }
+
+    protected static byte[] getBytesFromFile(String filePath) {
+        byte[] bytes;
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            FileInputStream fis = new FileInputStream(new File(filePath));
+
+            byte[] buffer = new byte[1024];
+            int readLength;
+            while(-1 != (readLength = fis.read(buffer))) {
+                baos.write(buffer, 0, readLength);
+            }
+            bytes = baos.toByteArray();
+        } catch(Exception e) {
+            bytes = new byte[1];
+        }
+        return bytes;
+    }
+
 }
