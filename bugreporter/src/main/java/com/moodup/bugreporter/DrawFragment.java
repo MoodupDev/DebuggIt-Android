@@ -121,6 +121,7 @@ public class DrawFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
+                drawingSurface.drawActiveRectangle();
                 uploadScreenshotAndGetUrl();
             }
         });
