@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Base64;
 
+import org.json.JSONObject;
+
 import java.io.BufferedWriter;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -33,6 +35,9 @@ public class ApiClient {
     public static final String CONTENT_TYPE_FORM = "application/x-www-form-urlencoded";
     public static final String USERNAME = "username";
     public static final String NO_INTERNET_MESSAGE = "No internet connection";
+
+    public static final String MIME_TYPE_AUDIO = "audio/mpeg";
+    public static final String MIME_TYPE_IMAGE = "image/png";
 
     public static final String HEROKU_UPLOAD_URL = "https://bugreporter.herokuapp.com/upload";
 
@@ -172,6 +177,38 @@ public class ApiClient {
         }
 
         return new HttpResponse(-1, NO_INTERNET_MESSAGE);
+    }
+
+    protected static String getUploadedFileUrl(HashMap<String, String> postParams) {
+        URL url;
+        try {
+            url = new URL(HEROKU_UPLOAD_URL);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(15000);
+            conn.setConnectTimeout(15000);
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+
+            conn.setRequestMethod("POST");
+
+            OutputStream os = conn.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(os, "UTF-8"));
+            writer.write(Utils.getPostDataString(postParams));
+
+            writer.flush();
+            writer.close();
+            os.close();
+            int response = conn.getResponseCode();
+            if(response == HttpsURLConnection.HTTP_OK) {
+                JSONObject json = new JSONObject(Utils.getStringFromInputStream(conn.getInputStream()));
+                return json.getString("Location");
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
 }

@@ -7,21 +7,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.cloudinary.utils.ObjectUtils;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class AudioCaptureFragment extends DialogFragment {
@@ -114,17 +107,17 @@ public class AudioCaptureFragment extends DialogFragment {
                 if (getActivity() != null && !isRemoving()) {
                     dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
                     audioCaptureHelper.stopRecording();
-                    try {
-                        uploadAudioAsyncTask = new UploadAudioAsyncTask();
-                        uploadAudioAsyncTask.execute(new FileInputStream(audioCaptureHelper.getFilePath()));
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
+
+                    HashMap<String, String> params = new HashMap<>();
+                    params.put("file", Base64.encodeToString(Utils.getBytesFromFile(audioCaptureHelper.getFilePath()), Base64.URL_SAFE));
+                    params.put("mimetype", ApiClient.MIME_TYPE_AUDIO);
+
+                    uploadAudioAsyncTask = new UploadAudioAsyncTask(params);
+                    uploadAudioAsyncTask.execute();
                 }
             }
         }.start();
     }
-
     @Override
     public void onDetach() {
         audioCaptureHelper.stopRecording();
@@ -142,31 +135,26 @@ public class AudioCaptureFragment extends DialogFragment {
         this.listener = listener;
     }
 
-    private class UploadAudioAsyncTask extends AsyncTask<InputStream, Void, List<String>> {
-        @Override
-        protected List<String> doInBackground(InputStream... params) {
-            List<String> urls = new ArrayList<>();
 
-            try {
-                for (InputStream is : params) {
-                    Map map = BugReporter.getInstance().getCloudinary().uploader().uploadLargeRaw(is, ObjectUtils.asMap("resource_type", "video"));
-                    urls.add((String) map.get("url"));
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                listener.onFailed();
-            }
+    private class UploadAudioAsyncTask extends AsyncTask<String, Void, String> {
+        private HashMap<String, String> postParams;
 
-            return urls;
+        protected UploadAudioAsyncTask(HashMap<String, String> postParams) {
+            this.postParams = postParams;
         }
 
         @Override
-        protected void onPostExecute(List<String> s) {
+        protected String doInBackground(String... params) {
+            return ApiClient.getUploadedFileUrl(postParams);
+        }
+
+        @Override
+        protected void onPostExecute(String url) {
             dialog.dismiss();
-            BugReporter.getInstance().getReport().getAudioUrls().addAll(s);
-            listener.onRecordUploaded(s.get(0));
+            BugReporter.getInstance().getReport().getAudioUrls().add(url);
+            listener.onRecordUploaded(url);
             dismiss();
-            super.onPostExecute(s);
+            super.onPostExecute(url);
         }
     }
 }

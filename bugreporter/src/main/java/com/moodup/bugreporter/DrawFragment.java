@@ -199,10 +199,10 @@ public class DrawFragment extends DialogFragment {
 
         HashMap<String, String> params = new HashMap<>();
         params.put("file", Base64.encodeToString(bitmapdata, Base64.URL_SAFE));
-        params.put("mimetype", "image/png");
+        params.put("mimetype", ApiClient.MIME_TYPE_IMAGE);
 
         uploadImageAsyncTask = new UploadImageAsyncTask(params);
-        uploadImageAsyncTask.execute(ApiClient.HEROKU_UPLOAD_URL);
+        uploadImageAsyncTask.execute();
     }
 
     private class UploadImageAsyncTask extends AsyncTask<String, Void, String> {
@@ -215,35 +215,7 @@ public class DrawFragment extends DialogFragment {
 
         @Override
         protected String doInBackground(String... params) {
-            URL url;
-            try {
-                url = new URL(params[0]);
-
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(15000);
-                conn.setConnectTimeout(15000);
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-
-                conn.setRequestMethod("POST");
-
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(os, "UTF-8"));
-                writer.write(Utils.getPostDataString(postParams));
-
-                writer.flush();
-                writer.close();
-                os.close();
-                int response = conn.getResponseCode();
-                if(response == HttpsURLConnection.HTTP_OK) {
-                    JSONObject json = new JSONObject(Utils.getStringFromInputStream(conn.getInputStream()));
-                    return json.getString("Location");
-                }
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
-            return "";
+            return ApiClient.getUploadedFileUrl(postParams);
         }
 
         @Override
