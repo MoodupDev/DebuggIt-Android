@@ -63,6 +63,8 @@ public class LoginDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 initApiClient();
+                final LoadingDialog dialog = LoadingDialog.newInstance(getContext().getString(R.string.login_loading_info));
+                dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
                 apiClient.login(
                         BugReporter.getInstance().getClientId(),
                         BugReporter.getInstance().getClientSecret(),
@@ -71,17 +73,17 @@ public class LoginDialog extends DialogFragment {
                         new ApiClient.HttpHandler() {
                             @Override
                             public void done(HttpResponse data) {
+                                dialog.dismiss();
                                 if(data.isSuccessfull()) {
                                     try {
                                         BugReporter.getInstance().saveTokens(data);
-                                        LoginDialog.this.dismiss();
+                                        ConfirmationDialog.newInstance(getContext().getString(R.string.login_successfull), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                                     } catch(JSONException e) {
                                         e.printStackTrace();
+                                        ConfirmationDialog.newInstance(getContext().getString(R.string.login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                                     }
-                                } else if(data.responseCode == HttpsURLConnection.HTTP_BAD_REQUEST) {
-                                    ConfirmationDialog.newInstance(getContext().getString(R.string.login_error_wrong_credentials)).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                                 } else {
-                                    ConfirmationDialog.newInstance(getContext().getString(R.string.error_no_internet)).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                    ConfirmationDialog.newInstance(getContext().getString(R.string.login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                                 }
                             }
                         }

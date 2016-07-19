@@ -27,7 +27,10 @@
     <string name="login.sign.in">Sign in</string>
     <string name="login.error.wrong.credentials">Wrong email or password</string>
     <string name="error.no.internet">No internet connection</string>
+    <string name="login.error">It\'s not possible to sign you in!\nCheck your Internet connection</string>
     <string name="login.info">Sign in to Bitbucket account\nand report bugs from the phone</string>
+    <string name="login.loading.info">Signing in to account...</string>
+    <string name="login.successfull">Signed in!\nNow let\'s smash some bugs</string>
 
 
 </resources>
