@@ -8,13 +8,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.cloudinary.Cloudinary;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
-import java.util.HashMap;
 
 public class BugReporter {
     
@@ -27,7 +24,6 @@ public class BugReporter {
 
     private Activity activity;
     private View reportButton;
-    private Cloudinary cloudinary;
 
     private String clientId;
     private String clientSecret;
@@ -54,18 +50,7 @@ public class BugReporter {
         this.clientSecret = clientSecret;
         this.repoSlug = repoSlug;
         this.accountName = accountName;
-        this.cloudinary = new Cloudinary(getCloudinaryConfig());
         this.report = new Report();
-    }
-
-    private HashMap<String, String> getCloudinaryConfig() {
-        HashMap<String, String> config = new HashMap<>();
-
-        config.put("cloud_name", "db9nesbif");
-        config.put("api_key", "235172213685627");
-        config.put("api_secret", "HyLIsCmPHA2MVuetbmV_t_YZa2M");
-
-        return config;
     }
 
     public void attach(Activity activity) {
@@ -206,10 +191,6 @@ public class BugReporter {
 
     protected String getAccountName() {
         return accountName;
-    }
-
-    protected Cloudinary getCloudinary() {
-        return cloudinary;
     }
 
     protected Report getReport() {
