@@ -30,17 +30,6 @@ public class Utils {
 
     public static final String MEDIA_FILE_FORMAT = ".mpeg";
 
-    protected static Map<String, String> getQueryMap(String query) {
-        String[] params = query.split("#")[1].split("&");
-        Map<String, String> map = new HashMap<String, String>();
-        for(String param : params) {
-            String name = param.split("=")[0];
-            String value = param.split("=")[1];
-            map.put(name, value);
-        }
-        return map;
-    }
-
     protected static void putString(Context context, String key, String value) {
         SharedPreferences prefs = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
