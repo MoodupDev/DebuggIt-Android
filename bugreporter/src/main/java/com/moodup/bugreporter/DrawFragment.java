@@ -182,6 +182,7 @@ public class DrawFragment extends DialogFragment {
         HashMap<String, String> params = new HashMap<>();
         params.put("file", Base64.encodeToString(bitmapdata, Base64.URL_SAFE));
         params.put("mimetype", ApiClient.MIME_TYPE_IMAGE);
+        params.put("package", getActivity().getPackageName());
 
         uploadImageAsyncTask = new UploadImageAsyncTask(params);
         uploadImageAsyncTask.execute();
