@@ -1,7 +1,6 @@
 package com.moodup.bugreporter;
 
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 import android.util.Base64;
 
 import org.json.JSONObject;
@@ -128,7 +127,6 @@ public class ApiClient {
         }
     }
 
-    @NonNull
     private HttpResponse getHttpResponse(String[] params, HashMap<String, String> postParams, boolean authorization) {
         URL url;
         InputStream is;
