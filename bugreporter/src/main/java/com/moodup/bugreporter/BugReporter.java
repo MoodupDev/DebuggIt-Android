@@ -9,12 +9,14 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.moodup.bugreporter.ShakeDetector.ShakeListener;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
 
-public class BugReporter {
+public class BugReporter implements ShakeListener {
     
     protected static final String BUTTON_POSITION_PORTRAIT = "button_position_portrait";
     protected static final String BUTTON_POSITION_LANDSCAPE = "button_position_landscape";
@@ -57,6 +59,7 @@ public class BugReporter {
     public void attach(Activity activity) {
         this.activity = activity;
         addReportButton();
+        ShakeDetector.getInstance().register(activity, this);
     }
 
     protected void authenticate(boolean refresh) {
@@ -211,5 +214,12 @@ public class BugReporter {
 
     protected String getClientSecret() {
         return clientSecret;
+    }
+
+    @Override
+    public void shakeDetected() {
+        if(((AppCompatActivity) activity).getSupportFragmentManager().findFragmentByTag(DrawFragment.TAG) == null) {
+            showDrawFragment();
+        }
     }
 }
