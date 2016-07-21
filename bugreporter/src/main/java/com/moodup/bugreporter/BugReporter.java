@@ -11,6 +11,8 @@ import android.widget.ImageView;
 
 import com.moodup.bugreporter.ShakeDetector.ShakeListener;
 
+import com.jraska.falcon.Falcon;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -182,7 +184,9 @@ public class BugReporter implements ShakeListener {
     }
 
     protected void showDrawFragment() {
-        new DrawFragment().show(((AppCompatActivity) activity).getSupportFragmentManager(), DrawFragment.TAG);
+        reportButton.setVisibility(View.GONE);
+        DrawFragment.newInstance(Falcon.takeScreenshotBitmap(activity)).show(((AppCompatActivity) activity).getSupportFragmentManager(), DrawFragment.TAG);
+        reportButton.setVisibility(View.VISIBLE);
     }
 
     protected String getAccessToken() {

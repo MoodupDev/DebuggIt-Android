@@ -74,7 +74,11 @@ public class DrawFragment extends DialogFragment {
         super.onSaveInstanceState(outState);
     }
 
-
+    protected static DrawFragment newInstance(Bitmap screenshot) {
+        DrawFragment fragment = new DrawFragment();
+        fragment.screenshot = screenshot;
+        return fragment;
+    }
 
     private void initViews(View view) {
         surfaceRoot = view.findViewById(R.id.surface_root);
@@ -106,9 +110,6 @@ public class DrawFragment extends DialogFragment {
         ImageView reportButton = (ImageView) rootView.findViewById(R.id.report_button);
         if(reportButton != null) {
             reportButton.setVisibility(View.INVISIBLE);
-        }
-        if(screenshot == null) {
-            screenshot = Utils.getBitmapFromView(rootView);
         }
         screenSurface.setImageBitmap(screenshot);
         if(reportButton != null) {
