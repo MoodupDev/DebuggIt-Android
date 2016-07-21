@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:padding="@dimen/report.layout.padding.horizontal"
+              android:padding="@dimen/br.report.layout.padding.horizontal"
               android:background="@color/bar.background"
               android:layout_height="match_parent">
     <com.moodup.bugreporter.MontserratEditText

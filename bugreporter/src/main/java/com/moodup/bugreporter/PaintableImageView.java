@@ -69,7 +69,7 @@ public class PaintableImageView extends ImageView {
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeCap(Paint.Cap.ROUND);
-        paint.setStrokeWidth(context.getResources().getDimensionPixelSize(R.dimen.draw_line_width));
+        paint.setStrokeWidth(context.getResources().getDimensionPixelSize(R.dimen.br_draw_line_width));
 
         points = new Point[4];
     }

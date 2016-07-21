@@ -3,7 +3,7 @@
     <item android:state_enabled="false">
         <shape android:shape="rectangle">
             <stroke android:width="2dp" android:color="@color/kind.button.disabled" />
-            <corners android:radius="@dimen/kind.button.radius" />
+            <corners android:radius="@dimen/br.kind.button.radius" />
         </shape>
     </item>
 
@@ -11,14 +11,14 @@
         <shape android:shape="rectangle">
             <solid android:color="@android:color/transparent" />
             <stroke android:width="2dp" android:color="@color/button.not.selected"/>
-            <corners android:radius="@dimen/kind.button.radius" />
+            <corners android:radius="@dimen/br.kind.button.radius" />
         </shape>
     </item>
 
     <item android:state_selected="true" android:color="@android:color/white">
         <shape android:shape="rectangle">
             <solid android:color="@color/app.orange" />
-            <corners android:radius="@dimen/kind.button.radius" />
+            <corners android:radius="@dimen/br.kind.button.radius" />
         </shape>
     </item>
 </selector>

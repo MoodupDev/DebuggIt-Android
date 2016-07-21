@@ -1,6 +1,6 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/confirmation_dialog_width"
+    android:layout_width="@dimen/br.confirmation.dialog.width"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:background="@drawable/main_background">
@@ -13,7 +13,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/big_margin"
+            android:layout_margin="@dimen/br.big.margin"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/debugg_and_bitbucket"/>
 
@@ -23,23 +23,23 @@
             android:layout_gravity="center"
             android:text="@string/br.login.info"
             android:gravity="center_horizontal"
-            android:layout_margin="@dimen/small_margin"
+            android:layout_margin="@dimen/br.small.margin"
             android:textColor="@color/dialog.text.color"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginLeft="@dimen/big_margin"
-            android:layout_marginRight="@dimen/big_margin"
-            android:layout_marginTop="@dimen/small_margin">
+            android:layout_marginLeft="@dimen/br.big.margin"
+            android:layout_marginRight="@dimen/br.big.margin"
+            android:layout_marginTop="@dimen/br.small.margin">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/login_email"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="@dimen/small_margin"/>
+                android:layout_marginRight="@dimen/br.small.margin"/>
 
             <com.moodup.bugreporter.MontserratEditText
                 android:id="@+id/bitbucket_email"
@@ -48,24 +48,24 @@
                 android:hint="@string/br.login.hint.email"
                 android:inputType="textEmailAddress"
                 android:textColorHint="@color/kind.button.disabled"
-                android:textSize="@dimen/text.size.regular"/>
+                android:textSize="@dimen/br.text.size.regular"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginLeft="@dimen/big_margin"
-            android:layout_marginRight="@dimen/big_margin"
-            android:layout_marginTop="@dimen/small_margin"
-            android:layout_marginBottom="@dimen/small_margin">
+            android:layout_marginLeft="@dimen/br.big.margin"
+            android:layout_marginRight="@dimen/br.big.margin"
+            android:layout_marginTop="@dimen/br.small.margin"
+            android:layout_marginBottom="@dimen/br.small.margin">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/login_password"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="@dimen/small_margin"/>
+                android:layout_marginRight="@dimen/br.small.margin"/>
 
             <com.moodup.bugreporter.MontserratEditText
                 android:id="@+id/bitbucket_password"
@@ -74,13 +74,13 @@
                 android:hint="@string/br.login.hint.password"
                 android:inputType="textPassword"
                 android:textColorHint="@color/kind.button.disabled"
-                android:textSize="@dimen/text.size.regular"/>
+                android:textSize="@dimen/br.text.size.regular"/>
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="@dimen/small_margin"
+            android:layout_marginTop="@dimen/br.small.margin"
             android:background="@color/app.gray"/>
 
             <com.moodup.bugreporter.MontserratTextView
@@ -88,11 +88,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/big_margin"
-                android:padding="@dimen/small_padding"
-                android:layout_margin="@dimen/small_margin"
+                android:layout_marginTop="@dimen/br.big.margin"
+                android:padding="@dimen/br.small.padding"
+                android:layout_margin="@dimen/br.small.margin"
                 android:text="@string/br.login.sign.in"
-                android:textSize="@dimen/text.size.regular"
+                android:textSize="@dimen/br.text.size.regular"
                 android:textColor="@color/dialog.text.color"/>
     </LinearLayout>
 </ScrollView>

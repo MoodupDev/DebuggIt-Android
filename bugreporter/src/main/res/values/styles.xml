@@ -9,7 +9,7 @@
         <item name="android:paddingTop">8dp</item>
         <item name="android:paddingBottom">8dp</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:textSize">@dimen/text.size.regular</item>
+        <item name="android:textSize">@dimen/br.text.size.regular</item>
     </style>
 
     <style name="ScreenshotImage">
@@ -31,11 +31,11 @@
     <style name="ReportButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">@dimen/report.button.padding</item>
-        <item name="android:layout_marginRight">@dimen/report.button.margin.horizontal</item>
+        <item name="android:padding">@dimen/br.report.button.padding</item>
+        <item name="android:layout_marginRight">@dimen/br.report.button.margin.horizontal</item>
         <item name="android:background">@drawable/button_option</item>
         <item name="android:textColor">@drawable/button_option_text_color</item>
-        <item name="android:textSize">@dimen/text.size.small</item>
+        <item name="android:textSize">@dimen/br.text.size.small</item>
     </style>
 
     <style name="ReportContentEditText">
@@ -49,11 +49,11 @@
     <style name="DialogText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginBottom">@dimen/big_margin</item>
-        <item name="android:layout_marginTop">@dimen/small_margin</item>
+        <item name="android:layout_marginBottom">@dimen/br.big.margin</item>
+        <item name="android:layout_marginTop">@dimen/br.small.margin</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/dialog.text.color</item>
-        <item name="android:textSize">@dimen/confirmation_dialog_font_size</item>
+        <item name="android:textSize">@dimen/br.text.size.regular</item>
         <item name="android:textStyle">bold</item>
     </style>
 
@@ -63,6 +63,6 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:minWidth">@dimen/confirmation_dialog_width</item>
+        <item name="android:minWidth">@dimen/br.confirmation.dialog.width</item>
     </style>
 </resources>

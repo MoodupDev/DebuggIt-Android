@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/report.item.width"
-    android:layout_height="@dimen/report.item.height"
-    android:layout_margin="@dimen/small_margin"
+    android:layout_width="@dimen/br.report.item.width"
+    android:layout_height="@dimen/br.report.item.height"
+    android:layout_margin="@dimen/br.small.margin"
     android:background="@drawable/item_background"
     android:gravity="center">
 

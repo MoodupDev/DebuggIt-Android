@@ -54,9 +54,9 @@ public class DrawFragment extends DialogFragment {
             return;
         }
         if(Utils.isOrientationLandscape(getContext())) {
-            getDialog().getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.confirmation_dialog_width_landscape), WindowManager.LayoutParams.WRAP_CONTENT);
+            getDialog().getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.br_confirmation_dialog_width_landscape), WindowManager.LayoutParams.WRAP_CONTENT);
         } else {
-            getDialog().getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.confirmation_dialog_width), WindowManager.LayoutParams.WRAP_CONTENT);
+            getDialog().getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.br_confirmation_dialog_width), WindowManager.LayoutParams.WRAP_CONTENT);
         }
     }
 

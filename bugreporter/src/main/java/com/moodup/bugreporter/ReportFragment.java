@@ -50,7 +50,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
             return;
         }
 
-        getDialog().getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.confirmation_dialog_width), WindowManager.LayoutParams.WRAP_CONTENT);
+        getDialog().getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.br_confirmation_dialog_width), WindowManager.LayoutParams.WRAP_CONTENT);
     }
 
 
