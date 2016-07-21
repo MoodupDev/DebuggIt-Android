@@ -24,7 +24,7 @@
             android:text="@string/br.login.info"
             android:gravity="center_horizontal"
             android:layout_margin="@dimen/br.small.margin"
-            android:textColor="@color/dialog.text.color"/>
+            android:textColor="@color/br.dialog.text.color"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/br.login.hint.email"
                 android:inputType="textEmailAddress"
-                android:textColorHint="@color/kind.button.disabled"
+                android:textColorHint="@color/br.kind.button.disabled"
                 android:textSize="@dimen/br.text.size.regular"/>
         </LinearLayout>
 
@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/br.login.hint.password"
                 android:inputType="textPassword"
-                android:textColorHint="@color/kind.button.disabled"
+                android:textColorHint="@color/br.kind.button.disabled"
                 android:textSize="@dimen/br.text.size.regular"/>
         </LinearLayout>
 
@@ -81,7 +81,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="@dimen/br.small.margin"
-            android:background="@color/app.gray"/>
+            android:background="@color/br.app.gray"/>
 
             <com.moodup.bugreporter.MontserratTextView
                 android:id="@+id/bitbucket_login_button"
@@ -93,6 +93,6 @@
                 android:layout_margin="@dimen/br.small.margin"
                 android:text="@string/br.login.sign.in"
                 android:textSize="@dimen/br.text.size.regular"
-                android:textColor="@color/dialog.text.color"/>
+                android:textColor="@color/br.dialog.text.color"/>
     </LinearLayout>
 </ScrollView>

@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@id/top_bar"
-        android:background="@color/app.gray" />
+        android:background="@color/br.app.gray" />
 
     <RelativeLayout
         android:id="@+id/surface_root"
@@ -61,7 +61,7 @@
         android:layout_height="1dp"
         android:layout_above="@+id/bottom_bar"
         android:layout_marginTop="@dimen/br.small.margin"
-        android:background="@color/app.gray" />
+        android:background="@color/br.app.gray" />
 
     <LinearLayout
         android:id="@+id/bottom_bar"

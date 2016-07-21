@@ -12,7 +12,7 @@
         android:layout_centerInParent="true"
         android:background="@null"
         android:text="+"
-        android:textColor="@color/report.item.stroke.gray"
+        android:textColor="@color/br.report.item.stroke.gray"
         android:textSize="22sp" />
 
 </RelativeLayout>

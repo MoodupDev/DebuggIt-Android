@@ -43,7 +43,7 @@
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">top</item>
-        <item name="android:textColorHint">@color/kind.button.disabled</item>
+        <item name="android:textColorHint">@color/br.kind.button.disabled</item>
     </style>
 
     <style name="DialogText">
@@ -52,7 +52,7 @@
         <item name="android:layout_marginBottom">@dimen/br.big.margin</item>
         <item name="android:layout_marginTop">@dimen/br.small.margin</item>
         <item name="android:gravity">center</item>
-        <item name="android:textColor">@color/dialog.text.color</item>
+        <item name="android:textColor">@color/br.dialog.text.color</item>
         <item name="android:textSize">@dimen/br.text.size.regular</item>
         <item name="android:textStyle">bold</item>
     </style>

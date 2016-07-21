@@ -24,14 +24,14 @@
         android:layout_marginBottom="@dimen/br.big.margin"
         android:layout_marginTop="@dimen/br.small.margin"
         android:indeterminate="true"
-        android:indeterminateTint="@color/app.orange"
+        android:indeterminateTint="@color/br.app.orange"
         android:indeterminateTintMode="src_atop" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/br.small.margin"
-        android:background="@color/app.gray" />
+        android:background="@color/br.app.gray" />
 
     <com.moodup.bugreporter.MontserratTextView
         android:id="@+id/loading_dialog_cancel_button"
