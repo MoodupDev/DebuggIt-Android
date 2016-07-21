@@ -17,10 +17,10 @@ public class ShakeDetector implements SensorEventListener {
 
     //region Fields
 
-    private ShakeDetector instance;
+    private static ShakeDetector instance;
 
     private Activity activity;
-    private SensorListener listener;
+    private ShakeListener listener;
 
     private long lastUpdate;
     private float lastX;
@@ -39,9 +39,19 @@ public class ShakeDetector implements SensorEventListener {
 
     //region Methods
 
-    protected void register(Activity activity, SensorListener listener) {
-        if(activity != null && this.activity != activity) {
+
+    protected static ShakeDetector getInstance() {
+        if(instance == null) {
+            instance = new ShakeDetector();
+        }
+        return instance;
+    }
+
+    protected void register(Activity activity, ShakeListener listener) {
+        if(this.activity != null && this.activity != activity) {
             unregister();
+        } else if(activity == null) {
+            return;
         }
         SensorManager sensorManager = getSensorManager(activity);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
@@ -88,7 +98,7 @@ public class ShakeDetector implements SensorEventListener {
 
     //endregion
 
-    interface SensorListener {
+    interface ShakeListener {
         void shakeDetected();
     }
 
