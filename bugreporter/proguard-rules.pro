@@ -17,6 +17,9 @@
 #}
 
 -keep class com.moodup.bugreporter.BugReporter {
-    public <methods>;
+    public static <methods>;
+    public void init(...);
+    public void attach(...);
 }
--keep class com.cloudinary.** { *; }
+
+-keepparameternames
