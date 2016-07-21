@@ -17,7 +17,7 @@ import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
 
-public class BugReporter implements ShakeListener {
+public class BugReporter {
 
     protected static final String BUTTON_POSITION_PORTRAIT = "button_position_portrait";
     protected static final String BUTTON_POSITION_LANDSCAPE = "button_position_landscape";
@@ -57,10 +57,17 @@ public class BugReporter implements ShakeListener {
         this.report = new Report();
     }
 
-    public void attach(Activity activity) {
+    public void attach(final Activity activity) {
         this.activity = activity;
         addReportButton();
-        ShakeDetector.getInstance().register(activity, this);
+        ShakeDetector.getInstance().register(activity, new ShakeListener() {
+            @Override
+            public void shakeDetected() {
+                if(((FragmentActivity) activity).getSupportFragmentManager().findFragmentByTag(DrawFragment.TAG) == null) {
+                    showDrawFragment();
+                }
+            }
+        });
     }
 
     protected void authenticate(boolean refresh) {
@@ -219,10 +226,4 @@ public class BugReporter implements ShakeListener {
         return clientSecret;
     }
 
-    @Override
-    public void shakeDetected() {
-        if(((FragmentActivity) activity).getSupportFragmentManager().findFragmentByTag(DrawFragment.TAG) == null) {
-            showDrawFragment();
-        }
-    }
 }
