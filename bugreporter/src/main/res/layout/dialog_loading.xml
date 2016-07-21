@@ -13,7 +13,7 @@
     <com.moodup.bugreporter.MontserratTextView
         android:id="@+id/confirmation_dialog_message"
         style="@style/DialogText"
-        android:text="@string/loading.dialog.message.report" />
+        android:text="@string/br.loading.dialog.message.report" />
 
     <ProgressBar
         android:id="@+id/loading_spinner"
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="@dimen/regular_padding"
-        android:text="@string/button.cancel"
+        android:text="@string/br.button.cancel"
         android:textColor="@drawable/dialog_text_color"
         android:textSize="@dimen/confirmation_dialog_font_size"
         android:textStyle="bold" />

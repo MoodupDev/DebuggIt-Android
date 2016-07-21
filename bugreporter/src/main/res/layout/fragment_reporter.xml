@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="@dimen/button.margin.horizontal"
-            android:text="@string/button.cancel" />
+            android:text="@string/br.button.cancel" />
 
         <ImageView
             android:id="@+id/view_pager_indicator"
@@ -35,7 +35,7 @@
             android:layout_marginRight="@dimen/button.margin.horizontal"
             android:background="@drawable/button_send"
             android:textColor="@android:color/white"
-            android:text="@string/button.send" />
+            android:text="@string/br.button.send" />
     </RelativeLayout>
 
     <View

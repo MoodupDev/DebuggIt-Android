@@ -89,7 +89,7 @@ public class DrawFragment extends DialogFragment {
         rubber = (ImageView) view.findViewById(R.id.draw_rubber);
         freeDraw = (ImageView) view.findViewById(R.id.draw_free);
         rectanglesDraw = (ImageView) view.findViewById(R.id.draw_rectangles);
-        dialog = LoadingDialog.newInstance(getString(R.string.loading_dialog_message_screenshot));
+        dialog = LoadingDialog.newInstance(getString(R.string.br_loading_dialog_message_screenshot));
 
         initDrawingSurface();
         initButtons();
@@ -211,7 +211,7 @@ public class DrawFragment extends DialogFragment {
                 new ReportFragment().show(getActivity().getSupportFragmentManager(), ReportFragment.TAG);
                 dismiss();
             } else {
-                ConfirmationDialog.newInstance(getString(R.string.screenshot_upload_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                ConfirmationDialog.newInstance(getString(R.string.br_screenshot_upload_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
             }
             super.onPostExecute(s);
         }

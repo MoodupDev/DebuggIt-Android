@@ -38,7 +38,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        dialog = LoadingDialog.newInstance(getString(R.string.loading_dialog_message_report));
+        dialog = LoadingDialog.newInstance(getString(R.string.br_loading_dialog_message_report));
         setCancelable(false);
         return initViews(inflater, container);
     }
@@ -70,7 +70,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
             public void onClick(View v) {
                 setApplicationVersion();
                 if(BugReporter.getInstance().getReport().getTitle().isEmpty()) {
-                    ConfirmationDialog.newInstance(getString(R.string.title_empty), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                    ConfirmationDialog.newInstance(getString(R.string.br_title_empty), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                 } else {
                     dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
                     sendIssue();

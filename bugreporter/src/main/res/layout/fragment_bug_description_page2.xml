@@ -8,13 +8,13 @@
     <com.moodup.bugreporter.MontserratEditText
         style="@style/ReportContentEditText"
         android:id="@+id/steps_text"
-        android:hint="@string/report.steps"/>
+        android:hint="@string/br.report.steps"/>
     <com.moodup.bugreporter.MontserratEditText
         style="@style/ReportContentEditText"
         android:id="@+id/actual_behaviour_text"
-        android:hint="@string/report.behaviour.actual"/>
+        android:hint="@string/br.report.behaviour.actual"/>
     <com.moodup.bugreporter.MontserratEditText
         style="@style/ReportContentEditText"
         android:id="@+id/expected_behaviour_text"
-        android:hint="@string/report.behaviour.expected"/>
+        android:hint="@string/br.report.behaviour.expected"/>
 </LinearLayout>

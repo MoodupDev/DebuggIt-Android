@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/login.info"
+            android:text="@string/br.login.info"
             android:gravity="center_horizontal"
             android:layout_margin="@dimen/small_margin"
             android:textColor="@color/dialog.text.color"/>
@@ -45,7 +45,7 @@
                 android:id="@+id/bitbucket_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/login.hint.email"
+                android:hint="@string/br.login.hint.email"
                 android:inputType="textEmailAddress"
                 android:textColorHint="@color/kind.button.disabled"
                 android:textSize="@dimen/text.size.regular"/>
@@ -71,7 +71,7 @@
                 android:id="@+id/bitbucket_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/login.hint.password"
+                android:hint="@string/br.login.hint.password"
                 android:inputType="textPassword"
                 android:textColorHint="@color/kind.button.disabled"
                 android:textSize="@dimen/text.size.regular"/>
@@ -91,7 +91,7 @@
                 android:layout_marginTop="@dimen/big_margin"
                 android:padding="@dimen/small_padding"
                 android:layout_margin="@dimen/small_margin"
-                android:text="@string/login.sign.in"
+                android:text="@string/br.login.sign.in"
                 android:textSize="@dimen/text.size.regular"
                 android:textColor="@color/dialog.text.color"/>
     </LinearLayout>

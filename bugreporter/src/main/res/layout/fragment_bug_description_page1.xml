@@ -19,12 +19,12 @@
             <com.moodup.bugreporter.MontserratTextView
                 android:id="@+id/kind_bug_button"
                 style="@style/ReportButton"
-                android:text="@string/kind.bug"/>
+                android:text="@string/br.kind.bug"/>
 
             <com.moodup.bugreporter.MontserratTextView
                 android:id="@+id/kind_enhancement_button"
                 style="@style/ReportButton"
-                android:text="@string/kind.enhancement"/>
+                android:text="@string/br.kind.enhancement"/>
 
         </LinearLayout>
 
@@ -37,17 +37,17 @@
             <com.moodup.bugreporter.MontserratTextView
                 android:id="@+id/priority_low_button"
                 style="@style/ReportButton"
-                android:text="@string/priority.low"/>
+                android:text="@string/br.priority.low"/>
 
             <com.moodup.bugreporter.MontserratTextView
                 android:id="@+id/priority_medium_button"
                 style="@style/ReportButton"
-                android:text="@string/priority.medium"/>
+                android:text="@string/br.priority.medium"/>
 
             <com.moodup.bugreporter.MontserratTextView
                 android:id="@+id/priority_high_button"
                 style="@style/ReportButton"
-                android:text="@string/priority.high"/>
+                android:text="@string/br.priority.high"/>
         </LinearLayout>
 
         <LinearLayout
@@ -62,7 +62,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="6"
-                android:hint="@string/bug.description.hint"
+                android:hint="@string/br.bug.description.hint"
                 android:textColorHint="@color/kind.button.disabled"
                 android:textSize="@dimen/text.size.regular"/>
 

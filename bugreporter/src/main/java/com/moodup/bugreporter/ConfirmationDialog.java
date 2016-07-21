@@ -78,7 +78,7 @@ public class ConfirmationDialog extends DialogFragment {
         icon.setRotation(type == TYPE_SUCCESS ? 0 : 180.0f);
         String text = getArguments().getString("text", "");
         if(text.isEmpty()) {
-            message.setText(getString(type == TYPE_SUCCESS ? R.string.confirmation_success : R.string.confirmation_failure));
+            message.setText(getString(type == TYPE_SUCCESS ? R.string.br_confirmation_success : R.string.br_confirmation_failure));
         } else {
             message.setText(text);
         }

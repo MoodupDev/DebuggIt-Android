@@ -63,7 +63,7 @@ public class AudioCaptureFragment extends DialogFragment {
             }
         });
 
-        dialog = LoadingDialog.newInstance(getString(R.string.loading_dialog_message_record));
+        dialog = LoadingDialog.newInstance(getString(R.string.br_loading_dialog_message_record));
 
         return view;
     }

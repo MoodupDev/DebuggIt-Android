@@ -133,7 +133,7 @@ public class BugDescriptionFragment extends Fragment {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(getActivity(), R.string.upload_audio_failed, Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getActivity(), R.string.br_upload_audio_failed, Toast.LENGTH_LONG).show();
                                     v.setSelected(!v.isSelected());
                                 }
                             });
@@ -324,7 +324,7 @@ public class BugDescriptionFragment extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        final LoadingDialog dialog = LoadingDialog.newInstance(getString(R.string.loading_dialog_message_play_audio));
+        final LoadingDialog dialog = LoadingDialog.newInstance(getString(R.string.br_loading_dialog_message_play_audio));
         dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
         lastPlayButton = playView;
         mediaPlayer.prepareAsync();

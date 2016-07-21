@@ -17,7 +17,7 @@
             style="@style/BarTextButton"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="@dimen/report.button.margin.horizontal"
-            android:text="@string/button.cancel" />
+            android:text="@string/br.button.cancel" />
 
         <com.moodup.bugreporter.MontserratTextView
             android:id="@+id/draw_confirm"
@@ -26,7 +26,7 @@
             android:background="@drawable/button_send"
             android:textColor="@android:color/white"
             android:layout_marginRight="@dimen/report.button.margin.horizontal"
-            android:text="@string/button.send" />
+            android:text="@string/br.button.send" />
     </RelativeLayout>
 
     <View
