@@ -2,16 +2,15 @@ package com.moodup.bugreporter;
 
 import android.app.Activity;
 import android.graphics.Rect;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.moodup.bugreporter.ShakeDetector.ShakeListener;
-
 import com.jraska.falcon.Falcon;
+import com.moodup.bugreporter.ShakeDetector.ShakeListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,7 +18,7 @@ import org.json.JSONObject;
 import java.net.HttpURLConnection;
 
 public class BugReporter implements ShakeListener {
-    
+
     protected static final String BUTTON_POSITION_PORTRAIT = "button_position_portrait";
     protected static final String BUTTON_POSITION_LANDSCAPE = "button_position_landscape";
     protected static final String ACCESS_TOKEN = "access_token";
@@ -39,7 +38,7 @@ public class BugReporter implements ShakeListener {
     private Report report;
 
     public static BugReporter getInstance() {
-        if (instance == null) {
+        if(instance == null) {
             instance = new BugReporter();
         }
 
@@ -69,9 +68,9 @@ public class BugReporter implements ShakeListener {
             refreshAccessToken();
             return;
         }
-        if (!hasAccessToken()) {
-            if(((AppCompatActivity) activity).getSupportFragmentManager().findFragmentByTag(LoginDialog.TAG) == null) {
-                LoginDialog.newInstance().show(((AppCompatActivity) activity).getSupportFragmentManager(), LoginDialog.TAG);
+        if(!hasAccessToken()) {
+            if(((FragmentActivity) activity).getSupportFragmentManager().findFragmentByTag(LoginDialog.TAG) == null) {
+                LoginDialog.newInstance().show(((FragmentActivity) activity).getSupportFragmentManager(), LoginDialog.TAG);
             }
         } else {
             accessToken = Utils.getString(activity, ACCESS_TOKEN, "");
@@ -114,7 +113,7 @@ public class BugReporter implements ShakeListener {
         if(!report.getScreensUrls().isEmpty()) {
             ((ImageView) reportButton).setImageDrawable(activity.getResources().getDrawable(R.drawable.next_screenshoot));
         }
-        if (!buttonAdded) {
+        if(!buttonAdded) {
             rootLayout.addView(reportButton);
             initReportButtonOnTouchListener(rootLayout);
         }
@@ -122,7 +121,7 @@ public class BugReporter implements ShakeListener {
 
     private void initButtonPosition() {
         float buttonPosition = Utils.getFloat(reportButton.getContext(), Utils.isOrientationLandscape(activity) ? BUTTON_POSITION_LANDSCAPE : BUTTON_POSITION_PORTRAIT, 0);
-        if (buttonPosition == 0) {
+        if(buttonPosition == 0) {
             Rect visibleFrame = new Rect();
             activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(visibleFrame);
             reportButton.setY(visibleFrame.bottom / 2);
@@ -185,7 +184,7 @@ public class BugReporter implements ShakeListener {
 
     protected void showDrawFragment() {
         reportButton.setVisibility(View.GONE);
-        DrawFragment.newInstance(Falcon.takeScreenshotBitmap(activity)).show(((AppCompatActivity) activity).getSupportFragmentManager(), DrawFragment.TAG);
+        DrawFragment.newInstance(Falcon.takeScreenshotBitmap(activity)).show(((FragmentActivity) activity).getSupportFragmentManager(), DrawFragment.TAG);
         reportButton.setVisibility(View.VISIBLE);
     }
 
@@ -222,7 +221,7 @@ public class BugReporter implements ShakeListener {
 
     @Override
     public void shakeDetected() {
-        if(((AppCompatActivity) activity).getSupportFragmentManager().findFragmentByTag(DrawFragment.TAG) == null) {
+        if(((FragmentActivity) activity).getSupportFragmentManager().findFragmentByTag(DrawFragment.TAG) == null) {
             showDrawFragment();
         }
     }

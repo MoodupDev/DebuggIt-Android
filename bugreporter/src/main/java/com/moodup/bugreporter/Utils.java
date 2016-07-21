@@ -8,8 +8,8 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.jaredrummler.android.device.DeviceName;
@@ -116,7 +116,7 @@ public class Utils {
     }
 
     protected static String getActiveFragmentName(Activity activity) {
-        FragmentManager fragmentManager = ((AppCompatActivity) activity).getSupportFragmentManager();
+        FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
         if(fragmentManager.getBackStackEntryCount() == 0) {
             return "";
         }
