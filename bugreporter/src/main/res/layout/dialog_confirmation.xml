@@ -20,7 +20,7 @@
 
     <com.moodup.bugreporter.MontserratTextView
         android:id="@+id/confirmation_dialog_message"
-        style="@style/DialogText"
+        style="@style/BrDialogText"
         tools:text="@string/br.confirmation.failure" />
 
     <View

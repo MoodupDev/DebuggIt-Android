@@ -36,7 +36,7 @@ public class DrawFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        CustomDialog dialog = new CustomDialog(getActivity(), R.style.CustomDialog);
+        CustomDialog dialog = new CustomDialog(getActivity(), R.style.BrCustomDialog);
         View rootView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_draw, null);
         dialog.setContentView(rootView);
         if(savedInstanceState != null) {

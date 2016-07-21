@@ -14,14 +14,14 @@
 
         <com.moodup.bugreporter.MontserratTextView
             android:id="@+id/draw_cancel"
-            style="@style/BarTextButton"
+            style="@style/BrBarTextButton"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="@dimen/br.report.button.margin.horizontal"
             android:text="@string/br.button.cancel" />
 
         <com.moodup.bugreporter.MontserratTextView
             android:id="@+id/draw_confirm"
-            style="@style/BarTextButton"
+            style="@style/BrBarTextButton"
             android:layout_alignParentRight="true"
             android:background="@drawable/button_send"
             android:textColor="@android:color/white"
@@ -46,13 +46,13 @@
 
         <ImageView
             android:id="@+id/image_surface"
-            style="@style/ScreenshotImageLandscape"
+            style="@style/BrScreenshotImageLandscape"
             android:background="@drawable/screenshot_background"
             android:scaleType="fitXY" />
 
         <com.moodup.bugreporter.PaintableImageView
             android:id="@+id/draw_surface"
-            style="@style/ScreenshotImageLandscape"
+            style="@style/BrScreenshotImageLandscape"
             android:background="@android:color/transparent" />
     </RelativeLayout>
 

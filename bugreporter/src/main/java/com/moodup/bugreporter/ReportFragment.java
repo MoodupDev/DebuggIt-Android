@@ -32,7 +32,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new CustomDialog(getActivity(), R.style.CustomDialog);
+        return new CustomDialog(getActivity(), R.style.BrCustomDialog);
     }
 
     @Nullable

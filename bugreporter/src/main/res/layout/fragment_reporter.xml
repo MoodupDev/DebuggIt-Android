@@ -13,7 +13,7 @@
 
         <com.moodup.bugreporter.MontserratTextView
             android:id="@+id/report_cancel"
-            style="@style/BarTextButton"
+            style="@style/BrBarTextButton"
             android:layout_width="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="@dimen/br.button.margin.horizontal"
@@ -28,7 +28,7 @@
 
         <com.moodup.bugreporter.MontserratTextView
             android:id="@+id/report_confirm"
-            style="@style/BarTextButton"
+            style="@style/BrBarTextButton"
             android:layout_width="@dimen/br.button.send.width"
             android:layout_alignParentRight="true"
             android:gravity="right"

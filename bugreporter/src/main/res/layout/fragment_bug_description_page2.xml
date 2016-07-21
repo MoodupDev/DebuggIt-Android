@@ -6,15 +6,15 @@
               android:background="@color/br.bar.background"
               android:layout_height="match_parent">
     <com.moodup.bugreporter.MontserratEditText
-        style="@style/ReportContentEditText"
+        style="@style/BrReportContentEditText"
         android:id="@+id/steps_text"
         android:hint="@string/br.report.steps"/>
     <com.moodup.bugreporter.MontserratEditText
-        style="@style/ReportContentEditText"
+        style="@style/BrReportContentEditText"
         android:id="@+id/actual_behaviour_text"
         android:hint="@string/br.report.behaviour.actual"/>
     <com.moodup.bugreporter.MontserratEditText
-        style="@style/ReportContentEditText"
+        style="@style/BrReportContentEditText"
         android:id="@+id/expected_behaviour_text"
         android:hint="@string/br.report.behaviour.expected"/>
 </LinearLayout>

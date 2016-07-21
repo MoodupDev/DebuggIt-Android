@@ -18,12 +18,12 @@
 
             <com.moodup.bugreporter.MontserratTextView
                 android:id="@+id/kind_bug_button"
-                style="@style/ReportButton"
+                style="@style/BrReportButton"
                 android:text="@string/br.kind.bug"/>
 
             <com.moodup.bugreporter.MontserratTextView
                 android:id="@+id/kind_enhancement_button"
-                style="@style/ReportButton"
+                style="@style/BrReportButton"
                 android:text="@string/br.kind.enhancement"/>
 
         </LinearLayout>
@@ -36,17 +36,17 @@
 
             <com.moodup.bugreporter.MontserratTextView
                 android:id="@+id/priority_low_button"
-                style="@style/ReportButton"
+                style="@style/BrReportButton"
                 android:text="@string/br.priority.low"/>
 
             <com.moodup.bugreporter.MontserratTextView
                 android:id="@+id/priority_medium_button"
-                style="@style/ReportButton"
+                style="@style/BrReportButton"
                 android:text="@string/br.priority.medium"/>
 
             <com.moodup.bugreporter.MontserratTextView
                 android:id="@+id/priority_high_button"
-                style="@style/ReportButton"
+                style="@style/BrReportButton"
                 android:text="@string/br.priority.high"/>
         </LinearLayout>
 

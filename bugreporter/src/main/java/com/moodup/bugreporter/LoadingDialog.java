@@ -18,7 +18,7 @@ public class LoadingDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        CustomDialog dialog = new CustomDialog(getActivity(), R.style.CustomDialog);
+        CustomDialog dialog = new CustomDialog(getActivity(), R.style.BrCustomDialog);
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_loading, null);
         dialog.setContentView(v);
 

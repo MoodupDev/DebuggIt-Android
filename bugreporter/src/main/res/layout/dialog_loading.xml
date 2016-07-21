@@ -12,7 +12,7 @@
 
     <com.moodup.bugreporter.MontserratTextView
         android:id="@+id/confirmation_dialog_message"
-        style="@style/DialogText"
+        style="@style/BrDialogText"
         android:text="@string/br.loading.dialog.message.report" />
 
     <ProgressBar
