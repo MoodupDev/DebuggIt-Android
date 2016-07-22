@@ -1,7 +1,10 @@
 package com.moodup.bugreporter;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -27,6 +30,7 @@ public class BugReporter {
     private static BugReporter instance;
 
     private Activity activity;
+    private Intent screenshotIntentData;
     private View reportButton;
 
     private String clientId;
@@ -60,12 +64,15 @@ public class BugReporter {
     public void attach(final Activity activity) {
         this.activity = activity;
         addReportButton();
+        registerShakeDetector(activity);
+        ScreenshotUtils.getScreenshotPermission(activity);
+    }
+
+    private void registerShakeDetector(Activity activity) {
         ShakeDetector.getInstance().register(activity, new ShakeListener() {
             @Override
             public void shakeDetected() {
-                if(((FragmentActivity) activity).getSupportFragmentManager().findFragmentByTag(DrawFragment.TAG) == null) {
-                    showDrawFragment();
-                }
+                showDrawFragment();
             }
         });
     }
@@ -190,9 +197,25 @@ public class BugReporter {
     }
 
     protected void showDrawFragment() {
-        reportButton.setVisibility(View.GONE);
-        DrawFragment.newInstance(Falcon.takeScreenshotBitmap(activity)).show(((FragmentActivity) activity).getSupportFragmentManager(), DrawFragment.TAG);
-        reportButton.setVisibility(View.VISIBLE);
+        if(((FragmentActivity) activity).getSupportFragmentManager().findFragmentByTag(DrawFragment.TAG) == null) {
+            reportButton.setVisibility(View.GONE);
+            final LoadingDialog dialog = LoadingDialog.newInstance("Generating your screenshot...");
+            dialog.show(((FragmentActivity) activity).getSupportFragmentManager(), LoadingDialog.TAG);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && screenshotIntentData != null) {
+                ScreenshotUtils.takeScreenshot(activity, screenshotIntentData, new ScreenshotUtils.ScreenshotListener() {
+                    @Override
+                    public void onScreenshotReady(Bitmap bitmap) {
+                        dialog.dismiss();
+                        DrawFragment.newInstance(bitmap).show(((FragmentActivity) activity).getSupportFragmentManager(), DrawFragment.TAG);
+                        reportButton.setVisibility(View.VISIBLE);
+                    }
+                });
+            } else {
+                dialog.dismiss();
+                DrawFragment.newInstance(Falcon.takeScreenshotBitmap(activity)).show(((FragmentActivity) activity).getSupportFragmentManager(), DrawFragment.TAG);
+                reportButton.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     protected String getAccessToken() {
@@ -226,4 +249,13 @@ public class BugReporter {
         return clientSecret;
     }
 
+    public void getScreenshotPermission(int requestCode, int resultCode, Intent data) {
+        if(requestCode == ScreenshotUtils.SCREENSHOT_REQUEST_CODE) {
+            if(resultCode == Activity.RESULT_OK) {
+                this.screenshotIntentData = data;
+            } else {
+                screenshotIntentData = null;
+            }
+        }
+    }
 }
