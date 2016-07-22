@@ -20,6 +20,7 @@
     public static <methods>;
     public void init(...);
     public void attach(...);
+    public void getScreenshotPermission(...);
 }
 
 -keepparameternames
