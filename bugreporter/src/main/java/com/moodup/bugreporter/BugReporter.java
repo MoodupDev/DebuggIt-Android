@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.jraska.falcon.Falcon;
 import com.moodup.bugreporter.ShakeDetector.ShakeListener;
 
 import org.json.JSONException;
@@ -212,7 +211,8 @@ public class BugReporter {
                 });
             } else {
                 dialog.dismiss();
-                DrawFragment.newInstance(Falcon.takeScreenshotBitmap(activity)).show(((FragmentActivity) activity).getSupportFragmentManager(), DrawFragment.TAG);
+                DrawFragment.newInstance(Utils.getBitmapFromView(activity.getWindow().getDecorView()))
+                        .show(((FragmentActivity) activity).getSupportFragmentManager(), DrawFragment.TAG);
                 reportButton.setVisibility(View.VISIBLE);
             }
         }
