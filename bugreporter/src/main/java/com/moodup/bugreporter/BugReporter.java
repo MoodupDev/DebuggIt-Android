@@ -76,7 +76,7 @@ public class BugReporter {
         ShakeDetector.getInstance().register(activity, new ShakeListener() {
             @Override
             public void shakeDetected() {
-                if(waitingForShake) {
+                if(waitingForShake && !isFragmentShown(DrawFragment.TAG)) {
                     showDrawFragment();
                     waitingForShake = false;
                 }
@@ -90,7 +90,7 @@ public class BugReporter {
             return;
         }
         if(!hasAccessToken()) {
-            if(((FragmentActivity) activity).getSupportFragmentManager().findFragmentByTag(LoginDialog.TAG) == null) {
+            if(!isFragmentShown(LoginDialog.TAG)) {
                 LoginDialog.newInstance().show(((FragmentActivity) activity).getSupportFragmentManager(), LoginDialog.TAG);
             }
         } else {
@@ -204,7 +204,7 @@ public class BugReporter {
     }
 
     protected void showDrawFragment() {
-        if(((FragmentActivity) activity).getSupportFragmentManager().findFragmentByTag(DrawFragment.TAG) == null) {
+        if(!isFragmentShown(DrawFragment.TAG)) {
             Utils.lockScreenRotation(activity, Utils.isOrientationLandscape(activity) ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             reportButton.setVisibility(View.GONE);
             final LoadingDialog dialog = LoadingDialog.newInstance(activity.getString(R.string.br_generating_screenshot));
@@ -220,6 +220,10 @@ public class BugReporter {
                 showDrawFragment(Utils.getBitmapFromView(activity.getWindow().getDecorView()), dialog);
             }
         }
+    }
+
+    private boolean isFragmentShown(String tag) {
+        return ((FragmentActivity) activity).getSupportFragmentManager().findFragmentByTag(tag) != null;
     }
 
     private void showDrawFragment(Bitmap bitmap, LoadingDialog dialog) {
