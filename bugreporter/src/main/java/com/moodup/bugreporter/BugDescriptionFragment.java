@@ -4,8 +4,11 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,9 +28,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
-
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class BugDescriptionFragment extends Fragment {
 
@@ -268,7 +272,7 @@ public class BugDescriptionFragment extends Fragment {
         ImageView itemScreenshot = (ImageView) itemScreenParent.findViewById(R.id.item_screenshot_image);
         ImageView itemScreenshotRemove = (ImageView) itemScreenParent.findViewById(R.id.item_screenshot_close);
 
-        Picasso.with(getActivity()).load(screenUrl).into(itemScreenshot);
+        new DownloadImagesTask(itemScreenshot).execute(screenUrl);
         itemScreenshotRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -414,6 +418,37 @@ public class BugDescriptionFragment extends Fragment {
         stepsToReproduce.addTextChangedListener(watcher);
         actualBehaviour.addTextChangedListener(watcher);
         expectedBehaviour.addTextChangedListener(watcher);
+    }
+
+    protected class DownloadImagesTask extends AsyncTask<String, Void, Bitmap> {
+
+        private ImageView imageView;
+
+        protected DownloadImagesTask(ImageView imageView) {
+            this.imageView = imageView;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            Bitmap bmp;
+            try {
+                URL url = new URL(urls[0]);
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                InputStream is = con.getInputStream();
+                bmp = BitmapFactory.decodeStream(is);
+                if (null != bmp) {
+                    return bmp;
+                }
+            } catch(Exception e) {
+                bmp = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+            }
+            return bmp;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            imageView.setImageBitmap(result);
+        }
     }
 
 }
