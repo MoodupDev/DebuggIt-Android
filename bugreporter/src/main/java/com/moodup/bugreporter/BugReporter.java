@@ -213,20 +213,21 @@ public class BugReporter {
                 ScreenshotUtils.takeScreenshot(activity, screenshotIntentData, new ScreenshotUtils.ScreenshotListener() {
                     @Override
                     public void onScreenshotReady(Bitmap bitmap) {
-                        dialog.dismiss();
-                        DrawFragment.newInstance(bitmap).show(((FragmentActivity) activity).getSupportFragmentManager(), DrawFragment.TAG);
-                        reportButton.setVisibility(View.VISIBLE);
-                        waitingForShake = true;
+                        showDrawFragment(bitmap, dialog);
                     }
                 });
             } else {
-                dialog.dismiss();
-                DrawFragment.newInstance(Utils.getBitmapFromView(activity.getWindow().getDecorView()))
-                        .show(((FragmentActivity) activity).getSupportFragmentManager(), DrawFragment.TAG);
-                reportButton.setVisibility(View.VISIBLE);
-                waitingForShake = true;
+                showDrawFragment(Utils.getBitmapFromView(activity.getWindow().getDecorView()), dialog);
             }
         }
+    }
+
+    private void showDrawFragment(Bitmap bitmap, LoadingDialog dialog) {
+        dialog.dismiss();
+        DrawFragment.newInstance(bitmap)
+                .show(((FragmentActivity) activity).getSupportFragmentManager(), DrawFragment.TAG);
+        reportButton.setVisibility(View.VISIBLE);
+        waitingForShake = true;
     }
 
     protected String getAccessToken() {
