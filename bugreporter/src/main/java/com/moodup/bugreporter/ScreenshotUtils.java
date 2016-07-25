@@ -90,7 +90,7 @@ public class ScreenshotUtils {
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         Image image = imageReader.acquireLatestImage();
                         final Bitmap bitmap;
-                        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+                        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP || Utils.isOrientationLandscape(activity)) {
                             bitmap = getBitmapFromImageForMarshmallow(image);
                         } else {
                             bitmap = getBitmapFromImage(image);
