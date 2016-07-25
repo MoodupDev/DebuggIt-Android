@@ -34,6 +34,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     compile 'com.android.support:appcompat-v7:23.2.1'
-    compile 'com.jaredrummler:android-device-names:1.0.9'
     compile 'com.jraska:falcon:1.0.1'
 }

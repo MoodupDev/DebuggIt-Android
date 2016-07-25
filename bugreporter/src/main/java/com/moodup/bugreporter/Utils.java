@@ -10,9 +10,8 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
 import android.view.View;
-
-import com.jaredrummler.android.device.DeviceName;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -130,7 +129,7 @@ public class Utils {
         builder.append("\n  |  |  | \n")
                 .append("--------|--------|------|-----\n")
                 .append("**Device** | ")
-                .append(DeviceName.getDeviceName())
+                .append(getDeviceName())
                 .append(" | ")
                 .append("**Android version** | ")
                 .append(String.format("%s (API %d)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT))
@@ -191,6 +190,35 @@ public class Utils {
             bytes = new byte[1];
         }
         return bytes;
+    }
+
+    public static String getDeviceName() {
+        String manufacturer = Build.MANUFACTURER;
+        String model = Build.MODEL;
+        if (model.startsWith(manufacturer)) {
+            return capitalize(model);
+        }
+        return capitalize(manufacturer) + " " + model;
+    }
+
+    private static String capitalize(String str) {
+        if (TextUtils.isEmpty(str)) {
+            return str;
+        }
+        char[] arr = str.toCharArray();
+        boolean capitalizeNext = true;
+        String phrase = "";
+        for (char c : arr) {
+            if (capitalizeNext && Character.isLetter(c)) {
+                phrase += Character.toUpperCase(c);
+                capitalizeNext = false;
+                continue;
+            } else if (Character.isWhitespace(c)) {
+                capitalizeNext = true;
+            }
+            phrase += c;
+        }
+        return phrase;
     }
 
 }
