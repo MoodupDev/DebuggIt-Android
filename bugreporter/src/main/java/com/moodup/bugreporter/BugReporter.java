@@ -203,7 +203,7 @@ public class BugReporter {
         });
     }
 
-    protected void showDrawFragment() {
+    private void showDrawFragment() {
         if(!isFragmentShown(DrawFragment.TAG)) {
             Utils.lockScreenRotation(activity, Utils.isOrientationLandscape(activity) ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             reportButton.setVisibility(View.GONE);
@@ -265,7 +265,7 @@ public class BugReporter {
         return clientSecret;
     }
 
-    public int getActivityOrientation() {
+    protected int getActivityOrientation() {
         return activityOrientation;
     }
 
