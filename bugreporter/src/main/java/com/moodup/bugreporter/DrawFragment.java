@@ -65,7 +65,7 @@ public class DrawFragment extends DialogFragment {
         if (uploadImageAsyncTask != null) {
             uploadImageAsyncTask.cancel(true);
         }
-        Utils.unlockScreenRotation(getActivity());
+        Utils.lockScreenRotation(getActivity(), BugReporter.getInstance().getActivityOrientation());
         super.onDestroyView();
     }
 

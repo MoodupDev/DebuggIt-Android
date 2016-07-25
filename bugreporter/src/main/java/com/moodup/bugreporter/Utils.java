@@ -3,7 +3,6 @@ package com.moodup.bugreporter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -148,12 +147,8 @@ public class Utils {
         return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
-    protected static void unlockScreenRotation(Activity activity) {
-        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-    }
-
-    protected static void lockScreenRotation(Activity activity, boolean landscape) {
-        activity.setRequestedOrientation(landscape ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    protected static void lockScreenRotation(Activity activity, int orientation) {
+        activity.setRequestedOrientation(orientation);
     }
 
     protected static int getStatusBarHeight(Context context) {

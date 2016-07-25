@@ -2,6 +2,7 @@ package com.moodup.bugreporter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Build;
@@ -31,6 +32,8 @@ public class BugReporter {
     private Activity activity;
     private Intent screenshotIntentData;
     private View reportButton;
+
+    private int activityOrientation;
 
     private String clientId;
     private String clientSecret;
@@ -62,6 +65,7 @@ public class BugReporter {
 
     public void attach(final Activity activity) {
         this.activity = activity;
+        this.activityOrientation = activity.getRequestedOrientation();
         addReportButton();
         registerShakeDetector(activity);
         ScreenshotUtils.getScreenshotPermission(activity);
@@ -197,9 +201,9 @@ public class BugReporter {
 
     protected void showDrawFragment() {
         if(((FragmentActivity) activity).getSupportFragmentManager().findFragmentByTag(DrawFragment.TAG) == null) {
-            Utils.lockScreenRotation(activity, Utils.isOrientationLandscape(activity));
+            Utils.lockScreenRotation(activity, Utils.isOrientationLandscape(activity) ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             reportButton.setVisibility(View.GONE);
-            final LoadingDialog dialog = LoadingDialog.newInstance("Generating your screenshot...");
+            final LoadingDialog dialog = LoadingDialog.newInstance(activity.getString(R.string.br_generating_screenshot));
             dialog.show(((FragmentActivity) activity).getSupportFragmentManager(), LoadingDialog.TAG);
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && screenshotIntentData != null) {
                 ScreenshotUtils.takeScreenshot(activity, screenshotIntentData, new ScreenshotUtils.ScreenshotListener() {
@@ -248,6 +252,10 @@ public class BugReporter {
 
     protected String getClientSecret() {
         return clientSecret;
+    }
+
+    public int getActivityOrientation() {
+        return activityOrientation;
     }
 
     public void getScreenshotPermission(int requestCode, int resultCode, Intent data) {

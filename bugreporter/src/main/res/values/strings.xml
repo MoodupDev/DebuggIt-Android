@@ -31,6 +31,7 @@
     <string name="br.login.info">Sign in to Bitbucket account\nand report bugs from the phone</string>
     <string name="br.login.loading.info">Signing in to account...</string>
     <string name="br.login.successfull">Signed in!\nNow let\'s smash some bugs</string>
+    <string name="br.generating.screenshot">Generating your screenshot...</string>
 
 
 </resources>
