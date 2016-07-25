@@ -197,6 +197,7 @@ public class BugReporter {
 
     protected void showDrawFragment() {
         if(((FragmentActivity) activity).getSupportFragmentManager().findFragmentByTag(DrawFragment.TAG) == null) {
+            Utils.lockScreenRotation(activity, Utils.isOrientationLandscape(activity));
             reportButton.setVisibility(View.GONE);
             final LoadingDialog dialog = LoadingDialog.newInstance("Generating your screenshot...");
             dialog.show(((FragmentActivity) activity).getSupportFragmentManager(), LoadingDialog.TAG);
