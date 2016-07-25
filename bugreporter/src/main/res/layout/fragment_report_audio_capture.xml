@@ -32,8 +32,8 @@
 
     <ImageView
         android:id="@+id/record_btn"
-        android:layout_width="@dimen/stop.icon.size"
-        android:layout_height="@dimen/stop.icon.size"
+        android:layout_width="@dimen/br.stop.icon.size"
+        android:layout_height="@dimen/br.stop.icon.size"
         android:layout_margin="20dp"
         android:src="@drawable/record_stop"/>
 

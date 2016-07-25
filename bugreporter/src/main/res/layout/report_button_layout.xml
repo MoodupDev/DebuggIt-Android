@@ -5,5 +5,5 @@
            android:layout_height="wrap_content"
            android:layout_gravity="right"
            android:background="@drawable/report_button_background"
-           android:padding="@dimen/report.layout.padding.horizontal"
+           android:padding="@dimen/br.report.layout.padding.horizontal"
            android:src="@drawable/logo_bug_small"/>

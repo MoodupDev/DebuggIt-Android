@@ -3,14 +3,14 @@
     <item>
         <shape>
             <corners android:radius="5dp"/>
-            <solid android:color="@color/app.orange"/>
+            <solid android:color="@color/br.app.orange"/>
             <padding android:left="2dp"/>
         </shape>
     </item>
     <item>
         <shape>
             <corners android:radius="5dp" />
-            <solid android:color="@color/bar.background" />
+            <solid android:color="@color/br.bar.background" />
         </shape>
     </item>
 </layer-list>

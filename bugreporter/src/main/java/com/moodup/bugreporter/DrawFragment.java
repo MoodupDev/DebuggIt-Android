@@ -1,30 +1,24 @@
 package com.moodup.bugreporter;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-import com.cloudinary.utils.ObjectUtils;
-
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.HashMap;
 
 public class DrawFragment extends DialogFragment {
 
     protected static final String TAG = DrawFragment.class.getSimpleName();
-    public static final String FREE_DRAW_ACTIVE = "free_draw_active";
+    protected static final String FREE_DRAW_ACTIVE = "free_draw_active";
+    public static final String SCREENSHOT = "screenshot";
 
     private View surfaceRoot;
     private ImageView screenSurface;
@@ -36,13 +30,18 @@ public class DrawFragment extends DialogFragment {
     private ImageView rectanglesDraw;
     private LoadingDialog dialog;
 
+    private Bitmap screenshot;
+
     private UploadImageAsyncTask uploadImageAsyncTask;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        CustomDialog dialog = new CustomDialog(getActivity(), R.style.CustomDialog);
+        CustomDialog dialog = new CustomDialog(getActivity(), R.style.BrCustomDialog);
         View rootView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_draw, null);
         dialog.setContentView(rootView);
+        if(savedInstanceState != null) {
+            screenshot = savedInstanceState.getParcelable(SCREENSHOT);
+        }
         initViews(rootView);
 
         return dialog;
@@ -54,8 +53,11 @@ public class DrawFragment extends DialogFragment {
         if (getDialog() == null) {
             return;
         }
-
-        getDialog().getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.confirmation_dialog_width), WindowManager.LayoutParams.WRAP_CONTENT);
+        if(Utils.isOrientationLandscape(getContext())) {
+            getDialog().getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.br_confirmation_dialog_width_landscape), WindowManager.LayoutParams.WRAP_CONTENT);
+        } else {
+            getDialog().getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.br_confirmation_dialog_width), WindowManager.LayoutParams.WRAP_CONTENT);
+        }
     }
 
     @Override
@@ -63,7 +65,20 @@ public class DrawFragment extends DialogFragment {
         if (uploadImageAsyncTask != null) {
             uploadImageAsyncTask.cancel(true);
         }
+        Utils.lockScreenRotation(getActivity(), BugReporter.getInstance().getActivityOrientation());
         super.onDestroyView();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(SCREENSHOT, screenshot);
+        super.onSaveInstanceState(outState);
+    }
+
+    protected static DrawFragment newInstance(Bitmap screenshot) {
+        DrawFragment fragment = new DrawFragment();
+        fragment.screenshot = screenshot;
+        return fragment;
     }
 
     private void initViews(View view) {
@@ -75,7 +90,7 @@ public class DrawFragment extends DialogFragment {
         rubber = (ImageView) view.findViewById(R.id.draw_rubber);
         freeDraw = (ImageView) view.findViewById(R.id.draw_free);
         rectanglesDraw = (ImageView) view.findViewById(R.id.draw_rectangles);
-        dialog = LoadingDialog.newInstance(getString(R.string.loading_dialog_message_screenshot));
+        dialog = LoadingDialog.newInstance(getString(R.string.br_loading_dialog_message_screenshot));
 
         initDrawingSurface();
         initButtons();
@@ -85,7 +100,7 @@ public class DrawFragment extends DialogFragment {
     }
 
     private void initButtonsState() {
-        boolean isFreeDrawActive = Utils.getBoolean(getContext(), FREE_DRAW_ACTIVE, false);
+        boolean isFreeDrawActive = Utils.getBoolean(getContext(), FREE_DRAW_ACTIVE, true);
         freeDraw.setSelected(isFreeDrawActive);
         rectanglesDraw.setSelected(!isFreeDrawActive);
         drawingSurface.setType(isFreeDrawActive ? PaintableImageView.TYPE_FREE_DRAW : PaintableImageView.TYPE_RECTANGLE_DRAW);
@@ -94,9 +109,13 @@ public class DrawFragment extends DialogFragment {
     private void initDrawingSurface() {
         View rootView = getActivity().findViewById(android.R.id.content);
         ImageView reportButton = (ImageView) rootView.findViewById(R.id.report_button);
-        reportButton.setVisibility(View.INVISIBLE);
-        screenSurface.setImageBitmap(Utils.getBitmapFromView(rootView));
-        reportButton.setVisibility(View.VISIBLE);
+        if(reportButton != null) {
+            reportButton.setVisibility(View.INVISIBLE);
+        }
+        screenSurface.setImageBitmap(screenshot);
+        if(reportButton != null) {
+            reportButton.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initButtons() {
@@ -104,6 +123,7 @@ public class DrawFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
+                drawingSurface.drawActiveRectangle();
                 uploadScreenshotAndGetUrl();
             }
         });
@@ -118,7 +138,7 @@ public class DrawFragment extends DialogFragment {
         rubber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                drawingSurface.clear();
+                drawingSurface.previousDrawing();
             }
         });
 
@@ -150,11 +170,8 @@ public class DrawFragment extends DialogFragment {
         } else {
             freeDraw.setSelected(false);
         }
-        v.setSelected(!v.isSelected());
-        drawingSurface.setEnabled(v.isSelected());
-        if(v.isSelected()) {
-            drawingSurface.setType(isFreeDrawClicked ? PaintableImageView.TYPE_FREE_DRAW : PaintableImageView.TYPE_RECTANGLE_DRAW);
-        }
+        v.setSelected(true);
+        drawingSurface.setType(isFreeDrawClicked ? PaintableImageView.TYPE_FREE_DRAW : PaintableImageView.TYPE_RECTANGLE_DRAW);
     }
 
     private void uploadScreenshotAndGetUrl() {
@@ -164,41 +181,39 @@ public class DrawFragment extends DialogFragment {
         bmp.compress(Bitmap.CompressFormat.PNG, 0, bos);
 
         byte[] bitmapdata = bos.toByteArray();
-        ByteArrayInputStream bs = new ByteArrayInputStream(bitmapdata);
 
-        uploadImageAsyncTask = new UploadImageAsyncTask();
+        HashMap<String, String> params = new HashMap<>();
+        params.put("file", Base64.encodeToString(bitmapdata, Base64.URL_SAFE));
+        params.put("mimetype", ApiClient.MIME_TYPE_IMAGE);
+        params.put("package", getActivity().getPackageName());
 
-        uploadImageAsyncTask.execute(bs);
+        uploadImageAsyncTask = new UploadImageAsyncTask(params);
+        uploadImageAsyncTask.execute();
     }
 
-    private class UploadImageAsyncTask extends AsyncTask<InputStream, Void, List<String>> {
-        @Override
-        protected List<String> doInBackground(InputStream... params) {
-            List<String> urls = new ArrayList<>();
+    private class UploadImageAsyncTask extends AsyncTask<String, Void, String> {
 
-            try {
-                for (InputStream is : params) {
-                    Map map = BugReporter.getInstance().getCloudinary().uploader().upload(is, ObjectUtils.emptyMap());
-                    urls.add((String) map.get("url"));
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        private HashMap<String, String> postParams;
 
-            return urls;
+        public UploadImageAsyncTask(HashMap<String, String> params) {
+            this.postParams = params;
         }
 
         @Override
-        protected void onPostExecute(List<String> s) {
+        protected String doInBackground(String... params) {
+            return ApiClient.getUploadedFileUrl(postParams);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
             dialog.dismiss();
-            if(s.size() != 0) {
-                BugReporter.getInstance().getReport().getScreensUrls().addAll(s);
+            if(s != null && !s.isEmpty()) {
+                BugReporter.getInstance().getReport().getScreensUrls().add(s);
                 new ReportFragment().show(getActivity().getSupportFragmentManager(), ReportFragment.TAG);
                 dismiss();
             } else {
-                ConfirmationDialog.newInstance(getString(R.string.screenshot_upload_error)).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                ConfirmationDialog.newInstance(getString(R.string.br_screenshot_upload_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
             }
-
             super.onPostExecute(s);
         }
     }

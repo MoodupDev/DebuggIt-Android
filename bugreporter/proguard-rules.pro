@@ -15,3 +15,12 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-keep class com.moodup.bugreporter.BugReporter {
+    public static <methods>;
+    public void init(...);
+    public void attach(...);
+    public void getScreenshotPermission(...);
+}
+
+-keepparameternames

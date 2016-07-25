@@ -1,26 +1,37 @@
 <resources>
-    <string name="lib_name">Bugreporter</string>
-    <string name="button.cancel">Cancel</string>
-    <string name="button.send">Send</string>
+    <string name="br.lib.name">Bugreporter</string>
+    <string name="br.button.cancel">Cancel</string>
+    <string name="br.button.send">Send</string>
 
-    <string name="kind.bug">Bug</string>
-    <string name="kind.enhancement">Enhancement</string>
-    <string name="priority.low">Low</string>
-    <string name="priority.medium">Medium</string>
-    <string name="priority.high">High</string>
-    <string name="bug.description.hint">What went wrong?</string>
-    <string name="report.steps">Steps to reproduce</string>
-    <string name="report.behaviour.actual">Actual behaviour</string>
-    <string name="report.behaviour.expected">Expected behaviour</string>
+    <string name="br.kind.bug">Bug</string>
+    <string name="br.kind.enhancement">Enhancement</string>
+    <string name="br.priority.low">Low</string>
+    <string name="br.priority.medium">Medium</string>
+    <string name="br.priority.high">High</string>
+    <string name="br.bug.description.hint">What went wrong?</string>
+    <string name="br.report.steps">Steps to reproduce</string>
+    <string name="br.report.behaviour.actual">Actual behaviour</string>
+    <string name="br.report.behaviour.expected">Expected behaviour</string>
 
-    <string name="confirmation.failure">Report isn\'t sent!\nCheck your Internet connection</string>
-    <string name="confirmation.success">Great report!\nEverything went smoothly</string>
-    <string name="loading.dialog.message.report">Sending report...</string>
-    <string name="loading.dialog.message.screenshot">Sending screenshot...</string>
-    <string name="loading.dialog.message.record">Sending record...</string>
-    <string name="loading.dialog.message.play.audio">Loading recording...</string>
-    <string name="title.empty">Issue title can\'t be empty!</string>
-    <string name="screenshot.upload.error">Screenshot isn’t saved!\nCheck your Internet connection</string>
+    <string name="br.confirmation.failure">Report isn\'t sent!\nCheck your Internet connection</string>
+    <string name="br.confirmation.success">Great report!\nEverything went smoothly</string>
+    <string name="br.loading.dialog.message.report">Sending report...</string>
+    <string name="br.loading.dialog.message.screenshot">Sending screenshot...</string>
+    <string name="br.loading.dialog.message.record">Sending record...</string>
+    <string name="br.loading.dialog.message.play.audio">Loading recording...</string>
+    <string name="br.title.empty">Issue title can\'t be empty!</string>
+    <string name="br.screenshot.upload.error">Screenshot isn’t saved!\nCheck your Internet connection</string>
+    <string name="br.upload.audio.failed">Audio upload failed!</string>
+    <string name="br.login.hint.password">Password</string>
+    <string name="br.login.hint.email">Email</string>
+    <string name="br.login.sign.in">Sign in</string>
+    <string name="br.login.error.wrong.credentials">Invalid email or password,\ncan\'t log in</string>
+    <string name="br.error.no.internet">No internet connection</string>
+    <string name="br.login.error">It\'s not possible to sign you in!\nCheck your Internet connection</string>
+    <string name="br.login.info">Sign in to Bitbucket account\nand report bugs from the phone</string>
+    <string name="br.login.loading.info">Signing in to account...</string>
+    <string name="br.login.successfull">Signed in!\nNow let\'s smash some bugs</string>
+    <string name="br.generating.screenshot">Generating your screenshot...</string>
 
 
 </resources>

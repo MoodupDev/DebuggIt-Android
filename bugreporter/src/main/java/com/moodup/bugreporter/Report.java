@@ -1,9 +1,5 @@
 package com.moodup.bugreporter;
 
-import android.os.Build;
-
-import com.jaredrummler.android.device.DeviceName;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +11,7 @@ public class Report {
     private String stepsToReproduce;
     private String actualBehaviour;
     private String expectedBehaviour;
+    private String applicationVersion;
     private List<String> audioUrls;
     private List<String> screensUrls;
 
@@ -32,9 +29,7 @@ public class Report {
     }
 
     protected String getContent() {
-        return "**Device**: " + DeviceName.getDeviceName() + "\n\n" +
-                String.format("**Android version**: %s (API %d)\n\n", Build.VERSION.RELEASE, Build.VERSION.SDK_INT) +
-                "**Steps to reproduce**: " + getStepsToReproduce() + "\n\n" +
+        return "**Steps to reproduce**: " + getStepsToReproduce() + "\n\n" +
                 "**Actual behaviour**: " + getActualBehaviour() + "\n\n" +
                 "**Expected behaviour**: " + getExpectedBehaviour() + "\n\n";
     }
@@ -81,6 +76,14 @@ public class Report {
 
     public void setExpectedBehaviour(String expectedBehaviour) {
         this.expectedBehaviour = expectedBehaviour;
+    }
+
+    public String getApplicationVersion() {
+        return applicationVersion == null ? "" : applicationVersion;
+    }
+
+    public void setApplicationVersion(String version) {
+        this.applicationVersion = version;
     }
 
     protected void setAudioUrls(List<String> audioUrls) {

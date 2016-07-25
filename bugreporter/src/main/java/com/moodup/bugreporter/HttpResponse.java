@@ -1,5 +1,7 @@
 package com.moodup.bugreporter;
 
+import javax.net.ssl.HttpsURLConnection;
+
 public class HttpResponse {
     String message;
     int responseCode;
@@ -28,6 +30,10 @@ public class HttpResponse {
 
     protected void setResponseCode(int responseCode) {
         this.responseCode = responseCode;
+    }
+
+    protected boolean isSuccessfull() {
+        return responseCode == HttpsURLConnection.HTTP_OK;
     }
 
 }

@@ -5,9 +5,6 @@ import android.util.Log;
 
 import java.io.IOException;
 
-/**
- * Created by grzegorz on 3/15/16.
- */
 public class AudioCaptureHelper {
 
     private static final String LOG_TAG = "AudioRecordTest";

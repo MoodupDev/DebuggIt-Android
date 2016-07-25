@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/bar.background">
+    android:background="@color/br.bar.background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,17 +14,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:padding="@dimen/report.layout.padding">
+            android:padding="@dimen/br.report.layout.padding">
 
             <com.moodup.bugreporter.MontserratTextView
                 android:id="@+id/kind_bug_button"
-                style="@style/ReportButton"
-                android:text="@string/kind.bug"/>
+                style="@style/BrReportButton"
+                android:text="@string/br.kind.bug"/>
 
             <com.moodup.bugreporter.MontserratTextView
                 android:id="@+id/kind_enhancement_button"
-                style="@style/ReportButton"
-                android:text="@string/kind.enhancement"/>
+                style="@style/BrReportButton"
+                android:text="@string/br.kind.enhancement"/>
 
         </LinearLayout>
 
@@ -32,29 +32,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:padding="@dimen/report.layout.padding">
+            android:padding="@dimen/br.report.layout.padding">
 
             <com.moodup.bugreporter.MontserratTextView
                 android:id="@+id/priority_low_button"
-                style="@style/ReportButton"
-                android:text="@string/priority.low"/>
+                style="@style/BrReportButton"
+                android:text="@string/br.priority.low"/>
 
             <com.moodup.bugreporter.MontserratTextView
                 android:id="@+id/priority_medium_button"
-                style="@style/ReportButton"
-                android:text="@string/priority.medium"/>
+                style="@style/BrReportButton"
+                android:text="@string/br.priority.medium"/>
 
             <com.moodup.bugreporter.MontserratTextView
                 android:id="@+id/priority_high_button"
-                style="@style/ReportButton"
-                android:text="@string/priority.high"/>
+                style="@style/BrReportButton"
+                android:text="@string/br.priority.high"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:padding="@dimen/report.layout.padding.horizontal"
+            android:padding="@dimen/br.report.layout.padding.horizontal"
             android:weightSum="7">
 
             <com.moodup.bugreporter.MontserratEditText
@@ -62,9 +62,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="6"
-                android:hint="@string/bug.description.hint"
-                android:textColorHint="@color/kind.button.disabled"
-                android:textSize="@dimen/text.size.regular"/>
+                android:hint="@string/br.bug.description.hint"
+                android:textColorHint="@color/br.kind.button.disabled"
+                android:textSize="@dimen/br.text.size.regular"/>
 
             <ImageView
                 android:id="@+id/record_button"
@@ -72,14 +72,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
-                android:src="@drawable/record_micro"/>
+                android:src="@drawable/button_micro"/>
         </LinearLayout>
 
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/small_margin"
+            android:layout_margin="@dimen/br.small.margin"
             android:fillViewport="true">
 
             <LinearLayout

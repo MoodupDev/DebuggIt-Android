@@ -17,4 +17,7 @@ public interface BitBucket {
     String KIND_ENHANCEMENT = "enhancement";
     String KIND_PROPOSAL = "proposal";
     String KIND_TASK = "task";
+
+    String GRANT_TYPE_PASSWORD = "password";
+    String GRANT_TYPE_REFRESH_TOKEN = "refresh_token";
 }

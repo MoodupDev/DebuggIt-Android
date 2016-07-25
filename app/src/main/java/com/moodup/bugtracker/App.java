@@ -9,6 +9,6 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        BugReporter.getInstance().init("C9PnuH4fPyvUDjFwMz", "JBeNHPJwYeHRLdnnsBCNU84ZLk5DFL7a", "bugreporter", "moodup");
+        BugReporter.getInstance().init("Jz9hKhxwAWgRNcS6m8", "dzyS7K5mnvcEWFtsS6veUM8RDJxRzwXQ", "bugreporter", "moodup");
     }
 }

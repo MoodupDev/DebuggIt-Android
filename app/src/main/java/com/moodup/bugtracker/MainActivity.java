@@ -2,7 +2,6 @@ package com.moodup.bugtracker;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -25,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, SecondActivity.class));
             }
         });
+
+        Snackbar.make(findViewById(android.R.id.content), "Snackbar", Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -33,4 +34,9 @@ public class MainActivity extends AppCompatActivity {
         BugReporter.getInstance().attach(this);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        BugReporter.getInstance().getScreenshotPermission(requestCode, resultCode, data);
+    }
 }

@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/confirmation_dialog_width"
+    android:layout_width="@dimen/br.confirmation.dialog.width"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_margin="@dimen/big_margin"
+    android:layout_margin="@dimen/br.big.margin"
     android:background="@drawable/main_background"
     android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/top.bar.height">
+        android:layout_height="@dimen/br.top.bar.height">
 
         <com.moodup.bugreporter.MontserratTextView
             android:id="@+id/draw_cancel"
-            style="@style/BarTextButton"
+            style="@style/BrBarTextButton"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="@dimen/report.button.margin.horizontal"
-            android:text="@string/button.cancel" />
+            android:layout_marginLeft="@dimen/br.report.button.margin.horizontal"
+            android:text="@string/br.button.cancel" />
 
         <com.moodup.bugreporter.MontserratTextView
             android:id="@+id/draw_confirm"
-            style="@style/BarTextButton"
+            style="@style/BrBarTextButton"
             android:layout_alignParentRight="true"
             android:background="@drawable/button_send"
             android:textColor="@android:color/white"
-            android:layout_marginRight="@dimen/report.button.margin.horizontal"
-            android:text="@string/button.send" />
+            android:layout_marginRight="@dimen/br.report.button.margin.horizontal"
+            android:text="@string/br.button.send" />
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@id/top_bar"
-        android:background="@color/app.gray" />
+        android:background="@color/br.app.gray" />
 
     <RelativeLayout
         android:id="@+id/surface_root"
@@ -46,13 +46,13 @@
 
         <ImageView
             android:id="@+id/image_surface"
-            style="@style/ScreenshotImage"
+            style="@style/BrScreenshotImage"
             android:background="@drawable/screenshot_background"
             android:scaleType="fitXY" />
 
         <com.moodup.bugreporter.PaintableImageView
             android:id="@+id/draw_surface"
-            style="@style/ScreenshotImage"
+            style="@style/BrScreenshotImage"
             android:background="@android:color/transparent" />
     </RelativeLayout>
 
@@ -60,8 +60,8 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_above="@+id/bottom_bar"
-        android:layout_marginTop="@dimen/small_margin"
-        android:background="@color/app.gray" />
+        android:layout_marginTop="@dimen/br.small.margin"
+        android:background="@color/br.app.gray" />
 
     <LinearLayout
         android:id="@+id/bottom_bar"
@@ -69,7 +69,19 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
-        android:padding="@dimen/small_margin">
+        android:padding="@dimen/br.small.margin">
+
+        <ImageView
+            android:id="@+id/draw_rubber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/button_rubber" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="37dp"
+            android:layout_weight="1" />
 
         <ImageView
             android:id="@+id/draw_rectangles"
@@ -90,17 +102,6 @@
             android:layout_weight="1"
             android:src="@drawable/button_free_draw" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="37dp"
-            android:layout_weight="1" />
-
-        <ImageView
-            android:id="@+id/draw_rubber"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/button_rubber" />
     </LinearLayout>
 
 </RelativeLayout>

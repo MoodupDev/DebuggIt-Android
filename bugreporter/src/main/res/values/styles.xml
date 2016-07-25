@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="BarTextButton">
+    <style name="BrBarTextButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingLeft">14dp</item>
@@ -9,10 +9,10 @@
         <item name="android:paddingTop">8dp</item>
         <item name="android:paddingBottom">8dp</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:textSize">@dimen/text.size.regular</item>
+        <item name="android:textSize">@dimen/br.text.size.regular</item>
     </style>
 
-    <style name="ScreenshotImage">
+    <style name="BrScreenshotImage">
         <item name="android:layout_width">250dp</item>
         <item name="android:layout_height">400dp</item>
         <item name="android:padding">3dp</item>
@@ -22,41 +22,47 @@
         <item name="android:layout_marginBottom">5dp</item>
     </style>
 
-    <style name="ReportButton">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">@dimen/report.button.padding</item>
-        <item name="android:layout_marginRight">@dimen/report.button.margin.horizontal</item>
-        <item name="android:background">@drawable/button_option</item>
-        <item name="android:textColor">@drawable/button_option_text_color</item>
-        <item name="android:textSize">@dimen/text.size.small</item>
+    <style name="BrScreenshotImageLandscape" parent="BrScreenshotImage">
+        <item name="android:layout_width">400dp</item>
+        <item name="android:layout_height">250dp</item>
+        <item name="android:padding">3dp</item>
     </style>
 
-    <style name="ReportContentEditText">
+    <style name="BrReportButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/br.report.button.padding</item>
+        <item name="android:layout_marginRight">@dimen/br.report.button.margin.horizontal</item>
+        <item name="android:background">@drawable/button_option</item>
+        <item name="android:textColor">@drawable/button_option_text_color</item>
+        <item name="android:textSize">@dimen/br.text.size.small</item>
+    </style>
+
+    <style name="BrReportContentEditText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">top</item>
-        <item name="android:textColorHint">@color/kind.button.disabled</item>
+        <item name="android:textColorHint">@color/br.kind.button.disabled</item>
     </style>
 
-    <style name="DialogText">
+    <style name="BrDialogText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginBottom">@dimen/big_margin</item>
-        <item name="android:layout_marginTop">@dimen/small_margin</item>
+        <item name="android:layout_marginBottom">@dimen/br.big.margin</item>
+        <item name="android:layout_marginTop">@dimen/br.small.margin</item>
         <item name="android:gravity">center</item>
-        <item name="android:textColor">@color/dialog.text.color</item>
-        <item name="android:textSize">@dimen/confirmation_dialog_font_size</item>
+        <item name="android:textColor">@color/br.dialog.text.color</item>
+        <item name="android:textSize">@dimen/br.text.size.regular</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="CustomDialog">
+    <style name="BrCustomDialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:minWidth">@dimen/confirmation_dialog_width</item>
+        <item name="android:minWidth">@dimen/br.confirmation.dialog.width</item>
     </style>
 </resources>

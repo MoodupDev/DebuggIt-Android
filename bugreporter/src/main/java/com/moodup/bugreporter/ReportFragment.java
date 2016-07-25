@@ -1,6 +1,9 @@
 package com.moodup.bugreporter;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,26 +26,19 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
     protected static final String TAG = ReportFragment.class.getSimpleName();
 
-    private ApiClient apiClient;
     private ImageView viewPagerIndicator;
     private LoadingDialog dialog;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new CustomDialog(getActivity(), R.style.CustomDialog);
+        return new CustomDialog(getActivity(), R.style.BrCustomDialog);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        apiClient = new ApiClient(
-                BugReporter.getInstance().getRepoSlug(),
-                BugReporter.getInstance().getAccountName(),
-                BugReporter.getInstance().getAccessToken()
-        );
-
-        dialog = LoadingDialog.newInstance(getString(R.string.loading_dialog_message_report));
+        dialog = LoadingDialog.newInstance(getString(R.string.br_loading_dialog_message_report));
         setCancelable(false);
         return initViews(inflater, container);
     }
@@ -50,17 +46,13 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     @Override
     public void onResume() {
         super.onResume();
-        if (getDialog() == null) {
+        if(getDialog() == null) {
             return;
         }
 
-        getDialog().getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.confirmation_dialog_width), WindowManager.LayoutParams.WRAP_CONTENT);
+        getDialog().getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.br_confirmation_dialog_width), WindowManager.LayoutParams.WRAP_CONTENT);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
 
     private View initViews(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.fragment_reporter, container, false);
@@ -76,32 +68,12 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Report report = BugReporter.getInstance().getReport();
-                if (BugReporter.getInstance().getReport().getTitle().isEmpty()) {
-                    ConfirmationDialog.newInstance(getString(R.string.title_empty)).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                setApplicationVersion();
+                if(BugReporter.getInstance().getReport().getTitle().isEmpty()) {
+                    ConfirmationDialog.newInstance(getString(R.string.br_title_empty), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                 } else {
                     dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
-                    apiClient.addIssue(
-                            report.getTitle(),
-                            report.getContent()
-                                    + getUrlAsStrings(report.getScreensUrls(), false)
-                                    + getUrlAsStrings(report.getAudioUrls(), true),
-                            report.getPriority(),
-                            report.getKind(),
-                            new ApiClient.HttpHandler() {
-                                @Override
-                                public void done(HttpResponse data) {
-                                    dialog.dismiss();
-                                    if (data.responseCode == HttpsURLConnection.HTTP_OK) {
-                                        BugReporter.getInstance().getReport().clear();
-                                        resetReportButtonImage();
-                                        ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_SUCCESS).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                                    } else {
-                                        ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_FAILURE).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                                    }
-                                }
-                            }
-                    );
+                    sendIssue();
                 }
             }
         });
@@ -114,6 +86,50 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                 dismiss();
             }
         });
+    }
+
+    private void sendIssue() {
+        Report report = BugReporter.getInstance().getReport();
+        ApiClient apiClient = new ApiClient(
+                BugReporter.getInstance().getRepoSlug(),
+                BugReporter.getInstance().getAccountName(),
+                BugReporter.getInstance().getAccessToken()
+        );
+        apiClient.addIssue(
+                report.getTitle(),
+                report.getContent()
+                        + getUrlAsStrings(report.getScreensUrls(), false)
+                        + getUrlAsStrings(report.getAudioUrls(), true)
+                        + Utils.getDeviceInfo(getActivity()),
+                report.getPriority(),
+                report.getKind(),
+                new ApiClient.HttpHandler() {
+                    @Override
+                    public void done(HttpResponse data) {
+                        dialog.dismiss();
+                        if(data.responseCode == HttpsURLConnection.HTTP_OK) {
+                            BugReporter.getInstance().getReport().clear();
+                            resetReportButtonImage();
+                            ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_SUCCESS).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                        } else if(data.responseCode == HttpsURLConnection.HTTP_FORBIDDEN) {
+                            ConfirmationDialog.newInstance(data.message, true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                        } else {
+                            ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_FAILURE).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                        }
+                    }
+                }
+        );
+    }
+
+    private void setApplicationVersion() {
+        Activity activity = BugReporter.getInstance().getActivity();
+        PackageManager manager = activity.getPackageManager();
+        try {
+            PackageInfo info = manager.getPackageInfo(activity.getPackageName(), 0);
+            BugReporter.getInstance().getReport().setApplicationVersion(String.format("%s (version code: %d)", info.versionName, info.versionCode));
+        } catch(PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initViewPager(View view) {
@@ -147,9 +163,9 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
     private String getUrlAsStrings(List<String> urls, boolean isMediaFile) {
         StringBuilder builder = new StringBuilder();
-        if (urls != null) {
-            for (String s : urls) {
-                if (!isMediaFile) {
+        if(urls != null) {
+            for(String s : urls) {
+                if(!isMediaFile) {
                     builder.append("![Alt text](")
                             .append(s)
                             .append(")")
