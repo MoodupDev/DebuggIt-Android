@@ -34,6 +34,7 @@ public class BugReporter {
     private View reportButton;
 
     private int activityOrientation;
+    private boolean waitingForShake = true;
 
     private String clientId;
     private String clientSecret;
@@ -75,7 +76,10 @@ public class BugReporter {
         ShakeDetector.getInstance().register(activity, new ShakeListener() {
             @Override
             public void shakeDetected() {
-                showDrawFragment();
+                if(waitingForShake) {
+                    showDrawFragment();
+                    waitingForShake = false;
+                }
             }
         });
     }
@@ -212,6 +216,7 @@ public class BugReporter {
                         dialog.dismiss();
                         DrawFragment.newInstance(bitmap).show(((FragmentActivity) activity).getSupportFragmentManager(), DrawFragment.TAG);
                         reportButton.setVisibility(View.VISIBLE);
+                        waitingForShake = true;
                     }
                 });
             } else {
@@ -219,6 +224,7 @@ public class BugReporter {
                 DrawFragment.newInstance(Utils.getBitmapFromView(activity.getWindow().getDecorView()))
                         .show(((FragmentActivity) activity).getSupportFragmentManager(), DrawFragment.TAG);
                 reportButton.setVisibility(View.VISIBLE);
+                waitingForShake = true;
             }
         }
     }

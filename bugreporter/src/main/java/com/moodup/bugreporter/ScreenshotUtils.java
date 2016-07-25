@@ -60,7 +60,13 @@ public class ScreenshotUtils {
 
     protected static void takeScreenshot(final Activity activity, Intent data, final ScreenshotListener listener) {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            final MediaProjection projection = initMediaProjection(activity, data);
+            final MediaProjection projection;
+            try {
+                projection = initMediaProjection(activity, data);
+            } catch(IllegalStateException e) {
+                // get next screenshot
+                return;
+            }
             final Rect screenSize = getScreenSize(activity);
             initHandler();
 
