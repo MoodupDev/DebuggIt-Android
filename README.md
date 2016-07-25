@@ -33,13 +33,13 @@ Owner name it's your team (or user) name.
 
 For example, if you want to add issues to this repository, your `init()` should looks like
 ```java
-BugReporter.getInstance().init("C9PnuH4fPyvUDjFwMz", "JBeNHPJwYeHRLdnnsBCNU84ZLk5DFL7a", "bugreporter", "moodup");
+BugReporter.getInstance().init("Jz9hKhxwAWgRNcS6m8", "dzyS7K5mnvcEWFtsS6veUM8RDJxRzwXQ", "bugreporter", "moodup");
 ```
 
 Attach BugReporter to your activities in `onStart()` method (it's perfect if your activities extends some `BaseActivity` class)
 
 ```java
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +55,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
+```
+
+### Include dialogs, popups etc.
+
+
+You can take screenshot with your custom or system dialogs for devices with **Android API > 20**. To get this working, you must add this line to your `Activity` `onActivityResult` method:
+
+```java
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    BugReporter.getInstance().getScreenshotPermission(requestCode, resultCode, data);
+}
+
 ```
 
 ## That's all. Your BugReporter is ready to work. ##
