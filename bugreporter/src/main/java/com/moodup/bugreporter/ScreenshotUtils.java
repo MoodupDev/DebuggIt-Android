@@ -92,12 +92,8 @@ public class ScreenshotUtils {
                 public void onImageAvailable(ImageReader reader) {
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         Image image = imageReader.acquireLatestImage();
-                        final Bitmap bitmap;
-                        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP || Utils.isOrientationLandscape(activity)) {
-                            bitmap = createTrimmedBitmap(getBitmapFromImageForMarshmallow(image));
-                        } else {
-                            bitmap = createTrimmedBitmap(getBitmapFromImage(image));
-                        }
+                        
+                        final Bitmap bitmap = getBitmap(image);
 
                         activity.runOnUiThread(new Runnable() {
                             @Override
@@ -167,7 +163,6 @@ public class ScreenshotUtils {
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private static Bitmap getBitmap(Image image) {
-        // FIXME: 26.07.2016 returning pixels in bad colors
         final Image.Plane[] planes = image.getPlanes();
         int width = image.getWidth();
         int height = image.getHeight();
@@ -178,11 +173,15 @@ public class ScreenshotUtils {
         int[] pixels = new int[intBuffer.capacity()];
         intBuffer.get(pixels);
         for(int i = 0; i < pixels.length; i++) {
-            pixels[i] ^= 0x00FFFFFF;
+            int red = Color.red(pixels[i]);
+            int green = Color.green(pixels[i]);
+            int blue = Color.blue(pixels[i]);
+            int alpha = Color.alpha(pixels[i]);
+            pixels[i] = Color.argb(alpha, blue, green, red); // red pixels = blue pixels, blue = red
         }
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         bitmap.setPixels(pixels, 0, rowStride / pixelStride, 0, 0, width, height);
-        return createTrimmedBitmap(bitmap);
+        return bitmap;
     }
 
     private static MediaProjection initMediaProjection(Activity activity, Intent data) {
