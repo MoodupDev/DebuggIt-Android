@@ -11,7 +11,7 @@ public class ShakeDetector implements SensorEventListener {
 
     //region Consts
 
-    private static final int SHAKE_THRESHOLD = 2000;
+    private static final int SHAKE_THRESHOLD = 3000;
 
     //endregion
 

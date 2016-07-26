@@ -34,7 +34,7 @@ public class BugReporter {
     private View reportButton;
 
     private int activityOrientation;
-    private boolean waitingForShake = true;
+    private boolean waitingForShake = false;
     private boolean initialized = false;
 
     private String clientId;
@@ -81,10 +81,17 @@ public class BugReporter {
         ShakeDetector.getInstance().register(activity, new ShakeListener() {
             @Override
             public void shakeDetected() {
-                if(waitingForShake && (!isFragmentShown(DrawFragment.TAG) && !isFragmentShown(ReportFragment.TAG))) {
+                if(shouldShowDrawFragment()) {
                     showDrawFragment();
                     waitingForShake = false;
                 }
+            }
+
+            private boolean shouldShowDrawFragment() {
+                return waitingForShake
+                        && !isFragmentShown(DrawFragment.TAG)
+                        && !isFragmentShown(ReportFragment.TAG)
+                        && !isFragmentShown(LoadingDialog.TAG);
             }
         });
     }
@@ -129,6 +136,9 @@ public class BugReporter {
         accessToken = json.getString(ACCESS_TOKEN);
         Utils.putString(activity, ACCESS_TOKEN, accessToken);
         Utils.putString(activity, REFRESH_TOKEN, json.getString(REFRESH_TOKEN));
+        if(hasAccessToken()) {
+            waitingForShake = true;
+        }
     }
 
     private void addReportButton() {
@@ -232,11 +242,15 @@ public class BugReporter {
     }
 
     private void showDrawFragment(Bitmap bitmap, LoadingDialog dialog) {
-        dialog.dismiss();
-        DrawFragment.newInstance(bitmap)
-                .show(((FragmentActivity) activity).getSupportFragmentManager(), DrawFragment.TAG);
-        reportButton.setVisibility(View.VISIBLE);
-        waitingForShake = true;
+        try {
+            dialog.dismiss();
+            DrawFragment.newInstance(bitmap)
+                    .show(((FragmentActivity) activity).getSupportFragmentManager(), DrawFragment.TAG);
+            reportButton.setVisibility(View.VISIBLE);
+            waitingForShake = true;
+        } catch(IllegalStateException e) {
+            e.printStackTrace();
+        }
     }
 
     protected String getAccessToken() {
