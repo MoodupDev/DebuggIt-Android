@@ -76,7 +76,7 @@ public class BugReporter {
         ShakeDetector.getInstance().register(activity, new ShakeListener() {
             @Override
             public void shakeDetected() {
-                if(waitingForShake && !isFragmentShown(DrawFragment.TAG)) {
+                if(waitingForShake && (!isFragmentShown(DrawFragment.TAG) && !isFragmentShown(ReportFragment.TAG))) {
                     showDrawFragment();
                     waitingForShake = false;
                 }
