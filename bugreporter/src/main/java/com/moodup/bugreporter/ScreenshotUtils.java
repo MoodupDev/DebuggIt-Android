@@ -91,9 +91,9 @@ public class ScreenshotUtils {
                         Image image = imageReader.acquireLatestImage();
                         final Bitmap bitmap;
                         if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP || Utils.isOrientationLandscape(activity)) {
-                            bitmap = getBitmapFromImageForMarshmallow(image);
+                            bitmap = createTrimmedBitmap(getBitmapFromImageForMarshmallow(image));
                         } else {
-                            bitmap = getBitmapFromImage(image);
+                            bitmap = createTrimmedBitmap(getBitmapFromImage(image));
                         }
 
                         activity.runOnUiThread(new Runnable() {
