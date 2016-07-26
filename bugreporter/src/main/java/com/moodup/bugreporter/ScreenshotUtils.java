@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
@@ -16,9 +17,11 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
+import android.util.Log;
 
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
 public class ScreenshotUtils {
     //region Consts
@@ -147,8 +150,8 @@ public class ScreenshotUtils {
         int offset = 0;
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         ByteBuffer buffer = planes[0].getBuffer();
-        for (int i = 0; i < height; ++i) {
-            for (int j = 0; j < width; ++j) {
+        for(int i = 0; i < height; ++i) {
+            for(int j = 0; j < width; ++j) {
                 int pixel = 0;
                 pixel |= (buffer.get(offset) & 0xff) << 16;     // R
                 pixel |= (buffer.get(offset + 1) & 0xff) << 8;  // G
@@ -160,6 +163,26 @@ public class ScreenshotUtils {
             offset += rowPadding;
         }
         return bitmap;
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private static Bitmap getBitmap(Image image) {
+        // FIXME: 26.07.2016 returning pixels in bad colors
+        final Image.Plane[] planes = image.getPlanes();
+        int width = image.getWidth();
+        int height = image.getHeight();
+        int pixelStride = planes[0].getPixelStride();
+        int rowStride = planes[0].getRowStride();
+        ByteBuffer buffer = planes[0].getBuffer();
+        IntBuffer intBuffer = buffer.asIntBuffer();
+        int[] pixels = new int[intBuffer.capacity()];
+        intBuffer.get(pixels);
+        for(int i = 0; i < pixels.length; i++) {
+            pixels[i] ^= 0x00FFFFFF;
+        }
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        bitmap.setPixels(pixels, 0, rowStride / pixelStride, 0, 0, width, height);
+        return createTrimmedBitmap(bitmap);
     }
 
     private static MediaProjection initMediaProjection(Activity activity, Intent data) {
