@@ -170,6 +170,36 @@ public class ScreenshotUtils {
         return null;
     }
 
+    public static Bitmap createTrimmedBitmap(Bitmap bmp) {
+
+        int imgHeight = bmp.getHeight();
+        int imgWidth = bmp.getWidth();
+        int smallX = 0, largeX = imgWidth, smallY = 0, largeY = imgHeight;
+        int left = imgWidth, right = imgWidth, top = imgHeight, bottom = imgHeight;
+        for(int i = 0; i < imgWidth; i++) {
+            for(int j = 0; j < imgHeight; j++) {
+                if(bmp.getPixel(i, j) != Color.TRANSPARENT) {
+                    if((i - smallX) < left) {
+                        left = (i - smallX);
+                    }
+                    if((largeX - i) < right) {
+                        right = (largeX - i);
+                    }
+                    if((j - smallY) < top) {
+                        top = (j - smallY);
+                    }
+                    if((largeY - j) < bottom) {
+                        bottom = (largeY - j);
+                    }
+                }
+            }
+        }
+        Log.d(ScreenshotUtils.class.getSimpleName(), "left:" + left + " right:" + right + " top:" + top + " bottom:" + bottom);
+        bmp = Bitmap.createBitmap(bmp, left, top, imgWidth - left - right, imgHeight - top - bottom);
+
+        return bmp;
+    }
+
     interface ScreenshotListener {
         void onScreenshotReady(Bitmap bitmap);
     }
