@@ -35,6 +35,7 @@ public class BugReporter {
 
     private int activityOrientation;
     private boolean waitingForShake = true;
+    private boolean initialized = false;
 
     private String clientId;
     private String clientSecret;
@@ -62,9 +63,13 @@ public class BugReporter {
         this.repoSlug = repoSlug;
         this.accountName = accountName;
         this.report = new Report();
+        this.initialized = true;
     }
 
     public void attach(final Activity activity) {
+        if(!initialized) {
+            throw new RuntimeException("BugReporter must be initialized with init(...) before using attach() method");
+        }
         this.activity = activity;
         this.activityOrientation = activity.getRequestedOrientation();
         addReportButton();
@@ -270,6 +275,9 @@ public class BugReporter {
     }
 
     public void getScreenshotPermission(int requestCode, int resultCode, Intent data) {
+        if(!initialized) {
+            throw new RuntimeException("BugReporter must be initialized with init(...) before using getScreenshotPermission() method");
+        }
         if(requestCode == ScreenshotUtils.SCREENSHOT_REQUEST_CODE) {
             if(resultCode == Activity.RESULT_OK) {
                 this.screenshotIntentData = data;
