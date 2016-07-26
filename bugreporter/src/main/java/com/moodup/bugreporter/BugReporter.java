@@ -94,6 +94,9 @@ public class BugReporter {
                         && !isFragmentShown(LoadingDialog.TAG);
             }
         });
+        if(hasAccessToken()) {
+            waitingForShake = true;
+        }
     }
 
     protected void authenticate(boolean refresh) {
@@ -136,9 +139,6 @@ public class BugReporter {
         accessToken = json.getString(ACCESS_TOKEN);
         Utils.putString(activity, ACCESS_TOKEN, accessToken);
         Utils.putString(activity, REFRESH_TOKEN, json.getString(REFRESH_TOKEN));
-        if(hasAccessToken()) {
-            waitingForShake = true;
-        }
     }
 
     private void addReportButton() {
@@ -222,17 +222,21 @@ public class BugReporter {
         if(!isFragmentShown(DrawFragment.TAG)) {
             Utils.lockScreenRotation(activity, Utils.isOrientationLandscape(activity) ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             reportButton.setVisibility(View.GONE);
-            final LoadingDialog dialog = LoadingDialog.newInstance(activity.getString(R.string.br_generating_screenshot));
-            dialog.show(((FragmentActivity) activity).getSupportFragmentManager(), LoadingDialog.TAG);
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && screenshotIntentData != null) {
-                ScreenshotUtils.takeScreenshot(activity, screenshotIntentData, new ScreenshotUtils.ScreenshotListener() {
-                    @Override
-                    public void onScreenshotReady(Bitmap bitmap) {
-                        showDrawFragment(bitmap, dialog);
-                    }
-                });
-            } else {
-                showDrawFragment(Utils.getBitmapFromView(activity.getWindow().getDecorView()), dialog);
+            try {
+                final LoadingDialog dialog = LoadingDialog.newInstance(activity.getString(R.string.br_generating_screenshot));
+                dialog.show(((FragmentActivity) activity).getSupportFragmentManager(), LoadingDialog.TAG);
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && screenshotIntentData != null) {
+                    ScreenshotUtils.takeScreenshot(activity, screenshotIntentData, new ScreenshotUtils.ScreenshotListener() {
+                        @Override
+                        public void onScreenshotReady(Bitmap bitmap) {
+                            showDrawFragment(bitmap, dialog);
+                        }
+                    });
+                } else {
+                    showDrawFragment(Utils.getBitmapFromView(activity.getWindow().getDecorView()), dialog);
+                }
+            } catch(IllegalStateException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -242,15 +246,11 @@ public class BugReporter {
     }
 
     private void showDrawFragment(Bitmap bitmap, LoadingDialog dialog) {
-        try {
-            dialog.dismiss();
-            DrawFragment.newInstance(bitmap)
-                    .show(((FragmentActivity) activity).getSupportFragmentManager(), DrawFragment.TAG);
-            reportButton.setVisibility(View.VISIBLE);
-            waitingForShake = true;
-        } catch(IllegalStateException e) {
-            e.printStackTrace();
-        }
+        dialog.dismiss();
+        DrawFragment.newInstance(bitmap)
+                .show(((FragmentActivity) activity).getSupportFragmentManager(), DrawFragment.TAG);
+        reportButton.setVisibility(View.VISIBLE);
+        waitingForShake = true;
     }
 
     protected String getAccessToken() {
