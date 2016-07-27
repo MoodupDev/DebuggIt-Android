@@ -35,6 +35,7 @@ public class ScreenshotUtils {
     //region Fields
 
     static Handler handler;
+    private static boolean nextScreenshotCanceled;
 
     //endregion
 
@@ -98,7 +99,12 @@ public class ScreenshotUtils {
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                listener.onScreenshotReady(bitmap);
+                                if(!nextScreenshotCanceled) {
+                                    listener.onScreenshotReady(bitmap);
+                                } else {
+                                    listener.onScreenshotReady(null);
+                                }
+                                nextScreenshotCanceled = false;
                             }
                         });
                         image.close();
@@ -220,6 +226,10 @@ public class ScreenshotUtils {
         bmp = Bitmap.createBitmap(bmp, left, top, imgWidth - left - right, imgHeight - top - bottom);
 
         return bmp;
+    }
+
+    public static void cancelNextScreenshot() {
+        nextScreenshotCanceled = true;
     }
 
     interface ScreenshotListener {
