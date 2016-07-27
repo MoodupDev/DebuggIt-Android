@@ -10,9 +10,15 @@ import android.view.WindowManager;
 
 public class LoadingDialog extends DialogFragment {
     //region Consts
+
     protected static final String TAG = LoadingDialog.class.getSimpleName();
+
     //endregion
+
     //region Fields
+
+    private View.OnClickListener onCancelClickListener;
+
     //endregion
 
     //region Override Methods
@@ -38,14 +44,18 @@ public class LoadingDialog extends DialogFragment {
 
     //region Methods
     protected static LoadingDialog newInstance(String message) {
-        LoadingDialog dialog = new LoadingDialog();
+        return newInstance(message, null);
+    }
+
+    protected static LoadingDialog newInstance(String message, View.OnClickListener onCancelClickListener) {
 
         Bundle bundle = new Bundle();
         bundle.putString("message", message);
 
-        dialog.setArguments(bundle);
-
-        return dialog;
+        LoadingDialog fragment = new LoadingDialog();
+        fragment.setArguments(bundle);
+        fragment.onCancelClickListener = onCancelClickListener;
+        return fragment;
     }
 
     private void initViews(View view) {
@@ -53,12 +63,16 @@ public class LoadingDialog extends DialogFragment {
         MontserratTextView cancelButton = (MontserratTextView) view.findViewById(R.id.loading_dialog_cancel_button);
 
         message.setText(getArguments().getString("message", ""));
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        if(onCancelClickListener == null) {
+            cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dismiss();
+                }
+            });
+        } else {
+            cancelButton.setOnClickListener(onCancelClickListener);
+        }
     }
     //endregion
 
