@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Utils {
@@ -223,6 +224,25 @@ public class Utils {
             phrase += c;
         }
         return phrase;
+    }
+
+    protected static String getUrlAsStrings(List<String> urls, boolean isMediaFile) {
+        StringBuilder builder = new StringBuilder();
+        if(urls != null) {
+            for(String s : urls) {
+                if(!isMediaFile) {
+                    builder.append("![Alt text](")
+                            .append(s)
+                            .append(")")
+                            .append("\n\n");
+                } else {
+                    builder.append(s)
+                            .append("\n\n");
+                }
+            }
+        }
+
+        return builder.toString();
     }
 
 }

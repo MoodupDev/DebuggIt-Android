@@ -98,8 +98,8 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         apiClient.addIssue(
                 report.getTitle(),
                 report.getContent()
-                        + getUrlAsStrings(report.getScreensUrls(), false)
-                        + getUrlAsStrings(report.getAudioUrls(), true)
+                        + Utils.getUrlAsStrings(report.getScreensUrls(), false)
+                        + Utils.getUrlAsStrings(report.getAudioUrls(), true)
                         + Utils.getDeviceInfo(getActivity()),
                 report.getPriority(),
                 report.getKind(),
@@ -159,25 +159,6 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     @Override
     public void onPageScrollStateChanged(int state) {
 
-    }
-
-    private String getUrlAsStrings(List<String> urls, boolean isMediaFile) {
-        StringBuilder builder = new StringBuilder();
-        if(urls != null) {
-            for(String s : urls) {
-                if(!isMediaFile) {
-                    builder.append("![Alt text](")
-                            .append(s)
-                            .append(")")
-                            .append('\n');
-                } else {
-                    builder.append(s)
-                            .append('\n');
-                }
-            }
-        }
-
-        return builder.toString();
     }
 
     private class ReportViewPagerAdapter extends FragmentPagerAdapter {
