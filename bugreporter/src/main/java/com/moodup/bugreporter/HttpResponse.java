@@ -3,8 +3,8 @@ package com.moodup.bugreporter;
 import javax.net.ssl.HttpsURLConnection;
 
 public class HttpResponse {
-    String message;
-    int responseCode;
+    private String message;
+    private int responseCode;
 
     protected HttpResponse() {
     }

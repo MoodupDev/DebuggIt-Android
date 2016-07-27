@@ -18,8 +18,6 @@ import com.moodup.bugreporter.ShakeDetector.ShakeListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.HttpURLConnection;
-
 public class BugReporter {
 
     protected static final String BUTTON_POSITION_PORTRAIT = "button_position_portrait";
@@ -125,7 +123,7 @@ public class BugReporter {
         apiClient.refreshToken(clientId, clientSecret, Utils.getString(activity, REFRESH_TOKEN, ""), new ApiClient.HttpHandler() {
             @Override
             public void done(HttpResponse data) {
-                if(data.responseCode == HttpURLConnection.HTTP_OK) {
+                if(data.isSuccessful()) {
                     try {
                         saveTokens(data);
                     } catch(JSONException e) {
