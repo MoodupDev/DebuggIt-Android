@@ -15,7 +15,7 @@ public class Report {
     private List<String> audioUrls;
     private List<String> screensUrls;
 
-    public Report() {
+    protected Report() {
         this.audioUrls = new ArrayList<>();
         this.screensUrls = new ArrayList<>();
     }
@@ -38,51 +38,51 @@ public class Report {
         return audioUrls;
     }
 
-    public String getKind() {
+    protected String getKind() {
         return kind == null ? "" : kind;
     }
 
-    public void setKind(String kind) {
+    protected void setKind(String kind) {
         this.kind = kind;
     }
 
-    public String getPriority() {
+    protected String getPriority() {
         return priority == null ? "" : priority;
     }
 
-    public void setPriority(String priority) {
+    protected void setPriority(String priority) {
         this.priority = priority;
     }
 
-    public String getStepsToReproduce() {
+    protected String getStepsToReproduce() {
         return stepsToReproduce == null ? "" : stepsToReproduce;
     }
 
-    public void setStepsToReproduce(String stepsToReproduce) {
+    protected void setStepsToReproduce(String stepsToReproduce) {
         this.stepsToReproduce = stepsToReproduce;
     }
 
-    public String getActualBehaviour() {
+    protected String getActualBehaviour() {
         return actualBehaviour == null ? "" : actualBehaviour;
     }
 
-    public void setActualBehaviour(String actualBehaviour) {
+    protected void setActualBehaviour(String actualBehaviour) {
         this.actualBehaviour = actualBehaviour;
     }
 
-    public String getExpectedBehaviour() {
+    protected String getExpectedBehaviour() {
         return expectedBehaviour == null ? "" : expectedBehaviour;
     }
 
-    public void setExpectedBehaviour(String expectedBehaviour) {
+    protected void setExpectedBehaviour(String expectedBehaviour) {
         this.expectedBehaviour = expectedBehaviour;
     }
 
-    public String getApplicationVersion() {
+    protected String getApplicationVersion() {
         return applicationVersion == null ? "" : applicationVersion;
     }
 
-    public void setApplicationVersion(String version) {
+    protected void setApplicationVersion(String version) {
         this.applicationVersion = version;
     }
 
