@@ -43,6 +43,7 @@ public class LoadingDialog extends DialogFragment {
     //endregion
 
     //region Methods
+
     protected static LoadingDialog newInstance(String message) {
         return newInstance(message, null);
     }
@@ -63,16 +64,15 @@ public class LoadingDialog extends DialogFragment {
         MontserratTextView cancelButton = (MontserratTextView) view.findViewById(R.id.loading_dialog_cancel_button);
 
         message.setText(getArguments().getString("message", ""));
-        if(onCancelClickListener == null) {
-            cancelButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dismiss();
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onCancelClickListener != null) {
+                    onCancelClickListener.onClick(v);
                 }
-            });
-        } else {
-            cancelButton.setOnClickListener(onCancelClickListener);
-        }
+                dismiss();
+            }
+        });
     }
     //endregion
 
