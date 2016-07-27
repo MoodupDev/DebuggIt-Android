@@ -44,6 +44,7 @@ public class BugReporter {
     private String accessToken;
 
     private Report report;
+    private LoadingDialog screenshotLoadingDialog;
 
     public static BugReporter getInstance() {
         if(instance == null) {
@@ -223,7 +224,7 @@ public class BugReporter {
             Utils.lockScreenRotation(activity, Utils.isOrientationLandscape(activity) ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             reportButton.setVisibility(View.GONE);
             try {
-                final LoadingDialog screenshotLoadingDialog = LoadingDialog.newInstance(activity.getString(R.string.br_generating_screenshot), new View.OnClickListener() {
+                screenshotLoadingDialog = LoadingDialog.newInstance(activity.getString(R.string.br_generating_screenshot), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         ScreenshotUtils.setNextScreenshotCanceled(true);
