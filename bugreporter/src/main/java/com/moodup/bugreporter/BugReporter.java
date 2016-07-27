@@ -20,10 +20,16 @@ import org.json.JSONObject;
 
 public class BugReporter {
 
+    // region Consts
+
     protected static final String BUTTON_POSITION_PORTRAIT = "button_position_portrait";
     protected static final String BUTTON_POSITION_LANDSCAPE = "button_position_landscape";
     protected static final String ACCESS_TOKEN = "access_token";
     protected static final String REFRESH_TOKEN = "refresh_token";
+
+    // endregion
+
+    // region Fields
 
     private static BugReporter instance;
 
@@ -44,16 +50,16 @@ public class BugReporter {
     private Report report;
     private LoadingDialog screenshotLoadingDialog;
 
+    // endregion
+
+    // region Methods
+
     public static BugReporter getInstance() {
         if(instance == null) {
             instance = new BugReporter();
         }
 
         return instance;
-    }
-
-    private BugReporter() {
-
     }
 
     public void init(String clientId, String clientSecret, String repoSlug, String accountName) {
@@ -77,25 +83,16 @@ public class BugReporter {
         initScreenshotLoadingDialog();
     }
 
-    private void registerShakeDetector(Activity activity) {
-        ShakeDetector.getInstance().register(activity, new ShakeListener() {
-            @Override
-            public void shakeDetected() {
-                if(shouldShowDrawFragment()) {
-                    showDrawFragment();
-                    waitingForShake = false;
-                }
+    public void getScreenshotPermission(int requestCode, int resultCode, Intent data) {
+        if(!initialized) {
+            throw new RuntimeException("BugReporter must be initialized with init(...) before using getScreenshotPermission() method");
+        }
+        if(requestCode == ScreenshotUtils.SCREENSHOT_REQUEST_CODE) {
+            if(resultCode == Activity.RESULT_OK) {
+                this.screenshotIntentData = data;
+            } else {
+                screenshotIntentData = null;
             }
-
-            private boolean shouldShowDrawFragment() {
-                return waitingForShake
-                        && !isFragmentShown(DrawFragment.TAG)
-                        && !isFragmentShown(ReportFragment.TAG)
-                        && !isFragmentShown(LoadingDialog.TAG);
-            }
-        });
-        if(hasAccessToken()) {
-            waitingForShake = true;
         }
     }
 
@@ -113,32 +110,46 @@ public class BugReporter {
         }
     }
 
-    private boolean hasAccessToken() {
-        return !Utils.getString(activity, ACCESS_TOKEN, "").isEmpty();
-    }
-
-    private void refreshAccessToken() {
-        ApiClient apiClient = new ApiClient(repoSlug, accountName, accessToken);
-        Utils.putString(activity, ACCESS_TOKEN, "");
-        apiClient.refreshToken(clientId, clientSecret, Utils.getString(activity, REFRESH_TOKEN, ""), new ApiClient.HttpHandler() {
-            @Override
-            public void done(HttpResponse data) {
-                if(data.isSuccessful()) {
-                    try {
-                        saveTokens(data);
-                    } catch(JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
-
     protected void saveTokens(HttpResponse data) throws JSONException {
         JSONObject json = new JSONObject(data.getMessage());
         accessToken = json.getString(ACCESS_TOKEN);
         Utils.putString(activity, ACCESS_TOKEN, accessToken);
         Utils.putString(activity, REFRESH_TOKEN, json.getString(REFRESH_TOKEN));
+    }
+
+    protected String getRepoSlug() {
+        return repoSlug;
+    }
+
+    protected String getAccountName() {
+        return accountName;
+    }
+
+    protected Report getReport() {
+        return report;
+    }
+
+    protected Activity getActivity() {
+        return activity;
+    }
+
+    protected String getClientId() {
+        return clientId;
+    }
+
+    protected String getClientSecret() {
+        return clientSecret;
+    }
+
+    protected String getAccessToken() {
+        if(accessToken == null) {
+            accessToken = Utils.getString(activity, ACCESS_TOKEN, "");
+        }
+        return accessToken;
+    }
+
+    protected int getActivityOrientation() {
+        return activityOrientation;
     }
 
     private void addReportButton() {
@@ -218,6 +229,45 @@ public class BugReporter {
         });
     }
 
+    private void registerShakeDetector(Activity activity) {
+        ShakeDetector.getInstance().register(activity, new ShakeListener() {
+            @Override
+            public void shakeDetected() {
+                if(shouldShowDrawFragment()) {
+                    showDrawFragment();
+                    waitingForShake = false;
+                }
+            }
+
+            private boolean shouldShowDrawFragment() {
+                return waitingForShake
+                        && !isFragmentShown(DrawFragment.TAG)
+                        && !isFragmentShown(ReportFragment.TAG)
+                        && !isFragmentShown(LoadingDialog.TAG);
+            }
+        });
+        if(hasAccessToken()) {
+            waitingForShake = true;
+        }
+    }
+
+    private void refreshAccessToken() {
+        ApiClient apiClient = new ApiClient(repoSlug, accountName, accessToken);
+        Utils.putString(activity, ACCESS_TOKEN, "");
+        apiClient.refreshToken(clientId, clientSecret, Utils.getString(activity, REFRESH_TOKEN, ""), new ApiClient.HttpHandler() {
+            @Override
+            public void done(HttpResponse data) {
+                if(data.isSuccessful()) {
+                    try {
+                        saveTokens(data);
+                    } catch(JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
     private void showDrawFragment() {
         if(!isFragmentShown(DrawFragment.TAG)) {
             Utils.lockScreenRotation(activity, Utils.isOrientationLandscape(activity) ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -269,51 +319,13 @@ public class BugReporter {
         waitingForShake = true;
     }
 
-    protected String getAccessToken() {
-        if(accessToken == null) {
-            accessToken = Utils.getString(activity, ACCESS_TOKEN, "");
-        }
-        return accessToken;
+    private boolean hasAccessToken() {
+        return !Utils.getString(activity, ACCESS_TOKEN, "").isEmpty();
     }
 
-    protected String getRepoSlug() {
-        return repoSlug;
+    private BugReporter() {
+        // one instance
     }
 
-    protected String getAccountName() {
-        return accountName;
-    }
-
-    protected Report getReport() {
-        return report;
-    }
-
-    protected Activity getActivity() {
-        return activity;
-    }
-
-    protected String getClientId() {
-        return clientId;
-    }
-
-    protected String getClientSecret() {
-        return clientSecret;
-    }
-
-    protected int getActivityOrientation() {
-        return activityOrientation;
-    }
-
-    public void getScreenshotPermission(int requestCode, int resultCode, Intent data) {
-        if(!initialized) {
-            throw new RuntimeException("BugReporter must be initialized with init(...) before using getScreenshotPermission() method");
-        }
-        if(requestCode == ScreenshotUtils.SCREENSHOT_REQUEST_CODE) {
-            if(resultCode == Activity.RESULT_OK) {
-                this.screenshotIntentData = data;
-            } else {
-                screenshotIntentData = null;
-            }
-        }
-    }
+    // endregion
 }
