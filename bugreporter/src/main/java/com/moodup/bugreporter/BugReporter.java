@@ -143,16 +143,16 @@ public class BugReporter {
 
     private void addReportButton() {
         final FrameLayout rootLayout = (FrameLayout) activity.findViewById(android.R.id.content);
-        reportButton = LayoutInflater.from(activity).inflate(R.layout.report_button_layout, rootLayout, false);
-        initButtonPosition();
-        boolean buttonAdded = rootLayout.findViewById(R.id.report_button) != null;
-        if(!report.getScreensUrls().isEmpty()) {
-            ((ImageView) reportButton).setImageDrawable(activity.getResources().getDrawable(R.drawable.next_screenshoot));
-        }
-        if(!buttonAdded) {
+        reportButton = rootLayout.findViewById(R.id.report_button);
+        if(reportButton == null) {
+            reportButton = LayoutInflater.from(activity).inflate(R.layout.report_button_layout, rootLayout, false);
             rootLayout.addView(reportButton);
             initReportButtonOnTouchListener(rootLayout);
         }
+        if(!report.getScreensUrls().isEmpty()) {
+            ((ImageView) reportButton).setImageDrawable(activity.getResources().getDrawable(R.drawable.next_screenshoot));
+        }
+        initButtonPosition();
     }
 
     private void initButtonPosition() {
@@ -227,6 +227,7 @@ public class BugReporter {
                     @Override
                     public void onClick(View v) {
                         ScreenshotUtils.cancelNextScreenshot();
+                        reportButton.setVisibility(View.VISIBLE);
                     }
                 });
                 dialog.show(((FragmentActivity) activity).getSupportFragmentManager(), LoadingDialog.TAG);
@@ -244,6 +245,7 @@ public class BugReporter {
                 }
             } catch(IllegalStateException e) {
                 e.printStackTrace();
+                reportButton.setVisibility(View.VISIBLE);
             }
         }
     }
