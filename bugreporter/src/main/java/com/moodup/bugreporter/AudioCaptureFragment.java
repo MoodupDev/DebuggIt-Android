@@ -63,7 +63,12 @@ public class AudioCaptureFragment extends DialogFragment {
             }
         });
 
-        dialog = LoadingDialog.newInstance(getString(R.string.br_loading_dialog_message_record));
+        dialog = LoadingDialog.newInstance(getString(R.string.br_loading_dialog_message_record), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadAudioAsyncTask.cancel(true);
+            }
+        });
 
         return view;
     }
