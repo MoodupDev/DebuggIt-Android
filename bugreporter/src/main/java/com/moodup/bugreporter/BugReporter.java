@@ -76,6 +76,7 @@ public class BugReporter {
         addReportButton();
         registerShakeDetector(activity);
         ScreenshotUtils.getScreenshotPermission(activity);
+        initScreenshotLoadingDialog();
     }
 
     private void registerShakeDetector(Activity activity) {
@@ -224,13 +225,6 @@ public class BugReporter {
             Utils.lockScreenRotation(activity, Utils.isOrientationLandscape(activity) ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             reportButton.setVisibility(View.GONE);
             try {
-                screenshotLoadingDialog = LoadingDialog.newInstance(activity.getString(R.string.br_generating_screenshot), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ScreenshotUtils.setNextScreenshotCanceled(true);
-                        reportButton.setVisibility(View.VISIBLE);
-                    }
-                });
                 screenshotLoadingDialog.show(((FragmentActivity) activity).getSupportFragmentManager(), LoadingDialog.TAG);
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && screenshotIntentData != null) {
                     ScreenshotUtils.setNextScreenshotCanceled(false);
@@ -253,6 +247,16 @@ public class BugReporter {
                 reportButton.setVisibility(View.VISIBLE);
             }
         }
+    }
+
+    private void initScreenshotLoadingDialog() {
+        screenshotLoadingDialog = LoadingDialog.newInstance(activity.getString(R.string.br_generating_screenshot), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ScreenshotUtils.setNextScreenshotCanceled(true);
+                reportButton.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private boolean isFragmentShown(String tag) {
