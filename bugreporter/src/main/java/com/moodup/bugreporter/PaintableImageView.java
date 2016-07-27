@@ -17,14 +17,13 @@ import java.util.ArrayList;
 
 public class PaintableImageView extends ImageView {
 
-    private static final float MINP = 0.25f;
-    private static final float MAXP = 0.75f;
-    private static final float TOUCH_TOLERANCE = 4;
-    public static final int GROUP_HORIZONTAL = 2;
-    public static final int GROUP_VERTICAL = 1;
+    protected static final int TYPE_FREE_DRAW = 0;
+    protected static final int TYPE_RECTANGLE_DRAW = 1;
 
-    public static final int TYPE_FREE_DRAW = 0;
-    public static final int TYPE_RECTANGLE_DRAW = 1;
+    private static final float TOUCH_TOLERANCE = 4;
+    private static final int GROUP_HORIZONTAL = 2;
+
+    private static final int GROUP_VERTICAL = 1;
 
     private Point[] points;
     private int groupId = -1;
@@ -74,7 +73,7 @@ public class PaintableImageView extends ImageView {
         points = new Point[4];
     }
 
-    public void setType(int type) {
+    protected void setType(int type) {
         drawActiveRectangle();
         this.type = type;
     }
@@ -405,35 +404,35 @@ public class PaintableImageView extends ImageView {
             this.id = count++;
         }
 
-        public int getCornerImageWidth() {
+        protected int getCornerImageWidth() {
             return bitmap.getWidth();
         }
 
-        public int getCornerImageHeight() {
+        protected int getCornerImageHeight() {
             return bitmap.getHeight();
         }
 
-        public Bitmap getBitmap() {
+        protected Bitmap getBitmap() {
             return bitmap;
         }
 
-        public int getX() {
+        protected int getX() {
             return point.x;
         }
 
-        public int getY() {
+        protected int getY() {
             return point.y;
         }
 
-        public int getID() {
+        protected int getID() {
             return id;
         }
 
-        public void setX(int x) {
+        protected void setX(int x) {
             point.x = x;
         }
 
-        public void setY(int y) {
+        protected void setY(int y) {
             point.y = y;
         }
     }
