@@ -240,7 +240,6 @@ public class PaintableImageView extends ImageView {
                         invalidate();
                         break;
                     case MotionEvent.ACTION_UP:
-                        rectanglesDrawTouchUp();
                         invalidate();
                         break;
                 }
@@ -248,10 +247,6 @@ public class PaintableImageView extends ImageView {
             return true;
         }
         return false;
-    }
-
-    private void rectanglesDrawTouchUp() {
-
     }
 
     private void rectanglesDrawTouchMove(float x, float y) {
