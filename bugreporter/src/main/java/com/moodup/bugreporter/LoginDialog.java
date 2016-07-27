@@ -74,7 +74,7 @@ public class LoginDialog extends DialogFragment {
                             @Override
                             public void done(HttpResponse data) {
                                 dialog.dismiss();
-                                if(data.isSuccessfull()) {
+                                if(data.isSuccessful()) {
                                     try {
                                         BugReporter.getInstance().saveTokens(data);
                                         ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_successfull), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);

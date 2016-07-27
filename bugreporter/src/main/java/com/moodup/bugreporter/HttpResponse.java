@@ -32,7 +32,7 @@ public class HttpResponse {
         this.responseCode = responseCode;
     }
 
-    protected boolean isSuccessfull() {
+    protected boolean isSuccessful() {
         return responseCode == HttpsURLConnection.HTTP_OK;
     }
 
