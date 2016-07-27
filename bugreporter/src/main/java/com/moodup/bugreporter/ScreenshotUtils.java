@@ -17,7 +17,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
-import android.util.Log;
 
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
@@ -94,7 +93,7 @@ public class ScreenshotUtils {
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         Image image = imageReader.acquireLatestImage();
                         
-                        final Bitmap bitmap = getBitmap(image);
+                        final Bitmap bitmap = trimBitmap(getBitmap(image));
 
                         activity.runOnUiThread(new Runnable() {
                             @Override
@@ -198,45 +197,93 @@ public class ScreenshotUtils {
         return null;
     }
 
-    public static Bitmap createTrimmedBitmap(Bitmap bmp) {
-
-        int imgHeight = bmp.getHeight();
-        int imgWidth = bmp.getWidth();
-        int smallX = 0, largeX = imgWidth, smallY = 0, largeY = imgHeight;
-        int left = imgWidth, right = imgWidth, top = imgHeight, bottom = imgHeight;
-        for(int i = 0; i < imgWidth; i++) {
-            for(int j = 0; j < imgHeight; j++) {
-                if(bmp.getPixel(i, j) != Color.TRANSPARENT) {
-                    if((i - smallX) < left) {
-                        left = (i - smallX);
-                    }
-                    if((largeX - i) < right) {
-                        right = (largeX - i);
-                    }
-                    if((j - smallY) < top) {
-                        top = (j - smallY);
-                    }
-                    if((largeY - j) < bottom) {
-                        bottom = (largeY - j);
-                    }
-                }
-            }
-        }
-        Log.d(ScreenshotUtils.class.getSimpleName(), "left:" + left + " right:" + right + " top:" + top + " bottom:" + bottom);
-        bmp = Bitmap.createBitmap(bmp, left, top, imgWidth - left - right, imgHeight - top - bottom);
-
-        return bmp;
-    }
-
-    public static void cancelNextScreenshot() {
+    protected static void cancelNextScreenshot() {
         nextScreenshotCanceled = true;
     }
 
-    interface ScreenshotListener {
-        void onScreenshotReady(Bitmap bitmap);
+    private static Bitmap trimBitmap(Bitmap bitmap) {
+        int imgHeight = bitmap.getHeight();
+        int imgWidth = bitmap.getWidth();
+
+        //TRIM WIDTH - LEFT
+        int startWidth = 0;
+        for(int x = 0; x < imgWidth; x++) {
+            if(startWidth == 0) {
+                for(int y = 0; y < imgHeight; y++) {
+                    if(bitmap.getPixel(x, y) != Color.TRANSPARENT) {
+                        startWidth = x;
+                        break;
+                    }
+                }
+            } else break;
+        }
+
+        //TRIM WIDTH - RIGHT
+        int endWidth = 0;
+        for(int x = imgWidth - 1; x >= 0; x--) {
+            if(endWidth == 0) {
+                for(int y = 0; y < imgHeight; y++) {
+                    if(bitmap.getPixel(x, y) != Color.TRANSPARENT) {
+                        endWidth = x;
+                        break;
+                    }
+                }
+            } else break;
+        }
+
+        //TRIM HEIGHT - TOP
+        int startHeight = 0;
+        for(int y = 0; y < imgHeight; y++) {
+            if(startHeight == 0) {
+                for(int x = 0; x < imgWidth; x++) {
+                    if(bitmap.getPixel(x, y) != Color.TRANSPARENT) {
+                        startHeight = y;
+                        break;
+                    }
+                }
+            } else break;
+        }
+
+        //TRIM HEIGHT - BOTTOM
+        int endHeight = 0;
+        for(int y = imgHeight - 1; y >= 0; y--) {
+            if(endHeight == 0) {
+                for(int x = 0; x < imgWidth; x++) {
+                    if(bitmap.getPixel(x, y) != Color.TRANSPARENT) {
+                        endHeight = y;
+                        break;
+                    }
+                }
+            } else break;
+        }
+
+        return Bitmap.createBitmap(
+                bitmap,
+                startWidth,
+                startHeight,
+                endWidth - startWidth,
+                endHeight - startHeight
+        );
+    }
+
+    protected static void trimBitmap(final Activity activity, final Bitmap bitmap, final ScreenshotListener listener) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                final Bitmap trimmed = trimBitmap(bitmap);
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        listener.onScreenshotReady(trimmed);
+                    }
+                });
+            }
+        });
     }
 
     //endregion
 
-
+    interface ScreenshotListener {
+        void onScreenshotReady(Bitmap bitmap);
+    }
 }

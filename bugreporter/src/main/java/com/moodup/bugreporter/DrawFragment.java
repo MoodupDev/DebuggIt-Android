@@ -181,20 +181,23 @@ public class DrawFragment extends DialogFragment {
     }
 
     private void uploadScreenshotAndGetUrl() {
-        Bitmap bmp = Utils.getBitmapFromView(surfaceRoot);
+        ScreenshotUtils.trimBitmap(getActivity(), Utils.getBitmapFromView(surfaceRoot), new ScreenshotUtils.ScreenshotListener() {
+            @Override
+            public void onScreenshotReady(Bitmap bitmap) {
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos);
 
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.PNG, 0, bos);
+                byte[] bitmapdata = bos.toByteArray();
 
-        byte[] bitmapdata = bos.toByteArray();
+                HashMap<String, String> params = new HashMap<>();
+                params.put("file", Base64.encodeToString(bitmapdata, Base64.URL_SAFE));
+                params.put("mimetype", ApiClient.MIME_TYPE_IMAGE);
+                params.put("package", getActivity().getPackageName());
 
-        HashMap<String, String> params = new HashMap<>();
-        params.put("file", Base64.encodeToString(bitmapdata, Base64.URL_SAFE));
-        params.put("mimetype", ApiClient.MIME_TYPE_IMAGE);
-        params.put("package", getActivity().getPackageName());
-
-        uploadImageAsyncTask = new UploadImageAsyncTask(params);
-        uploadImageAsyncTask.execute();
+                uploadImageAsyncTask = new UploadImageAsyncTask(params);
+                uploadImageAsyncTask.execute();
+            }
+        });
     }
 
     private class UploadImageAsyncTask extends AsyncTask<String, Void, String> {
