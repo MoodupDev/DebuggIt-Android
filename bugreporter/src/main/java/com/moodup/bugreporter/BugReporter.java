@@ -34,7 +34,8 @@ public class BugReporter {
     private View reportButton;
 
     private int activityOrientation;
-    private boolean waitingForShake = true;
+    private boolean waitingForShake = false;
+    private boolean initialized = false;
 
     private String clientId;
     private String clientSecret;
@@ -62,9 +63,13 @@ public class BugReporter {
         this.repoSlug = repoSlug;
         this.accountName = accountName;
         this.report = new Report();
+        this.initialized = true;
     }
 
     public void attach(final Activity activity) {
+        if(!initialized) {
+            throw new RuntimeException("BugReporter must be initialized with init(...) before using attach() method");
+        }
         this.activity = activity;
         this.activityOrientation = activity.getRequestedOrientation();
         addReportButton();
@@ -76,12 +81,22 @@ public class BugReporter {
         ShakeDetector.getInstance().register(activity, new ShakeListener() {
             @Override
             public void shakeDetected() {
-                if(waitingForShake && !isFragmentShown(DrawFragment.TAG)) {
+                if(shouldShowDrawFragment()) {
                     showDrawFragment();
                     waitingForShake = false;
                 }
             }
+
+            private boolean shouldShowDrawFragment() {
+                return waitingForShake
+                        && !isFragmentShown(DrawFragment.TAG)
+                        && !isFragmentShown(ReportFragment.TAG)
+                        && !isFragmentShown(LoadingDialog.TAG);
+            }
         });
+        if(hasAccessToken()) {
+            waitingForShake = true;
+        }
     }
 
     protected void authenticate(boolean refresh) {
@@ -207,17 +222,21 @@ public class BugReporter {
         if(!isFragmentShown(DrawFragment.TAG)) {
             Utils.lockScreenRotation(activity, Utils.isOrientationLandscape(activity) ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             reportButton.setVisibility(View.GONE);
-            final LoadingDialog dialog = LoadingDialog.newInstance(activity.getString(R.string.br_generating_screenshot));
-            dialog.show(((FragmentActivity) activity).getSupportFragmentManager(), LoadingDialog.TAG);
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && screenshotIntentData != null) {
-                ScreenshotUtils.takeScreenshot(activity, screenshotIntentData, new ScreenshotUtils.ScreenshotListener() {
-                    @Override
-                    public void onScreenshotReady(Bitmap bitmap) {
-                        showDrawFragment(bitmap, dialog);
-                    }
-                });
-            } else {
-                showDrawFragment(Utils.getBitmapFromView(activity.getWindow().getDecorView()), dialog);
+            try {
+                final LoadingDialog dialog = LoadingDialog.newInstance(activity.getString(R.string.br_generating_screenshot));
+                dialog.show(((FragmentActivity) activity).getSupportFragmentManager(), LoadingDialog.TAG);
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && screenshotIntentData != null) {
+                    ScreenshotUtils.takeScreenshot(activity, screenshotIntentData, new ScreenshotUtils.ScreenshotListener() {
+                        @Override
+                        public void onScreenshotReady(Bitmap bitmap) {
+                            showDrawFragment(bitmap, dialog);
+                        }
+                    });
+                } else {
+                    showDrawFragment(Utils.getBitmapFromView(activity.getWindow().getDecorView()), dialog);
+                }
+            } catch(IllegalStateException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -270,6 +289,9 @@ public class BugReporter {
     }
 
     public void getScreenshotPermission(int requestCode, int resultCode, Intent data) {
+        if(!initialized) {
+            throw new RuntimeException("BugReporter must be initialized with init(...) before using getScreenshotPermission() method");
+        }
         if(requestCode == ScreenshotUtils.SCREENSHOT_REQUEST_CODE) {
             if(resultCode == Activity.RESULT_OK) {
                 this.screenshotIntentData = data;

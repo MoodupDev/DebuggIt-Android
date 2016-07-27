@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 
 
 public class LoadingDialog extends DialogFragment {
@@ -21,6 +22,8 @@ public class LoadingDialog extends DialogFragment {
         CustomDialog dialog = new CustomDialog(getActivity(), R.style.BrCustomDialog);
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_loading, null);
         dialog.setContentView(v);
+
+        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         initViews(v);
 

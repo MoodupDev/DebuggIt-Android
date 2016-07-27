@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
@@ -16,9 +17,11 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
+import android.util.Log;
 
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
 public class ScreenshotUtils {
     //region Consts
@@ -89,12 +92,8 @@ public class ScreenshotUtils {
                 public void onImageAvailable(ImageReader reader) {
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         Image image = imageReader.acquireLatestImage();
-                        final Bitmap bitmap;
-                        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP || Utils.isOrientationLandscape(activity)) {
-                            bitmap = getBitmapFromImageForMarshmallow(image);
-                        } else {
-                            bitmap = getBitmapFromImage(image);
-                        }
+                        
+                        final Bitmap bitmap = getBitmap(image);
 
                         activity.runOnUiThread(new Runnable() {
                             @Override
@@ -147,8 +146,8 @@ public class ScreenshotUtils {
         int offset = 0;
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         ByteBuffer buffer = planes[0].getBuffer();
-        for (int i = 0; i < height; ++i) {
-            for (int j = 0; j < width; ++j) {
+        for(int i = 0; i < height; ++i) {
+            for(int j = 0; j < width; ++j) {
                 int pixel = 0;
                 pixel |= (buffer.get(offset) & 0xff) << 16;     // R
                 pixel |= (buffer.get(offset + 1) & 0xff) << 8;  // G
@@ -162,12 +161,65 @@ public class ScreenshotUtils {
         return bitmap;
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private static Bitmap getBitmap(Image image) {
+        final Image.Plane[] planes = image.getPlanes();
+        int width = image.getWidth();
+        int height = image.getHeight();
+        int pixelStride = planes[0].getPixelStride();
+        int rowStride = planes[0].getRowStride();
+        ByteBuffer buffer = planes[0].getBuffer();
+        IntBuffer intBuffer = buffer.asIntBuffer();
+        int[] pixels = new int[intBuffer.capacity()];
+        intBuffer.get(pixels);
+        for(int i = 0; i < pixels.length; i++) {
+            int red = Color.red(pixels[i]);
+            int green = Color.green(pixels[i]);
+            int blue = Color.blue(pixels[i]);
+            int alpha = Color.alpha(pixels[i]);
+            pixels[i] = Color.argb(alpha, blue, green, red); // red pixels = blue pixels, blue = red
+        }
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        bitmap.setPixels(pixels, 0, rowStride / pixelStride, 0, 0, width, height);
+        return bitmap;
+    }
+
     private static MediaProjection initMediaProjection(Activity activity, Intent data) {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             MediaProjectionManager projectionManager = (MediaProjectionManager) activity.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
             return projectionManager.getMediaProjection(Activity.RESULT_OK, data);
         }
         return null;
+    }
+
+    public static Bitmap createTrimmedBitmap(Bitmap bmp) {
+
+        int imgHeight = bmp.getHeight();
+        int imgWidth = bmp.getWidth();
+        int smallX = 0, largeX = imgWidth, smallY = 0, largeY = imgHeight;
+        int left = imgWidth, right = imgWidth, top = imgHeight, bottom = imgHeight;
+        for(int i = 0; i < imgWidth; i++) {
+            for(int j = 0; j < imgHeight; j++) {
+                if(bmp.getPixel(i, j) != Color.TRANSPARENT) {
+                    if((i - smallX) < left) {
+                        left = (i - smallX);
+                    }
+                    if((largeX - i) < right) {
+                        right = (largeX - i);
+                    }
+                    if((j - smallY) < top) {
+                        top = (j - smallY);
+                    }
+                    if((largeY - j) < bottom) {
+                        bottom = (largeY - j);
+                    }
+                }
+            }
+        }
+        Log.d(ScreenshotUtils.class.getSimpleName(), "left:" + left + " right:" + right + " top:" + top + " bottom:" + bottom);
+        bmp = Bitmap.createBitmap(bmp, left, top, imgWidth - left - right, imgHeight - top - bottom);
+
+        return bmp;
     }
 
     interface ScreenshotListener {
