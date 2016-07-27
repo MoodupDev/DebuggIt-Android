@@ -197,8 +197,8 @@ public class ScreenshotUtils {
         return null;
     }
 
-    protected static void cancelNextScreenshot() {
-        nextScreenshotCanceled = true;
+    protected static void setNextScreenshotCanceled(boolean canceled) {
+        nextScreenshotCanceled = canceled;
     }
 
     private static Bitmap trimBitmap(Bitmap bitmap) {

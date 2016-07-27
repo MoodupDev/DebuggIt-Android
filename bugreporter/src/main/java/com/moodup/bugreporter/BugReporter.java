@@ -223,25 +223,29 @@ public class BugReporter {
             Utils.lockScreenRotation(activity, Utils.isOrientationLandscape(activity) ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             reportButton.setVisibility(View.GONE);
             try {
-                final LoadingDialog dialog = LoadingDialog.newInstance(activity.getString(R.string.br_generating_screenshot), new View.OnClickListener() {
+                final LoadingDialog screenshotLoadingDialog = LoadingDialog.newInstance(activity.getString(R.string.br_generating_screenshot), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ScreenshotUtils.cancelNextScreenshot();
+                        ScreenshotUtils.setNextScreenshotCanceled(true);
                         reportButton.setVisibility(View.VISIBLE);
                     }
                 });
-                dialog.show(((FragmentActivity) activity).getSupportFragmentManager(), LoadingDialog.TAG);
+                screenshotLoadingDialog.show(((FragmentActivity) activity).getSupportFragmentManager(), LoadingDialog.TAG);
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && screenshotIntentData != null) {
+                    ScreenshotUtils.setNextScreenshotCanceled(false);
                     ScreenshotUtils.takeScreenshot(activity, screenshotIntentData, new ScreenshotUtils.ScreenshotListener() {
                         @Override
                         public void onScreenshotReady(Bitmap bitmap) {
                             if(bitmap != null) {
-                                showDrawFragment(bitmap, dialog);
+                                showDrawFragment(bitmap, screenshotLoadingDialog);
+                            } else {
+                                screenshotLoadingDialog.dismiss();
+                                reportButton.setVisibility(View.VISIBLE);
                             }
                         }
                     });
                 } else {
-                    showDrawFragment(Utils.getBitmapFromView(activity.getWindow().getDecorView()), dialog);
+                    showDrawFragment(Utils.getBitmapFromView(activity.getWindow().getDecorView()), screenshotLoadingDialog);
                 }
             } catch(IllegalStateException e) {
                 e.printStackTrace();
