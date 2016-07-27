@@ -90,7 +90,13 @@ public class DrawFragment extends DialogFragment {
         rubber = (ImageView) view.findViewById(R.id.draw_rubber);
         freeDraw = (ImageView) view.findViewById(R.id.draw_free);
         rectanglesDraw = (ImageView) view.findViewById(R.id.draw_rectangles);
-        dialog = LoadingDialog.newInstance(getString(R.string.br_loading_dialog_message_screenshot));
+        dialog = LoadingDialog.newInstance(getString(R.string.br_loading_dialog_message_screenshot), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadImageAsyncTask.cancel(true);
+                dialog.dismiss();
+            }
+        });
 
         initDrawingSurface();
         initButtons();
