@@ -21,6 +21,7 @@
     <com.moodup.bugreporter.MontserratTextView
         android:id="@+id/confirmation_dialog_message"
         style="@style/BrDialogText"
+        android:autoLink="web"
         tools:text="@string/br.confirmation.failure" />
 
     <View

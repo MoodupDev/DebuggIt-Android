@@ -41,6 +41,8 @@ public class BugReporter {
     private int activityOrientation;
     private boolean waitingForShake = false;
     private boolean initialized = false;
+    private boolean versionChecked = false;
+    private boolean versionSupported = false;
 
     private String clientId;
     private String clientSecret;
@@ -75,6 +77,15 @@ public class BugReporter {
     public void attach(final Activity activity) {
         if(!initialized) {
             throw new RuntimeException("BugReporter must be initialized with init(...) before using attach() method");
+        }
+        if(!versionChecked) {
+            new ApiClient(repoSlug, accountName, accessToken).checkVersion(BuildConfig.VERSION_NAME, new ApiClient.HttpHandler() {
+                @Override
+                public void done(HttpResponse data) {
+                    versionChecked = data.isSuccessful();
+                    versionSupported = Boolean.parseBoolean(data.getMessage());
+                }
+            });
         }
         this.activity = activity;
         this.activityOrientation = activity.getRequestedOrientation();
@@ -270,6 +281,15 @@ public class BugReporter {
     }
 
     private void startDrawFragment() {
+        if(versionChecked && !versionSupported) {
+            showUnsupportedVersionPopup();
+            waitingForShake = true;
+            return;
+        } else if(!versionChecked) {
+            showCantCheckVersionPopup();
+            waitingForShake = true;
+            return;
+        }
         if(!isFragmentShown(DrawFragment.TAG)) {
             Utils.lockScreenRotation(activity, Utils.isOrientationLandscape(activity) ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             reportButton.setVisibility(View.GONE);
@@ -322,6 +342,16 @@ public class BugReporter {
 
     private boolean hasAccessToken() {
         return !Utils.getString(activity, ACCESS_TOKEN, "").isEmpty();
+    }
+
+    private void showUnsupportedVersionPopup() {
+        ConfirmationDialog.newInstance(activity.getString(R.string.br_unsupported_version), true)
+                .show(((FragmentActivity) activity).getSupportFragmentManager(), ConfirmationDialog.TAG);
+    }
+
+    private void showCantCheckVersionPopup() {
+        ConfirmationDialog.newInstance(activity.getString(R.string.br_cant_check_version), true)
+                .show(((FragmentActivity) activity).getSupportFragmentManager(), ConfirmationDialog.TAG);
     }
 
     private BugReporter() {
