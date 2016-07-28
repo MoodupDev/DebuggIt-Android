@@ -103,8 +103,8 @@ public class BugReporter {
             return;
         }
         if(!hasAccessToken()) {
-            if(!isFragmentShown(LoginDialog.TAG)) {
-                LoginDialog.newInstance().show(((FragmentActivity) activity).getSupportFragmentManager(), LoginDialog.TAG);
+            if(!isFragmentShown(LoginFragment.TAG)) {
+                LoginFragment.newInstance().show(((FragmentActivity) activity).getSupportFragmentManager(), LoginFragment.TAG);
             }
         } else {
             accessToken = Utils.getString(activity, ACCESS_TOKEN, "");

@@ -11,10 +11,10 @@ import org.json.JSONException;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class LoginDialog extends DialogFragment {
+public class LoginFragment extends DialogFragment {
     //region Consts
 
-    public static final String TAG = LoginDialog.class.getSimpleName();
+    public static final String TAG = LoginFragment.class.getSimpleName();
 
     //endregion
 
@@ -30,7 +30,7 @@ public class LoginDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         CustomDialog dialog = new CustomDialog(getActivity(), R.style.BrCustomDialog);
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_login, null);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_login, null);
         dialog.setContentView(view);
 
         initView(view);
@@ -46,12 +46,12 @@ public class LoginDialog extends DialogFragment {
 
     //region Methods
 
-    public LoginDialog() {
+    public LoginFragment() {
         // Required empty public constructor
     }
 
-    protected static LoginDialog newInstance() {
-        return new LoginDialog();
+    protected static LoginFragment newInstance() {
+        return new LoginFragment();
     }
 
     private void initView(View view) {
