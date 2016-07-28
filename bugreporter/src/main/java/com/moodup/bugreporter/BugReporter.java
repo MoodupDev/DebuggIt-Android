@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Build;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -161,7 +162,7 @@ public class BugReporter {
             initReportButtonOnTouchListener(rootLayout);
         }
         if(!report.getScreensUrls().isEmpty()) {
-            ((ImageView) reportButton).setImageDrawable(activity.getResources().getDrawable(R.drawable.next_screenshoot));
+            ((ImageView) reportButton).setImageDrawable(ResourcesCompat.getDrawable(activity.getResources(), R.drawable.next_screenshoot, null));
         }
         initButtonPosition();
     }

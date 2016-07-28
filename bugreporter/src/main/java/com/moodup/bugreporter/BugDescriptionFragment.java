@@ -15,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -218,7 +219,7 @@ public class BugDescriptionFragment extends Fragment {
             public void onClick(View v) {
                 View rootView = getActivity().findViewById(android.R.id.content);
                 ImageView reportButton = (ImageView) rootView.findViewById(R.id.report_button);
-                reportButton.setImageDrawable(getResources().getDrawable(R.drawable.next_screenshoot));
+                reportButton.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.next_screenshoot, null));
                 ((DialogFragment) getParentFragment()).dismiss();
             }
         });

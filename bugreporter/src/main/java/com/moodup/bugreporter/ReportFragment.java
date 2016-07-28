@@ -11,14 +11,13 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
-
-import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -143,7 +142,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     private void resetReportButtonImage() {
         View rootView = getActivity().findViewById(android.R.id.content);
         ImageView reportButton = (ImageView) rootView.findViewById(R.id.report_button);
-        reportButton.setImageDrawable(getResources().getDrawable(R.drawable.logo_bug_small));
+        reportButton.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.logo_bug_small, null));
     }
 
     @Override
