@@ -77,7 +77,7 @@ public class LoginFragment extends DialogFragment {
                                 if(data.isSuccessful()) {
                                     try {
                                         BugReporter.getInstance().saveTokens(data);
-                                        ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_successfull), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                        ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                                     } catch(JSONException e) {
                                         e.printStackTrace();
                                         ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);

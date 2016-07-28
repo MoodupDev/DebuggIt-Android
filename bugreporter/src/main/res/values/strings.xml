@@ -30,7 +30,7 @@
     <string name="br.login.error">It\'s not possible to sign you in!\nCheck your Internet connection</string>
     <string name="br.login.info">Sign in to Bitbucket account\nand report bugs from the phone</string>
     <string name="br.login.loading.info">Signing in to account...</string>
-    <string name="br.login.successfull">Signed in!\nNow let\'s smash some bugs</string>
+    <string name="br.login.successful">Signed in!\nNow let\'s smash some bugs</string>
     <string name="br.generating.screenshot">Generating your screenshot...</string>
     <string name="br.unsupported.version">Your debugg.it version isn\'t the latest version, check debugg.it website</string>
     <string name="br.cant.check.version">Can\'t check is your debugg.it version supported!\nCheck your Internet connection</string>
