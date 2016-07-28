@@ -197,7 +197,7 @@ public class BugReporter {
                             if(!hasAccessToken()) {
                                 authenticate(false);
                             } else {
-                                showDrawFragment();
+                                startDrawFragment();
                             }
                         }
                         isMoving = false;
@@ -234,7 +234,7 @@ public class BugReporter {
             @Override
             public void shakeDetected() {
                 if(shouldShowDrawFragment()) {
-                    showDrawFragment();
+                    startDrawFragment();
                     waitingForShake = false;
                 }
             }
@@ -268,7 +268,7 @@ public class BugReporter {
         });
     }
 
-    private void showDrawFragment() {
+    private void startDrawFragment() {
         if(!isFragmentShown(DrawFragment.TAG)) {
             Utils.lockScreenRotation(activity, Utils.isOrientationLandscape(activity) ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             reportButton.setVisibility(View.GONE);
@@ -280,7 +280,7 @@ public class BugReporter {
                         @Override
                         public void onScreenshotReady(Bitmap bitmap) {
                             if(bitmap != null) {
-                                showDrawFragment(bitmap, screenshotLoadingDialog);
+                                showDrawFragment(bitmap);
                             } else {
                                 screenshotLoadingDialog.dismiss();
                                 reportButton.setVisibility(View.VISIBLE);
@@ -288,7 +288,7 @@ public class BugReporter {
                         }
                     });
                 } else {
-                    showDrawFragment(Utils.getBitmapFromView(activity.getWindow().getDecorView()), screenshotLoadingDialog);
+                    showDrawFragment(Utils.getBitmapFromView(activity.getWindow().getDecorView()));
                 }
             } catch(IllegalStateException e) {
                 e.printStackTrace();
@@ -311,8 +311,8 @@ public class BugReporter {
         return ((FragmentActivity) activity).getSupportFragmentManager().findFragmentByTag(tag) != null;
     }
 
-    private void showDrawFragment(Bitmap bitmap, LoadingDialog dialog) {
-        dialog.dismiss();
+    private void showDrawFragment(Bitmap bitmap) {
+        screenshotLoadingDialog.dismiss();
         DrawFragment.newInstance(bitmap)
                 .show(((FragmentActivity) activity).getSupportFragmentManager(), DrawFragment.TAG);
         reportButton.setVisibility(View.VISIBLE);
