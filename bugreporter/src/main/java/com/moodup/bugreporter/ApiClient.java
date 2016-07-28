@@ -36,6 +36,7 @@ public class ApiClient {
     public static final String MIME_TYPE_IMAGE = "image/png";
 
     public static final String HEROKU_UPLOAD_URL = "https://bugreporter.herokuapp.com/upload";
+    public static final String HEROKU_VERSION_URL = "https://bugreporter.herokuapp.com/version";
 
     private String repoSlug;
     private String accountName;
@@ -82,6 +83,10 @@ public class ApiClient {
         new ApiClient.AuthorizeAsyncTask(map, handler).execute(BitBucket.AUTHORIZE_URL);
     }
 
+    protected void checkVersion(String currentVersion, HttpHandler handler) {
+        new ApiClient.CheckSupportedVersion(currentVersion, handler).execute(HEROKU_VERSION_URL);
+    }
+
     protected class AuthorizeAsyncTask extends AsyncTask<String, Void, HttpResponse> {
 
         private HashMap<String, String> postParams;
@@ -124,6 +129,57 @@ public class ApiClient {
         protected void onPostExecute(HttpResponse result) {
             handler.done(result);
             super.onPostExecute(result);
+        }
+    }
+
+    protected static class CheckSupportedVersion extends AsyncTask<String, Void, HttpResponse> {
+
+        private String currentVersion;
+        private HttpHandler handler;
+
+        public CheckSupportedVersion(String currentVersion, HttpHandler handler) {
+            this.currentVersion = currentVersion;
+            this.handler = handler;
+        }
+
+        @Override
+        protected HttpResponse doInBackground(String... params) {
+            URL url;
+            try {
+                url = new URL(params[0]);
+
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(15000);
+                conn.setConnectTimeout(15000);
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+
+                conn.setRequestMethod("POST");
+
+                OutputStream os = conn.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+                HashMap<String, String> map = new HashMap<>();
+                map.put("version", currentVersion);
+                writer.write(Utils.getPostDataString(map));
+
+                writer.flush();
+                writer.close();
+                os.close();
+                int response = conn.getResponseCode();
+                if(response == HttpsURLConnection.HTTP_OK) {
+                    return new HttpResponse(response, Utils.getStringFromInputStream(conn.getInputStream()));
+                }
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+            return new HttpResponse();
+        }
+
+        @Override
+        protected void onPostExecute(HttpResponse httpResponse) {
+            handler.done(httpResponse);
+            super.onPostExecute(httpResponse);
         }
     }
 
