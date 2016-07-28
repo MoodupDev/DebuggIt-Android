@@ -267,6 +267,9 @@ public class ScreenshotUtils {
     }
 
     protected static void trimBitmap(final Activity activity, final Bitmap bitmap, final ScreenshotListener listener) {
+        if(handler == null) {
+            handler = new Handler();
+        }
         handler.post(new Runnable() {
             @Override
             public void run() {
