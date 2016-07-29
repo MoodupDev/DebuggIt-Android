@@ -99,7 +99,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                 report.getContent()
                         + Utils.getUrlAsStrings(report.getScreensUrls(), false)
                         + Utils.getUrlAsStrings(report.getAudioUrls(), true)
-                        + Utils.getDeviceInfo(getActivity()),
+                        + Utils.getDeviceInfoString(getActivity()),
                 report.getPriority(),
                 report.getKind(),
                 new ApiClient.HttpHandler() {

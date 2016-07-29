@@ -24,11 +24,16 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class Utils {
 
-    public static final String MEDIA_FILE_FORMAT = ".mpeg";
+    protected static final String MEDIA_FILE_FORMAT = ".mpeg";
+    private static final String API_VERSION_FORMAT = "%s (API %d)";
+    private static final String APPLICATION_VERSION_FORMAT = "%s (%d)";
+    private static final String MARKDOWN_BOLD = "**";
+    private static final String MARKDOWN_CELL_SEPARATOR = " | ";
 
     protected static void putString(Context context, String key, String value) {
         SharedPreferences prefs = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
@@ -108,7 +113,7 @@ public class Utils {
     protected static String getApplicationVersion(Activity activity) {
         try {
             PackageInfo info = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0);
-            return String.format("%s (%d)", info.versionName, info.versionCode);
+            return String.format(Locale.getDefault(), APPLICATION_VERSION_FORMAT, info.versionName, info.versionCode);
         } catch(PackageManager.NameNotFoundException e) {
             e.printStackTrace();
             return "";
@@ -118,30 +123,42 @@ public class Utils {
     protected static String getActiveFragmentName(Activity activity) {
         FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
         if(fragmentManager.getBackStackEntryCount() == 0) {
-            return "";
+            return activity.getClass().getSimpleName();
         }
         return fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
     }
+    
+    protected static String getDeviceInfoString(Activity activity) {
+        HashMap<String, String> deviceInfo = getDeviceInfo(activity);
 
-    // TODO: 31.05.2016 refactor
-    protected static String getDeviceInfo(Activity activity) {
         StringBuilder builder = new StringBuilder();
-        String activeFragmentName = getActiveFragmentName(activity);
-        builder.append("\n  |  |  | \n")
-                .append("--------|--------|------|-----\n")
-                .append("**Device** | ")
-                .append(getDeviceName())
-                .append(" | ")
-                .append("**Android version** | ")
-                .append(String.format("%s (API %d)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT))
+        builder.append(" | | | ")
                 .append("\n")
-                .append("**App version** | ")
-                .append(getApplicationVersion(activity))
-                .append(" | ")
-                .append("**Current view** | ")
-                .append(activeFragmentName.isEmpty() ? activity.getClass().getSimpleName() : activeFragmentName)
-                .append('\n');
+                .append("----|----|----|----")
+                .append("\n");
+
+        int lineCounter = 0;
+
+        for(Map.Entry<String, String> entry : deviceInfo.entrySet()) {
+            builder.append(MARKDOWN_BOLD)
+                    .append(entry.getKey())
+                    .append(MARKDOWN_BOLD)
+                    .append(MARKDOWN_CELL_SEPARATOR)
+                    .append(entry.getValue())
+                    .append(lineCounter % 2 == 1 ? "\n" : MARKDOWN_CELL_SEPARATOR);
+            lineCounter++;
+        }
+
         return builder.toString();
+    }
+
+    private static HashMap<String, String> getDeviceInfo(Activity activity) {
+        HashMap<String, String> deviceInfo = new HashMap<>();
+        deviceInfo.put("Device", getDeviceName());
+        deviceInfo.put("Android version", String.format(Locale.getDefault(), API_VERSION_FORMAT, Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
+        deviceInfo.put("Application version", getApplicationVersion(activity));
+        deviceInfo.put("Current view", getActiveFragmentName(activity));
+        return deviceInfo;
     }
 
     protected static boolean isOrientationLandscape(Context context) {
