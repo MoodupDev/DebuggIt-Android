@@ -246,8 +246,8 @@ public class BugReporter {
             @Override
             public void shakeDetected() {
                 if(shouldShowDrawFragment()) {
-                    startDrawFragment();
                     waitingForShake = false;
+                    startDrawFragment();
                 }
             }
 
