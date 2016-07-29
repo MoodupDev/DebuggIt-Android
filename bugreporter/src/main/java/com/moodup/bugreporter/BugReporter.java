@@ -127,6 +127,7 @@ public class BugReporter {
         accessToken = json.getString(ACCESS_TOKEN);
         Utils.putString(activity, ACCESS_TOKEN, accessToken);
         Utils.putString(activity, REFRESH_TOKEN, json.getString(REFRESH_TOKEN));
+        waitingForShake = true;
     }
 
     protected String getRepoSlug() {
@@ -245,7 +246,9 @@ public class BugReporter {
         ShakeDetector.getInstance().register(activity, new ShakeListener() {
             @Override
             public void shakeDetected() {
-                if(shouldShowDrawFragment()) {
+                if(!hasAccessToken()) {
+                    authenticate(false);
+                } else if(shouldShowDrawFragment()) {
                     waitingForShake = false;
                     startDrawFragment();
                 }
