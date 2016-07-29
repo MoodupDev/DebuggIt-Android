@@ -5,10 +5,16 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_margin="@dimen/br.big.margin"
-    android:background="@drawable/main_background"
     android:gravity="center"
-    android:orientation="vertical"
-    android:paddingTop="@dimen/br.big.padding">
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/main_background"
+        android:gravity="center"
+        android:paddingTop="@dimen/br.big.padding"
+        android:orientation="vertical">
 
     <ImageView
         android:id="@+id/confirmation_dialog_icon"
@@ -41,5 +47,9 @@
         android:textColor="@drawable/dialog_text_color"
         android:textSize="@dimen/br.text.size.regular"
         android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <include layout="@layout/created_by_view"/>
 
 </LinearLayout>
