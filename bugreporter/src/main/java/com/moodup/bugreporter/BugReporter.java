@@ -322,7 +322,9 @@ public class BugReporter {
         screenshotLoadingDialog = LoadingDialog.newInstance(activity.getString(R.string.br_generating_screenshot), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ScreenshotUtils.setNextScreenshotCanceled(true);
+                if(screenshotIntentData != null) {
+                    ScreenshotUtils.setNextScreenshotCanceled(true);
+                }
                 reportButton.setVisibility(View.VISIBLE);
             }
         });
