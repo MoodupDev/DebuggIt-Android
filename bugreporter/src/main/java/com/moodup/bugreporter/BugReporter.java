@@ -242,15 +242,17 @@ public class BugReporter {
         });
     }
 
-    private void registerShakeDetector(Activity activity) {
+    private void registerShakeDetector(final Activity activity) {
         ShakeDetector.getInstance().register(activity, new ShakeListener() {
             @Override
             public void shakeDetected() {
-                if(!hasAccessToken()) {
-                    authenticate(false);
-                } else if(shouldShowDrawFragment()) {
-                    waitingForShake = false;
-                    startDrawFragment();
+                if(Utils.isActivityRunning(activity)) {
+                    if(!hasAccessToken()) {
+                        authenticate(false);
+                    } else if(shouldShowDrawFragment()) {
+                        waitingForShake = false;
+                        startDrawFragment();
+                    }
                 }
             }
 

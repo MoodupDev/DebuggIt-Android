@@ -245,4 +245,8 @@ public class Utils {
         return builder.toString();
     }
 
+    protected static boolean isActivityRunning(Activity activity) {
+        return activity.getWindow().getDecorView().isShown();
+    }
+
 }
