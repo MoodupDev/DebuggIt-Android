@@ -1,9 +1,6 @@
 package com.moodup.bugreporter;
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -67,7 +64,6 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setApplicationVersion();
                 if(BugReporter.getInstance().getReport().getTitle().isEmpty()) {
                     ConfirmationDialog.newInstance(getString(R.string.br_title_empty), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                 } else {
@@ -120,17 +116,6 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                     }
                 }
         );
-    }
-
-    private void setApplicationVersion() {
-        Activity activity = BugReporter.getInstance().getActivity();
-        PackageManager manager = activity.getPackageManager();
-        try {
-            PackageInfo info = manager.getPackageInfo(activity.getPackageName(), 0);
-            BugReporter.getInstance().getReport().setApplicationVersion(String.format("%s (version code: %d)", info.versionName, info.versionCode));
-        } catch(PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     private void initViewPager(View view) {

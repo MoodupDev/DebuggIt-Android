@@ -11,7 +11,6 @@ public class Report {
     private String stepsToReproduce;
     private String actualBehaviour;
     private String expectedBehaviour;
-    private String applicationVersion;
     private List<String> audioUrls;
     private List<String> screensUrls;
 
@@ -76,14 +75,6 @@ public class Report {
 
     protected void setExpectedBehaviour(String expectedBehaviour) {
         this.expectedBehaviour = expectedBehaviour;
-    }
-
-    protected String getApplicationVersion() {
-        return applicationVersion == null ? "" : applicationVersion;
-    }
-
-    protected void setApplicationVersion(String version) {
-        this.applicationVersion = version;
     }
 
     protected void setAudioUrls(List<String> audioUrls) {
