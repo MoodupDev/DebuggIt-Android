@@ -101,7 +101,9 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                 new ApiClient.HttpHandler() {
                     @Override
                     public void done(HttpResponse data) {
-                        dialog.dismiss();
+                        if(!data.isUnauthorized()) {
+                            dialog.dismiss();
+                        }
                         if(data.isSuccessful()) {
                             BugReporter.getInstance().getReport().clear();
                             resetReportButtonImage();
