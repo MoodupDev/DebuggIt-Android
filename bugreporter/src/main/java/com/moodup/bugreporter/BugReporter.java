@@ -309,7 +309,7 @@ public class BugReporter {
                         }
                     });
                 } else {
-                    showDrawFragment(Utils.getBitmapFromView(activity.getWindow().getDecorView()));
+                    showDrawFragment(Falcon.takeScreenshotBitmap(activity));
                 }
             } catch(IllegalStateException e) {
                 e.printStackTrace();
