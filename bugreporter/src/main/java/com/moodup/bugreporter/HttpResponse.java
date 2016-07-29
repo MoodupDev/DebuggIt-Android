@@ -15,8 +15,9 @@ public class HttpResponse {
     }
 
     protected String getMessage() {
-        if (message == null)
+        if(message == null) {
             return "";
+        }
         return message;
     }
 
@@ -36,4 +37,7 @@ public class HttpResponse {
         return responseCode == HttpsURLConnection.HTTP_OK;
     }
 
+    protected boolean isUnauthorized() {
+        return responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED;
+    }
 }
