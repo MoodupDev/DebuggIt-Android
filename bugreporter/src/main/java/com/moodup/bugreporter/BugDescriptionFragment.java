@@ -52,6 +52,7 @@ public class BugDescriptionFragment extends Fragment {
     private MediaPlayer mediaPlayer;
 
     private View lastPlayButton;
+    private TextWatcher contentTextWatcher;
 
     public static BugDescriptionFragment newInstance(int position) {
         BugDescriptionFragment fragment = new BugDescriptionFragment();
@@ -61,6 +62,19 @@ public class BugDescriptionFragment extends Fragment {
 
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public void onDestroyView() {
+        if(bugTitle != null) {
+            bugTitle.removeTextChangedListener(contentTextWatcher);
+        }
+        if(actualBehaviour != null) {
+            actualBehaviour.removeTextChangedListener(contentTextWatcher);
+            stepsToReproduce.removeTextChangedListener(contentTextWatcher);
+            expectedBehaviour.removeTextChangedListener(contentTextWatcher);
+        }
+        super.onDestroyView();
     }
 
     @Nullable
@@ -90,22 +104,6 @@ public class BugDescriptionFragment extends Fragment {
     private void initFirstPage(View view) {
         mediaPlayer = new MediaPlayer();
         bugTitle = (MontserratEditText) view.findViewById(R.id.bug_title);
-        bugTitle.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                BugReporter.getInstance().getReport().setTitle(bugTitle.getText().toString());
-            }
-        });
         bugTitle.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -155,6 +153,7 @@ public class BugDescriptionFragment extends Fragment {
 
         initBugKindButtons(view);
         initBugPriorityButtons(view);
+        initTextWatchers(true);
     }
 
     public void requestRecordPermissions(Activity activity) {
@@ -390,11 +389,11 @@ public class BugDescriptionFragment extends Fragment {
         stepsToReproduce = (MontserratEditText) view.findViewById(R.id.steps_text);
         actualBehaviour = (MontserratEditText) view.findViewById(R.id.actual_behaviour_text);
         expectedBehaviour = (MontserratEditText) view.findViewById(R.id.expected_behaviour_text);
-        initTextWatchers();
+        initTextWatchers(false);
     }
 
-    private void initTextWatchers() {
-        TextWatcher watcher = new TextWatcher() {
+    private void initTextWatchers(boolean firstPage) {
+        contentTextWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -407,7 +406,9 @@ public class BugDescriptionFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(s == stepsToReproduce.getEditableText()) {
+                if(bugTitle != null && s == bugTitle.getEditableText()) {
+                    BugReporter.getInstance().getReport().setTitle(bugTitle.getText().toString());
+                } else if(s == stepsToReproduce.getEditableText()) {
                     BugReporter.getInstance().getReport().setStepsToReproduce(stepsToReproduce.getText().toString());
                 } else if(s == actualBehaviour.getEditableText()) {
                     BugReporter.getInstance().getReport().setActualBehaviour(actualBehaviour.getText().toString());
@@ -416,9 +417,13 @@ public class BugDescriptionFragment extends Fragment {
                 }
             }
         };
-        stepsToReproduce.addTextChangedListener(watcher);
-        actualBehaviour.addTextChangedListener(watcher);
-        expectedBehaviour.addTextChangedListener(watcher);
+        if(firstPage) {
+            bugTitle.addTextChangedListener(contentTextWatcher);
+        } else {
+            stepsToReproduce.addTextChangedListener(contentTextWatcher);
+            actualBehaviour.addTextChangedListener(contentTextWatcher);
+            expectedBehaviour.addTextChangedListener(contentTextWatcher);
+        }
     }
 
     protected class DownloadImagesTask extends AsyncTask<String, Void, Bitmap> {
