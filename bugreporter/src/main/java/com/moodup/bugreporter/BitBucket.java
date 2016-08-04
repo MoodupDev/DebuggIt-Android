@@ -7,17 +7,13 @@ public interface BitBucket {
     String ISSUES_URL = "https://api.bitbucket.org/1.0/repositories/%1$s/%2$s/issues";
 
     // PRIORITIES
-    String PRIORITY_TRIVIAL = "trivial";
     String PRIORITY_MINOR = "minor";
     String PRIORITY_MAJOR = "major";
     String PRIORITY_CRITICAL = "critical";
-    String PRIORITY_BLOCKER = "blocker";
 
     // ISSUE KINDS
     String KIND_BUG = "bug";
     String KIND_ENHANCEMENT = "enhancement";
-    String KIND_PROPOSAL = "proposal";
-    String KIND_TASK = "task";
 
     // AUTH
     String GRANT_TYPE_PASSWORD = "password";
