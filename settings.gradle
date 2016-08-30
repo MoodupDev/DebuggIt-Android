@@ -1,1 +1,1 @@
-include ':app', ':bugreporter'
+include ':app', ':debuggit'

@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/br.top.bar.height">
 
-            <com.mooduplabs.bugreporter.MontserratTextView
+            <com.mooduplabs.debuggit.MontserratTextView
                 android:id="@+id/report_cancel"
                 style="@style/BrBarTextButton"
                 android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
                 android:layout_centerInParent="true"
                 android:src="@drawable/circles"/>
 
-            <com.mooduplabs.bugreporter.MontserratTextView
+            <com.mooduplabs.debuggit.MontserratTextView
                 android:id="@+id/report_confirm"
                 style="@style/BrBarTextButton"
                 android:layout_width="@dimen/br.button.send.width"

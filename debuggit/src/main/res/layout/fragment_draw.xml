@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="@dimen/br.confirmation.dialog.width.landscape"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/br.big.margin"
-                android:background="@drawable/main_background"
-                android:orientation="vertical">
+    android:layout_width="@dimen/br.confirmation.dialog.width"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="@dimen/br.big.margin"
+    android:background="@drawable/main_background"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/br.top.bar.height">
 
-        <com.mooduplabs.bugreporter.MontserratTextView
+        <com.mooduplabs.debuggit.MontserratTextView
             android:id="@+id/draw_cancel"
             style="@style/BrBarTextButton"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="@dimen/br.report.button.margin.horizontal"
             android:text="@string/br.button.cancel" />
 
-        <com.mooduplabs.bugreporter.MontserratTextView
+        <com.mooduplabs.debuggit.MontserratTextView
             android:id="@+id/draw_confirm"
             style="@style/BrBarTextButton"
             android:layout_alignParentRight="true"
@@ -46,13 +46,13 @@
 
         <ImageView
             android:id="@+id/image_surface"
-            style="@style/BrScreenshotImageLandscape"
+            style="@style/BrScreenshotImage"
             android:background="@drawable/screenshot_background"
             android:scaleType="fitXY" />
 
-        <com.mooduplabs.bugreporter.PaintableImageView
+        <com.mooduplabs.debuggit.PaintableImageView
             android:id="@+id/draw_surface"
-            style="@style/BrScreenshotImageLandscape"
+            style="@style/BrScreenshotImage"
             android:background="@android:color/transparent" />
     </RelativeLayout>
 
