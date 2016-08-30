@@ -189,7 +189,7 @@ public class BugDescriptionFragment extends Fragment {
                             } else {
                                 priority = BitBucket.PRIORITY_CRITICAL;
                             }
-                            BugReporter.getInstance().getReport().setPriority(priority);
+                            DebuggIt.getInstance().getReport().setPriority(priority);
                         }
                         deselectOtherButtons(v, priorityButtons);
                     }
@@ -202,7 +202,7 @@ public class BugDescriptionFragment extends Fragment {
 
     private void initReportItems(View view) {
         itemsContainer = (LinearLayout) view.findViewById(R.id.bug_items_container);
-        BugReporter reporter = BugReporter.getInstance();
+        DebuggIt reporter = DebuggIt.getInstance();
 
         for (String screenshotUrl : reporter.getReport().getScreensUrls()) {
             addScreenshotMiniature(itemsContainer, screenshotUrl);
@@ -227,7 +227,7 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     private void initReport() {
-        Report report = BugReporter.getInstance().getReport();
+        Report report = DebuggIt.getInstance().getReport();
         if (!report.getTitle().isEmpty()) {
             bugTitle.setText(report.getTitle());
             bugTitle.setSelection(report.getTitle().length());
@@ -255,7 +255,7 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     private void initReportContent() {
-        Report report = BugReporter.getInstance().getReport();
+        Report report = DebuggIt.getInstance().getReport();
         if (!report.getActualBehaviour().isEmpty()) {
             actualBehaviour.setText(report.getActualBehaviour());
         }
@@ -278,7 +278,7 @@ public class BugDescriptionFragment extends Fragment {
             public void onClick(View v) {
                 parent.removeView(itemScreenParent);
                 parent.invalidate();
-                BugReporter.getInstance().getReport().getScreensUrls().remove(screenUrl);
+                DebuggIt.getInstance().getReport().getScreensUrls().remove(screenUrl);
             }
         });
 
@@ -308,7 +308,7 @@ public class BugDescriptionFragment extends Fragment {
             public void onClick(View v) {
                 parent.removeView(itemAudioParent);
                 parent.invalidate();
-                BugReporter.getInstance().getReport().getAudioUrls().remove(audioUrl);
+                DebuggIt.getInstance().getReport().getAudioUrls().remove(audioUrl);
             }
         });
 
@@ -368,7 +368,7 @@ public class BugDescriptionFragment extends Fragment {
                     if(!v.isSelected()) {
                         v.setSelected(!v.isSelected());
                         if (v.isSelected()) {
-                            BugReporter.getInstance().getReport().setKind(v.getId() == R.id.kind_bug_button ? BitBucket.KIND_BUG : BitBucket.KIND_ENHANCEMENT);
+                            DebuggIt.getInstance().getReport().setKind(v.getId() == R.id.kind_bug_button ? BitBucket.KIND_BUG : BitBucket.KIND_ENHANCEMENT);
                         }
                         deselectOtherButtons(v, kindButtons);
                     }
@@ -407,13 +407,13 @@ public class BugDescriptionFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if(bugTitle != null && s == bugTitle.getEditableText()) {
-                    BugReporter.getInstance().getReport().setTitle(bugTitle.getText().toString());
+                    DebuggIt.getInstance().getReport().setTitle(bugTitle.getText().toString());
                 } else if(s == stepsToReproduce.getEditableText()) {
-                    BugReporter.getInstance().getReport().setStepsToReproduce(stepsToReproduce.getText().toString());
+                    DebuggIt.getInstance().getReport().setStepsToReproduce(stepsToReproduce.getText().toString());
                 } else if(s == actualBehaviour.getEditableText()) {
-                    BugReporter.getInstance().getReport().setActualBehaviour(actualBehaviour.getText().toString());
+                    DebuggIt.getInstance().getReport().setActualBehaviour(actualBehaviour.getText().toString());
                 } else {
-                    BugReporter.getInstance().getReport().setExpectedBehaviour(expectedBehaviour.getText().toString());
+                    DebuggIt.getInstance().getReport().setExpectedBehaviour(expectedBehaviour.getText().toString());
                 }
             }
         };

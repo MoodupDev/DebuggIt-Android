@@ -157,7 +157,7 @@ public class AudioCaptureFragment extends DialogFragment {
         @Override
         protected void onPostExecute(String url) {
             dialog.dismiss();
-            BugReporter.getInstance().getReport().getAudioUrls().add(url);
+            DebuggIt.getInstance().getReport().getAudioUrls().add(url);
             listener.onRecordUploaded(url);
             dismiss();
             super.onPostExecute(url);

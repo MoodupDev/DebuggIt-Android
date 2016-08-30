@@ -66,8 +66,8 @@ public class LoginFragment extends DialogFragment {
                 final LoadingDialog dialog = LoadingDialog.newInstance(getContext().getString(R.string.br_login_loading_info));
                 dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
                 apiClient.login(
-                        BugReporter.getInstance().getClientId(),
-                        BugReporter.getInstance().getClientSecret(),
+                        DebuggIt.getInstance().getClientId(),
+                        DebuggIt.getInstance().getClientSecret(),
                         email.getText().toString(),
                         password.getText().toString(),
                         new ApiClient.HttpHandler() {
@@ -76,7 +76,7 @@ public class LoginFragment extends DialogFragment {
                                 dialog.dismiss();
                                 if(data.isSuccessful()) {
                                     try {
-                                        BugReporter.getInstance().saveTokens(data);
+                                        DebuggIt.getInstance().saveTokens(data);
                                         ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                                     } catch(JSONException e) {
                                         e.printStackTrace();
@@ -96,8 +96,8 @@ public class LoginFragment extends DialogFragment {
 
     private void initApiClient() {
         apiClient = new ApiClient(
-                BugReporter.getInstance().getRepoSlug(),
-                BugReporter.getInstance().getAccountName(),
+                DebuggIt.getInstance().getRepoSlug(),
+                DebuggIt.getInstance().getAccountName(),
                 ""
         );
     }

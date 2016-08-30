@@ -65,7 +65,7 @@ public class DrawFragment extends DialogFragment {
         if (uploadImageAsyncTask != null) {
             uploadImageAsyncTask.cancel(true);
         }
-        Utils.lockScreenRotation(getActivity(), BugReporter.getInstance().getActivityOrientation());
+        Utils.lockScreenRotation(getActivity(), DebuggIt.getInstance().getActivityOrientation());
         super.onDestroyView();
     }
 
@@ -217,7 +217,7 @@ public class DrawFragment extends DialogFragment {
         protected void onPostExecute(String s) {
             dialog.dismiss();
             if(s != null && !s.isEmpty()) {
-                BugReporter.getInstance().getReport().getScreensUrls().add(s);
+                DebuggIt.getInstance().getReport().getScreensUrls().add(s);
                 new ReportFragment().show(getActivity().getSupportFragmentManager(), ReportFragment.TAG);
                 dismiss();
             } else {

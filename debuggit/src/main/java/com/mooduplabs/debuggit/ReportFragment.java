@@ -64,7 +64,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(BugReporter.getInstance().getReport().getTitle().isEmpty()) {
+                if(DebuggIt.getInstance().getReport().getTitle().isEmpty()) {
                     ConfirmationDialog.newInstance(getString(R.string.br_title_empty), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                 } else {
                     dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
@@ -76,7 +76,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BugReporter.getInstance().getReport().clear();
+                DebuggIt.getInstance().getReport().clear();
                 resetReportButtonImage();
                 dismiss();
             }
@@ -84,11 +84,11 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     }
 
     private void sendIssue() {
-        Report report = BugReporter.getInstance().getReport();
+        Report report = DebuggIt.getInstance().getReport();
         ApiClient apiClient = new ApiClient(
-                BugReporter.getInstance().getRepoSlug(),
-                BugReporter.getInstance().getAccountName(),
-                BugReporter.getInstance().getAccessToken()
+                DebuggIt.getInstance().getRepoSlug(),
+                DebuggIt.getInstance().getAccountName(),
+                DebuggIt.getInstance().getAccessToken()
         );
         apiClient.addIssue(
                 report.getTitle(),
@@ -105,7 +105,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                             dialog.dismiss();
                         }
                         if(data.isSuccessful()) {
-                            BugReporter.getInstance().getReport().clear();
+                            DebuggIt.getInstance().getReport().clear();
                             resetReportButtonImage();
                             ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_SUCCESS).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                         } else if(data.isUnauthorized()) {

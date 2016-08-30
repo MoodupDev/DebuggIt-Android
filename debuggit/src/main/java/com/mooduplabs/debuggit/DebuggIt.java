@@ -19,7 +19,7 @@ import com.mooduplabs.debuggit.ShakeDetector.ShakeListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class BugReporter {
+public class DebuggIt {
 
     // region Consts
 
@@ -32,7 +32,7 @@ public class BugReporter {
 
     // region Fields
 
-    private static BugReporter instance;
+    private static DebuggIt instance;
 
     private Activity activity;
     private Intent screenshotIntentData;
@@ -57,9 +57,9 @@ public class BugReporter {
 
     // region Methods
 
-    public static BugReporter getInstance() {
+    public static DebuggIt getInstance() {
         if(instance == null) {
-            instance = new BugReporter();
+            instance = new DebuggIt();
         }
 
         return instance;
@@ -76,7 +76,7 @@ public class BugReporter {
 
     public void attach(final Activity activity) {
         if(!initialized) {
-            throw new RuntimeException("BugReporter must be initialized with init(...) before using attach() method");
+            throw new RuntimeException("debugg.it must be initialized with init(...) before using attach() method");
         }
         if(!versionChecked) {
             new ApiClient(repoSlug, accountName, accessToken).checkVersion(BuildConfig.VERSION_NAME, new ApiClient.HttpHandler() {
@@ -97,7 +97,7 @@ public class BugReporter {
 
     public void getScreenshotPermission(int requestCode, int resultCode, Intent data) {
         if(!initialized) {
-            throw new RuntimeException("BugReporter must be initialized with init(...) before using getScreenshotPermission() method");
+            throw new RuntimeException("debugg.it must be initialized with init(...) before using getScreenshotPermission() method");
         }
         if(requestCode == ScreenshotUtils.SCREENSHOT_REQUEST_CODE) {
             if(resultCode == Activity.RESULT_OK) {
@@ -361,7 +361,7 @@ public class BugReporter {
                 .show(((FragmentActivity) activity).getSupportFragmentManager(), ConfirmationDialog.TAG);
     }
 
-    private BugReporter() {
+    private DebuggIt() {
         // one instance
     }
 

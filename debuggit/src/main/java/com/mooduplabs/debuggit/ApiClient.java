@@ -216,7 +216,7 @@ public class ApiClient {
                 is = conn.getInputStream();
                 return new HttpResponse(response, Utils.getStringFromInputStream(is));
             } else if(response == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-                BugReporter.getInstance().authenticate(true);
+                DebuggIt.getInstance().authenticate(true);
                 return new HttpResponse(response, "");
             } else if(response == HttpURLConnection.HTTP_FORBIDDEN) {
                 return new HttpResponse(response, Utils.getStringFromInputStream(conn.getErrorStream()));

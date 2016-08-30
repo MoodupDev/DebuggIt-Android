@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.mooduplabs.debuggit.BugReporter;
+import com.mooduplabs.debuggit.DebuggIt;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,12 +31,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        BugReporter.getInstance().attach(this);
+        DebuggIt.getInstance().attach(this);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        BugReporter.getInstance().getScreenshotPermission(requestCode, resultCode, data);
+        DebuggIt.getInstance().getScreenshotPermission(requestCode, resultCode, data);
     }
 }
