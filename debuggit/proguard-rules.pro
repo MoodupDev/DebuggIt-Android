@@ -16,7 +16,7 @@
 #   public *;
 #}
 
--keep class com.moodup.bugreporter.BugReporter {
+-keep class com.mooduplabs.debuggit.DebuggIt {
     public static <methods>;
     public void init(...);
     public void attach(...);
