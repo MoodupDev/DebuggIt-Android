@@ -6,7 +6,7 @@
     android:background="@drawable/item_background"
     android:gravity="center">
 
-    <com.moodup.bugreporter.MontserratTextView
+    <com.mooduplabs.bugreporter.MontserratTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"

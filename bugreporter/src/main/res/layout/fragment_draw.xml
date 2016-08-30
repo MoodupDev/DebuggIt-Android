@@ -12,14 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/br.top.bar.height">
 
-        <com.moodup.bugreporter.MontserratTextView
+        <com.mooduplabs.bugreporter.MontserratTextView
             android:id="@+id/draw_cancel"
             style="@style/BrBarTextButton"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="@dimen/br.report.button.margin.horizontal"
             android:text="@string/br.button.cancel" />
 
-        <com.moodup.bugreporter.MontserratTextView
+        <com.mooduplabs.bugreporter.MontserratTextView
             android:id="@+id/draw_confirm"
             style="@style/BrBarTextButton"
             android:layout_alignParentRight="true"
@@ -50,7 +50,7 @@
             android:background="@drawable/screenshot_background"
             android:scaleType="fitXY" />
 
-        <com.moodup.bugreporter.PaintableImageView
+        <com.mooduplabs.bugreporter.PaintableImageView
             android:id="@+id/draw_surface"
             style="@style/BrScreenshotImage"
             android:background="@android:color/transparent" />

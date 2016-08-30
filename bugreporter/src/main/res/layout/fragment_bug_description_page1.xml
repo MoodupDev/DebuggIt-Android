@@ -16,12 +16,12 @@
             android:layout_gravity="center_horizontal"
             android:padding="@dimen/br.report.layout.padding">
 
-            <com.moodup.bugreporter.MontserratTextView
+            <com.mooduplabs.bugreporter.MontserratTextView
                 android:id="@+id/kind_bug_button"
                 style="@style/BrReportButton"
                 android:text="@string/br.kind.bug"/>
 
-            <com.moodup.bugreporter.MontserratTextView
+            <com.mooduplabs.bugreporter.MontserratTextView
                 android:id="@+id/kind_enhancement_button"
                 style="@style/BrReportButton"
                 android:text="@string/br.kind.enhancement"/>
@@ -34,17 +34,17 @@
             android:layout_gravity="center_horizontal"
             android:padding="@dimen/br.report.layout.padding">
 
-            <com.moodup.bugreporter.MontserratTextView
+            <com.mooduplabs.bugreporter.MontserratTextView
                 android:id="@+id/priority_low_button"
                 style="@style/BrReportButton"
                 android:text="@string/br.priority.low"/>
 
-            <com.moodup.bugreporter.MontserratTextView
+            <com.mooduplabs.bugreporter.MontserratTextView
                 android:id="@+id/priority_medium_button"
                 style="@style/BrReportButton"
                 android:text="@string/br.priority.medium"/>
 
-            <com.moodup.bugreporter.MontserratTextView
+            <com.mooduplabs.bugreporter.MontserratTextView
                 android:id="@+id/priority_high_button"
                 style="@style/BrReportButton"
                 android:text="@string/br.priority.high"/>
@@ -57,7 +57,7 @@
             android:padding="@dimen/br.report.layout.padding.horizontal"
             android:weightSum="7">
 
-            <com.moodup.bugreporter.MontserratEditText
+            <com.mooduplabs.bugreporter.MontserratEditText
                 android:id="@+id/bug_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

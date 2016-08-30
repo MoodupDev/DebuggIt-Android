@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/record_dot"/>
 
-        <com.moodup.bugreporter.MontserratTextView
+        <com.mooduplabs.bugreporter.MontserratTextView
             android:id="@+id/timer_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

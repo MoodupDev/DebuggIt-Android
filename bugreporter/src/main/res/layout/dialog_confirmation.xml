@@ -24,7 +24,7 @@
             android:layout_marginTop="@dimen/br.small.margin"
             android:src="@drawable/thumbs_up"/>
 
-        <com.moodup.bugreporter.MontserratTextView
+        <com.mooduplabs.bugreporter.MontserratTextView
             android:id="@+id/confirmation_dialog_message"
             style="@style/BrDialogText"
             android:autoLink="web"
@@ -36,7 +36,7 @@
             android:layout_marginTop="@dimen/br.small.margin"
             android:background="@color/br.app.gray"/>
 
-        <com.moodup.bugreporter.MontserratTextView
+        <com.mooduplabs.bugreporter.MontserratTextView
             android:id="@+id/confirmation_dialog_ok_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
