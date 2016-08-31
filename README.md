@@ -1,4 +1,4 @@
-# BugReporter #
+# debugg.it #
 
 ## What is this repository for? ##
 
@@ -6,11 +6,40 @@ This is a library-project, which provides a tool to report your Android applicat
 
 ## How do I get set up? ##
 
+### As module ###
+
 Clone this repo.
 
 Add this library into your project as module (`File -> New -> Import Module`).
 
-Init BugReporter in your `Application` class
+### As `aar` & gradle dependency ###
+
+Download `debuggit.aar` file from [here](http://debugg.it/downloads/debuggit.aar).
+
+Put your file in `libs` directory (`app/libs`). If you don't have this directory, create it.
+
+Add these lines to your `build.gradle`:
+```groovy
+repositories {
+    ...
+    flatDir {
+       dirs 'libs'
+    }
+}
+
+...
+
+dependencies {
+    ...
+    compile(name:'debuggit', ext:'aar')
+
+}
+
+```
+
+### Initialize debugg.it in your project ###
+
+Init debugg.it in your `Application` class
 
 ```java
 public class App extends Application {
@@ -18,7 +47,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        BugReporter.getInstance().init("clientId", "secret", "repoName", "ownerName");
+        DebuggIt.getInstance().init("clientId", "secret", "repoName", "ownerName");
     }
 }
 ```
@@ -33,7 +62,7 @@ Owner name it's your team (or user) name.
 
 For example, if you want to add issues to this repository, your `init()` should looks like
 ```java
-BugReporter.getInstance().init("Jz9hKhxwAWgRNcS6m8", "dzyS7K5mnvcEWFtsS6veUM8RDJxRzwXQ", "bugreporter", "moodup");
+DebuggIt.getInstance().init("Jz9hKhxwAWgRNcS6m8", "dzyS7K5mnvcEWFtsS6veUM8RDJxRzwXQ", "bugreporter", "moodup");
 ```
 
 Attach BugReporter to your activities in `onStart()` method (it's perfect if your activities extends some `BaseActivity` class)
@@ -51,7 +80,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        BugReporter.getInstance().attach(this);
+        DebuggIt.getInstance().attach(this);
     }
 
 }
@@ -66,9 +95,9 @@ You can take screenshot with your custom or system dialogs for devices with **An
 @Override
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
-    BugReporter.getInstance().getScreenshotPermission(requestCode, resultCode, data);
+    DebuggIt.getInstance().getScreenshotPermission(requestCode, resultCode, data);
 }
 
 ```
 
-## That's all. Your BugReporter is ready to work. ##
+## That's all. Your debugg.it is ready to work. ##

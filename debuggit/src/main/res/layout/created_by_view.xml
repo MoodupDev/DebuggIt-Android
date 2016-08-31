@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.mooduplabs.debuggit.MontserratTextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:textAlignment="center"
+    android:autoLink="web"
+    android:padding="@dimen/br.created.by.padding"
+    android:textColorLink="@android:color/white"
+    android:textColor="@android:color/white"
+    android:text="@string/br.created.by.text">
+
+</com.mooduplabs.debuggit.MontserratTextView>

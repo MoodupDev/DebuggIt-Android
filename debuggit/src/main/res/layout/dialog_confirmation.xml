@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:layout_margin="@dimen/br.big.margin"
+              android:gravity="center"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/main_background"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/br.big.padding">
+
+        <ImageView
+            android:id="@+id/confirmation_dialog_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/br.big.margin"
+            android:layout_marginTop="@dimen/br.small.margin"
+            android:src="@drawable/thumbs_up"/>
+
+        <com.mooduplabs.debuggit.MontserratTextView
+            android:id="@+id/confirmation_dialog_message"
+            style="@style/BrDialogText"
+            android:autoLink="web"
+            tools:text="@string/br.confirmation.failure"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/br.divider.height"
+            android:layout_marginTop="@dimen/br.small.margin"
+            android:background="@color/br.app.gray"/>
+
+        <com.mooduplabs.debuggit.MontserratTextView
+            android:id="@+id/confirmation_dialog_ok_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/br.regular.padding"
+            android:text="@android:string/ok"
+            android:textAllCaps="true"
+            android:textColor="@drawable/dialog_text_color"
+            android:textSize="@dimen/br.text.size.regular"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+
+    <include layout="@layout/created_by_view"/>
+
+</LinearLayout>

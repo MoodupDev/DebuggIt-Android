@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="br.tiny.margin">4dp</dimen>
+    <dimen name="br.small.margin">8dp</dimen>
+    <dimen name="br.tiny.padding">4dp</dimen>
+    <dimen name="br.small.padding">8dp</dimen>
+    <dimen name="br.regular.padding">12dp</dimen>
+    <dimen name="br.big.padding">16dp</dimen>
+    <dimen name="br.big.margin">24dp</dimen>
+    <dimen name="br.text.size.regular">16sp</dimen>
+    <dimen name="br.text.size.small">12sp</dimen>
+    <dimen name="br.kind.button.radius">5dp</dimen>
+    <dimen name="br.report.button.padding">16dp</dimen>
+    <dimen name="br.report.button.margin.horizontal">10dp</dimen>
+    <dimen name="br.report.layout.padding">10dp</dimen>
+    <dimen name="br.report.layout.padding.horizontal">15dp</dimen>
+    <dimen name="br.confirmation.dialog.width">280dp</dimen>
+    <dimen name="br.confirmation.dialog.width.landscape">400dp</dimen>
+    <dimen name="br.report.item.height">130dp</dimen>
+    <dimen name="br.report.item.width">80dp</dimen>
+    <dimen name="br.draw.line.width">3dp</dimen>
+    <dimen name="br.stop.icon.size">60dp</dimen>
+    <dimen name="br.button.send.width">70dp</dimen>
+    <dimen name="br.button.margin.horizontal">8dp</dimen>
+    <dimen name="br.top.bar.height">50dp</dimen>
+    <dimen name="br.created.by.padding">10dp</dimen>
+    <dimen name="br.divider.height">1dp</dimen>
+</resources>

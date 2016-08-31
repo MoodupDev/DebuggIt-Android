@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/br.bar.background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="@dimen/br.report.layout.padding">
+
+            <com.mooduplabs.debuggit.MontserratTextView
+                android:id="@+id/kind_bug_button"
+                style="@style/BrReportButton"
+                android:text="@string/br.kind.bug"/>
+
+            <com.mooduplabs.debuggit.MontserratTextView
+                android:id="@+id/kind_enhancement_button"
+                style="@style/BrReportButton"
+                android:text="@string/br.kind.enhancement"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="@dimen/br.report.layout.padding">
+
+            <com.mooduplabs.debuggit.MontserratTextView
+                android:id="@+id/priority_low_button"
+                style="@style/BrReportButton"
+                android:text="@string/br.priority.low"/>
+
+            <com.mooduplabs.debuggit.MontserratTextView
+                android:id="@+id/priority_medium_button"
+                style="@style/BrReportButton"
+                android:text="@string/br.priority.medium"/>
+
+            <com.mooduplabs.debuggit.MontserratTextView
+                android:id="@+id/priority_high_button"
+                style="@style/BrReportButton"
+                android:text="@string/br.priority.high"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="@dimen/br.report.layout.padding.horizontal"
+            android:weightSum="7">
+
+            <com.mooduplabs.debuggit.MontserratEditText
+                android:id="@+id/bug_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:hint="@string/br.bug.description.hint"
+                android:textColorHint="@color/br.kind.button.disabled"
+                android:textSize="@dimen/br.text.size.regular"/>
+
+            <ImageView
+                android:id="@+id/record_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:src="@drawable/button_micro"/>
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/br.small.margin"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:id="@+id/bug_items_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"/>
+        </HorizontalScrollView>
+    </LinearLayout>
+</ScrollView>
