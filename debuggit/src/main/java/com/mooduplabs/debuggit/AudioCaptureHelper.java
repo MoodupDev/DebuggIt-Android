@@ -1,13 +1,11 @@
 package com.mooduplabs.debuggit;
 
 import android.media.MediaRecorder;
-import android.util.Log;
 
 import java.io.IOException;
 
 public class AudioCaptureHelper {
 
-    private static final String LOG_TAG = "AudioRecordTest";
     private MediaRecorder mediaRecorder = null;
     private String filePath = null;
     private boolean recording = false;
@@ -31,7 +29,7 @@ public class AudioCaptureHelper {
         try {
             mediaRecorder.prepare();
         } catch (IOException e) {
-            Log.e(LOG_TAG, "prepare() failed");
+            // ignored
         }
         mediaRecorder.start();
     }
