@@ -38,6 +38,11 @@ public class BugDescriptionFragment extends Fragment {
 
     public static final String POSITION = "position";
     public static final int RECORD_PERMISSIONS_REQUEST = 145;
+    private static final int PRIORITY_MINOR_INDEX = 0;
+    private static final int PRIORITY_MAJOR_INDEX = 1;
+    private static final int PRIORITY_CRITICAL_INDEX = 2;
+    private static final int KIND_BUG_INDEX = 0;
+    private static final int KIND_ENHANCEMENT_INDEX = 1;
 
     private LinearLayout itemsContainer;
     private ImageView recordButton;
@@ -228,30 +233,51 @@ public class BugDescriptionFragment extends Fragment {
 
     private void initReport() {
         Report report = DebuggIt.getInstance().getReport();
+        initTitle(report);
+        initButtonsState(report);
+    }
+
+    private void initTitle(Report report) {
         if (!report.getTitle().isEmpty()) {
             bugTitle.setText(report.getTitle());
             bugTitle.setSelection(report.getTitle().length());
         }
-        if (!report.getKind().isEmpty()) {
-            kindButtons[(report.getKind().equalsIgnoreCase(BitBucket.KIND_BUG) ? 0 : 1)].setSelected(true);
-        } else {
-            kindButtons[0].setSelected(true);
-            report.setKind(BitBucket.KIND_BUG);
-        }
+    }
+
+    private void initButtonsState(Report report) {
+        initKindButtonState(report);
+        initPriorityButtonState(report);
+    }
+
+    private void initPriorityButtonState(Report report) {
         if (!report.getPriority().isEmpty()) {
-            int index;
-            if (report.getPriority().equalsIgnoreCase(BitBucket.PRIORITY_MINOR)) {
-                index = 0;
-            } else if (report.getPriority().equalsIgnoreCase(BitBucket.PRIORITY_MAJOR)) {
-                index = 1;
-            } else {
-                index = 2;
-            }
-            priorityButtons[index].setSelected(true);
+            priorityButtons[getSelectedPriorityButtonIndex(report)].setSelected(true);
         } else {
-            priorityButtons[1].setSelected(true);
+            priorityButtons[PRIORITY_CRITICAL_INDEX].setSelected(true);
             report.setPriority(BitBucket.PRIORITY_MAJOR);
         }
+    }
+
+    private void initKindButtonState(Report report) {
+        if (!report.getKind().isEmpty()) {
+            kindButtons[getSelectedKindButtonIndex(report)].setSelected(true);
+        } else {
+            kindButtons[KIND_BUG_INDEX].setSelected(true);
+            report.setKind(BitBucket.KIND_BUG);
+        }
+    }
+
+    private int getSelectedKindButtonIndex(Report report) {
+        return report.getKind().equalsIgnoreCase(BitBucket.KIND_BUG) ? KIND_BUG_INDEX : KIND_ENHANCEMENT_INDEX;
+    }
+
+    private int getSelectedPriorityButtonIndex(Report report) {
+        if (report.getPriority().equalsIgnoreCase(BitBucket.PRIORITY_MINOR)) {
+            return PRIORITY_MINOR_INDEX;
+        } else if (report.getPriority().equalsIgnoreCase(BitBucket.PRIORITY_MAJOR)) {
+            return PRIORITY_MAJOR_INDEX;
+        }
+        return PRIORITY_CRITICAL_INDEX;
     }
 
     private void initReportContent() {
