@@ -5,6 +5,11 @@ import java.util.List;
 
 public class Report {
 
+    private static final String STEPS_TO_REPRODUCE_TITLE = "**Steps to reproduce**: ";
+    private static final String ACTUAL_BEHAVIOUR_TITLE = "**Actual behaviour**: ";
+    private static final String EXPECTED_BEHAVIOUR_TITLE = "**Expected behaviour**: ";
+    private static final String END_LINE = "\n\n";
+
     private String title;
     private String kind;
     private String priority;
@@ -28,9 +33,9 @@ public class Report {
     }
 
     protected String getContent() {
-        return "**Steps to reproduce**: " + getStepsToReproduce() + "\n\n" +
-                "**Actual behaviour**: " + getActualBehaviour() + "\n\n" +
-                "**Expected behaviour**: " + getExpectedBehaviour() + "\n\n";
+        return STEPS_TO_REPRODUCE_TITLE + getStepsToReproduce() + END_LINE +
+                ACTUAL_BEHAVIOUR_TITLE + getActualBehaviour() + END_LINE +
+                EXPECTED_BEHAVIOUR_TITLE + getExpectedBehaviour() + END_LINE;
     }
 
     protected List<String> getAudioUrls() {
