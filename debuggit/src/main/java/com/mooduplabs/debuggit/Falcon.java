@@ -126,12 +126,12 @@ public final class Falcon {
         int maxHeight = Integer.MIN_VALUE;
 
         for (ViewRootData viewRoot : viewRoots) {
-            if (viewRoot._winFrame.right > maxWidth) {
-                maxWidth = viewRoot._winFrame.right;
+            if (viewRoot.winFrame.right > maxWidth) {
+                maxWidth = viewRoot.winFrame.right;
             }
 
-            if (viewRoot._winFrame.bottom > maxHeight) {
-                maxHeight = viewRoot._winFrame.bottom;
+            if (viewRoot.winFrame.bottom > maxHeight) {
+                maxHeight = viewRoot.winFrame.bottom;
             }
         }
 
@@ -167,16 +167,16 @@ public final class Falcon {
 
     private static void drawRootToBitmap(ViewRootData config, Bitmap bitmap) {
         // now only dim supported
-        if ((config._layoutParams.flags & FLAG_DIM_BEHIND) == FLAG_DIM_BEHIND) {
+        if ((config.layoutParams.flags & FLAG_DIM_BEHIND) == FLAG_DIM_BEHIND) {
             Canvas dimCanvas = new Canvas(bitmap);
 
-            int alpha = (int) (255 * config._layoutParams.dimAmount);
+            int alpha = (int) (255 * config.layoutParams.dimAmount);
             dimCanvas.drawARGB(alpha, 0, 0, 0);
         }
 
         Canvas canvas = new Canvas(bitmap);
-        canvas.translate(config._winFrame.left, config._winFrame.top);
-        config._view.draw(canvas);
+        canvas.translate(config.winFrame.left, config.winFrame.top);
+        config.view.draw(canvas);
     }
 
     private static void writeBitmap(Bitmap bitmap, File toFile) throws IOException {
@@ -261,17 +261,17 @@ public final class Falcon {
         int minTop = Integer.MAX_VALUE;
         int minLeft = Integer.MAX_VALUE;
         for (ViewRootData rootView : rootViews) {
-            if (rootView._winFrame.top < minTop) {
-                minTop = rootView._winFrame.top;
+            if (rootView.winFrame.top < minTop) {
+                minTop = rootView.winFrame.top;
             }
 
-            if (rootView._winFrame.left < minLeft) {
-                minLeft = rootView._winFrame.left;
+            if (rootView.winFrame.left < minLeft) {
+                minLeft = rootView.winFrame.left;
             }
         }
 
         for (ViewRootData rootView : rootViews) {
-            rootView._winFrame.offset(-minLeft, -minTop);
+            rootView.winFrame.offset(-minLeft, -minTop);
         }
     }
 
@@ -399,26 +399,26 @@ public final class Falcon {
     }
 
     private static class ViewRootData {
-        private final View _view;
-        private final Rect _winFrame;
-        private final LayoutParams _layoutParams;
+        private final View view;
+        private final Rect winFrame;
+        private final LayoutParams layoutParams;
 
         ViewRootData(View view, Rect winFrame, LayoutParams layoutParams) {
-            _view = view;
-            _winFrame = winFrame;
-            _layoutParams = layoutParams;
+            this.view = view;
+            this.winFrame = winFrame;
+            this.layoutParams = layoutParams;
         }
 
         boolean isDialogType() {
-            return _layoutParams.type == LayoutParams.TYPE_APPLICATION;
+            return layoutParams.type == LayoutParams.TYPE_APPLICATION;
         }
 
         boolean isActivityType() {
-            return _layoutParams.type == LayoutParams.TYPE_BASE_APPLICATION;
+            return layoutParams.type == LayoutParams.TYPE_BASE_APPLICATION;
         }
 
         Context context() {
-            return _view.getContext();
+            return view.getContext();
         }
     }
 
