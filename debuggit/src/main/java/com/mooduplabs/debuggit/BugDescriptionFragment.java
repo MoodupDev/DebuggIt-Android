@@ -108,6 +108,14 @@ public class BugDescriptionFragment extends Fragment {
 
     private void initFirstPage(View view) {
         mediaPlayer = new MediaPlayer();
+        initBugTitle(view);
+        initRecordButton(view);
+        initBugKindButtons(view);
+        initBugPriorityButtons(view);
+        initTextWatchers(true);
+    }
+
+    private void initBugTitle(View view) {
         bugTitle = (MontserratEditText) view.findViewById(R.id.bug_title);
         bugTitle.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -121,6 +129,9 @@ public class BugDescriptionFragment extends Fragment {
                 return false;
             }
         });
+    }
+
+    private void initRecordButton(View view) {
         recordButton = (ImageView) view.findViewById(R.id.record_button);
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,15 +161,6 @@ public class BugDescriptionFragment extends Fragment {
                 }
             }
         });
-
-        kindButtons = new MontserratTextView[] {
-                (MontserratTextView) view.findViewById(R.id.kind_bug_button),
-                (MontserratTextView) view.findViewById(R.id.kind_enhancement_button)
-        };
-
-        initBugKindButtons(view);
-        initBugPriorityButtons(view);
-        initTextWatchers(true);
     }
 
     public void requestRecordPermissions(Activity activity) {
@@ -207,13 +209,13 @@ public class BugDescriptionFragment extends Fragment {
 
     private void initReportItems(View view) {
         itemsContainer = (LinearLayout) view.findViewById(R.id.bug_items_container);
-        DebuggIt reporter = DebuggIt.getInstance();
+        Report report = DebuggIt.getInstance().getReport();
 
-        for (String screenshotUrl : reporter.getReport().getScreensUrls()) {
+        for (String screenshotUrl : report.getScreensUrls()) {
             addScreenshotMiniature(itemsContainer, screenshotUrl);
         }
 
-        for (String audioUrl : reporter.getReport().getAudioUrls()) {
+        for (String audioUrl : report.getAudioUrls()) {
             addAudioMiniature(itemsContainer, audioUrl);
         }
 
