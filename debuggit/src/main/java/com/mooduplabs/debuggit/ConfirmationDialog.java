@@ -9,9 +9,13 @@ import android.widget.ImageView;
 
 public class ConfirmationDialog extends DialogFragment {
     //region Consts
+
     protected static final String TAG = ConfirmationDialog.class.getSimpleName();
     protected static final int TYPE_FAILURE = 0;
     protected static final int TYPE_SUCCESS = 1;
+    private static final String MESSAGE = "message";
+    private static final String TYPE = "type";
+
     //endregion
     //region Fields
     //endregion
@@ -40,7 +44,7 @@ public class ConfirmationDialog extends DialogFragment {
         ConfirmationDialog dialog = new ConfirmationDialog();
 
         Bundle bundle = new Bundle();
-        bundle.putInt("type", type);
+        bundle.putInt(TYPE, type);
 
         dialog.setArguments(bundle);
 
@@ -51,15 +55,15 @@ public class ConfirmationDialog extends DialogFragment {
         ConfirmationDialog dialog = new ConfirmationDialog();
 
         Bundle bundle = new Bundle();
-        bundle.putString("text", message);
-        bundle.putInt("type", error ? TYPE_FAILURE : TYPE_SUCCESS);
+        bundle.putString(MESSAGE, message);
+        bundle.putInt(TYPE, error ? TYPE_FAILURE : TYPE_SUCCESS);
 
         dialog.setArguments(bundle);
         return dialog;
     }
 
     private void initViews(View view) {
-        final int type = getArguments().getInt("type", TYPE_SUCCESS);
+        final int type = getArguments().getInt(TYPE, TYPE_SUCCESS);
 
         ImageView icon = (ImageView) view.findViewById(R.id.confirmation_dialog_icon);
         MontserratTextView message = (MontserratTextView) view.findViewById(R.id.confirmation_dialog_message);
@@ -76,7 +80,7 @@ public class ConfirmationDialog extends DialogFragment {
         });
 
         icon.setRotation(type == TYPE_SUCCESS ? 0 : 180.0f);
-        String text = getArguments().getString("text", "");
+        String text = getArguments().getString(MESSAGE, "");
         if(text.isEmpty()) {
             message.setText(getString(type == TYPE_SUCCESS ? R.string.br_confirmation_success : R.string.br_confirmation_failure));
         } else {
