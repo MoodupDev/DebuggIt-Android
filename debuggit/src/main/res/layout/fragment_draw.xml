@@ -31,7 +31,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/br.divider.height"
         android:layout_below="@id/top_bar"
         android:background="@color/br.app.gray" />
 
@@ -58,7 +58,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/br.divider.height"
         android:layout_above="@+id/bottom_bar"
         android:layout_marginTop="@dimen/br.small.margin"
         android:background="@color/br.app.gray" />
