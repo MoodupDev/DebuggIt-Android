@@ -187,10 +187,10 @@ public class DrawFragment extends DialogFragment {
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos);
 
-                byte[] bitmapdata = bos.toByteArray();
+                byte[] bitmapData = bos.toByteArray();
 
                 HashMap<String, String> params = new HashMap<>();
-                params.put("file", Base64.encodeToString(bitmapdata, Base64.URL_SAFE));
+                params.put("file", Base64.encodeToString(bitmapData, Base64.URL_SAFE));
                 params.put("mimetype", ApiClient.MIME_TYPE_IMAGE);
                 params.put("package", getActivity().getPackageName());
 
