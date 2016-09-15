@@ -1,5 +1,5 @@
 <resources>
-    <string name="br.lib.name">Bugreporter</string>
+    <string name="br.lib.name">debugg.it</string>
     <string name="br.button.cancel">Cancel</string>
     <string name="br.button.send">Send</string>
 
@@ -35,6 +35,7 @@
     <string name="br.unsupported.version">Your debugg.it version isn\'t the latest version, check debugg.it website</string>
     <string name="br.cant.check.version">Can\'t check is your debugg.it version supported!\nCheck your Internet connection</string>
     <string name="br.created.by.text">Created by www.mooduplabs.com</string>
+    <string name="br.error.invalid.repo.owner.issue.tracker">Invalid repository/owner or issue tracker isn\'t enabled in your repository settings</string>
 
 
 </resources>
