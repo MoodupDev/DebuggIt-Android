@@ -218,7 +218,9 @@ public class ApiClient {
             } else if(response == HttpsURLConnection.HTTP_UNAUTHORIZED) {
                 DebuggIt.getInstance().authenticate(true);
                 return new HttpResponse(response, "");
-            } else if(response == HttpURLConnection.HTTP_FORBIDDEN) {
+            } else if(response == HttpsURLConnection.HTTP_FORBIDDEN) {
+                return new HttpResponse(response, Utils.getStringFromInputStream(conn.getErrorStream()));
+            } else if(response == HttpsURLConnection.HTTP_BAD_REQUEST) {
                 return new HttpResponse(response, Utils.getStringFromInputStream(conn.getErrorStream()));
             } else {
                 return new HttpResponse(response, "");

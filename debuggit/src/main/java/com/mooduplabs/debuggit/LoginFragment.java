@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -77,13 +78,13 @@ public class LoginFragment extends DialogFragment {
                                 if(data.isSuccessful()) {
                                     try {
                                         DebuggIt.getInstance().saveTokens(data);
-                                        ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                        ConfirmationDialog.newInstance(getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                                     } catch(JSONException e) {
                                         e.printStackTrace();
-                                        ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                        ConfirmationDialog.newInstance(getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                                     }
                                 } else if(data.getResponseCode() == HttpsURLConnection.HTTP_BAD_REQUEST) {
-                                    ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error_wrong_credentials), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                    ConfirmationDialog.newInstance(getErrorMessage(data), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                                 } else {
                                     ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                                 }
@@ -92,6 +93,16 @@ public class LoginFragment extends DialogFragment {
                 );
             }
         });
+    }
+
+    private String getErrorMessage(HttpResponse data) {
+        try {
+            JSONObject error = new JSONObject(data.getMessage());
+            return error.getString("error_description");
+        } catch(JSONException e) {
+            e.printStackTrace();
+            return getString(R.string.br_login_error_wrong_credentials);
+        }
     }
 
     private void initApiClient() {
