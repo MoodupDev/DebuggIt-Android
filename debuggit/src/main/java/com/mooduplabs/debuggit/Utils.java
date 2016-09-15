@@ -12,6 +12,9 @@ import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.View;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -263,6 +266,15 @@ public class Utils {
 
     protected static boolean isActivityRunning(Activity activity) {
         return activity.getWindow().getDecorView().isShown();
+    }
+
+    protected static String getBitbucketErrorMessage(Context context, HttpResponse data, int defaultResStringId) {
+        try {
+            JSONObject error = new JSONObject(data.getMessage());
+            return error.getString("error_description");
+        } catch(JSONException e) {
+            return data.getMessage().isEmpty() ? context.getString(defaultResStringId) : data.getMessage();
+        }
     }
 
 }
