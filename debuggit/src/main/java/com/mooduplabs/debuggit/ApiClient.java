@@ -6,7 +6,6 @@ import android.util.Base64;
 import org.json.JSONObject;
 
 import java.io.BufferedWriter;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -185,7 +184,6 @@ public class ApiClient {
 
     private HttpResponse getHttpResponse(String[] params, HashMap<String, String> postParams, boolean authorization) {
         URL url;
-        InputStream is;
         try {
             url = new URL(params[0]);
 
@@ -213,17 +211,12 @@ public class ApiClient {
             int response = conn.getResponseCode();
 
             if(response == HttpsURLConnection.HTTP_OK) {
-                is = conn.getInputStream();
-                return new HttpResponse(response, Utils.getStringFromInputStream(is));
-            } else if(response == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-                DebuggIt.getInstance().authenticate(true);
-                return new HttpResponse(response, "");
-            } else if(response == HttpsURLConnection.HTTP_FORBIDDEN) {
-                return new HttpResponse(response, Utils.getStringFromInputStream(conn.getErrorStream()));
-            } else if(response == HttpsURLConnection.HTTP_BAD_REQUEST) {
-                return new HttpResponse(response, Utils.getStringFromInputStream(conn.getErrorStream()));
+                return new HttpResponse(response, Utils.getStringFromInputStream(conn.getInputStream()));
             } else {
-                return new HttpResponse(response, "");
+                if(response == HttpsURLConnection.HTTP_UNAUTHORIZED) {
+                    DebuggIt.getInstance().authenticate(true);
+                }
+                return new HttpResponse(response, Utils.getStringFromInputStream(conn.getErrorStream()));
             }
         } catch(Exception e) {
             e.printStackTrace();
