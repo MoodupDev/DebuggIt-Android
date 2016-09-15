@@ -55,6 +55,4 @@
             android:layout_height="400dp"
             android:layout_below="@+id/top_bar"/>
     </RelativeLayout>
-
-    <include layout="@layout/created_by_view"/>
 </LinearLayout>

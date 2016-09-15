@@ -102,6 +102,4 @@
                 android:textSize="@dimen/br.text.size.regular"/>
         </LinearLayout>
     </ScrollView>
-
-    <include layout="@layout/created_by_view"/>
 </LinearLayout>

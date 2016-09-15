@@ -51,6 +51,4 @@
 
     </LinearLayout>
 
-    <include layout="@layout/created_by_view"/>
-
 </LinearLayout>
