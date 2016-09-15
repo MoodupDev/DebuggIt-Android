@@ -96,6 +96,8 @@ public class Report {
 
     protected void clear() {
         title = "";
+        kind = "";
+        priority = "";
         stepsToReproduce = "";
         actualBehaviour = "";
         expectedBehaviour = "";
