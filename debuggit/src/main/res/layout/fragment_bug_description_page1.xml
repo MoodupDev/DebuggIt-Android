@@ -58,13 +58,12 @@
             android:weightSum="7">
 
             <com.mooduplabs.debuggit.MontserratEditText
+                style="@style/BrBaseEditText"
                 android:id="@+id/bug_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="6"
-                android:hint="@string/br.bug.description.hint"
-                android:textColorHint="@color/br.kind.button.disabled"
-                android:textSize="@dimen/br.text.size.regular"/>
+                android:hint="@string/br.bug.description.hint"/>
 
             <ImageView
                 android:id="@+id/record_button"

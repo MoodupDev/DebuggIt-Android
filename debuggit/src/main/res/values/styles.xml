@@ -38,22 +38,28 @@
         <item name="android:textSize">@dimen/br.text.size.small</item>
     </style>
 
-    <style name="BrReportContentEditText">
+    <style name="BrBaseText">
+        <item name="android:textColor">@color/br.dialog.text.color</item>
+        <item name="android:textSize">@dimen/br.text.size.regular</item>
+    </style>
+
+    <style name="BrBaseEditText" parent="BrBaseText">
+        <item name="android:textColorHint">@color/br.kind.button.disabled</item>
+    </style>
+
+    <style name="BrReportContentEditText" parent="BrBaseEditText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">top</item>
-        <item name="android:textColorHint">@color/br.kind.button.disabled</item>
     </style>
 
-    <style name="BrDialogText">
+    <style name="BrDialogText" parent="BrBaseText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">@dimen/br.big.margin</item>
         <item name="android:layout_marginTop">@dimen/br.small.margin</item>
         <item name="android:gravity">center</item>
-        <item name="android:textColor">@color/br.dialog.text.color</item>
-        <item name="android:textSize">@dimen/br.text.size.regular</item>
         <item name="android:textStyle">bold</item>
     </style>
 
