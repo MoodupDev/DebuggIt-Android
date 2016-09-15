@@ -255,7 +255,7 @@ public class BugDescriptionFragment extends Fragment {
         if (!report.getPriority().isEmpty()) {
             priorityButtons[getSelectedPriorityButtonIndex(report)].setSelected(true);
         } else {
-            priorityButtons[PRIORITY_CRITICAL_INDEX].setSelected(true);
+            priorityButtons[PRIORITY_MAJOR_INDEX].setSelected(true);
             report.setPriority(BitBucket.PRIORITY_MAJOR);
         }
     }
