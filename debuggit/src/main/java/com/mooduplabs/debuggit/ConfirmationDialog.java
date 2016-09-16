@@ -18,6 +18,7 @@ public class ConfirmationDialog extends DialogFragment {
 
     //endregion
     //region Fields
+    private View.OnClickListener onOkClickListener;
     //endregion
 
     //region Override Methods
@@ -62,6 +63,10 @@ public class ConfirmationDialog extends DialogFragment {
         return dialog;
     }
 
+    protected void setOnOkClickListener(View.OnClickListener listener) {
+        onOkClickListener = listener;
+    }
+
     private void initViews(View view) {
         final int type = getArguments().getInt(TYPE, TYPE_SUCCESS);
 
@@ -74,6 +79,9 @@ public class ConfirmationDialog extends DialogFragment {
             public void onClick(View v) {
                 if (type == TYPE_SUCCESS) {
                     ((DialogFragment)getParentFragment()).dismiss();
+                }
+                if(onOkClickListener != null) {
+                    onOkClickListener.onClick(null);
                 }
                 dismiss();
             }

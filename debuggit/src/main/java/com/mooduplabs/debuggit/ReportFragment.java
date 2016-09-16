@@ -19,6 +19,7 @@ import android.widget.ImageView;
 public class ReportFragment extends DialogFragment implements ViewPager.OnPageChangeListener {
 
     protected static final String TAG = ReportFragment.class.getSimpleName();
+    protected static final int MAX_RETRIES_COUNT = 3;
 
     private ImageView viewPagerIndicator;
     private LoadingDialog dialog;
@@ -109,12 +110,13 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                             retriesCount = 0;
                             ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_SUCCESS).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                         } else if(data.isUnauthorized()) {
-                            if(retriesCount < 3) {
+                            if(retriesCount < MAX_RETRIES_COUNT) {
                                 retriesCount++;
                                 sendIssue();
                             } else {
+                                dialog.dismiss();
                                 retriesCount = 0;
-                                ConfirmationDialog.newInstance(getString(R.string.br_error_access_token_expired), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                showReloginMessage();
                             }
                         } else {
                             ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(data, getString(R.string.br_confirmation_failure)), true)
@@ -123,6 +125,18 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                     }
                 }
         );
+    }
+
+    private void showReloginMessage() {
+        ConfirmationDialog dialog = ConfirmationDialog.newInstance(getString(R.string.br_error_access_token_expired), true);
+        dialog.setOnOkClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.putString(getContext(), DebuggIt.ACCESS_TOKEN, "");
+                DebuggIt.getInstance().authenticate(false);
+            }
+        });
+        dialog.show(getChildFragmentManager(), ConfirmationDialog.TAG);
     }
 
     private void initViewPager(View view) {
