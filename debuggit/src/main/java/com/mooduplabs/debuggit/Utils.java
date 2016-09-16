@@ -271,7 +271,10 @@ public class Utils {
     protected static String getBitbucketErrorMessage(HttpResponse data, String defaultMessage) {
         try {
             JSONObject error = new JSONObject(data.getMessage());
-            return error.getString("error_description");
+            if(error.has("error_description")) {
+                return error.getString("error_description");
+            }
+            return error.getJSONObject("error").getString("message");
         } catch(JSONException e) {
             return data.getMessage().isEmpty() ? defaultMessage : data.getMessage();
         }
