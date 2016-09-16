@@ -268,12 +268,12 @@ public class Utils {
         return activity.getWindow().getDecorView().isShown();
     }
 
-    protected static String getBitbucketErrorMessage(Context context, HttpResponse data, int defaultResStringId) {
+    protected static String getBitbucketErrorMessage(HttpResponse data, String defaultMessage) {
         try {
             JSONObject error = new JSONObject(data.getMessage());
             return error.getString("error_description");
         } catch(JSONException e) {
-            return data.getMessage().isEmpty() ? context.getString(defaultResStringId) : data.getMessage();
+            return data.getMessage().isEmpty() ? defaultMessage : data.getMessage();
         }
     }
 

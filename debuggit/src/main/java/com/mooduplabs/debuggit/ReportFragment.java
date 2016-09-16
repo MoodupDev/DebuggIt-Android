@@ -16,8 +16,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-import javax.net.ssl.HttpsURLConnection;
-
 public class ReportFragment extends DialogFragment implements ViewPager.OnPageChangeListener {
 
     protected static final String TAG = ReportFragment.class.getSimpleName();
@@ -111,10 +109,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                         } else if(data.isUnauthorized()) {
                             sendIssue();
                         } else {
-                            int defaultErrorString = data.getResponseCode() == HttpsURLConnection.HTTP_NOT_FOUND ?
-                                            R.string.br_error_invalid_repo_owner_issue_tracker :
-                                            R.string.br_confirmation_failure;
-                            ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(getContext(), data, defaultErrorString), true)
+                            ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(data, getString(R.string.br_confirmation_failure)), true)
                                     .show(getChildFragmentManager(), ConfirmationDialog.TAG);
                         }
                     }

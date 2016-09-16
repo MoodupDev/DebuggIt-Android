@@ -83,7 +83,7 @@ public class LoginFragment extends DialogFragment {
                                         ConfirmationDialog.newInstance(getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                                     }
                                 } else if(data.getResponseCode() == HttpsURLConnection.HTTP_BAD_REQUEST) {
-                                    ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(getContext(), data, R.string.br_login_error_wrong_credentials), true)
+                                    ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(data, getString(R.string.br_login_error_wrong_credentials)), true)
                                             .show(getChildFragmentManager(), ConfirmationDialog.TAG);
                                 } else {
                                     ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
