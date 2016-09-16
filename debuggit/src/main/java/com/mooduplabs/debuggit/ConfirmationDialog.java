@@ -17,8 +17,11 @@ public class ConfirmationDialog extends DialogFragment {
     private static final String TYPE = "type";
 
     //endregion
+
     //region Fields
+
     private View.OnClickListener onOkClickListener;
+
     //endregion
 
     //region Override Methods
@@ -63,8 +66,20 @@ public class ConfirmationDialog extends DialogFragment {
         return dialog;
     }
 
-    protected void setOnOkClickListener(View.OnClickListener listener) {
-        onOkClickListener = listener;
+    protected static ConfirmationDialog newInstance(String message, boolean error, View.OnClickListener onOkClickListener) {
+        ConfirmationDialog dialog = ConfirmationDialog.newInstance(message, error);
+        dialog.setOnOkClickListener(onOkClickListener);
+        return dialog;
+    }
+
+    protected static ConfirmationDialog newInstance(int type, View.OnClickListener onOkClickListener) {
+        ConfirmationDialog dialog = ConfirmationDialog.newInstance(type);
+        dialog.setOnOkClickListener(onOkClickListener);
+        return dialog;
+    }
+
+    protected void setOnOkClickListener(View.OnClickListener onOkClickListener) {
+        this.onOkClickListener = onOkClickListener;
     }
 
     private void initViews(View view) {

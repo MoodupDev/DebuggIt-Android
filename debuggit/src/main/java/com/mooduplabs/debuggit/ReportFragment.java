@@ -128,15 +128,13 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     }
 
     private void showReloginMessage() {
-        ConfirmationDialog dialog = ConfirmationDialog.newInstance(getString(R.string.br_error_access_token_expired), true);
-        dialog.setOnOkClickListener(new View.OnClickListener() {
+        ConfirmationDialog.newInstance(getString(R.string.br_error_access_token_expired), true, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Utils.putString(getContext(), DebuggIt.ACCESS_TOKEN, "");
                 DebuggIt.getInstance().authenticate(false);
             }
-        });
-        dialog.show(getChildFragmentManager(), ConfirmationDialog.TAG);
+        }).show(getChildFragmentManager(), ConfirmationDialog.TAG);
     }
 
     private void initViewPager(View view) {
