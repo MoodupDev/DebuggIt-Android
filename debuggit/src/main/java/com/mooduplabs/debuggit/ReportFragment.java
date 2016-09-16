@@ -110,12 +110,12 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                             ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_SUCCESS).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                         } else if(data.isUnauthorized()) {
                             sendIssue();
-                        } else if(data.getResponseCode() == HttpsURLConnection.HTTP_FORBIDDEN) {
-                            ConfirmationDialog.newInstance(data.getMessage(), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                        } else if(data.getResponseCode() == HttpsURLConnection.HTTP_NOT_FOUND) {
-                            ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(getContext(), data, R.string.br_error_invalid_repo_owner_issue_tracker), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                         } else {
-                            ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_FAILURE).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                            int defaultErrorString = data.getResponseCode() == HttpsURLConnection.HTTP_NOT_FOUND ?
+                                            R.string.br_error_invalid_repo_owner_issue_tracker :
+                                            R.string.br_confirmation_failure;
+                            ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(getContext(), data, defaultErrorString), true)
+                                    .show(getChildFragmentManager(), ConfirmationDialog.TAG);
                         }
                     }
                 }
