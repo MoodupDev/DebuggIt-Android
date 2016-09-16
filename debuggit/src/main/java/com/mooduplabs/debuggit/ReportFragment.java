@@ -22,6 +22,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
     private ImageView viewPagerIndicator;
     private LoadingDialog dialog;
+    private int retriesCount = 0;
 
     @NonNull
     @Override
@@ -105,10 +106,13 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                         if(data.isSuccessful()) {
                             DebuggIt.getInstance().getReport().clear();
                             resetReportButtonImage();
+                            retriesCount = 0;
                             ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_SUCCESS).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                        } else if(data.isUnauthorized()) {
-                            sendIssue();
+                        } else if(data.isUnauthorized() && retriesCount < 3) {
+                                retriesCount++;
+                                sendIssue();
                         } else {
+                            retriesCount = 0;
                             ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(data, getString(R.string.br_confirmation_failure)), true)
                                     .show(getChildFragmentManager(), ConfirmationDialog.TAG);
                         }
