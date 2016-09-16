@@ -108,11 +108,15 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                             resetReportButtonImage();
                             retriesCount = 0;
                             ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_SUCCESS).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                        } else if(data.isUnauthorized() && retriesCount < 3) {
+                        } else if(data.isUnauthorized()) {
+                            if(retriesCount < 3) {
                                 retriesCount++;
                                 sendIssue();
+                            } else {
+                                retriesCount = 0;
+                                ConfirmationDialog.newInstance(getString(R.string.br_error_access_token_expired), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                            }
                         } else {
-                            retriesCount = 0;
                             ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(data, getString(R.string.br_confirmation_failure)), true)
                                     .show(getChildFragmentManager(), ConfirmationDialog.TAG);
                         }
