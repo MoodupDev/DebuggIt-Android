@@ -34,10 +34,14 @@ public class ApiClient {
     public static final String USERNAME = "username";
     public static final String NO_INTERNET_MESSAGE = "No internet connection";
 
-    public static final String HEROKU_UPLOAD_IMAGE_URL = "https://debuggit-api-staging.herokuapp.com/api/v1/upload/image";
-    public static final String HEROKU_UPLOAD_AUDIO_URL = "https://debuggit-api-staging.herokuapp.com/api/v1/upload/audio";
-    public static final String EVENTS_URL = "https://debuggit-api-staging.herokuapp.com/api/v1/events";
-    public static final String SUPPORTED_VERSION_URL = "https://debuggit-api-staging.herokuapp.com/api/v1/supported_versions/%d";
+    public static final String BASE_URL = "https://debuggit-api-staging.herokuapp.com";
+    // TODO: 19.09.2016 Find way to store base url depending on flavor
+    public static final String UPLOAD_IMAGE_URL = BASE_URL + "/api/v1/upload/image";
+    public static final String UPLOAD_AUDIO_URL = BASE_URL + "/api/v1/upload/audio";
+    public static final String EVENTS_URL = BASE_URL + "/api/v1/events";
+    public static final String SUPPORTED_VERSION_URL = BASE_URL + "/api/v1/supported_versions/%d";
+
+    public static final int TIMEOUT_MILLIS = 15000;
 
     private String repoSlug;
     private String accountName;
@@ -174,8 +178,8 @@ public class ApiClient {
                 url = new URL(params[0]);
 
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(15000);
-                conn.setConnectTimeout(15000);
+                conn.setReadTimeout(TIMEOUT_MILLIS);
+                conn.setConnectTimeout(TIMEOUT_MILLIS);
                 conn.setDoOutput(true);
 
                 int response = conn.getResponseCode();
@@ -211,8 +215,8 @@ public class ApiClient {
                 url = new URL(params[0]);
 
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(15000);
-                conn.setConnectTimeout(15000);
+                conn.setReadTimeout(TIMEOUT_MILLIS);
+                conn.setConnectTimeout(TIMEOUT_MILLIS);
                 conn.setDoInput(true);
                 conn.setDoOutput(true);
 
@@ -240,8 +244,8 @@ public class ApiClient {
             url = new URL(params[0]);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(15000);
-            conn.setConnectTimeout(15000);
+            conn.setReadTimeout(TIMEOUT_MILLIS);
+            conn.setConnectTimeout(TIMEOUT_MILLIS);
             conn.setDoInput(true);
             conn.setDoOutput(true);
             conn.addRequestProperty("Authorization",
@@ -280,11 +284,11 @@ public class ApiClient {
     protected static String getUploadedFileUrl(HashMap<String, String> postParams, boolean isImage) {
         URL url;
         try {
-            url = new URL(isImage ? HEROKU_UPLOAD_IMAGE_URL : HEROKU_UPLOAD_AUDIO_URL);
+            url = new URL(isImage ? UPLOAD_IMAGE_URL : UPLOAD_AUDIO_URL);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(15000);
-            conn.setConnectTimeout(15000);
+            conn.setReadTimeout(TIMEOUT_MILLIS);
+            conn.setConnectTimeout(TIMEOUT_MILLIS);
             conn.setDoInput(true);
             conn.setDoOutput(true);
 
