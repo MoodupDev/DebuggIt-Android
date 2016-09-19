@@ -34,7 +34,8 @@ public class ApiClient {
     public static final String MIME_TYPE_AUDIO = "audio/mpeg";
     public static final String MIME_TYPE_IMAGE = "image/png";
 
-    public static final String HEROKU_UPLOAD_URL = "https://bugreporter.herokuapp.com/upload";
+    public static final String HEROKU_UPLOAD_IMAGE_URL = "https://debuggit-api-staging.herokuapp.com/api/v1/upload/image";
+    public static final String HEROKU_UPLOAD_AUDIO_URL = "https://debuggit-api-staging.herokuapp.com/api/v1/upload/audio";
     public static final String HEROKU_VERSION_URL = "https://bugreporter.herokuapp.com/version";
 
     private String repoSlug;
@@ -225,10 +226,10 @@ public class ApiClient {
         return new HttpResponse(-1, NO_INTERNET_MESSAGE);
     }
 
-    protected static String getUploadedFileUrl(HashMap<String, String> postParams) {
+    protected static String getUploadedFileUrl(HashMap<String, String> postParams, boolean isImage) {
         URL url;
         try {
-            url = new URL(HEROKU_UPLOAD_URL);
+            url = new URL(isImage ? HEROKU_UPLOAD_IMAGE_URL : HEROKU_UPLOAD_AUDIO_URL);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(15000);
@@ -249,7 +250,7 @@ public class ApiClient {
             int response = conn.getResponseCode();
             if(response == HttpsURLConnection.HTTP_OK) {
                 JSONObject json = new JSONObject(Utils.getStringFromInputStream(conn.getInputStream()));
-                return json.getString("Location");
+                return json.getString("url");
             }
         } catch(Exception e) {
             e.printStackTrace();
