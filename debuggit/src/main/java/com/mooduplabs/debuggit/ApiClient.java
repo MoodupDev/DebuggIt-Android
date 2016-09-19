@@ -34,9 +34,6 @@ public class ApiClient {
     public static final String USERNAME = "username";
     public static final String NO_INTERNET_MESSAGE = "No internet connection";
 
-    public static final String MIME_TYPE_AUDIO = "audio/mpeg";
-    public static final String MIME_TYPE_IMAGE = "image/png";
-
     public static final String HEROKU_UPLOAD_IMAGE_URL = "https://debuggit-api-staging.herokuapp.com/api/v1/upload/image";
     public static final String HEROKU_UPLOAD_AUDIO_URL = "https://debuggit-api-staging.herokuapp.com/api/v1/upload/audio";
     public static final String EVENTS_URL = "https://debuggit-api-staging.herokuapp.com/api/v1/events";
@@ -50,6 +47,8 @@ public class ApiClient {
         INITIALIZED,
         HAS_UNSUPPORTED_VERSION,
         SCREENSHOT_ADDED,
+        SCREENSHOT_ADDED_RECTANGLE,
+        SCREENSHOT_ADDED_DRAW,
         SCREENSHOT_REMOVED,
         AUDIO_ADDED,
         AUDIO_PLAYED,

@@ -217,12 +217,20 @@ public class DrawFragment extends DialogFragment {
             if(s != null && !s.isEmpty()) {
                 DebuggIt.getInstance().getReport().getScreensUrls().add(s);
                 new ReportFragment().show(getActivity().getSupportFragmentManager(), ReportFragment.TAG);
-                ApiClient.postEvent(getContext(), ApiClient.EventType.SCREENSHOT_ADDED);
+                postEventsAfterAddingScreenshot();
                 dismiss();
             } else {
                 ConfirmationDialog.newInstance(getString(R.string.br_screenshot_upload_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
             }
             super.onPostExecute(s);
+        }
+
+        private void postEventsAfterAddingScreenshot() {
+            ApiClient.postEvent(getContext(), ApiClient.EventType.SCREENSHOT_ADDED);
+            ApiClient.postEvent(getContext(),
+                    DrawFragment.this.drawingSurface.getType() == PaintableImageView.TYPE_FREE_DRAW ?
+                            ApiClient.EventType.SCREENSHOT_ADDED_DRAW :
+                            ApiClient.EventType.SCREENSHOT_ADDED_RECTANGLE);
         }
     }
 }

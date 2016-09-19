@@ -78,6 +78,10 @@ public class PaintableImageView extends ImageView {
         this.type = type;
     }
 
+    protected int getType() {
+        return type;
+    }
+
     protected void drawActiveRectangle() {
         if(isRectangleActive()) {
             drawRectangle();
