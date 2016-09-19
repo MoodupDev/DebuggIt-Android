@@ -190,9 +190,7 @@ public class DrawFragment extends DialogFragment {
                 byte[] bitmapData = bos.toByteArray();
 
                 HashMap<String, String> params = new HashMap<>();
-                params.put("file", Base64.encodeToString(bitmapData, Base64.URL_SAFE));
-                params.put("mimetype", ApiClient.MIME_TYPE_IMAGE);
-                params.put("package", getActivity().getPackageName());
+                params.put("data", Base64.encodeToString(bitmapData, Base64.NO_WRAP));
 
                 uploadImageAsyncTask = new UploadImageAsyncTask(params);
                 uploadImageAsyncTask.execute();
@@ -210,7 +208,7 @@ public class DrawFragment extends DialogFragment {
 
         @Override
         protected String doInBackground(String... params) {
-            return ApiClient.getUploadedFileUrl(postParams);
+            return ApiClient.getUploadedFileUrl(postParams, true);
         }
 
         @Override
