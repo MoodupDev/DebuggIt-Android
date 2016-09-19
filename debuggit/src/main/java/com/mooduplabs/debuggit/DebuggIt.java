@@ -43,6 +43,7 @@ public class DebuggIt {
     private boolean initialized = false;
     private boolean versionChecked = false;
     private boolean versionSupported = false;
+    private boolean shouldPostInitializedEvent = true;
 
     private String clientId;
     private String clientSecret;
@@ -75,6 +76,10 @@ public class DebuggIt {
     }
 
     public void attach(final Activity activity) {
+        if(shouldPostInitializedEvent) {
+            ApiClient.postEvent(activity, ApiClient.EventType.INITIALIZED);
+            shouldPostInitializedEvent = false;
+        }
         if(!initialized) {
             throw new RuntimeException("debugg.it must be initialized with init(...) before using attach() method");
         }
