@@ -1,6 +1,8 @@
 package com.mooduplabs.debuggit;
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Base64;
 
 import org.json.JSONObject;
@@ -36,11 +38,27 @@ public class ApiClient {
 
     public static final String HEROKU_UPLOAD_IMAGE_URL = "https://debuggit-api-staging.herokuapp.com/api/v1/upload/image";
     public static final String HEROKU_UPLOAD_AUDIO_URL = "https://debuggit-api-staging.herokuapp.com/api/v1/upload/audio";
+    public static final String EVENTS_URL = "https://debuggit-api-staging.herokuapp.com/api/v1/events";
     public static final String HEROKU_VERSION_URL = "https://bugreporter.herokuapp.com/version";
 
     private String repoSlug;
     private String accountName;
     private String accessToken;
+
+    protected enum EventType {
+        INITIALIZED,
+        HAS_UNSUPPORTED_VERSION,
+        SCREENSHOT_ADDED,
+        SCREENSHOT_REMOVED,
+        AUDIO_ADDED,
+        AUDIO_PLAYED,
+        AUDIO_REMOVED,
+        REPORT_SENT,
+        REPORT_CANCELED,
+        ACTUAL_BEHAVIOUR_FILLED,
+        STEPS_TO_REPRODUCE_FILLED,
+        EXPECTED_BEHAVIOUR_FILLED
+    }
 
     protected interface HttpHandler {
         void done(HttpResponse data);
@@ -85,6 +103,16 @@ public class ApiClient {
 
     protected void checkVersion(String currentVersion, HttpHandler handler) {
         new ApiClient.CheckSupportedVersion(currentVersion, handler).execute(HEROKU_VERSION_URL);
+    }
+
+    protected static void postEvent(Context context, EventType eventType) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("event_type", eventType.name().toLowerCase());
+        params.put("app_id", context.getPackageName());
+        params.put("android_sdk", String.valueOf(Build.VERSION.SDK_INT));
+        params.put("device", Utils.getDeviceName());
+
+        new PostEventAsyncTask(params).execute(EVENTS_URL);
     }
 
     protected class AuthorizeAsyncTask extends AsyncTask<String, Void, HttpResponse> {
@@ -180,6 +208,44 @@ public class ApiClient {
         protected void onPostExecute(HttpResponse httpResponse) {
             handler.done(httpResponse);
             super.onPostExecute(httpResponse);
+        }
+    }
+
+    protected static class PostEventAsyncTask extends AsyncTask<String, Void, Void> {
+
+        private HashMap<String, String> postParams;
+
+        public PostEventAsyncTask(HashMap<String, String> postParams) {
+            this.postParams = postParams;
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+            URL url;
+            try {
+                url = new URL(params[0]);
+
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(15000);
+                conn.setConnectTimeout(15000);
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+
+                conn.setRequestMethod("POST");
+
+                OutputStream os = conn.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+                writer.write(Utils.getPostDataString(postParams));
+
+                writer.flush();
+                writer.close();
+                os.close();
+                conn.getResponseCode();
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 
