@@ -78,13 +78,14 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
             public void onClick(View v) {
                 DebuggIt.getInstance().getReport().clear();
                 resetReportButtonImage();
+                ApiClient.postEvent(getContext(), ApiClient.EventType.REPORT_CANCELED);
                 dismiss();
             }
         });
     }
 
     private void sendIssue() {
-        Report report = DebuggIt.getInstance().getReport();
+        final Report report = DebuggIt.getInstance().getReport();
         ApiClient apiClient = new ApiClient(
                 DebuggIt.getInstance().getRepoSlug(),
                 DebuggIt.getInstance().getAccountName(),
@@ -109,6 +110,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                             resetReportButtonImage();
                             retriesCount = 0;
                             ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_SUCCESS).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                            postEventsAfterSendingReport(report);
                         } else if(data.isUnauthorized()) {
                             if(retriesCount < MAX_RETRIES_COUNT) {
                                 retriesCount++;
@@ -125,6 +127,19 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                     }
                 }
         );
+    }
+
+    private void postEventsAfterSendingReport(Report report) {
+        if(!report.getActualBehaviour().isEmpty()) {
+            ApiClient.postEvent(getContext(), ApiClient.EventType.ACTUAL_BEHAVIOUR_FILLED);
+        }
+        if(!report.getStepsToReproduce().isEmpty()) {
+            ApiClient.postEvent(getContext(), ApiClient.EventType.STEPS_TO_REPRODUCE_FILLED);
+        }
+        if(!report.getExpectedBehaviour().isEmpty()) {
+            ApiClient.postEvent(getContext(), ApiClient.EventType.EXPECTED_BEHAVIOUR_FILLED);
+        }
+        ApiClient.postEvent(getContext(), ApiClient.EventType.REPORT_SENT);
     }
 
     private void showReloginMessage() {
