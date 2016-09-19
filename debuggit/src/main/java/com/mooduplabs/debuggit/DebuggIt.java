@@ -79,11 +79,11 @@ public class DebuggIt {
             throw new RuntimeException("debugg.it must be initialized with init(...) before using attach() method");
         }
         if(!versionChecked) {
-            new ApiClient(repoSlug, accountName, accessToken).checkVersion(BuildConfig.VERSION_NAME, new ApiClient.HttpHandler() {
+            ApiClient.checkVersion(BuildConfig.VERSION_CODE, new ApiClient.HttpHandler() {
                 @Override
                 public void done(HttpResponse data) {
-                    versionChecked = data.isSuccessful();
-                    versionSupported = Boolean.parseBoolean(data.getMessage());
+                    versionChecked = true;
+                    versionSupported = data.isSuccessful();
                 }
             });
         }

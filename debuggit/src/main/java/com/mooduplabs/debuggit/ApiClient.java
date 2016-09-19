@@ -14,6 +14,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.HashMap;
+import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -39,7 +40,7 @@ public class ApiClient {
     public static final String HEROKU_UPLOAD_IMAGE_URL = "https://debuggit-api-staging.herokuapp.com/api/v1/upload/image";
     public static final String HEROKU_UPLOAD_AUDIO_URL = "https://debuggit-api-staging.herokuapp.com/api/v1/upload/audio";
     public static final String EVENTS_URL = "https://debuggit-api-staging.herokuapp.com/api/v1/events";
-    public static final String HEROKU_VERSION_URL = "https://bugreporter.herokuapp.com/version";
+    public static final String SUPPORTED_VERSION_URL = "https://debuggit-api-staging.herokuapp.com/api/v1/supported_versions/%d";
 
     private String repoSlug;
     private String accountName;
@@ -101,8 +102,8 @@ public class ApiClient {
         new ApiClient.AuthorizeAsyncTask(map, handler).execute(BitBucket.AUTHORIZE_URL);
     }
 
-    protected void checkVersion(String currentVersion, HttpHandler handler) {
-        new ApiClient.CheckSupportedVersion(currentVersion, handler).execute(HEROKU_VERSION_URL);
+    protected static void checkVersion(int currentVersion, HttpHandler handler) {
+        new CheckSupportedVersion(handler).execute(String.format(Locale.getDefault(), SUPPORTED_VERSION_URL, currentVersion));
     }
 
     protected static void postEvent(Context context, EventType eventType) {
@@ -161,12 +162,9 @@ public class ApiClient {
     }
 
     protected static class CheckSupportedVersion extends AsyncTask<String, Void, HttpResponse> {
-
-        private String currentVersion;
         private HttpHandler handler;
 
-        public CheckSupportedVersion(String currentVersion, HttpHandler handler) {
-            this.currentVersion = currentVersion;
+        public CheckSupportedVersion(HttpHandler handler) {
             this.handler = handler;
         }
 
@@ -179,25 +177,13 @@ public class ApiClient {
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setReadTimeout(15000);
                 conn.setConnectTimeout(15000);
-                conn.setDoInput(true);
                 conn.setDoOutput(true);
 
-                conn.setRequestMethod("POST");
-
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(os, "UTF-8"));
-                HashMap<String, String> map = new HashMap<>();
-                map.put("version", currentVersion);
-                writer.write(Utils.getPostDataString(map));
-
-                writer.flush();
-                writer.close();
-                os.close();
                 int response = conn.getResponseCode();
                 if(response == HttpsURLConnection.HTTP_OK) {
                     return new HttpResponse(response, Utils.getStringFromInputStream(conn.getInputStream()));
                 }
+                return new HttpResponse(response, Utils.getStringFromInputStream(conn.getErrorStream()));
             } catch(Exception e) {
                 e.printStackTrace();
             }
