@@ -33,6 +33,7 @@ public class DrawFragment extends DialogFragment {
     private Bitmap screenshot;
 
     private UploadImageAsyncTask uploadImageAsyncTask;
+    private boolean uploadDissmissed;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -93,8 +94,7 @@ public class DrawFragment extends DialogFragment {
         dialog = LoadingDialog.newInstance(getString(R.string.br_loading_dialog_message_screenshot), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadImageAsyncTask.cancel(true);
-                dialog.dismiss();
+                uploadDissmissed = true;
             }
         });
 
@@ -194,7 +194,18 @@ public class DrawFragment extends DialogFragment {
                 params.put("app_id", getContext().getPackageName());
 
                 uploadImageAsyncTask = new UploadImageAsyncTask(params);
-                uploadImageAsyncTask.execute();
+                dialog.setOnCancelClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(uploadImageAsyncTask != null) {
+                            uploadImageAsyncTask.cancel(true);
+                        }
+                    }
+                });
+                if(!uploadDissmissed) {
+                    uploadImageAsyncTask.execute();
+                }
+                uploadDissmissed = false;
             }
         });
     }

@@ -59,6 +59,10 @@ public class LoadingDialog extends DialogFragment {
         return fragment;
     }
 
+    protected void setOnCancelClickListener(View.OnClickListener onCancelClickListener) {
+        this.onCancelClickListener = onCancelClickListener;
+    }
+
     private void initViews(View view) {
         MontserratTextView message = (MontserratTextView) view.findViewById(R.id.confirmation_dialog_message);
         MontserratTextView cancelButton = (MontserratTextView) view.findViewById(R.id.loading_dialog_cancel_button);
