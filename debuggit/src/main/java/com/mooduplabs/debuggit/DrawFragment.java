@@ -191,6 +191,7 @@ public class DrawFragment extends DialogFragment {
 
                 HashMap<String, String> params = new HashMap<>();
                 params.put("data", Base64.encodeToString(bitmapData, Base64.NO_WRAP));
+                params.put("app_id", getContext().getPackageName());
 
                 uploadImageAsyncTask = new UploadImageAsyncTask(params);
                 uploadImageAsyncTask.execute();

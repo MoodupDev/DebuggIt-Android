@@ -115,6 +115,7 @@ public class AudioCaptureFragment extends DialogFragment {
 
                     HashMap<String, String> params = new HashMap<>();
                     params.put("data", Base64.encodeToString(Utils.getBytesFromFile(audioCaptureHelper.getFilePath()), Base64.NO_WRAP));
+                    params.put("app_id", getContext().getPackageName());
 
                     uploadAudioAsyncTask = new UploadAudioAsyncTask(params);
                     uploadAudioAsyncTask.execute();
