@@ -34,12 +34,10 @@ public class ApiClient {
     public static final String USERNAME = "username";
     public static final String NO_INTERNET_MESSAGE = "No internet connection";
 
-    public static final String BASE_URL = "https://debuggit-api-staging.herokuapp.com";
-    // TODO: 19.09.2016 Find way to store base url depending on flavor
-    public static final String UPLOAD_IMAGE_URL = BASE_URL + "/api/v1/upload/image";
-    public static final String UPLOAD_AUDIO_URL = BASE_URL + "/api/v1/upload/audio";
-    public static final String EVENTS_URL = BASE_URL + "/api/v1/events";
-    public static final String SUPPORTED_VERSION_URL = BASE_URL + "/api/v1/supported_versions/%d";
+    public static final String UPLOAD_IMAGE_URL = BuildConfig.API_BASE_URL + "/api/v1/upload/image";
+    public static final String UPLOAD_AUDIO_URL = BuildConfig.API_BASE_URL + "/api/v1/upload/audio";
+    public static final String EVENTS_URL = BuildConfig.API_BASE_URL + "/api/v1/events";
+    public static final String SUPPORTED_VERSION_URL = BuildConfig.API_BASE_URL + "/api/v1/supported_versions/%d";
 
     public static final int TIMEOUT_MILLIS = 15000;
 
