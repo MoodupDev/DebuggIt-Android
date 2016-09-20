@@ -337,34 +337,36 @@ public class PaintableImageView extends ImageView {
     }
 
     private void drawRectangle() {
-        int left, top, right, bottom;
-        left = points[0].x;
-        top = points[0].y;
-        right = points[0].x;
-        bottom = points[0].y;
-        for(int i = 0; i < points.length; i++) {
-            left = left > points[i].x ? points[i].x : left;
-            top = top > points[i].y ? points[i].y : top;
-            right = right < points[i].x ? points[i].x : right;
-            bottom = bottom < points[i].y ? points[i].y : bottom;
+        if(points != null && points[0] != null) {
+            int left, top, right, bottom;
+            left = points[0].x;
+            top = points[0].y;
+            right = points[0].x;
+            bottom = points[0].y;
+            for(int i = 0; i < points.length; i++) {
+                left = left > points[i].x ? points[i].x : left;
+                top = top > points[i].y ? points[i].y : top;
+                right = right < points[i].x ? points[i].x : right;
+                bottom = bottom < points[i].y ? points[i].y : bottom;
+            }
+
+            RectF rectangle = new RectF(
+                    left + corners.get(0).getCornerImageWidth() / 2,
+                    top + corners.get(0).getCornerImageWidth() / 2,
+                    right + corners.get(2).getCornerImageWidth() / 2,
+                    bottom + corners.get(2).getCornerImageWidth() / 2
+            );
+
+            rectanglesHistory.add(rectangle);
+
+            canvas.drawRect(
+                    rectangle.left,
+                    rectangle.top,
+                    rectangle.right,
+                    rectangle.bottom,
+                    paint
+            );
         }
-
-        RectF rectangle = new RectF(
-                left + corners.get(0).getCornerImageWidth() / 2,
-                top + corners.get(0).getCornerImageWidth() / 2,
-                right + corners.get(2).getCornerImageWidth() / 2,
-                bottom + corners.get(2).getCornerImageWidth() / 2
-        );
-
-        rectanglesHistory.add(rectangle);
-
-        canvas.drawRect(
-                rectangle.left,
-                rectangle.top,
-                rectangle.right,
-                rectangle.bottom,
-                paint
-        );
     }
 
     private void initCorners() {
