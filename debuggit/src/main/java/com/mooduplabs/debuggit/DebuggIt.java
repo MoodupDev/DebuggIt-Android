@@ -69,7 +69,7 @@ public class DebuggIt {
     public void init(String clientId, String clientSecret, String repoSlug, String accountName) {
         this.clientId = clientId;
         this.clientSecret = clientSecret;
-        this.repoSlug = repoSlug;
+        this.repoSlug = repoSlug.toLowerCase();
         this.accountName = accountName;
         this.report = new Report();
         this.initialized = true;
