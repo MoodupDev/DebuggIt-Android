@@ -11,6 +11,8 @@ android {
         versionName "0.4.2"
     }
 
+    publishNonDefault true
+
     buildTypes {
         release {
             minifyEnabled true
