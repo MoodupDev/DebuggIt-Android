@@ -51,7 +51,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
 
     private View initViews(LayoutInflater inflater, ViewGroup container) {
-        View view = inflater.inflate(R.layout.fragment_reporter, container, false);
+        View view = inflater.inflate(R.layout.fragment_br_reporter, container, false);
         initViewPager(view);
         initButtons(view);
         return view;

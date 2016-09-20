@@ -174,7 +174,7 @@ public class DebuggIt {
         final FrameLayout rootLayout = (FrameLayout) activity.findViewById(android.R.id.content);
         reportButton = rootLayout.findViewById(R.id.report_button);
         if(reportButton == null) {
-            reportButton = LayoutInflater.from(activity).inflate(R.layout.report_button_layout, rootLayout, false);
+            reportButton = LayoutInflater.from(activity).inflate(R.layout.layout_br_report_button, rootLayout, false);
             rootLayout.addView(reportButton);
             initReportButtonOnTouchListener(rootLayout);
         }

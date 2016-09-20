@@ -26,7 +26,7 @@ public class LoadingDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         CustomDialog dialog = new CustomDialog(getActivity(), R.style.BrCustomDialog);
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_loading, null);
+        View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_br_loading, null);
         dialog.setContentView(v);
 
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

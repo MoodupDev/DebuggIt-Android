@@ -48,7 +48,7 @@ public class AudioCaptureFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_report_audio_capture, container, false);
+        View view = inflater.inflate(R.layout.fragment_br_report_audio_capture, container, false);
         initRecording();
         setCancelable(false);
         timer = (MontserratTextView) view.findViewById(R.id.timer_text);

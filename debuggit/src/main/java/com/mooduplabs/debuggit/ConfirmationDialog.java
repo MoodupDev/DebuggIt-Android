@@ -29,7 +29,7 @@ public class ConfirmationDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         CustomDialog dialog = new CustomDialog(getActivity(), R.style.BrCustomDialog);
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_confirmation, null);
+        View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_br_confirmation, null);
         dialog.setContentView(v);
 
         initViews(v);

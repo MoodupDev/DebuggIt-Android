@@ -30,7 +30,7 @@ public class LoginFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         CustomDialog dialog = new CustomDialog(getActivity(), R.style.BrCustomDialog);
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_login, null);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_br_login, null);
         dialog.setContentView(view);
 
         initView(view);

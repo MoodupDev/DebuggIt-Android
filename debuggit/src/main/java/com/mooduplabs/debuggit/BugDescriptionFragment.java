@@ -92,12 +92,12 @@ public class BugDescriptionFragment extends Fragment {
         View view;
         switch (position) {
             case 0:
-                view = inflater.inflate(R.layout.fragment_bug_description_page1, container, false);
+                view = inflater.inflate(R.layout.fragment_br_bug_description_page1, container, false);
                 initFirstPage(view);
                 initReport();
                 break;
             default:
-                view = inflater.inflate(R.layout.fragment_bug_description_page2, container, false);
+                view = inflater.inflate(R.layout.fragment_br_bug_description_page2, container, false);
                 initSecondPage(view);
                 initReportContent();
                 break;
@@ -219,7 +219,7 @@ public class BugDescriptionFragment extends Fragment {
             addAudioMiniature(itemsContainer, audioUrl);
         }
 
-        RelativeLayout itemAddNewScreenshot = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_new_screenshot, itemsContainer, false);
+        RelativeLayout itemAddNewScreenshot = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_br_new_screenshot, itemsContainer, false);
         itemAddNewScreenshot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -296,7 +296,7 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     private void addScreenshotMiniature(final ViewGroup parent, final String screenUrl) {
-        final RelativeLayout itemScreenParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_screenshot, parent, false);
+        final RelativeLayout itemScreenParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_br_screenshot, parent, false);
         ImageView itemScreenshot = (ImageView) itemScreenParent.findViewById(R.id.item_screenshot_image);
         ImageView itemScreenshotRemove = (ImageView) itemScreenParent.findViewById(R.id.item_screenshot_close);
 
@@ -315,7 +315,7 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     private void addAudioMiniature(final ViewGroup parent, final String audioUrl) {
-        final RelativeLayout itemAudioParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_audio, parent, false);
+        final RelativeLayout itemAudioParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_br_audio, parent, false);
         ImageButton playButton = (ImageButton) itemAudioParent.findViewById(R.id.item_audio_button);
         final ImageView itemAudioRemove = (ImageView) itemAudioParent.findViewById(R.id.item_audio_close);
 
