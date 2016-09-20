@@ -97,6 +97,8 @@ public class AudioCaptureFragment extends DialogFragment {
     private void initTimer() {
         countDownTimer = new CountDownTimer(DURATION, COUNT_DOWN_INTERVAL) {
 
+            private int recordingTime = 0;
+
             @Override
             public void onTick(long millisUntilFinished) {
                 timer.setText(
@@ -104,6 +106,7 @@ public class AudioCaptureFragment extends DialogFragment {
                                 TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
                                 TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished))
                 );
+                recordingTime += COUNT_DOWN_INTERVAL / 1000;
                 recordDot.setVisibility(TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % 2 == 0 ? View.INVISIBLE : View.VISIBLE);
             }
 
@@ -112,6 +115,8 @@ public class AudioCaptureFragment extends DialogFragment {
                 if (getActivity() != null && !isRemoving()) {
                     dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
                     audioCaptureHelper.stopRecording();
+
+                    ApiClient.postEvent(getContext(), ApiClient.EventType.AUDIO_RECORD_TIME, recordingTime);
 
                     HashMap<String, String> params = new HashMap<>();
                     params.put("data", Base64.encodeToString(Utils.getBytesFromFile(audioCaptureHelper.getFilePath()), Base64.NO_WRAP));

@@ -106,11 +106,11 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                             dialog.dismiss();
                         }
                         if(data.isSuccessful()) {
-                            DebuggIt.getInstance().getReport().clear();
+                            postEventsAfterSendingReport(report);
+                            report.clear();
                             resetReportButtonImage();
                             retriesCount = 0;
                             ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_SUCCESS).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                            postEventsAfterSendingReport(report);
                         } else if(data.isUnauthorized()) {
                             if(retriesCount < MAX_RETRIES_COUNT) {
                                 retriesCount++;
@@ -139,6 +139,8 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         if(!report.getExpectedBehaviour().isEmpty()) {
             ApiClient.postEvent(getContext(), ApiClient.EventType.EXPECTED_BEHAVIOUR_FILLED);
         }
+        ApiClient.postEvent(getContext(), ApiClient.EventType.SCREENSHOT_AMOUNT, report.getScreensUrls().size());
+        ApiClient.postEvent(getContext(), ApiClient.EventType.AUDIO_AMOUNT, report.getAudioUrls().size());
         ApiClient.postEvent(getContext(), ApiClient.EventType.REPORT_SENT);
     }
 

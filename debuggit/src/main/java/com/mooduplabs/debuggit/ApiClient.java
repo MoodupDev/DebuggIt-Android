@@ -52,9 +52,12 @@ public class ApiClient {
         SCREENSHOT_ADDED_RECTANGLE,
         SCREENSHOT_ADDED_DRAW,
         SCREENSHOT_REMOVED,
+        SCREENSHOT_AMOUNT,
         AUDIO_ADDED,
+        AUDIO_RECORD_TIME,
         AUDIO_PLAYED,
         AUDIO_REMOVED,
+        AUDIO_AMOUNT,
         REPORT_SENT,
         REPORT_CANCELED,
         ACTUAL_BEHAVIOUR_FILLED,
@@ -108,11 +111,16 @@ public class ApiClient {
     }
 
     protected static void postEvent(Context context, EventType eventType) {
+        postEvent(context, eventType, null);
+    }
+
+    protected static void postEvent(Context context, EventType eventType, Integer value) {
         HashMap<String, String> params = new HashMap<>();
         params.put("event_type", eventType.name().toLowerCase());
         params.put("app_id", context.getPackageName());
         params.put("android_sdk", String.valueOf(Build.VERSION.SDK_INT));
         params.put("device", Utils.getDeviceName());
+        if(value != null) params.put("value", String.valueOf(value));
 
         new PostEventAsyncTask(params).execute(EVENTS_URL);
     }
