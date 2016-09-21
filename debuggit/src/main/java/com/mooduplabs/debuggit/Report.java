@@ -82,16 +82,8 @@ public class Report {
         this.expectedBehaviour = expectedBehaviour;
     }
 
-    protected void setAudioUrls(List<String> audioUrls) {
-        this.audioUrls = audioUrls;
-    }
-
     protected List<String> getScreensUrls() {
         return screensUrls;
-    }
-
-    protected void setScreensUrls(List<String> screensUrls) {
-        this.screensUrls = screensUrls;
     }
 
     protected void clear() {
