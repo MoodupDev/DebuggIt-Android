@@ -80,9 +80,7 @@ public class DebuggIt {
             ApiClient.postEvent(activity, ApiClient.EventType.INITIALIZED);
             shouldPostInitializedEvent = false;
         }
-        if(!initialized) {
-            throw new RuntimeException("debugg.it must be initialized with init(...) before using attach() method");
-        }
+        checkIfInitialized("attach");
         if(!versionChecked) {
             ApiClient.checkVersion(BuildConfig.VERSION_CODE, new ApiClient.HttpHandler() {
                 @Override
@@ -100,10 +98,14 @@ public class DebuggIt {
         initScreenshotLoadingDialog();
     }
 
-    public void getScreenshotPermission(int requestCode, int resultCode, Intent data) {
+    private void checkIfInitialized(String callingMethodName) {
         if(!initialized) {
-            throw new RuntimeException("debugg.it must be initialized with init(...) before using getScreenshotPermission() method");
+            throw new IllegalStateException(String.format("debugg.it must be initialized with init(...) before using %s() method", callingMethodName));
         }
+    }
+
+    public void getScreenshotPermission(int requestCode, int resultCode, Intent data) {
+        checkIfInitialized("getScreenshotPermission");
         if(requestCode == ScreenshotUtils.SCREENSHOT_REQUEST_CODE) {
             if(resultCode == Activity.RESULT_OK) {
                 this.screenshotIntentData = data;
