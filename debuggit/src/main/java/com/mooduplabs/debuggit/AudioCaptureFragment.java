@@ -161,10 +161,14 @@ public class AudioCaptureFragment extends DialogFragment {
         @Override
         protected void onPostExecute(String url) {
             dialog.dismiss();
-            DebuggIt.getInstance().getReport().getAudioUrls().add(url);
-            listener.onRecordUploaded(url);
             dismiss();
-            ApiClient.postEvent(getContext(), ApiClient.EventType.AUDIO_ADDED);
+            if(url.isEmpty()) {
+                listener.onFailed();
+            } else {
+                DebuggIt.getInstance().getReport().getAudioUrls().add(url);
+                listener.onRecordUploaded(url);
+                ApiClient.postEvent(getContext(), ApiClient.EventType.AUDIO_ADDED);
+            }
             super.onPostExecute(url);
         }
     }

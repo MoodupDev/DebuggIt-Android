@@ -152,7 +152,7 @@ public class BugDescriptionFragment extends Fragment {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(getActivity(), R.string.br_upload_audio_failed, Toast.LENGTH_LONG).show();
+                                    ConfirmationDialog.newInstance(getString(R.string.br_upload_audio_failed), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                                     v.setSelected(!v.isSelected());
                                 }
                             });
