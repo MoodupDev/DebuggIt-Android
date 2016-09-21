@@ -39,10 +39,6 @@ public class ConfirmationDialog extends DialogFragment {
 
     //endregion
 
-    //region Events
-
-    //endregion
-
     //region Methods
     protected static ConfirmationDialog newInstance(int type) {
         ConfirmationDialog dialog = new ConfirmationDialog();
@@ -68,12 +64,6 @@ public class ConfirmationDialog extends DialogFragment {
 
     protected static ConfirmationDialog newInstance(String message, boolean error, View.OnClickListener onOkClickListener) {
         ConfirmationDialog dialog = ConfirmationDialog.newInstance(message, error);
-        dialog.setOnOkClickListener(onOkClickListener);
-        return dialog;
-    }
-
-    protected static ConfirmationDialog newInstance(int type, View.OnClickListener onOkClickListener) {
-        ConfirmationDialog dialog = ConfirmationDialog.newInstance(type);
         dialog.setOnOkClickListener(onOkClickListener);
         return dialog;
     }

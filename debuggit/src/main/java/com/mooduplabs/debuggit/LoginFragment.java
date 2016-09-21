@@ -40,10 +40,6 @@ public class LoginFragment extends DialogFragment {
 
     //endregion
 
-    //region Events
-
-    //endregion
-
     //region Methods
 
     public LoginFragment() {

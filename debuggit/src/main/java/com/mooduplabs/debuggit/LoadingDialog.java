@@ -38,10 +38,6 @@ public class LoadingDialog extends DialogFragment {
 
     //endregion
 
-    //region Events
-
-    //endregion
-
     //region Methods
 
     protected static LoadingDialog newInstance(String message) {

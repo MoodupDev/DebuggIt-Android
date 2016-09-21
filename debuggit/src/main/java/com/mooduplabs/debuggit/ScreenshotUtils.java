@@ -18,7 +18,6 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
@@ -35,14 +34,6 @@ public class ScreenshotUtils {
 
     static Handler handler;
     private static boolean nextScreenshotCanceled;
-
-    //endregion
-
-    //region Override Methods
-
-    //endregion
-
-    //region Events
 
     //endregion
 
@@ -128,42 +119,6 @@ public class ScreenshotUtils {
             }
         };
         thread.start();
-    }
-
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    private static Bitmap getBitmapFromImage(Image image) {
-        final Image.Plane[] planes = image.getPlanes();
-        final Buffer buffer = planes[0].getBuffer().rewind();
-        Bitmap bitmap = Bitmap.createBitmap(image.getWidth(), image.getHeight(), Bitmap.Config.ARGB_8888);
-        bitmap.copyPixelsFromBuffer(buffer);
-        return bitmap;
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    private static Bitmap getBitmapFromImageForMarshmallow(Image image) {
-        final Image.Plane[] planes = image.getPlanes();
-        int width = image.getWidth();
-        int height = image.getHeight();
-        int pixelStride = planes[0].getPixelStride();
-        int rowStride = planes[0].getRowStride();
-        int rowPadding = rowStride - pixelStride * width;
-
-        int offset = 0;
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        ByteBuffer buffer = planes[0].getBuffer();
-        for(int i = 0; i < height; ++i) {
-            for(int j = 0; j < width; ++j) {
-                int pixel = 0;
-                pixel |= (buffer.get(offset) & 0xff) << 16;     // R
-                pixel |= (buffer.get(offset + 1) & 0xff) << 8;  // G
-                pixel |= (buffer.get(offset + 2) & 0xff);       // B
-                pixel |= (buffer.get(offset + 3) & 0xff) << 24; // A
-                bitmap.setPixel(j, i, pixel);
-                offset += pixelStride;
-            }
-            offset += rowPadding;
-        }
-        return bitmap;
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)

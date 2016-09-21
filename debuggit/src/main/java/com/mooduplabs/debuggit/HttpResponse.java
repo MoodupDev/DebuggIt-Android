@@ -29,10 +29,6 @@ public class HttpResponse {
         return responseCode;
     }
 
-    protected void setResponseCode(int responseCode) {
-        this.responseCode = responseCode;
-    }
-
     protected boolean isSuccessful() {
         return responseCode == HttpsURLConnection.HTTP_OK;
     }

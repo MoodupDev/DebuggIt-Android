@@ -29,14 +29,6 @@ public class ShakeDetector implements SensorEventListener {
 
     //endregion
 
-    //region Override Methods
-
-    //endregion
-
-    //region Events
-
-    //endregion
-
     //region Methods
 
 
