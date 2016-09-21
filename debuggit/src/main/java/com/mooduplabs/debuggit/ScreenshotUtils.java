@@ -64,7 +64,7 @@ public class ScreenshotUtils {
             final Rect screenSize = getScreenSize(activity);
             initHandler();
 
-            final ImageReader imageReader = ImageReader.newInstance(screenSize.width(), screenSize.height(), PixelFormat.RGBA_8888, 1);
+            final ImageReader imageReader = ImageReader.newInstance(screenSize.width(), screenSize.height(), PixelFormat.RGBA_8888, 5);
             if(projection != null) {
                 projection.createVirtualDisplay(
                         SCREENSHOT_VIRTUAL_DISPLAY_NAME,
