@@ -87,7 +87,7 @@ public class DebuggIt {
             ApiClient.checkVersion(BuildConfig.VERSION_CODE, new ApiClient.HttpHandler() {
                 @Override
                 public void done(HttpResponse data) {
-                    versionChecked = true;
+                    versionChecked = data.getResponseCode() != ApiClient.NO_CONNECTION_RESPONSE_CODE;
                     versionSupported = data.isSuccessful();
                 }
             });

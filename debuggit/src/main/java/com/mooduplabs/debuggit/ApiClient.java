@@ -40,6 +40,7 @@ public class ApiClient {
     public static final String SUPPORTED_VERSION_URL = BuildConfig.API_BASE_URL + "/api/v1/supported_versions/%d";
 
     public static final int TIMEOUT_MILLIS = 15000;
+    public static final int NO_CONNECTION_RESPONSE_CODE = -1;
 
     private String repoSlug;
     private String accountName;
@@ -196,7 +197,7 @@ public class ApiClient {
             } catch(Exception e) {
                 e.printStackTrace();
             }
-            return new HttpResponse();
+            return new HttpResponse(NO_CONNECTION_RESPONSE_CODE, NO_INTERNET_MESSAGE);
         }
 
         @Override
@@ -284,7 +285,7 @@ public class ApiClient {
             e.printStackTrace();
         }
 
-        return new HttpResponse(-1, NO_INTERNET_MESSAGE);
+        return new HttpResponse(NO_CONNECTION_RESPONSE_CODE, NO_INTERNET_MESSAGE);
     }
 
     protected static String getUploadedFileUrl(HashMap<String, String> postParams, boolean isImage) {
