@@ -70,25 +70,29 @@ public class LoginFragment extends DialogFragment {
                             @Override
                             public void done(HttpResponse data) {
                                 dialog.dismiss();
-                                if(data.isSuccessful()) {
-                                    try {
-                                        DebuggIt.getInstance().saveTokens(data);
-                                        ConfirmationDialog.newInstance(getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                                    } catch(JSONException e) {
-                                        e.printStackTrace();
-                                        ConfirmationDialog.newInstance(getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                                    }
-                                } else if(data.getResponseCode() == HttpsURLConnection.HTTP_BAD_REQUEST) {
-                                    ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(data, getString(R.string.br_login_error_wrong_credentials)), true)
-                                            .show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                                } else {
-                                    ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                                }
+                                handleLoginResponse(data);
                             }
                         }
                 );
             }
         });
+    }
+
+    private void handleLoginResponse(HttpResponse data) {
+        if(data.isSuccessful()) {
+            try {
+                DebuggIt.getInstance().saveTokens(data);
+                ConfirmationDialog.newInstance(getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+            } catch(JSONException e) {
+                e.printStackTrace();
+                ConfirmationDialog.newInstance(getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+            }
+        } else if(data.getResponseCode() == HttpsURLConnection.HTTP_BAD_REQUEST) {
+            ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(data, getString(R.string.br_login_error_wrong_credentials)), true)
+                    .show(getChildFragmentManager(), ConfirmationDialog.TAG);
+        } else {
+            ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+        }
     }
 
     private void initApiClient() {
