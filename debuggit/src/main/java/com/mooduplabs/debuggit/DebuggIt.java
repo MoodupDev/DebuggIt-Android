@@ -96,6 +96,7 @@ public class DebuggIt {
         registerShakeDetector(activity);
         ScreenshotUtils.getScreenshotPermission(activity);
         initScreenshotLoadingDialog();
+        Thread.setDefaultUncaughtExceptionHandler(UncaughtExceptionHandler.with(activity.getApplicationContext()));
     }
 
     private void checkIfInitialized(String callingMethodName) {
