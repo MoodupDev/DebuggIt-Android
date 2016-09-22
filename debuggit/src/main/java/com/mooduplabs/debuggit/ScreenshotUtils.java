@@ -5,7 +5,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
@@ -27,6 +31,13 @@ public class ScreenshotUtils {
     public static final int SCREENSHOT_REQUEST_CODE = 345;
     public static final String SCREENSHOT_VIRTUAL_DISPLAY_NAME = "screenshot-virtual-display";
     public static final String SCREENSHOT_HANDLER_NAME = "ScreenshotHandler";
+
+    private static final float[] BGR_TO_RGB_COLOR_TRANSFORM = {
+        0,  0,  1f, 0,  0,
+        0,  1f, 0,  0,  0,
+        1f, 0,  0,  0,  0,
+        0,  0,  0,  1f, 0
+    };
 
     //endregion
 
@@ -132,15 +143,14 @@ public class ScreenshotUtils {
         IntBuffer intBuffer = buffer.asIntBuffer();
         int[] pixels = new int[intBuffer.capacity()];
         intBuffer.get(pixels);
-        for(int i = 0; i < pixels.length; i++) {
-            int red = Color.red(pixels[i]);
-            int green = Color.green(pixels[i]);
-            int blue = Color.blue(pixels[i]);
-            int alpha = Color.alpha(pixels[i]);
-            pixels[i] = Color.argb(alpha, blue, green, red); // red pixels = blue pixels, blue = red
-        }
+        Paint paint = new Paint();
+        ColorMatrix colorMatrix = new ColorMatrix(BGR_TO_RGB_COLOR_TRANSFORM);
+        ColorMatrixColorFilter colorFilter = new ColorMatrixColorFilter(colorMatrix);
+        paint.setColorFilter(colorFilter);
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         bitmap.setPixels(pixels, 0, rowStride / pixelStride, 0, 0, width, height);
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawBitmap(bitmap, 0, 0, paint);
         return bitmap;
     }
 
