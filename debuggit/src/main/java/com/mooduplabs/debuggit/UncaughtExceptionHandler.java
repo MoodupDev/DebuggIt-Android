@@ -30,12 +30,14 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
         ApiClient.postEvent(context, ApiClient.EventType.APP_CRASHED);
-        Log.d("Stack trace", getStackTrace(ex));
-        Log.d("Other threads", getStackTraceFromEveryThread());
-        ActivityManager.MemoryInfo mi = getMemoryInfo();
-        Log.d("Free RAM", humanReadableSize(mi.availMem));
-        Log.d("Total RAM", humanReadableSize(mi.totalMem));
-        Log.d("Free space", humanReadableSize(freeInternalMemory()));
+        if(BuildConfig.DEBUG) {
+            Log.d("Stack trace", getStackTrace(ex));
+            Log.d("Other threads", getStackTraceFromEveryThread());
+            ActivityManager.MemoryInfo mi = getMemoryInfo();
+            Log.d("Free RAM", humanReadableSize(mi.availMem));
+            Log.d("Total RAM", humanReadableSize(mi.totalMem));
+            Log.d("Free space", humanReadableSize(freeInternalMemory()));
+        }
         defaultHandler.uncaughtException(thread, ex);
     }
 
