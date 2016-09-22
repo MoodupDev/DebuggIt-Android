@@ -26,10 +26,10 @@ public class SecondActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Dialog");
         builder.setMessage("Shake your phone to take screenshot");
-        builder.setPositiveButton("Screenshot", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Crash me", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                throw new RuntimeException("crash button clicked");
             }
         });
         builder.show();
