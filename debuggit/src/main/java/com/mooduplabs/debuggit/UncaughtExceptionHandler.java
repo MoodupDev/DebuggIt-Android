@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.support.annotation.NonNull;
+import android.text.format.Formatter;
 import android.util.Log;
 
 import java.io.PrintWriter;
@@ -16,8 +17,6 @@ import java.util.Set;
 
 public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
     //region Consts
-
-    private static final long MB_IN_BYTES = 1024 * 1024;
 
     //endregion
 
@@ -36,9 +35,9 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
         Log.d("Stack trace", getStackTrace(ex));
         Log.d("Other threads", getStackTraceFromEveryThread());
         ActivityManager.MemoryInfo mi = getMemoryInfo();
-        Log.d("Free RAM", humanReadableByteCount(mi.availMem, false));
-        Log.d("Total RAM", humanReadableByteCount(mi.totalMem, false));
-        Log.d("Free space", humanReadableByteCount(freeInternalMemory(), false));
+        Log.d("Free RAM", humanReadableSize(mi.availMem));
+        Log.d("Total RAM", humanReadableSize(mi.totalMem));
+        Log.d("Free space", humanReadableSize(freeInternalMemory()));
         defaultHandler.uncaughtException(thread, ex);
     }
 
@@ -99,16 +98,8 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
         return memoryInfo;
     }
 
-    private long bytesToMegabytes(long bytes) {
-        return bytes / MB_IN_BYTES;
-    }
-
-    private String humanReadableByteCount(long bytes, boolean si) {
-        int unit = si ? 1000 : 1024;
-        if (bytes < unit) return bytes + " B";
-        int exp = (int) (Math.log(bytes) / Math.log(unit));
-        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp-1) + (si ? "" : "i");
-        return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
+    private String humanReadableSize(long bytes) {
+        return Formatter.formatFileSize(context, bytes);
     }
 
     private long freeInternalMemory() {
