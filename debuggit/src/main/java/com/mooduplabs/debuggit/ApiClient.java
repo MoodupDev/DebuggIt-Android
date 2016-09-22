@@ -63,7 +63,8 @@ public class ApiClient {
         REPORT_CANCELED,
         ACTUAL_BEHAVIOUR_FILLED,
         STEPS_TO_REPRODUCE_FILLED,
-        EXPECTED_BEHAVIOUR_FILLED
+        EXPECTED_BEHAVIOUR_FILLED,
+        APP_CRASHED
     }
 
     protected interface HttpHandler {
