@@ -9,9 +9,6 @@ import android.support.annotation.NonNull;
 import android.text.format.Formatter;
 import android.util.Log;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.util.Map;
 import java.util.Set;
 
@@ -75,10 +72,7 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
     }
 
     private String getStackTrace(Throwable throwable) {
-        Writer stackTrace = new StringWriter();
-        PrintWriter printWriter = new PrintWriter(stackTrace);
-        throwable.printStackTrace(printWriter);
-        return throwable.toString();
+        return Log.getStackTraceString(throwable);
     }
 
     @NonNull
