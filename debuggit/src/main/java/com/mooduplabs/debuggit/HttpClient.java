@@ -35,6 +35,8 @@ public class HttpClient {
     private HashMap<String, String> headers;
     private Method method;
     private String data;
+    private String response;
+    private Exception exception;
     private int responseCode;
     private int timeout;
 
@@ -149,13 +151,22 @@ public class HttpClient {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                try {
-                    connect();
-                    handleStringResponse(callback);
-                } catch(IOException e) {
-                    callback.onException(e);
-                }
+                getResponse();
                 return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                if(exception != null) {
+                    callback.onException(exception);
+                } else {
+                    if(isSuccessful()) {
+                        callback.onSuccess(response);
+                    } else {
+                        callback.onFailure(responseCode, response);
+                    }
+                }
+                super.onPostExecute(aVoid);
             }
         }.execute();
     }
@@ -164,38 +175,48 @@ public class HttpClient {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                try {
-                    connect();
-                    handleJsonResponse(callback);
-                } catch(IOException | JSONException e) {
-                    callback.onException(e);
-                }
+                getResponse();
                 return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                if(exception != null) {
+                    callback.onException(exception);
+                } else {
+                    if(isSuccessful()) {
+                        try {
+                            callback.onSuccess(new JSONObject(response));
+                        } catch(JSONException e) {
+                            callback.onException(e);
+                        }
+                    } else {
+                        callback.onFailure(responseCode, response);
+                    }
+                }
+                super.onPostExecute(aVoid);
             }
         }.execute();
     }
 
-    private void handleStringResponse(StringResponseCallback callback) throws IOException {
-        if(isSuccessful()) {
-            try {
-                callback.onSuccess(readStringResponse(connection.getInputStream()));
-            } catch(IOException e) {
-                callback.onException(e);
-            }
-        } else {
-            callback.onFailure(responseCode, readStringResponse(connection.getErrorStream()));
+    private void getResponse() {
+        try {
+            connect();
+            readResponse();
+        } catch(IOException e) {
+            exception = e;
         }
     }
 
-    private void handleJsonResponse(JsonResponseCallback callback) throws IOException, JSONException {
+    private void readResponse() throws IOException {
         if(isSuccessful()) {
             try {
-                callback.onSuccess(readJsonResponse(connection.getInputStream()));
-            } catch(IOException | JSONException e) {
-                callback.onException(e);
+                response = readStringResponse(connection.getInputStream());
+            } catch(IOException e) {
+                exception = e;
             }
         } else {
-            callback.onFailure(responseCode, readStringResponse(connection.getErrorStream()));
+            response = readStringResponse(connection.getErrorStream());
         }
     }
 
