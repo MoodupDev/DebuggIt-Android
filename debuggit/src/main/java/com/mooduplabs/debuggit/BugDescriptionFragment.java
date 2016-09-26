@@ -27,7 +27,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -148,11 +147,13 @@ public class BugDescriptionFragment extends Fragment {
                         }
 
                         @Override
-                        public void onFailed() {
+                        public void onFailed(final boolean canceled) {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    ConfirmationDialog.newInstance(getString(R.string.br_upload_audio_failed), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                    if(!canceled) {
+                                        ConfirmationDialog.newInstance(getString(R.string.br_upload_audio_failed), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                    }
                                     v.setSelected(!v.isSelected());
                                 }
                             });

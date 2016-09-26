@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import java.net.HttpURLConnection;
+
 public class ReportFragment extends DialogFragment implements ViewPager.OnPageChangeListener {
 
     protected static final String TAG = ReportFragment.class.getSimpleName();
@@ -99,19 +101,20 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                         + Utils.getDeviceInfoString(getActivity()),
                 report.getPriority(),
                 report.getKind(),
-                new ApiClient.HttpHandler() {
+                new StringResponseCallback() {
                     @Override
-                    public void done(HttpResponse data) {
-                        if(!data.isUnauthorized()) {
-                            dialog.dismiss();
-                        }
-                        if(data.isSuccessful()) {
-                            postEventsAfterSendingReport(report);
-                            report.clear();
-                            resetReportButtonImage();
-                            retriesCount = 0;
-                            ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_SUCCESS).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                        } else if(data.isUnauthorized()) {
+                    public void onSuccess(String response) {
+                        dialog.dismiss();
+                        postEventsAfterSendingReport(report);
+                        report.clear();
+                        resetReportButtonImage();
+                        retriesCount = 0;
+                        ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_SUCCESS).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                    }
+
+                    @Override
+                    public void onFailure(int responseCode, String errorMessage) {
+                        if(responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
                             if(retriesCount < MAX_RETRIES_COUNT) {
                                 retriesCount++;
                                 sendIssue();
@@ -121,9 +124,17 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                                 showReloginMessage();
                             }
                         } else {
-                            ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(data, getString(R.string.br_confirmation_failure)), true)
+                            dialog.dismiss();
+                            ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(errorMessage, getString(R.string.br_confirmation_failure)), true)
                                     .show(getChildFragmentManager(), ConfirmationDialog.TAG);
                         }
+                    }
+
+                    @Override
+                    public void onException(Exception ex) {
+                        dialog.dismiss();
+                        ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_FAILURE)
+                                .show(getChildFragmentManager(), ConfirmationDialog.TAG);
                     }
                 }
         );

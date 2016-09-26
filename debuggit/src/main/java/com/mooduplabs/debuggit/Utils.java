@@ -268,15 +268,15 @@ public class Utils {
         return activity.getWindow().getDecorView().isShown();
     }
 
-    protected static String getBitbucketErrorMessage(HttpResponse data, String defaultMessage) {
+    protected static String getBitbucketErrorMessage(String response, String defaultMessage) {
         try {
-            JSONObject error = new JSONObject(data.getMessage());
+            JSONObject error = new JSONObject(response);
             if(error.has("error_description")) {
                 return error.getString("error_description");
             }
             return error.getJSONObject("error").getString("message");
         } catch(JSONException e) {
-            return data.getMessage().isEmpty() ? defaultMessage : data.getMessage();
+            return response.isEmpty() ? defaultMessage : response;
         }
     }
 

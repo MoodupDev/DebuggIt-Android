@@ -2,7 +2,6 @@ package com.mooduplabs.debuggit;
 
 import android.app.Dialog;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Base64;
@@ -11,8 +10,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
-import java.util.HashMap;
 
 public class DrawFragment extends DialogFragment {
 
@@ -32,8 +33,7 @@ public class DrawFragment extends DialogFragment {
 
     private Bitmap screenshot;
 
-    private UploadImageAsyncTask uploadImageAsyncTask;
-    private boolean uploadDissmissed;
+    private boolean uploadCancelled;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class DrawFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (getDialog() == null) {
+        if(getDialog() == null) {
             return;
         }
         if(Utils.isOrientationLandscape(getContext())) {
@@ -63,9 +63,6 @@ public class DrawFragment extends DialogFragment {
 
     @Override
     public void onDestroyView() {
-        if (uploadImageAsyncTask != null) {
-            uploadImageAsyncTask.cancel(true);
-        }
         Utils.lockScreenRotation(getActivity(), DebuggIt.getInstance().getActivityOrientation());
         super.onDestroyView();
     }
@@ -94,7 +91,7 @@ public class DrawFragment extends DialogFragment {
         dialog = LoadingDialog.newInstance(getString(R.string.br_loading_dialog_message_screenshot), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadDissmissed = true;
+                uploadCancelled = true;
             }
         });
 
@@ -184,65 +181,62 @@ public class DrawFragment extends DialogFragment {
         ScreenshotUtils.trimBitmap(getActivity(), Utils.getBitmapFromView(surfaceRoot), new ScreenshotUtils.ScreenshotListener() {
             @Override
             public void onScreenshotReady(Bitmap bitmap) {
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos);
+                if(!uploadCancelled) {
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos);
 
-                byte[] bitmapData = bos.toByteArray();
+                    byte[] bitmapData = bos.toByteArray();
 
-                HashMap<String, String> params = new HashMap<>();
-                params.put("data", Base64.encodeToString(bitmapData, Base64.NO_WRAP));
-                params.put("app_id", getContext().getPackageName());
+                    ApiClient.uploadImage(
+                            Base64.encodeToString(bitmapData, Base64.NO_WRAP),
+                            getContext().getPackageName(),
+                            new JsonResponseCallback() {
+                                @Override
+                                public void onSuccess(JSONObject response) {
+                                    if(!uploadCancelled) {
+                                        dialog.dismiss();
+                                        try {
+                                            String url = response.getString("url");
+                                            DebuggIt.getInstance().getReport().getScreensUrls().add(url);
+                                            new ReportFragment().show(getActivity().getSupportFragmentManager(), ReportFragment.TAG);
+                                            postEventsAfterAddingScreenshot();
+                                            dismiss();
+                                        } catch(JSONException e) {
+                                            // ignored
+                                        }
+                                    }
+                                    uploadCancelled = false;
+                                }
 
-                uploadImageAsyncTask = new UploadImageAsyncTask(params);
-                dialog.setOnCancelClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(uploadImageAsyncTask != null) {
-                            uploadImageAsyncTask.cancel(true);
-                        }
-                    }
-                });
-                if(!uploadDissmissed) {
-                    uploadImageAsyncTask.execute();
+                                @Override
+                                public void onFailure(int responseCode, String errorMessage) {
+                                    if(!uploadCancelled) {
+                                        dialog.dismiss();
+                                        ConfirmationDialog.newInstance(getString(R.string.br_screenshot_upload_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                    }
+                                    uploadCancelled = false;
+                                }
+
+                                @Override
+                                public void onException(Exception ex) {
+                                    if(!uploadCancelled) {
+                                        dialog.dismiss();
+                                        ConfirmationDialog.newInstance(getString(R.string.br_screenshot_upload_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                    }
+                                    uploadCancelled = false;
+                                }
+                            });
                 }
-                uploadDissmissed = false;
+                uploadCancelled = false;
             }
         });
     }
 
-    private class UploadImageAsyncTask extends AsyncTask<String, Void, String> {
-
-        private HashMap<String, String> postParams;
-
-        public UploadImageAsyncTask(HashMap<String, String> params) {
-            this.postParams = params;
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            return ApiClient.getUploadedFileUrl(postParams, true);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            dialog.dismiss();
-            if(s != null && !s.isEmpty()) {
-                DebuggIt.getInstance().getReport().getScreensUrls().add(s);
-                new ReportFragment().show(getActivity().getSupportFragmentManager(), ReportFragment.TAG);
-                postEventsAfterAddingScreenshot();
-                dismiss();
-            } else {
-                ConfirmationDialog.newInstance(getString(R.string.br_screenshot_upload_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-            }
-            super.onPostExecute(s);
-        }
-
-        private void postEventsAfterAddingScreenshot() {
-            ApiClient.postEvent(getContext(), ApiClient.EventType.SCREENSHOT_ADDED);
-            ApiClient.postEvent(getContext(),
-                    DrawFragment.this.drawingSurface.getType() == PaintableImageView.TYPE_FREE_DRAW ?
-                            ApiClient.EventType.SCREENSHOT_ADDED_DRAW :
-                            ApiClient.EventType.SCREENSHOT_ADDED_RECTANGLE);
-        }
+    private void postEventsAfterAddingScreenshot() {
+        ApiClient.postEvent(getContext(), ApiClient.EventType.SCREENSHOT_ADDED);
+        ApiClient.postEvent(getContext(),
+                DrawFragment.this.drawingSurface.getType() == PaintableImageView.TYPE_FREE_DRAW ?
+                        ApiClient.EventType.SCREENSHOT_ADDED_DRAW :
+                        ApiClient.EventType.SCREENSHOT_ADDED_RECTANGLE);
     }
 }

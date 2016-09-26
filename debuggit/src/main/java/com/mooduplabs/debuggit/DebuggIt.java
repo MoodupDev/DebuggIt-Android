@@ -82,11 +82,21 @@ public class DebuggIt {
         }
         checkIfInitialized("attach");
         if(!versionChecked) {
-            ApiClient.checkVersion(BuildConfig.VERSION_CODE, new ApiClient.HttpHandler() {
+            ApiClient.checkVersion(BuildConfig.VERSION_CODE, new StringResponseCallback() {
                 @Override
-                public void done(HttpResponse data) {
-                    versionChecked = data.getResponseCode() != ApiClient.NO_CONNECTION_RESPONSE_CODE;
-                    versionSupported = data.isSuccessful();
+                public void onSuccess(String response) {
+                    versionChecked = versionSupported = true;
+                }
+
+                @Override
+                public void onFailure(int responseCode, String errorMessage) {
+                    versionChecked = true;
+                    versionSupported = false;
+                }
+
+                @Override
+                public void onException(Exception exception) {
+                    versionChecked = versionSupported = false;
                 }
             });
         }
@@ -130,11 +140,10 @@ public class DebuggIt {
         }
     }
 
-    protected void saveTokens(HttpResponse data) throws JSONException {
-        JSONObject json = new JSONObject(data.getMessage());
-        accessToken = json.getString(ACCESS_TOKEN);
+    protected void saveTokens(JSONObject response) throws JSONException {
+        accessToken = response.getString(ACCESS_TOKEN);
         Utils.putString(activity, ACCESS_TOKEN, accessToken);
-        Utils.putString(activity, REFRESH_TOKEN, json.getString(REFRESH_TOKEN));
+        Utils.putString(activity, REFRESH_TOKEN, response.getString(REFRESH_TOKEN));
         waitingForShake = true;
     }
 
@@ -279,18 +288,26 @@ public class DebuggIt {
     private void refreshAccessToken() {
         ApiClient apiClient = new ApiClient(repoSlug, accountName, accessToken);
         Utils.putString(activity, ACCESS_TOKEN, "");
-        apiClient.refreshToken(clientId, clientSecret, Utils.getString(activity, REFRESH_TOKEN, ""), new ApiClient.HttpHandler() {
-            @Override
-            public void done(HttpResponse data) {
-                if(data.isSuccessful()) {
-                    try {
-                        saveTokens(data);
-                    } catch(JSONException e) {
-                        e.printStackTrace();
+        apiClient.refreshToken(clientId, clientSecret, Utils.getString(activity, REFRESH_TOKEN, ""), new JsonResponseCallback() {
+                    @Override
+                    public void onSuccess(JSONObject response) {
+                        try {
+                            saveTokens(response);
+                        } catch(JSONException e) {
+                            // ignored
+                        }
                     }
-                }
-            }
-        });
+
+                    @Override
+                    public void onFailure(int responseCode, String errorMessage) {
+                        // do nothing
+                    }
+
+                    @Override
+                    public void onException(Exception ex) {
+                        // do nothing
+                    }
+                });
     }
 
     private void startDrawFragment() {

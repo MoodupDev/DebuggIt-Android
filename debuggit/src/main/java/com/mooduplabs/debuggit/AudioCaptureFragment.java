@@ -1,6 +1,5 @@
 package com.mooduplabs.debuggit;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
@@ -13,7 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import java.util.HashMap;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -28,14 +29,13 @@ public class AudioCaptureFragment extends DialogFragment {
     private CountDownTimer countDownTimer;
     private MontserratTextView timer;
     private AudioRecordListener listener;
-    private UploadAudioAsyncTask uploadAudioAsyncTask;
     private LoadingDialog dialog;
     private ImageView recordDot;
 
     public interface AudioRecordListener {
         void onRecordUploaded(String audioUrl);
 
-        void onFailed();
+        void onFailed(boolean canceled);
     }
 
     public static AudioCaptureFragment newInstance(AudioRecordListener listener) {
@@ -66,7 +66,8 @@ public class AudioCaptureFragment extends DialogFragment {
         dialog = LoadingDialog.newInstance(getString(R.string.br_loading_dialog_message_record), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadAudioAsyncTask.cancel(true);
+                dismiss();
+                listener.onFailed(true);
             }
         });
 
@@ -75,12 +76,8 @@ public class AudioCaptureFragment extends DialogFragment {
 
     @Override
     public void onDestroyView() {
-        if (countDownTimer != null) {
+        if(countDownTimer != null) {
             countDownTimer = null;
-        }
-
-        if (uploadAudioAsyncTask != null) {
-            uploadAudioAsyncTask.cancel(true);
         }
         super.onDestroyView();
     }
@@ -112,22 +109,55 @@ public class AudioCaptureFragment extends DialogFragment {
 
             @Override
             public void onFinish() {
-                if (getActivity() != null && !isRemoving()) {
+                if(getActivity() != null && !isRemoving()) {
                     dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
                     audioCaptureHelper.stopRecording();
 
                     ApiClient.postEvent(getContext(), ApiClient.EventType.AUDIO_RECORD_TIME, recordingTime);
 
-                    HashMap<String, String> params = new HashMap<>();
-                    params.put("data", Base64.encodeToString(Utils.getBytesFromFile(audioCaptureHelper.getFilePath()), Base64.NO_WRAP));
-                    params.put("app_id", getContext().getPackageName());
+                    ApiClient.uploadAudio(
+                            Base64.encodeToString(Utils.getBytesFromFile(audioCaptureHelper.getFilePath()), Base64.NO_WRAP),
+                            getContext().getPackageName(),
+                            new JsonResponseCallback() {
+                                @Override
+                                public void onSuccess(JSONObject response) {
+                                    if(isAdded()) {
+                                        try {
+                                            String url = response.getString("url");
+                                            DebuggIt.getInstance().getReport().getAudioUrls().add(url);
+                                            listener.onRecordUploaded(url);
+                                            ApiClient.postEvent(getContext(), ApiClient.EventType.AUDIO_ADDED);
+                                        } catch(JSONException e) {
+                                            // ignored
+                                        }
+                                        dialog.dismiss();
+                                        dismiss();
+                                    }
+                                }
 
-                    uploadAudioAsyncTask = new UploadAudioAsyncTask(params);
-                    uploadAudioAsyncTask.execute();
+                                @Override
+                                public void onFailure(int responseCode, String errorMessage) {
+                                    onUploadFailed();
+                                }
+
+                                private void onUploadFailed() {
+                                    if(isAdded()) {
+                                        dialog.dismiss();
+                                        dismiss();
+                                        listener.onFailed(false);
+                                    }
+                                }
+
+                                @Override
+                                public void onException(Exception ex) {
+                                    onUploadFailed();
+                                }
+                            });
                 }
             }
         }.start();
     }
+
     @Override
     public void onDetach() {
         audioCaptureHelper.stopRecording();
@@ -143,34 +173,6 @@ public class AudioCaptureFragment extends DialogFragment {
 
     public void setListener(AudioRecordListener listener) {
         this.listener = listener;
-    }
-
-
-    private class UploadAudioAsyncTask extends AsyncTask<String, Void, String> {
-        private HashMap<String, String> postParams;
-
-        protected UploadAudioAsyncTask(HashMap<String, String> postParams) {
-            this.postParams = postParams;
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            return ApiClient.getUploadedFileUrl(postParams, false);
-        }
-
-        @Override
-        protected void onPostExecute(String url) {
-            dialog.dismiss();
-            dismiss();
-            if(url.isEmpty()) {
-                listener.onFailed();
-            } else {
-                DebuggIt.getInstance().getReport().getAudioUrls().add(url);
-                listener.onRecordUploaded(url);
-                ApiClient.postEvent(getContext(), ApiClient.EventType.AUDIO_ADDED);
-            }
-            super.onPostExecute(url);
-        }
     }
 }
 

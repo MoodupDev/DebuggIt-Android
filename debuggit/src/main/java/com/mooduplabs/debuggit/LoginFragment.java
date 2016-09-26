@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -66,11 +67,26 @@ public class LoginFragment extends DialogFragment {
                         DebuggIt.getInstance().getClientSecret(),
                         email.getText().toString(),
                         password.getText().toString(),
-                        new ApiClient.HttpHandler() {
+                        new JsonResponseCallback() {
                             @Override
-                            public void done(HttpResponse data) {
+                            public void onSuccess(JSONObject response) {
                                 dialog.dismiss();
-                                handleLoginResponse(data);
+                                handleLoginResponse(response);
+                            }
+
+                            @Override
+                            public void onFailure(int responseCode, String errorMessage) {
+                                if(responseCode == HttpsURLConnection.HTTP_BAD_REQUEST) {
+                                    ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(errorMessage, getString(R.string.br_login_error_wrong_credentials)), true)
+                                            .show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                } else {
+                                    ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                }
+                            }
+
+                            @Override
+                            public void onException(Exception ex) {
+                                ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                             }
                         }
                 );
@@ -78,20 +94,12 @@ public class LoginFragment extends DialogFragment {
         });
     }
 
-    private void handleLoginResponse(HttpResponse data) {
-        if(data.isSuccessful()) {
-            try {
-                DebuggIt.getInstance().saveTokens(data);
-                ConfirmationDialog.newInstance(getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-            } catch(JSONException e) {
-                e.printStackTrace();
-                ConfirmationDialog.newInstance(getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-            }
-        } else if(data.getResponseCode() == HttpsURLConnection.HTTP_BAD_REQUEST) {
-            ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(data, getString(R.string.br_login_error_wrong_credentials)), true)
-                    .show(getChildFragmentManager(), ConfirmationDialog.TAG);
-        } else {
-            ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+    private void handleLoginResponse(JSONObject response) {
+        try {
+            DebuggIt.getInstance().saveTokens(response);
+            ConfirmationDialog.newInstance(getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+        } catch(JSONException e) {
+            ConfirmationDialog.newInstance(getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
         }
     }
 
