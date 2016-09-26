@@ -5,7 +5,4 @@ import org.json.JSONObject;
 public interface JsonResponseCallback extends ResponseCallback<JSONObject> {
     @Override
     void onSuccess(JSONObject response);
-
-    @Override
-    void onFailure(int responseCode, JSONObject errorMessage);
 }

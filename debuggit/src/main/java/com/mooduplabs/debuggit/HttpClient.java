@@ -195,7 +195,7 @@ public class HttpClient {
                 callback.onException(e);
             }
         } else {
-            callback.onFailure(responseCode, readJsonResponse(connection.getErrorStream()));
+            callback.onFailure(responseCode, readStringResponse(connection.getErrorStream()));
         }
     }
 
