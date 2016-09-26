@@ -25,7 +25,6 @@ public class HttpClient {
 
     private static final String CHARSET_UTF8 = "UTF-8";
     private static final String AUTHORIZATION_KEY = "Authorization";
-    private static final int INVALID_RESPONSE_CODE = -1;
     private static final int DEFAULT_TIMEOUT_MILLIS = 15000;
     private static final String CONTENT_TYPE_KEY = "Content-type";
     private static final String CONTENT_TYPE_APPLICATION_JSON = "application/json";
@@ -138,6 +137,11 @@ public class HttpClient {
             public void onFailure(int responseCode, String errorMessage) {
 
             }
+
+            @Override
+            public void onException(Exception e) {
+
+            }
         });
     }
 
@@ -149,8 +153,7 @@ public class HttpClient {
                     connect();
                     handleStringResponse(callback);
                 } catch(IOException e) {
-                    responseCode = INVALID_RESPONSE_CODE;
-                    callback.onFailure(responseCode, e.getMessage());
+                    callback.onException(e);
                 }
                 return null;
             }
@@ -165,8 +168,7 @@ public class HttpClient {
                     connect();
                     handleJsonResponse(callback);
                 } catch(IOException | JSONException e) {
-                    responseCode = INVALID_RESPONSE_CODE;
-                    callback.onFailure(responseCode, createJsonErrorObject(e.getMessage()));
+                    callback.onException(e);
                 }
                 return null;
             }
@@ -178,7 +180,7 @@ public class HttpClient {
             try {
                 callback.onSuccess(readStringResponse(connection.getInputStream()));
             } catch(IOException e) {
-                callback.onFailure(responseCode, e.getMessage());
+                callback.onException(e);
             }
         } else {
             callback.onFailure(responseCode, readStringResponse(connection.getErrorStream()));
@@ -190,7 +192,7 @@ public class HttpClient {
             try {
                 callback.onSuccess(readJsonResponse(connection.getInputStream()));
             } catch(IOException | JSONException e) {
-                callback.onFailure(responseCode, createJsonErrorObject(e.getMessage()));
+                callback.onException(e);
             }
         } else {
             callback.onFailure(responseCode, readJsonResponse(connection.getErrorStream()));
@@ -264,25 +266,17 @@ public class HttpClient {
     }
 
     private void writeToOutputStream(String data) {
-        BufferedWriter writer;
-        try {
-            writer = new BufferedWriter(new OutputStreamWriter(os, CHARSET_UTF8));
-            writer.write(data);
-            writer.flush();
-            writer.close();
-            os.close();
-        } catch(IOException e) {
-            e.printStackTrace();
+        if((method == Method.POST || method == Method.PUT) && data != null) {
+            BufferedWriter writer;
+            try {
+                writer = new BufferedWriter(new OutputStreamWriter(os, CHARSET_UTF8));
+                writer.write(data);
+                writer.flush();
+                writer.close();
+                os.close();
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
         }
-    }
-
-    private JSONObject createJsonErrorObject(String message) {
-        JSONObject object = new JSONObject();
-        try {
-            object.put("error", message);
-        } catch(JSONException e) {
-            // ignored
-        }
-        return object;
     }
 }
