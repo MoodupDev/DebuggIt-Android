@@ -26,6 +26,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     private ImageView viewPagerIndicator;
     private LoadingDialog dialog;
     private int retriesCount = 0;
+    private StringResponseCallback sendingIssueCallback;
 
     @NonNull
     @Override
@@ -88,11 +89,57 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
     private void sendIssue() {
         final Report report = DebuggIt.getInstance().getReport();
-        ApiClient apiClient = new ApiClient(
-                DebuggIt.getInstance().getRepoSlug(),
-                DebuggIt.getInstance().getAccountName(),
-                DebuggIt.getInstance().getAccessToken()
-        );
+        sendingIssueCallback = new StringResponseCallback() {
+            @Override
+            public void onSuccess(String response) {
+                dialog.dismiss();
+                postEventsAfterSendingReport(report);
+                report.clear();
+                resetReportButtonImage();
+                retriesCount = 0;
+                ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_SUCCESS).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+            }
+
+            @Override
+            public void onFailure(int responseCode, String errorMessage) {
+                if(responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                    if(retriesCount < MAX_RETRIES_COUNT) {
+                        retriesCount++;
+                        sendIssue();
+                    } else {
+                        dialog.dismiss();
+                        retriesCount = 0;
+                        showReloginMessage();
+                    }
+                } else {
+                    dialog.dismiss();
+                    ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(errorMessage, getString(R.string.br_confirmation_failure)), true)
+                            .show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                }
+            }
+
+            @Override
+            public void onException(Exception ex) {
+                dialog.dismiss();
+                ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_FAILURE)
+                        .show(getChildFragmentManager(), ConfirmationDialog.TAG);
+            }
+        };
+        switch(DebuggIt.getInstance().getConfigType()) {
+            case BITBUCKET:
+                sendIssueToBitbucket(report);
+                break;
+            case JIRA:
+                JiraApiClient apiClient = new JiraApiClient(DebuggIt.getInstance().getJiraConfig());
+                // TODO: 26.09.2016 implement
+                break;
+            case GITHUB:
+                break;
+        }
+    }
+
+    private void sendIssueToBitbucket(final Report report) {
+        BitBucketApiClient apiClient = new BitBucketApiClient(DebuggIt.getInstance().getBitBucketConfig());
         apiClient.addIssue(
                 report.getTitle(),
                 report.getContent()
@@ -101,42 +148,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                         + Utils.getDeviceInfoString(getActivity()),
                 report.getPriority(),
                 report.getKind(),
-                new StringResponseCallback() {
-                    @Override
-                    public void onSuccess(String response) {
-                        dialog.dismiss();
-                        postEventsAfterSendingReport(report);
-                        report.clear();
-                        resetReportButtonImage();
-                        retriesCount = 0;
-                        ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_SUCCESS).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                    }
-
-                    @Override
-                    public void onFailure(int responseCode, String errorMessage) {
-                        if(responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                            if(retriesCount < MAX_RETRIES_COUNT) {
-                                retriesCount++;
-                                sendIssue();
-                            } else {
-                                dialog.dismiss();
-                                retriesCount = 0;
-                                showReloginMessage();
-                            }
-                        } else {
-                            dialog.dismiss();
-                            ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(errorMessage, getString(R.string.br_confirmation_failure)), true)
-                                    .show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                        }
-                    }
-
-                    @Override
-                    public void onException(Exception ex) {
-                        dialog.dismiss();
-                        ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_FAILURE)
-                                .show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                    }
-                }
+                sendingIssueCallback
         );
     }
 

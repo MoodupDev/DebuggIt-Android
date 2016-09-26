@@ -45,11 +45,9 @@ public class DebuggIt {
     private boolean versionSupported = false;
     private boolean shouldPostInitializedEvent = true;
 
-    private String clientId;
-    private String clientSecret;
-    private String repoSlug;
-    private String accountName;
-    private String accessToken;
+    private BitBucketConfig bitBucketConfig;
+    private JiraConfig jiraConfig;
+    private ConfigType configType;
 
     private Report report;
     private LoadingDialog screenshotLoadingDialog;
@@ -67,20 +65,27 @@ public class DebuggIt {
     }
 
     public void init(String clientId, String clientSecret, String repoSlug, String accountName) {
-        this.clientId = clientId;
-        this.clientSecret = clientSecret;
-        this.repoSlug = repoSlug.toLowerCase();
-        this.accountName = accountName;
+        this.bitBucketConfig = new BitBucketConfig(clientId, clientSecret, repoSlug, accountName);
+        init(ConfigType.BITBUCKET);
+    }
+
+    private void init(ConfigType configType) {
+        this.configType = configType;
         this.report = new Report();
         this.initialized = true;
     }
 
+    public void init(String host, String projectKey) {
+        this.jiraConfig = new JiraConfig(host, projectKey);
+        init(ConfigType.JIRA);
+    }
+
     public void attach(final Activity activity) {
+        checkIfInitialized("attach");
         if(shouldPostInitializedEvent) {
             ApiClient.postEvent(activity, ApiClient.EventType.INITIALIZED);
             shouldPostInitializedEvent = false;
         }
-        checkIfInitialized("attach");
         if(!versionChecked) {
             ApiClient.checkVersion(BuildConfig.VERSION_CODE, new StringResponseCallback() {
                 @Override
@@ -136,23 +141,15 @@ public class DebuggIt {
                 LoginFragment.newInstance().show(((FragmentActivity) activity).getSupportFragmentManager(), LoginFragment.TAG);
             }
         } else {
-            accessToken = Utils.getString(activity, ACCESS_TOKEN, "");
+            bitBucketConfig.setAccessToken(Utils.getString(activity, ACCESS_TOKEN, ""));
         }
     }
 
     protected void saveTokens(JSONObject response) throws JSONException {
-        accessToken = response.getString(ACCESS_TOKEN);
-        Utils.putString(activity, ACCESS_TOKEN, accessToken);
+        bitBucketConfig.setAccessToken(response.getString(ACCESS_TOKEN));
+        Utils.putString(activity, ACCESS_TOKEN, response.getString(ACCESS_TOKEN));
         Utils.putString(activity, REFRESH_TOKEN, response.getString(REFRESH_TOKEN));
         waitingForShake = true;
-    }
-
-    protected String getRepoSlug() {
-        return repoSlug;
-    }
-
-    protected String getAccountName() {
-        return accountName;
     }
 
     protected Report getReport() {
@@ -163,19 +160,16 @@ public class DebuggIt {
         return activity;
     }
 
-    protected String getClientId() {
-        return clientId;
+    public ConfigType getConfigType() {
+        return configType;
     }
 
-    protected String getClientSecret() {
-        return clientSecret;
+    public JiraConfig getJiraConfig() {
+        return jiraConfig;
     }
 
-    protected String getAccessToken() {
-        if(accessToken == null) {
-            accessToken = Utils.getString(activity, ACCESS_TOKEN, "");
-        }
-        return accessToken;
+    public BitBucketConfig getBitBucketConfig() {
+        return bitBucketConfig;
     }
 
     protected int getActivityOrientation() {
@@ -224,7 +218,7 @@ public class DebuggIt {
 
                     case MotionEvent.ACTION_UP:
                         if(!isMoving || Math.abs(previousY - view.getY()) <= MOVE_TOLERANCE) {
-                            if(!hasAccessToken()) {
+                            if(configType == ConfigType.BITBUCKET && !hasAccessToken()) {
                                 authenticate(false);
                             } else {
                                 startDrawFragment();
@@ -286,9 +280,9 @@ public class DebuggIt {
     }
 
     private void refreshAccessToken() {
-        ApiClient apiClient = new ApiClient(repoSlug, accountName, accessToken);
+        BitBucketApiClient apiClient = new BitBucketApiClient(bitBucketConfig);
         Utils.putString(activity, ACCESS_TOKEN, "");
-        apiClient.refreshToken(clientId, clientSecret, Utils.getString(activity, REFRESH_TOKEN, ""), new JsonResponseCallback() {
+        apiClient.refreshToken(Utils.getString(activity, REFRESH_TOKEN, ""), new JsonResponseCallback() {
                     @Override
                     public void onSuccess(JSONObject response) {
                         try {
@@ -392,4 +386,10 @@ public class DebuggIt {
     }
 
     // endregion
+
+    enum ConfigType {
+        BITBUCKET,
+        JIRA,
+        GITHUB
+    }
 }
