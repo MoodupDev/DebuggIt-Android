@@ -9,14 +9,6 @@ import java.util.HashMap;
 
 public class ApiClient {
 
-    public static final String TITLE = "title";
-    public static final String CONTENT = "content";
-    public static final String PRIORITY = "priority";
-    public static final String KIND = "kind";
-    public static final String GRANT_TYPE = "grant_type";
-    public static final String CHARSET_UTF8 = "UTF-8";
-    public static final String USERNAME = "username";
-
     public static final String UPLOAD_IMAGE_URL = BuildConfig.API_BASE_URL + "/api/v1/upload/image";
     public static final String UPLOAD_AUDIO_URL = BuildConfig.API_BASE_URL + "/api/v1/upload/audio";
     public static final String EVENTS_URL = BuildConfig.API_BASE_URL + "/api/v1/events";
@@ -55,13 +47,13 @@ public class ApiClient {
 
     protected void addIssue(String title, String content, String priority, String kind, StringResponseCallback callback) {
         HashMap<String, String> map = new HashMap<>();
-        map.put(TITLE, title);
-        map.put(CONTENT, content);
-        map.put(PRIORITY, priority);
-        map.put(KIND, kind);
+        map.put(Constants.Keys.TITLE, title);
+        map.put(Constants.Keys.CONTENT, content);
+        map.put(Constants.Keys.PRIORITY, priority);
+        map.put(Constants.Keys.KIND, kind);
 
         try {
-            HttpClient.post(String.format(BitBucket.ISSUES_URL, accountName, repoSlug)).withData(map).authUser(accessToken).send(callback);
+            HttpClient.post(String.format(Constants.BitBucket.ISSUES_URL, accountName, repoSlug)).withData(map).authUser(accessToken).send(callback);
         } catch(UnsupportedEncodingException | MalformedURLException e) {
             callback.onException(e);
         }
@@ -69,11 +61,11 @@ public class ApiClient {
 
     protected void refreshToken(String clientId, String clientSecret, String refreshToken, JsonResponseCallback callback) {
         HashMap<String, String> map = new HashMap<>();
-        map.put(GRANT_TYPE, BitBucket.GRANT_TYPE_REFRESH_TOKEN);
-        map.put(BitBucket.GRANT_TYPE_REFRESH_TOKEN, refreshToken);
+        map.put(Constants.Keys.GRANT_TYPE, Constants.BitBucket.GRANT_TYPE_REFRESH_TOKEN);
+        map.put(Constants.BitBucket.GRANT_TYPE_REFRESH_TOKEN, refreshToken);
 
         try {
-            HttpClient.post(BitBucket.AUTHORIZE_URL).withData(map).authUser(clientId, clientSecret).send(callback);
+            HttpClient.post(Constants.BitBucket.AUTHORIZE_URL).withData(map).authUser(clientId, clientSecret).send(callback);
         } catch(UnsupportedEncodingException | MalformedURLException e) {
             callback.onException(e);
         }
@@ -81,12 +73,12 @@ public class ApiClient {
 
     protected void login(String clientId, String clientSecret, String email, String password, JsonResponseCallback callback) {
         HashMap<String, String> map = new HashMap<>();
-        map.put(GRANT_TYPE, BitBucket.GRANT_TYPE_PASSWORD);
-        map.put(USERNAME, email);
-        map.put(BitBucket.GRANT_TYPE_PASSWORD, password);
+        map.put(Constants.Keys.GRANT_TYPE, Constants.BitBucket.GRANT_TYPE_PASSWORD);
+        map.put(Constants.Keys.USERNAME, email);
+        map.put(Constants.BitBucket.GRANT_TYPE_PASSWORD, password);
 
         try {
-            HttpClient.post(BitBucket.AUTHORIZE_URL).withData(map).authUser(clientId, clientSecret).send(callback);
+            HttpClient.post(Constants.BitBucket.AUTHORIZE_URL).withData(map).authUser(clientId, clientSecret).send(callback);
         } catch(UnsupportedEncodingException | MalformedURLException e) {
             callback.onException(e);
         }
@@ -106,11 +98,11 @@ public class ApiClient {
 
     protected static void postEvent(Context context, EventType eventType, Integer value) {
         HashMap<String, String> params = new HashMap<>();
-        params.put("event_type", eventType.name().toLowerCase());
-        params.put("app_id", context.getPackageName());
-        params.put("android_sdk", String.valueOf(Build.VERSION.SDK_INT));
-        params.put("device", Utils.getDeviceName());
-        if(value != null) params.put("value", String.valueOf(value));
+        params.put(Constants.Keys.EVENT_TYPE, eventType.name().toLowerCase());
+        params.put(Constants.Keys.APP_ID, context.getPackageName());
+        params.put(Constants.Keys.ANDROID_SDK, String.valueOf(Build.VERSION.SDK_INT));
+        params.put(Constants.Keys.DEVICE, Utils.getDeviceName());
+        if(value != null) params.put(Constants.Keys.VALUE, String.valueOf(value));
 
         try {
             HttpClient.post(EVENTS_URL).withData(params).send();
@@ -122,8 +114,8 @@ public class ApiClient {
 
     protected static void uploadImage(String imageData, String appId, JsonResponseCallback callback) {
         HashMap<String, String> data = new HashMap<>();
-        data.put("data", imageData);
-        data.put("app_id", appId);
+        data.put(Constants.Keys.DATA, imageData);
+        data.put(Constants.Keys.APP_ID, appId);
 
         try {
             HttpClient.post(UPLOAD_IMAGE_URL).withData(data).send(callback);
@@ -134,8 +126,8 @@ public class ApiClient {
 
     protected static void uploadAudio(String audioData, String appId, JsonResponseCallback callback) {
         HashMap<String, String> data = new HashMap<>();
-        data.put("data", audioData);
-        data.put("app_id", appId);
+        data.put(Constants.Keys.DATA, audioData);
+        data.put(Constants.Keys.APP_ID, appId);
 
         try {
             HttpClient.post(UPLOAD_AUDIO_URL).withData(data).send(callback);
