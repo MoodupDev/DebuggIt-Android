@@ -15,15 +15,9 @@ import android.view.View;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -82,34 +76,6 @@ public class Utils {
         view.destroyDrawingCache();
 
         return bmp;
-    }
-
-    protected static String getStringFromInputStream(InputStream is) {
-
-        BufferedReader br = null;
-        StringBuilder sb = new StringBuilder();
-
-        String line;
-        try {
-
-            br = new BufferedReader(new InputStreamReader(is));
-            while((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-        } catch(IOException e) {
-            e.printStackTrace();
-        } finally {
-            if(br != null) {
-                try {
-                    br.close();
-                } catch(IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return sb.toString();
-
     }
 
     protected static String getApplicationVersion(Activity activity) {
@@ -178,24 +144,6 @@ public class Utils {
             statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
         }
         return statusBarHeight;
-    }
-
-    protected static String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
-        StringBuilder result = new StringBuilder();
-        boolean first = true;
-        for(Map.Entry<String, String> entry : params.entrySet()) {
-            if(first) {
-                first = false;
-            } else {
-                result.append("&");
-            }
-
-            result.append(URLEncoder.encode(entry.getKey(), ApiClient.CHARSET_UTF8))
-                    .append("=")
-                    .append(URLEncoder.encode(entry.getValue(), ApiClient.CHARSET_UTF8));
-        }
-
-        return result.toString();
     }
 
     protected static byte[] getBytesFromFile(String filePath) {
