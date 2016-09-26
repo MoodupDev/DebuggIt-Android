@@ -14,10 +14,6 @@ public class ApiClient {
     public static final String EVENTS_URL = BuildConfig.API_BASE_URL + "/api/v1/events";
     public static final String SUPPORTED_VERSION_URL = BuildConfig.API_BASE_URL + "/api/v1/supported_versions/%d";
 
-    private String repoSlug;
-    private String accountName;
-    private String accessToken;
-
     protected enum EventType {
         INITIALIZED,
         HAS_UNSUPPORTED_VERSION,
@@ -37,51 +33,6 @@ public class ApiClient {
         STEPS_TO_REPRODUCE_FILLED,
         EXPECTED_BEHAVIOUR_FILLED,
         APP_CRASHED
-    }
-
-    public ApiClient(String repoSlug, String accountName, String accessToken) {
-        this.repoSlug = repoSlug;
-        this.accountName = accountName;
-        this.accessToken = accessToken;
-    }
-
-    protected void addIssue(String title, String content, String priority, String kind, StringResponseCallback callback) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put(Constants.Keys.TITLE, title);
-        map.put(Constants.Keys.CONTENT, content);
-        map.put(Constants.Keys.PRIORITY, priority);
-        map.put(Constants.Keys.KIND, kind);
-
-        try {
-            HttpClient.post(String.format(Constants.BitBucket.ISSUES_URL, accountName, repoSlug)).withData(map).authUser(accessToken).send(callback);
-        } catch(UnsupportedEncodingException | MalformedURLException e) {
-            callback.onException(e);
-        }
-    }
-
-    protected void refreshToken(String clientId, String clientSecret, String refreshToken, JsonResponseCallback callback) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put(Constants.Keys.GRANT_TYPE, Constants.BitBucket.GRANT_TYPE_REFRESH_TOKEN);
-        map.put(Constants.BitBucket.GRANT_TYPE_REFRESH_TOKEN, refreshToken);
-
-        try {
-            HttpClient.post(Constants.BitBucket.AUTHORIZE_URL).withData(map).authUser(clientId, clientSecret).send(callback);
-        } catch(UnsupportedEncodingException | MalformedURLException e) {
-            callback.onException(e);
-        }
-    }
-
-    protected void login(String clientId, String clientSecret, String email, String password, JsonResponseCallback callback) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put(Constants.Keys.GRANT_TYPE, Constants.BitBucket.GRANT_TYPE_PASSWORD);
-        map.put(Constants.Keys.USERNAME, email);
-        map.put(Constants.BitBucket.GRANT_TYPE_PASSWORD, password);
-
-        try {
-            HttpClient.post(Constants.BitBucket.AUTHORIZE_URL).withData(map).authUser(clientId, clientSecret).send(callback);
-        } catch(UnsupportedEncodingException | MalformedURLException e) {
-            callback.onException(e);
-        }
     }
 
     protected static void checkVersion(int currentVersion, StringResponseCallback callback) {
