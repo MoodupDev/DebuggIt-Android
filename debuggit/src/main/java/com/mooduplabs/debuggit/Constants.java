@@ -21,6 +21,11 @@ interface Constants {
         String GRANT_TYPE_REFRESH_TOKEN = "refresh_token";
     }
 
+    interface Jira {
+        String ISSUES_URL = "https://%s/rest/api/2/issue/%s";
+        String PROJECTS_URL = "https://%s/rest/api/2/project";
+    }
+
     interface Keys {
         String TITLE = "title";
         String CONTENT = "content";
