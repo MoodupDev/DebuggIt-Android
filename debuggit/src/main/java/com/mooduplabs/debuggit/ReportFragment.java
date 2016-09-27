@@ -26,7 +26,6 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     private ImageView viewPagerIndicator;
     private LoadingDialog dialog;
     private int retriesCount = 0;
-    private StringResponseCallback sendingIssueCallback;
 
     @NonNull
     @Override
