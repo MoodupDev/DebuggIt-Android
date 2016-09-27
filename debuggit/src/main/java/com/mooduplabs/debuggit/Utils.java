@@ -30,6 +30,8 @@ public class Utils {
     private static final String APPLICATION_VERSION_FORMAT = "%s (%d)";
     private static final String MARKDOWN_BOLD = "**";
     private static final String MARKDOWN_CELL_SEPARATOR = " | ";
+    public static final String JIRA_BOLD = "*";
+    public static final String JIRA_CELL_SEPARATOR = "|";
 
     protected static void putString(Context context, String key, String value) {
         SharedPreferences prefs = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
@@ -100,24 +102,57 @@ public class Utils {
         HashMap<String, String> deviceInfo = getDeviceInfo(activity);
 
         StringBuilder builder = new StringBuilder();
-        builder.append(" | | | ")
-                .append("\n")
-                .append("----|----|----|----")
-                .append("\n");
-
-        int lineCounter = 0;
-
-        for(Map.Entry<String, String> entry : deviceInfo.entrySet()) {
-            builder.append(MARKDOWN_BOLD)
-                    .append(entry.getKey())
-                    .append(MARKDOWN_BOLD)
-                    .append(MARKDOWN_CELL_SEPARATOR)
-                    .append(entry.getValue())
-                    .append(lineCounter % 2 == 1 ? "\n" : MARKDOWN_CELL_SEPARATOR);
-            lineCounter++;
-        }
+        appendTableHeader(builder);
+        appendDeviceInfo(deviceInfo, builder);
 
         return builder.toString();
+    }
+
+    private static void appendDeviceInfo(HashMap<String, String> deviceInfo, StringBuilder builder) {
+        int lineCounter = 0;
+
+        switch(DebuggIt.getInstance().getConfigType()) {
+            case JIRA:
+                builder.append(JIRA_CELL_SEPARATOR);
+                for(Map.Entry<String, String> entry : deviceInfo.entrySet()) {
+                    builder.append(JIRA_BOLD).append(entry.getKey()).append(JIRA_BOLD)
+                            .append(JIRA_CELL_SEPARATOR).append(entry.getValue()).append(lineCounter % 2 == 1 ? JIRA_CELL_SEPARATOR + "\n" + JIRA_CELL_SEPARATOR : JIRA_CELL_SEPARATOR);
+                    lineCounter++;
+                }
+                builder.deleteCharAt(builder.lastIndexOf(JIRA_CELL_SEPARATOR));
+                break;
+            case GITHUB:
+            case BITBUCKET:
+                default:
+                    for(Map.Entry<String, String> entry : deviceInfo.entrySet()) {
+                        builder.append(MARKDOWN_BOLD)
+                                .append(entry.getKey())
+                                .append(MARKDOWN_BOLD)
+                                .append(MARKDOWN_CELL_SEPARATOR)
+                                .append(entry.getValue())
+                                .append(lineCounter % 2 == 1 ? "\n" : MARKDOWN_CELL_SEPARATOR);
+                        lineCounter++;
+                    }
+                break;
+        }
+    }
+
+    private static StringBuilder appendTableHeader(StringBuilder builder) {
+        switch(DebuggIt.getInstance().getConfigType()) {
+            case JIRA:
+                builder.append("|| Key || Value || Key || Value ||")
+                        .append("\n");
+                break;
+            case BITBUCKET:
+            case GITHUB:
+            default:
+                builder.append(" | | | ")
+                        .append("\n")
+                        .append("----|----|----|----")
+                        .append("\n");
+                break;
+        }
+        return builder;
     }
 
     private static HashMap<String, String> getDeviceInfo(Activity activity) {
@@ -193,14 +228,12 @@ public class Utils {
         return phrase;
     }
 
-    protected static String getUrlAsStrings(List<String> urls, boolean isMediaFile) {
+    protected static String getUrlAsStrings(List<String> urls, boolean isAudioUrl) {
         StringBuilder builder = new StringBuilder();
         if(urls != null) {
             for(String s : urls) {
-                if(!isMediaFile) {
-                    builder.append("![Alt text](")
-                            .append(s)
-                            .append(")")
+                if(!isAudioUrl) {
+                    appendImageLink(builder, s)
                             .append("\n\n");
                 } else {
                     builder.append(s)
@@ -210,6 +243,24 @@ public class Utils {
         }
 
         return builder.toString();
+    }
+
+    private static StringBuilder appendImageLink(StringBuilder builder, String url) {
+        switch(DebuggIt.getInstance().getConfigType()) {
+            case BITBUCKET:
+                builder.append("![Alt text](")
+                        .append(url)
+                        .append(")");
+                break;
+            case JIRA:
+                builder.append("!")
+                        .append(url)
+                        .append("!");
+                break;
+            case GITHUB:
+                break;
+        }
+        return builder;
     }
 
     protected static boolean isActivityRunning(Activity activity) {

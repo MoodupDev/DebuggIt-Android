@@ -1,13 +1,15 @@
 package com.mooduplabs.debuggit;
 
+import android.app.Activity;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Report {
 
-    private static final String STEPS_TO_REPRODUCE_TITLE = "**Steps to reproduce**: ";
-    private static final String ACTUAL_BEHAVIOUR_TITLE = "**Actual behaviour**: ";
-    private static final String EXPECTED_BEHAVIOUR_TITLE = "**Expected behaviour**: ";
+    private static final String STEPS_TO_REPRODUCE_TITLE = "%1$sSteps to reproduce%1$s: ";
+    private static final String ACTUAL_BEHAVIOUR_TITLE = "%1$sActual behaviour%1$s: ";
+    private static final String EXPECTED_BEHAVIOUR_TITLE = "%1$sExpected behaviour%1$s: ";
     private static final String END_LINE = "\n\n";
 
     private String title;
@@ -30,12 +32,6 @@ public class Report {
 
     protected void setTitle(String title) {
         this.title = title;
-    }
-
-    protected String getContent() {
-        return STEPS_TO_REPRODUCE_TITLE + getStepsToReproduce() + END_LINE +
-                ACTUAL_BEHAVIOUR_TITLE + getActualBehaviour() + END_LINE +
-                EXPECTED_BEHAVIOUR_TITLE + getExpectedBehaviour() + END_LINE;
     }
 
     protected List<String> getAudioUrls() {
@@ -95,5 +91,25 @@ public class Report {
         expectedBehaviour = "";
         audioUrls.clear();
         screensUrls.clear();
+    }
+
+    protected String getContent(Activity activity) {
+        String boldMark;
+        switch(DebuggIt.getInstance().getConfigType()) {
+            case JIRA:
+                boldMark = "*";
+                break;
+            case GITHUB:
+            case BITBUCKET:
+            default:
+                boldMark = "**";
+
+        }
+        return String.format(STEPS_TO_REPRODUCE_TITLE, boldMark) + getStepsToReproduce() + END_LINE +
+                String.format(ACTUAL_BEHAVIOUR_TITLE, boldMark) + getActualBehaviour() + END_LINE +
+                String.format(EXPECTED_BEHAVIOUR_TITLE, boldMark) + getExpectedBehaviour() + END_LINE
+                + Utils.getUrlAsStrings(screensUrls, false)
+                + Utils.getUrlAsStrings(audioUrls, true)
+                + Utils.getDeviceInfoString(activity);
     }
 }

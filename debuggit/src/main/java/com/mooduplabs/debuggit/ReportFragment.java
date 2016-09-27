@@ -90,10 +90,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         final Report report = DebuggIt.getInstance().getReport();
         DebuggIt.getInstance().getApiService().addIssue(
                 report.getTitle(),
-                report.getContent()
-                        + Utils.getUrlAsStrings(report.getScreensUrls(), false)
-                        + Utils.getUrlAsStrings(report.getAudioUrls(), true)
-                        + Utils.getDeviceInfoString(getActivity()),
+                report.getContent(getActivity()),
                 report.getPriority(),
                 report.getKind(),
                 new StringResponseCallback() {
