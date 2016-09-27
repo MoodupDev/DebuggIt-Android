@@ -11,10 +11,12 @@ class JiraApiService implements ApiService {
     private String projectKey;
     private String username;
     private String password;
+    private boolean usesHttps;
 
-    public JiraApiService(String host, String projectKey) {
+    public JiraApiService(String host, String projectKey, boolean usesHttps) {
         this.host = host;
         this.projectKey = projectKey;
+        this.usesHttps = usesHttps;
     }
 
     public String getUsername() {
@@ -36,7 +38,7 @@ class JiraApiService implements ApiService {
     @Override
     public void login(String email, String password, JsonResponseCallback callback) {
         try {
-            HttpClient.get(String.format(Constants.Jira.CONFIGURATION_URL, host)).authUser(email, password).send(callback);
+            HttpClient.get(getUrlWithCorrectProtocol(String.format(Constants.Jira.CONFIGURATION_URL, host))).authUser(email, password).send(callback);
         } catch(MalformedURLException e) {
             callback.onException(e);
         }
@@ -45,7 +47,7 @@ class JiraApiService implements ApiService {
     @Override
     public void addIssue(String title, String content, String priority, String kind, StringResponseCallback callback) {
         try {
-            HttpClient.post(String.format(Constants.Jira.ISSUES_URL, host))
+            HttpClient.post(getUrlWithCorrectProtocol(String.format(Constants.Jira.ISSUES_URL, host)))
                     .authUser(username, password)
                     .withData(getIssueObject(title, content, priority, kind))
                     .send(callback);
@@ -54,6 +56,18 @@ class JiraApiService implements ApiService {
         } catch(JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void refreshToken(String refreshToken, JsonResponseCallback callback) {
+        // do nothing
+    }
+
+    private String getUrlWithCorrectProtocol(String url) {
+        if(!usesHttps) {
+            url = url.replaceFirst("s", "");
+        }
+        return url;
     }
 
     private JSONObject getIssueObject(String title, String content, String priority, String kind) throws JSONException {
@@ -75,11 +89,6 @@ class JiraApiService implements ApiService {
 
         issue.put(Constants.Keys.FIELDS, fields);
         return issue;
-    }
-
-    @Override
-    public void refreshToken(String refreshToken, JsonResponseCallback callback) {
-        // do nothing
     }
 
     private String getJiraKind(String kind) {
