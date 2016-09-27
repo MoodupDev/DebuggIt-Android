@@ -75,9 +75,13 @@ public class DebuggIt {
         this.initialized = true;
     }
 
-    public void init(String host, String projectKey) {
-        this.apiService = new JiraApiService(host, projectKey);
+    public void init(String host, String projectKey, boolean usesHttps) {
+        this.apiService = new JiraApiService(host, projectKey, usesHttps);
         init(ConfigType.JIRA);
+    }
+
+    public void init(String host, String projectKey) {
+        init(host, projectKey, true);
     }
 
     public void attach(final Activity activity) {
