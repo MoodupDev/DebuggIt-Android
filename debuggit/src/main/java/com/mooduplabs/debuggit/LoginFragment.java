@@ -10,8 +10,6 @@ import android.view.View;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.HttpURLConnection;
-
 import javax.net.ssl.HttpsURLConnection;
 
 public class LoginFragment extends DialogFragment {
@@ -26,55 +24,6 @@ public class LoginFragment extends DialogFragment {
     private LoadingDialog loadingDialog;
     private MontserratEditText email;
     private MontserratEditText password;
-    private JsonResponseCallback bitbucketLoginResponseCallback = new JsonResponseCallback() {
-        @Override
-        public void onSuccess(JSONObject response) {
-            loadingDialog.dismiss();
-            handleLoginResponse(response);
-        }
-
-        @Override
-        public void onFailure(int responseCode, String errorMessage) {
-            if(responseCode == HttpsURLConnection.HTTP_BAD_REQUEST) {
-                ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(errorMessage, getString(R.string.br_login_error_wrong_credentials)), true)
-                        .show(getChildFragmentManager(), ConfirmationDialog.TAG);
-            } else {
-                ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-            }
-        }
-
-        @Override
-        public void onException(Exception ex) {
-            ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-        }
-    };
-
-    private StringResponseCallback jiraLoginResponseCallback = new StringResponseCallback() {
-
-        @Override
-        public void onSuccess(String response) {
-            loadingDialog.dismiss();
-            DebuggIt.getInstance().getJiraConfig().setUsername(email.getText().toString());
-            DebuggIt.getInstance().getJiraConfig().setPassword(password.getText().toString());
-            ConfirmationDialog.newInstance(getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-        }
-
-        @Override
-        public void onFailure(int responseCode, String errorMessage) {
-            loadingDialog.dismiss();
-            if(responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error_wrong_credentials), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-            } else {
-                ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-            }
-        }
-
-        @Override
-        public void onException(Exception ex) {
-            loadingDialog.dismiss();
-            ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-        }
-    };
 
     //endregion
 
@@ -114,29 +63,57 @@ public class LoginFragment extends DialogFragment {
             public void onClick(View v) {
                 loadingDialog = LoadingDialog.newInstance(getContext().getString(R.string.br_login_loading_info));
                 loadingDialog.show(getChildFragmentManager(), LoadingDialog.TAG);
-                switch(DebuggIt.getInstance().getConfigType()) {
-                    case BITBUCKET:
-                        BitBucketApiClient apiClient = new BitBucketApiClient(DebuggIt.getInstance().getBitBucketConfig());
-                        apiClient.login(
-                                DebuggIt.getInstance().getBitBucketConfig().getClientId(),
-                                DebuggIt.getInstance().getBitBucketConfig().getClientSecret(),
-                                email.getText().toString(),
-                                password.getText().toString(),
-                                bitbucketLoginResponseCallback
-                        );
-                        break;
-                    case JIRA:
-                        JiraApiClient jiraApiClient = new JiraApiClient(DebuggIt.getInstance().getJiraConfig());
-                        jiraApiClient.login(email.getText().toString(), password.getText().toString(), jiraLoginResponseCallback);
-                        break;
-                    case GITHUB:
-                        break;
-                }
+                final String email = LoginFragment.this.email.getText().toString();
+                final String password = LoginFragment.this.password.getText().toString();
+                DebuggIt.getInstance().getApiService().login(
+                        email,
+                        password,
+                        new JsonResponseCallback() {
+                            @Override
+                            public void onSuccess(JSONObject response) {
+                                loadingDialog.dismiss();
+                                switch(DebuggIt.getInstance().getConfigType()) {
+
+                                    case BITBUCKET:
+                                        handleBitBucketLoginResponse(response);
+                                        break;
+                                    case JIRA:
+                                        handleJiraLoginResponse(email, password);
+                                        break;
+                                    case GITHUB:
+                                        break;
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(int responseCode, String errorMessage) {
+                                if(responseCode == HttpsURLConnection.HTTP_BAD_REQUEST) {
+                                    ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(errorMessage, getString(R.string.br_login_error_wrong_credentials)), true)
+                                            .show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                } else {
+                                    ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                }
+                            }
+
+                            @Override
+                            public void onException(Exception ex) {
+                                ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                            }
+                        }
+                );
             }
         });
     }
 
-    private void handleLoginResponse(JSONObject response) {
+    private void handleJiraLoginResponse(String email, String password) {
+        Utils.putString(getActivity(), Constants.Keys.JIRA_EMAIL, email);
+        Utils.putString(getActivity(), Constants.Keys.JIRA_PASSWORD, password);
+        ((JiraApiService) DebuggIt.getInstance().getApiService()).setUsername(email);
+        ((JiraApiService) DebuggIt.getInstance().getApiService()).setPassword(password);
+        ConfirmationDialog.newInstance(getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+    }
+
+    private void handleBitBucketLoginResponse(JSONObject response) {
         try {
             DebuggIt.getInstance().saveTokens(response);
             ConfirmationDialog.newInstance(getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
