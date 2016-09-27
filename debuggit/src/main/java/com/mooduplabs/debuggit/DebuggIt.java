@@ -64,7 +64,7 @@ public class DebuggIt {
         return instance;
     }
 
-    public void init(String clientId, String clientSecret, String repoSlug, String accountName) {
+    public void initBitbucket(String clientId, String clientSecret, String repoSlug, String accountName) {
         this.apiService = new BitBucketApiService(clientId, clientSecret, repoSlug, accountName);
         init(ConfigType.BITBUCKET);
     }
@@ -75,13 +75,13 @@ public class DebuggIt {
         this.initialized = true;
     }
 
-    public void init(String host, String projectKey, boolean usesHttps) {
+    public void initJira(String host, String projectKey, boolean usesHttps) {
         this.apiService = new JiraApiService(host, projectKey, usesHttps);
         init(ConfigType.JIRA);
     }
 
-    public void init(String host, String projectKey) {
-        init(host, projectKey, true);
+    public void initJira(String host, String projectKey) {
+        initJira(host, projectKey, true);
     }
 
     public void attach(final Activity activity) {
