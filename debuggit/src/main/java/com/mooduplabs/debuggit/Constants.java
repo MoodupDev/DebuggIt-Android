@@ -22,8 +22,8 @@ interface Constants {
     }
 
     interface Jira {
-        String ISSUES_URL = "https://%s/rest/api/2/issue/%s";
-        String PROJECTS_URL = "https://%s/rest/api/2/project";
+        String ISSUES_URL = "https://%s/rest/api/2/issue";
+        String CONFIGURATION_URL = "https://%s/rest/api/2/configuration";
     }
 
     interface Keys {
@@ -39,5 +39,7 @@ interface Constants {
         String DEVICE = "device";
         String VALUE = "value";
         String DATA = "data";
+        String JIRA_EMAIL = "jira_email";
+        String JIRA_PASSWORD = "jira_password";
     }
 }
