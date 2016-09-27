@@ -45,9 +45,9 @@ public class DebuggIt {
     private boolean versionSupported = false;
     private boolean shouldPostInitializedEvent = true;
 
-    private BitBucketConfig bitBucketConfig;
-    private JiraConfig jiraConfig;
     private ConfigType configType;
+
+    private ApiService apiService;
 
     private Report report;
     private LoadingDialog screenshotLoadingDialog;
@@ -65,7 +65,7 @@ public class DebuggIt {
     }
 
     public void init(String clientId, String clientSecret, String repoSlug, String accountName) {
-        this.bitBucketConfig = new BitBucketConfig(clientId, clientSecret, repoSlug, accountName);
+        this.apiService = new BitBucketApiService(clientId, clientSecret, repoSlug, accountName);
         init(ConfigType.BITBUCKET);
     }
 
@@ -76,7 +76,7 @@ public class DebuggIt {
     }
 
     public void init(String host, String projectKey) {
-        this.jiraConfig = new JiraConfig(host, projectKey);
+        this.apiService = new JiraApiService(host, projectKey);
         init(ConfigType.JIRA);
     }
 
@@ -141,12 +141,27 @@ public class DebuggIt {
                 LoginFragment.newInstance().show(((FragmentActivity) activity).getSupportFragmentManager(), LoginFragment.TAG);
             }
         } else {
-            bitBucketConfig.setAccessToken(Utils.getString(activity, ACCESS_TOKEN, ""));
+            applySavedTokens();
+        }
+    }
+
+    private void applySavedTokens() {
+        switch(DebuggIt.getInstance().getConfigType()) {
+
+            case BITBUCKET:
+                ((BitBucketApiService) apiService).setAccessToken(Utils.getString(activity, ACCESS_TOKEN, ""));
+                break;
+            case JIRA:
+                ((JiraApiService) apiService).setUsername(Utils.getString(activity, Constants.Keys.JIRA_EMAIL, ""));
+                ((JiraApiService) apiService).setPassword(Utils.getString(activity, Constants.Keys.JIRA_PASSWORD, ""));
+                break;
+            case GITHUB:
+                break;
         }
     }
 
     protected void saveTokens(JSONObject response) throws JSONException {
-        bitBucketConfig.setAccessToken(response.getString(ACCESS_TOKEN));
+        ((BitBucketApiService) apiService).setAccessToken(response.getString(ACCESS_TOKEN));
         Utils.putString(activity, ACCESS_TOKEN, response.getString(ACCESS_TOKEN));
         Utils.putString(activity, REFRESH_TOKEN, response.getString(REFRESH_TOKEN));
         waitingForShake = true;
@@ -164,17 +179,14 @@ public class DebuggIt {
         return configType;
     }
 
-    public JiraConfig getJiraConfig() {
-        return jiraConfig;
-    }
-
-    public BitBucketConfig getBitBucketConfig() {
-        return bitBucketConfig;
-    }
-
     protected int getActivityOrientation() {
         return activityOrientation;
     }
+
+    public ApiService getApiService() {
+        return apiService;
+    }
+
 
     private void addReportButton() {
         final FrameLayout rootLayout = (FrameLayout) activity.findViewById(android.R.id.content);
@@ -218,9 +230,10 @@ public class DebuggIt {
 
                     case MotionEvent.ACTION_UP:
                         if(!isMoving || Math.abs(previousY - view.getY()) <= MOVE_TOLERANCE) {
-                            if(configType == ConfigType.BITBUCKET && !hasAccessToken()) {
+                            if(!hasAccessToken()) {
                                 authenticate(false);
                             } else {
+                                applySavedTokens();
                                 startDrawFragment();
                             }
                         }
@@ -280,28 +293,27 @@ public class DebuggIt {
     }
 
     private void refreshAccessToken() {
-        BitBucketApiClient apiClient = new BitBucketApiClient(bitBucketConfig);
         Utils.putString(activity, ACCESS_TOKEN, "");
-        apiClient.refreshToken(Utils.getString(activity, REFRESH_TOKEN, ""), new JsonResponseCallback() {
-                    @Override
-                    public void onSuccess(JSONObject response) {
-                        try {
-                            saveTokens(response);
-                        } catch(JSONException e) {
-                            // ignored
-                        }
-                    }
+        apiService.refreshToken(Utils.getString(activity, REFRESH_TOKEN, ""), new JsonResponseCallback() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    saveTokens(response);
+                } catch(JSONException e) {
+                    // ignored
+                }
+            }
 
-                    @Override
-                    public void onFailure(int responseCode, String errorMessage) {
-                        // do nothing
-                    }
+            @Override
+            public void onFailure(int responseCode, String errorMessage) {
+                // do nothing
+            }
 
-                    @Override
-                    public void onException(Exception ex) {
-                        // do nothing
-                    }
-                });
+            @Override
+            public void onException(Exception ex) {
+                // do nothing
+            }
+        });
     }
 
     private void startDrawFragment() {
@@ -367,7 +379,17 @@ public class DebuggIt {
     }
 
     private boolean hasAccessToken() {
-        return !Utils.getString(activity, ACCESS_TOKEN, "").isEmpty();
+        switch(DebuggIt.getInstance().getConfigType()) {
+
+            case BITBUCKET:
+                return !Utils.getString(activity, ACCESS_TOKEN, "").isEmpty();
+            case JIRA:
+                return !Utils.getString(activity, Constants.Keys.JIRA_EMAIL, "").isEmpty()
+                        || !Utils.getString(activity, Constants.Keys.JIRA_PASSWORD, "").isEmpty();
+            case GITHUB:
+                break;
+        }
+        return false;
     }
 
     private void showUnsupportedVersionPopup() {
