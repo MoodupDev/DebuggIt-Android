@@ -216,7 +216,11 @@ public class HttpClient {
                 exception = e;
             }
         } else {
-            response = readStringResponse(connection.getErrorStream());
+            try {
+                response = readStringResponse(connection.getErrorStream());
+            } catch(Exception e) {
+                exception = e;
+            }
         }
     }
 
