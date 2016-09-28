@@ -44,7 +44,6 @@ public class BugDescriptionFragment extends Fragment {
     private static final int KIND_ENHANCEMENT_INDEX = 1;
 
     private LinearLayout itemsContainer;
-    private ImageView recordButton;
     private MontserratTextView[] kindButtons;
     private MontserratTextView[] priorityButtons;
     private MontserratEditText bugTitle;
@@ -131,7 +130,7 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     private void initRecordButton(View view) {
-        recordButton = (ImageView) view.findViewById(R.id.record_button);
+        ImageView recordButton = (ImageView) view.findViewById(R.id.record_button);
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
