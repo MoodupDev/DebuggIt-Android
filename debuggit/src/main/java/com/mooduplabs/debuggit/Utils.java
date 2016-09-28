@@ -144,9 +144,13 @@ public class Utils {
                         .append("\n");
                 break;
             case BITBUCKET:
-            case GITHUB:
-            default:
                 builder.append(" | | | ")
+                        .append("\n")
+                        .append("----|----|----|----")
+                        .append("\n");
+                break;
+            case GITHUB:
+                builder.append(" | | | |")
                         .append("\n")
                         .append("----|----|----|----")
                         .append("\n");
@@ -247,17 +251,16 @@ public class Utils {
 
     private static StringBuilder appendImageLink(StringBuilder builder, String url) {
         switch(DebuggIt.getInstance().getConfigType()) {
-            case BITBUCKET:
-                builder.append("![Alt text](")
-                        .append(url)
-                        .append(")");
-                break;
             case JIRA:
                 builder.append("!")
                         .append(url)
                         .append("!");
                 break;
             case GITHUB:
+            case BITBUCKET:
+                builder.append("![Alt text](")
+                        .append(url)
+                        .append(")");
                 break;
         }
         return builder;
