@@ -302,8 +302,8 @@ public class DebuggIt {
     }
 
     private void refreshAccessToken() {
-        Utils.putString(activity, ACCESS_TOKEN, "");
-        apiService.refreshToken(Utils.getString(activity, REFRESH_TOKEN, ""), new JsonResponseCallback() {
+        Utils.putString(activity, Constants.BitBucket.ACCESS_TOKEN, "");
+        apiService.refreshToken(Utils.getString(activity, Constants.BitBucket.REFRESH_TOKEN, ""), new JsonResponseCallback() {
             @Override
             public void onSuccess(JSONObject response) {
                 try {
@@ -391,7 +391,7 @@ public class DebuggIt {
         switch(DebuggIt.getInstance().getConfigType()) {
 
             case BITBUCKET:
-                return !Utils.getString(activity, ACCESS_TOKEN, "").isEmpty();
+                return !Utils.getString(activity, Constants.BitBucket.ACCESS_TOKEN, "").isEmpty();
             case JIRA:
                 return !Utils.getString(activity, Constants.Jira.EMAIL, "").isEmpty()
                         && !Utils.getString(activity, Constants.Jira.PASSWORD, "").isEmpty();
