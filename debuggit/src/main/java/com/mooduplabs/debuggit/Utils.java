@@ -279,4 +279,22 @@ public class Utils {
         }
     }
 
+    protected static String convertPriorityName(String priority) {
+        switch(DebuggIt.getInstance().getConfigType()) {
+            case BITBUCKET:
+                switch(priority) {
+                    case Constants.PRIORITY_LOW:
+                        return Constants.BitBucket.PRIORITY_MINOR;
+                    case Constants.PRIORITY_MEDIUM:
+                        return Constants.BitBucket.PRIORITY_MAJOR;
+                    case Constants.PRIORITY_HIGH:
+                        return Constants.BitBucket.PRIORITY_CRITICAL;
+                }
+            case JIRA:
+            case GITHUB:
+                default:
+                return priority;
+        }
+    }
+
 }

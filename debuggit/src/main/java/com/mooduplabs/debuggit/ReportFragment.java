@@ -91,7 +91,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         DebuggIt.getInstance().getApiService().addIssue(
                 report.getTitle(),
                 report.getContent(getActivity()),
-                report.getPriority(),
+                Utils.convertPriorityName(report.getPriority()),
                 report.getKind(),
                 new StringResponseCallback() {
                     @Override
