@@ -18,7 +18,9 @@
 
 -keep class com.mooduplabs.debuggit.DebuggIt {
     public static <methods>;
-    public void init(...);
+    public void initBitbucket(...);
+    public void initJira(...);
+    public void initGitHub(...);
     public void attach(...);
     public void getScreenshotPermission(...);
 }

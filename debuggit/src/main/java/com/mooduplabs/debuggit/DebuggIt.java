@@ -77,7 +77,7 @@ public class DebuggIt {
         initJira(host, projectKey, true);
     }
 
-    public void initGithub(String repoSlug, String accountName) {
+    public void initGitHub(String repoSlug, String accountName) {
         this.apiService = new GitHubApiService(accountName, repoSlug);
         init(ConfigType.GITHUB);
     }
