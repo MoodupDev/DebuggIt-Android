@@ -79,7 +79,7 @@ class JiraApiService implements ApiService {
 
         project.put(Constants.Keys.PROJECT_KEY, projectKey);
         issueType.put(Constants.Keys.FIELD_NAME, getJiraKind(kind));
-        priorityObject.put(Constants.Keys.FIELD_NAME, getJiraPriority(priority));
+        priorityObject.put(Constants.Keys.FIELD_NAME, priority);
 
         fields.put(Constants.Keys.PROJECT, project);
         fields.put(Constants.Keys.SUMMARY, title);
@@ -92,18 +92,6 @@ class JiraApiService implements ApiService {
     }
 
     private String getJiraKind(String kind) {
-        return kind.equalsIgnoreCase(Constants.BitBucket.KIND_BUG) ? Constants.Jira.KIND_BUG : Constants.Jira.KIND_TASK;
-    }
-
-    private String getJiraPriority(String priority) {
-        switch(priority) {
-            case Constants.BitBucket.PRIORITY_MINOR:
-                return Constants.Jira.PRIORITY_LOW;
-            case Constants.BitBucket.PRIORITY_MAJOR:
-                return Constants.Jira.PRIORITY_MEDIUM;
-            case Constants.BitBucket.PRIORITY_CRITICAL:
-                return Constants.Jira.PRIORITY_HIGH;
-        }
-        return Constants.Jira.PRIORITY_MEDIUM;
+        return kind.equalsIgnoreCase(Constants.KIND_BUG) ? Constants.Jira.KIND_BUG : Constants.Jira.KIND_TASK;
     }
 }
