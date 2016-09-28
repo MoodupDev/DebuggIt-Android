@@ -24,10 +24,11 @@ import java.util.Map;
 public class HttpClient {
 
     private static final String CHARSET_UTF8 = "UTF-8";
-    private static final String AUTHORIZATION_KEY = "Authorization";
     private static final int DEFAULT_TIMEOUT_MILLIS = 15000;
     private static final String CONTENT_TYPE_KEY = "Content-type";
     private static final String CONTENT_TYPE_APPLICATION_JSON = "application/json";
+    public static final String ACCEPT_HEADER = "Accept";
+    public static final String AUTHORIZATION_HEADER = "Authorization";
 
     private URL url;
     private HttpURLConnection connection;
@@ -115,12 +116,12 @@ public class HttpClient {
     }
 
     public HttpClient authUser(String username, String password) {
-        withHeader(AUTHORIZATION_KEY, getBasicAuthString(username, password));
+        withHeader(AUTHORIZATION_HEADER, getBasicAuthString(username, password));
         return this;
     }
 
     public HttpClient authUser(String token) {
-        withHeader(AUTHORIZATION_KEY, getBearerAuthString(token));
+        withHeader(AUTHORIZATION_HEADER, getBearerAuthString(token));
         return this;
     }
 

@@ -70,5 +70,10 @@ interface Constants {
         String ISSUE_TYPE = "issuetype";
         String FIELDS = "fields";
         String TOKEN = "token";
+        String SCOPES = "scopes";
+        String NOTE = "note";
+        String NOTE_URL = "note_url";
+        String LABELS = "labels";
+        String BODY = "body";
     }
 }

@@ -9,6 +9,8 @@ import java.net.MalformedURLException;
 public class GitHubApiService implements ApiService {
     //region Consts
 
+    private static final String TOKEN_FORMAT = "token %s";
+
     //endregion
 
     //region Fields
@@ -25,7 +27,7 @@ public class GitHubApiService implements ApiService {
     public void login(String email, String password, JsonResponseCallback callback) {
         try {
             HttpClient.post(Constants.GitHub.AUTHORIZE_URL)
-                    .withHeader("Accept", Constants.GitHub.JSON_FORMAT)
+                    .withHeader(HttpClient.ACCEPT_HEADER, Constants.GitHub.JSON_FORMAT)
                     .authUser(email, password)
                     .withData(getAuthJsonObject())
                     .send(callback);
@@ -38,8 +40,8 @@ public class GitHubApiService implements ApiService {
     public void addIssue(String title, String content, String priority, String kind, StringResponseCallback callback) {
         try {
             HttpClient.post(String.format(Constants.GitHub.ISSUES_URL, accountName, repoSlug))
-                    .withHeader("Accept", Constants.GitHub.JSON_FORMAT)
-                    .withHeader("Authorization", String.format("token %s", accessToken))
+                    .withHeader(HttpClient.ACCEPT_HEADER, Constants.GitHub.JSON_FORMAT)
+                    .withHeader(HttpClient.AUTHORIZATION_HEADER, String.format(TOKEN_FORMAT, accessToken))
                     .withData(getIssueJsonObject(title, content, kind))
                     .send(callback);
         } catch(MalformedURLException e) {
@@ -70,11 +72,11 @@ public class GitHubApiService implements ApiService {
     private JSONObject getAuthJsonObject() {
         JSONObject auth = new JSONObject();
         JSONArray scopes = new JSONArray();
-        scopes.put("repo");
+        scopes.put(Constants.GitHub.SCOPE_REPO);
         try {
-            auth.put("scopes", scopes);
-            auth.put("note", "Debugg.it library" + System.currentTimeMillis());
-            auth.put("note_url", "http://debugg.it");
+            auth.put(Constants.Keys.SCOPES, scopes);
+            auth.put(Constants.Keys.NOTE, String.format("debugg.it library at %s", Utils.getDateString(System.currentTimeMillis())));
+            auth.put(Constants.Keys.NOTE_URL, "http://debugg.it");
         } catch(JSONException e) {
             e.printStackTrace();
         }
@@ -85,11 +87,11 @@ public class GitHubApiService implements ApiService {
     private JSONObject getIssueJsonObject(String title, String content, String kind) {
         JSONObject issue = new JSONObject();
         try {
-            issue.put("title", title);
-            issue.put("body", content);
+            issue.put(Constants.Keys.TITLE, title);
+            issue.put(Constants.Keys.BODY, content);
             JSONArray labels = new JSONArray();
             labels.put(kind);
-            issue.put("labels", labels);
+            issue.put(Constants.Keys.LABELS, labels);
         } catch(JSONException e) {
             e.printStackTrace();
         }

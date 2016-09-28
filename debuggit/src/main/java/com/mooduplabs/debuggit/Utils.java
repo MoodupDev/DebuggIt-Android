@@ -18,6 +18,8 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -276,6 +278,9 @@ public class Utils {
             if(error.has("error_description")) {
                 return error.getString("error_description");
             }
+            if(error.has("message")) {
+                return error.getString("message");
+            }
             return error.getJSONObject("error").getString("message");
         } catch(JSONException e) {
             return response.isEmpty() ? defaultMessage : response;
@@ -298,6 +303,14 @@ public class Utils {
                 default:
                 return priority;
         }
+    }
+
+    protected static String getDateString(long milliSeconds) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(milliSeconds);
+        return formatter.format(calendar.getTime());
     }
 
 }
