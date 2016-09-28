@@ -9,6 +9,8 @@ interface Constants {
     // ISSUE KINDS
     String KIND_BUG = "bug";
     String KIND_ENHANCEMENT = "enhancement";
+    
+    String DEBUGGIT_URL = "http://debugg.it";
 
     interface BitBucket {
         // URLS

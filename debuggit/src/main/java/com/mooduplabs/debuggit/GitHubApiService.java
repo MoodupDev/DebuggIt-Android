@@ -10,6 +10,7 @@ public class GitHubApiService implements ApiService {
     //region Consts
 
     private static final String TOKEN_FORMAT = "token %s";
+    private static final String AUTH_NOTE_FORMAT = "debugg.it library at %s";
 
     //endregion
 
@@ -75,8 +76,8 @@ public class GitHubApiService implements ApiService {
         scopes.put(Constants.GitHub.SCOPE_REPO);
         try {
             auth.put(Constants.Keys.SCOPES, scopes);
-            auth.put(Constants.Keys.NOTE, String.format("debugg.it library at %s", Utils.getDateString(System.currentTimeMillis())));
-            auth.put(Constants.Keys.NOTE_URL, "http://debugg.it");
+            auth.put(Constants.Keys.NOTE, String.format(AUTH_NOTE_FORMAT, Utils.getDateString(System.currentTimeMillis())));
+            auth.put(Constants.Keys.NOTE_URL, Constants.DEBUGGIT_URL);
         } catch(JSONException e) {
             e.printStackTrace();
         }
