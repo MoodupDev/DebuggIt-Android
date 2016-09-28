@@ -81,8 +81,10 @@ public class LoginFragment extends DialogFragment {
                                         handleJiraLoginResponse(email, password);
                                         break;
                                     case GITHUB:
+                                        handleGitHubLoginResponse(response);
                                         break;
                                 }
+                                DebuggIt.getInstance().applySavedTokens();
                             }
 
                             @Override
@@ -105,11 +107,18 @@ public class LoginFragment extends DialogFragment {
         });
     }
 
+    private void handleGitHubLoginResponse(JSONObject response) {
+        try {
+            Utils.putString(getActivity(), Constants.GitHub.ACCESS_TOKEN, response.getString(Constants.Keys.TOKEN));
+            ConfirmationDialog.newInstance(getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+        } catch(JSONException e) {
+            ConfirmationDialog.newInstance(getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+        }
+    }
+
     private void handleJiraLoginResponse(String email, String password) {
         Utils.putString(getActivity(), Constants.Keys.JIRA_EMAIL, email);
         Utils.putString(getActivity(), Constants.Keys.JIRA_PASSWORD, password);
-        ((JiraApiService) DebuggIt.getInstance().getApiService()).setUsername(email);
-        ((JiraApiService) DebuggIt.getInstance().getApiService()).setPassword(password);
         ConfirmationDialog.newInstance(getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
     }
 

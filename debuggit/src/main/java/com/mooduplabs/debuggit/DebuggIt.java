@@ -155,7 +155,7 @@ public class DebuggIt {
         }
     }
 
-    private void applySavedTokens() {
+    protected void applySavedTokens() {
         switch(DebuggIt.getInstance().getConfigType()) {
 
             case BITBUCKET:
@@ -166,6 +166,7 @@ public class DebuggIt {
                 ((JiraApiService) apiService).setPassword(Utils.getString(activity, Constants.Keys.JIRA_PASSWORD, ""));
                 break;
             case GITHUB:
+                ((GitHubApiService) apiService).setAccessToken(Utils.getString(activity, Constants.GitHub.ACCESS_TOKEN, ""));
                 break;
         }
     }
@@ -397,7 +398,7 @@ public class DebuggIt {
                 return !Utils.getString(activity, Constants.Keys.JIRA_EMAIL, "").isEmpty()
                         || !Utils.getString(activity, Constants.Keys.JIRA_PASSWORD, "").isEmpty();
             case GITHUB:
-                break;
+                return !Utils.getString(activity, Constants.GitHub.ACCESS_TOKEN, "").isEmpty();
         }
         return false;
     }
