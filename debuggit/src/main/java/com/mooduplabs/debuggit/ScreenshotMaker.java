@@ -43,10 +43,10 @@ import static android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND;
 /**
  * Utility class to take screenshots of activity screen
  */
-public final class Falcon {
+public final class ScreenshotMaker {
     //region Constants
 
-    private static final String TAG = "Falcon";
+    private static final String TAG = "ScreenshotMaker";
 
     //endregion
 
@@ -361,7 +361,7 @@ public final class Falcon {
     //region Constructors
 
     // No instances
-    private Falcon() {
+    private ScreenshotMaker() {
     }
 
     //endregion

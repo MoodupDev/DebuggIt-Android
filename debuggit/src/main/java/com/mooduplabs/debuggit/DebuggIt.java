@@ -354,7 +354,7 @@ public class DebuggIt {
                         }
                     });
                 } else {
-                    showDrawFragment(Falcon.takeScreenshotBitmap(activity));
+                    showDrawFragment(ScreenshotMaker.takeScreenshotBitmap(activity));
                 }
             } catch(IllegalStateException e) {
                 e.printStackTrace();
