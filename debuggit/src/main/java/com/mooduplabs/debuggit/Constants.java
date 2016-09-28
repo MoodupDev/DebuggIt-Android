@@ -2,6 +2,14 @@ package com.mooduplabs.debuggit;
 
 interface Constants {
 
+    String PRIORITY_LOW = "Low";
+    String PRIORITY_MEDIUM = "Medium";
+    String PRIORITY_HIGH = "High";
+
+    // ISSUE KINDS
+    String KIND_BUG = "bug";
+    String KIND_ENHANCEMENT = "enhancement";
+
     interface BitBucket {
         // URLS
         String AUTHORIZE_URL = "https://bitbucket.org/site/oauth2/access_token";
@@ -11,10 +19,6 @@ interface Constants {
         String PRIORITY_MINOR = "minor";
         String PRIORITY_MAJOR = "major";
         String PRIORITY_CRITICAL = "critical";
-
-        // ISSUE KINDS
-        String KIND_BUG = "bug";
-        String KIND_ENHANCEMENT = "enhancement";
 
         // AUTH
         String GRANT_TYPE_PASSWORD = "password";
@@ -26,9 +30,6 @@ interface Constants {
         String CONFIGURATION_URL = "https://%s/rest/api/2/configuration";
         String KIND_BUG = "Bug";
         String KIND_TASK = "Task";
-        String PRIORITY_LOW = "Low";
-        String PRIORITY_MEDIUM = "Medium";
-        String PRIORITY_HIGH = "High";
     }
 
     interface Keys {

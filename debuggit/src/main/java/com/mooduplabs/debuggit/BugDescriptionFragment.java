@@ -37,9 +37,9 @@ public class BugDescriptionFragment extends Fragment {
 
     public static final String POSITION = "position";
     public static final int RECORD_PERMISSIONS_REQUEST = 145;
-    private static final int PRIORITY_MINOR_INDEX = 0;
-    private static final int PRIORITY_MAJOR_INDEX = 1;
-    private static final int PRIORITY_CRITICAL_INDEX = 2;
+    private static final int PRIORITY_LOW_INDEX = 0;
+    private static final int PRIORITY_MEDIUM_INDEX = 1;
+    private static final int PRIORITY_HIGH_INDEX = 2;
     private static final int KIND_BUG_INDEX = 0;
     private static final int KIND_ENHANCEMENT_INDEX = 1;
 
@@ -191,11 +191,11 @@ public class BugDescriptionFragment extends Fragment {
                         if (v.isSelected()) {
                             String priority;
                             if (v.getId() == R.id.priority_low_button) {
-                                priority = Constants.BitBucket.PRIORITY_MINOR;
+                                priority = Constants.PRIORITY_LOW;
                             } else if (v.getId() == R.id.priority_medium_button) {
-                                priority = Constants.BitBucket.PRIORITY_MAJOR;
+                                priority = Constants.PRIORITY_MEDIUM;
                             } else {
-                                priority = Constants.BitBucket.PRIORITY_CRITICAL;
+                                priority = Constants.PRIORITY_HIGH;
                             }
                             DebuggIt.getInstance().getReport().setPriority(priority);
                         }
@@ -256,7 +256,7 @@ public class BugDescriptionFragment extends Fragment {
         if (!report.getPriority().isEmpty()) {
             priorityButtons[getSelectedPriorityButtonIndex(report)].setSelected(true);
         } else {
-            priorityButtons[PRIORITY_MAJOR_INDEX].setSelected(true);
+            priorityButtons[PRIORITY_MEDIUM_INDEX].setSelected(true);
             report.setPriority(Constants.BitBucket.PRIORITY_MAJOR);
         }
     }
@@ -266,21 +266,21 @@ public class BugDescriptionFragment extends Fragment {
             kindButtons[getSelectedKindButtonIndex(report)].setSelected(true);
         } else {
             kindButtons[KIND_BUG_INDEX].setSelected(true);
-            report.setKind(Constants.BitBucket.KIND_BUG);
+            report.setKind(Constants.KIND_BUG);
         }
     }
 
     private int getSelectedKindButtonIndex(Report report) {
-        return report.getKind().equalsIgnoreCase(Constants.BitBucket.KIND_BUG) ? KIND_BUG_INDEX : KIND_ENHANCEMENT_INDEX;
+        return report.getKind().equalsIgnoreCase(Constants.KIND_BUG) ? KIND_BUG_INDEX : KIND_ENHANCEMENT_INDEX;
     }
 
     private int getSelectedPriorityButtonIndex(Report report) {
-        if (report.getPriority().equalsIgnoreCase(Constants.BitBucket.PRIORITY_MINOR)) {
-            return PRIORITY_MINOR_INDEX;
-        } else if (report.getPriority().equalsIgnoreCase(Constants.BitBucket.PRIORITY_MAJOR)) {
-            return PRIORITY_MAJOR_INDEX;
+        if (report.getPriority().equalsIgnoreCase(Constants.PRIORITY_LOW)) {
+            return PRIORITY_LOW_INDEX;
+        } else if (report.getPriority().equalsIgnoreCase(Constants.PRIORITY_MEDIUM)) {
+            return PRIORITY_MEDIUM_INDEX;
         }
-        return PRIORITY_CRITICAL_INDEX;
+        return PRIORITY_HIGH_INDEX;
     }
 
     private void initReportContent() {
@@ -400,7 +400,7 @@ public class BugDescriptionFragment extends Fragment {
                     if(!v.isSelected()) {
                         v.setSelected(!v.isSelected());
                         if (v.isSelected()) {
-                            DebuggIt.getInstance().getReport().setKind(v.getId() == R.id.kind_bug_button ? Constants.BitBucket.KIND_BUG : Constants.BitBucket.KIND_ENHANCEMENT);
+                            DebuggIt.getInstance().getReport().setKind(v.getId() == R.id.kind_bug_button ? Constants.KIND_BUG : Constants.KIND_ENHANCEMENT);
                         }
                         deselectOtherButtons(v, kindButtons);
                     }
