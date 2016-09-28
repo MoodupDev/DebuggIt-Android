@@ -89,7 +89,7 @@ public class LoginFragment extends DialogFragment {
 
                             @Override
                             public void onFailure(int responseCode, String errorMessage) {
-                                if(responseCode == HttpsURLConnection.HTTP_BAD_REQUEST) {
+                                if(responseCode == HttpsURLConnection.HTTP_BAD_REQUEST || responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
                                     ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(errorMessage, getString(R.string.br_login_error_wrong_credentials)), true)
                                             .show(getChildFragmentManager(), ConfirmationDialog.TAG);
                                 } else {
@@ -117,8 +117,8 @@ public class LoginFragment extends DialogFragment {
     }
 
     private void handleJiraLoginResponse(String email, String password) {
-        Utils.putString(getActivity(), Constants.Keys.JIRA_EMAIL, email);
-        Utils.putString(getActivity(), Constants.Keys.JIRA_PASSWORD, password);
+        Utils.putString(getActivity(), Constants.Jira.EMAIL, email);
+        Utils.putString(getActivity(), Constants.Jira.PASSWORD, password);
         ConfirmationDialog.newInstance(getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
     }
 

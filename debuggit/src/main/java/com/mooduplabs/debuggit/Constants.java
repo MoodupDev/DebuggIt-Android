@@ -23,20 +23,30 @@ interface Constants {
         // AUTH
         String GRANT_TYPE_PASSWORD = "password";
         String GRANT_TYPE_REFRESH_TOKEN = "refresh_token";
+
+        String ACCESS_TOKEN = "access_token";
+        String REFRESH_TOKEN = "refresh_token";
     }
 
     interface Jira {
         String ISSUES_URL = "https://%s/rest/api/2/issue";
         String CONFIGURATION_URL = "https://%s/rest/api/2/configuration";
+
         String KIND_BUG = "Bug";
         String KIND_TASK = "Task";
+
+        String EMAIL = "jira_email";
+        String PASSWORD = "jira_password";
     }
 
     interface GitHub {
-        String JSON_FORMAT = "application/vnd.github.v3+json";
         String AUTHORIZE_URL = "https://api.github.com/authorizations";
         String ISSUES_URL = "https://api.github.com/repos/%1$s/%2$s/issues";
+
+        String JSON_FORMAT = "application/vnd.github.v3+json";
+
         String ACCESS_TOKEN = "github_access_token";
+        String SCOPE_REPO = "repo";
     }
 
     interface Keys {
@@ -52,8 +62,6 @@ interface Constants {
         String DEVICE = "device";
         String VALUE = "value";
         String DATA = "data";
-        String JIRA_EMAIL = "jira_email";
-        String JIRA_PASSWORD = "jira_password";
         String PROJECT_KEY = "key";
         String PROJECT = "project";
         String SUMMARY = "summary";

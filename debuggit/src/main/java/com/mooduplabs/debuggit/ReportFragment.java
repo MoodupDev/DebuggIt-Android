@@ -150,10 +150,25 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         ConfirmationDialog.newInstance(getString(R.string.br_error_access_token_expired), true, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.putString(getContext(), DebuggIt.ACCESS_TOKEN, "");
+                clearToken();
                 DebuggIt.getInstance().authenticate(false);
             }
         }).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+    }
+
+    private void clearToken() {
+        switch(DebuggIt.getInstance().getConfigType()) {
+            case BITBUCKET:
+                Utils.putString(getContext(), Constants.BitBucket.ACCESS_TOKEN, "");
+                break;
+            case JIRA:
+                Utils.putString(getContext(), Constants.Jira.EMAIL, "");
+                Utils.putString(getContext(), Constants.Jira.PASSWORD, "");
+                break;
+            case GITHUB:
+                Utils.putString(getContext(), Constants.GitHub.ACCESS_TOKEN, "");
+                break;
+        }
     }
 
     private void initViewPager(View view) {

@@ -25,8 +25,6 @@ public class DebuggIt {
 
     protected static final String BUTTON_POSITION_PORTRAIT = "button_position_portrait";
     protected static final String BUTTON_POSITION_LANDSCAPE = "button_position_landscape";
-    protected static final String ACCESS_TOKEN = "access_token";
-    protected static final String REFRESH_TOKEN = "refresh_token";
 
     // endregion
 
@@ -159,11 +157,11 @@ public class DebuggIt {
         switch(DebuggIt.getInstance().getConfigType()) {
 
             case BITBUCKET:
-                ((BitBucketApiService) apiService).setAccessToken(Utils.getString(activity, ACCESS_TOKEN, ""));
+                ((BitBucketApiService) apiService).setAccessToken(Utils.getString(activity, Constants.BitBucket.ACCESS_TOKEN, ""));
                 break;
             case JIRA:
-                ((JiraApiService) apiService).setUsername(Utils.getString(activity, Constants.Keys.JIRA_EMAIL, ""));
-                ((JiraApiService) apiService).setPassword(Utils.getString(activity, Constants.Keys.JIRA_PASSWORD, ""));
+                ((JiraApiService) apiService).setUsername(Utils.getString(activity, Constants.Jira.EMAIL, ""));
+                ((JiraApiService) apiService).setPassword(Utils.getString(activity, Constants.Jira.PASSWORD, ""));
                 break;
             case GITHUB:
                 ((GitHubApiService) apiService).setAccessToken(Utils.getString(activity, Constants.GitHub.ACCESS_TOKEN, ""));
@@ -172,9 +170,9 @@ public class DebuggIt {
     }
 
     protected void saveTokens(JSONObject response) throws JSONException {
-        ((BitBucketApiService) apiService).setAccessToken(response.getString(ACCESS_TOKEN));
-        Utils.putString(activity, ACCESS_TOKEN, response.getString(ACCESS_TOKEN));
-        Utils.putString(activity, REFRESH_TOKEN, response.getString(REFRESH_TOKEN));
+        ((BitBucketApiService) apiService).setAccessToken(response.getString(Constants.BitBucket.ACCESS_TOKEN));
+        Utils.putString(activity, Constants.BitBucket.ACCESS_TOKEN, response.getString(Constants.BitBucket.ACCESS_TOKEN));
+        Utils.putString(activity, Constants.BitBucket.REFRESH_TOKEN, response.getString(Constants.BitBucket.REFRESH_TOKEN));
         waitingForShake = true;
     }
 
@@ -395,8 +393,8 @@ public class DebuggIt {
             case BITBUCKET:
                 return !Utils.getString(activity, ACCESS_TOKEN, "").isEmpty();
             case JIRA:
-                return !Utils.getString(activity, Constants.Keys.JIRA_EMAIL, "").isEmpty()
-                        || !Utils.getString(activity, Constants.Keys.JIRA_PASSWORD, "").isEmpty();
+                return !Utils.getString(activity, Constants.Jira.EMAIL, "").isEmpty()
+                        && !Utils.getString(activity, Constants.Jira.PASSWORD, "").isEmpty();
             case GITHUB:
                 return !Utils.getString(activity, Constants.GitHub.ACCESS_TOKEN, "").isEmpty();
         }
