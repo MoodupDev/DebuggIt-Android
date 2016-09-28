@@ -69,11 +69,6 @@ public class DebuggIt {
         init(ConfigType.BITBUCKET);
     }
 
-    private void init(ConfigType configType) {
-        this.configType = configType;
-        this.report = new Report();
-        this.initialized = true;
-    }
 
     public void initJira(String host, String projectKey, boolean usesHttps) {
         this.apiService = new JiraApiService(host, projectKey, usesHttps);
@@ -82,6 +77,17 @@ public class DebuggIt {
 
     public void initJira(String host, String projectKey) {
         initJira(host, projectKey, true);
+    }
+
+    public void initGithub(String repoSlug, String accountName) {
+        this.apiService = new GitHubApiService(accountName, repoSlug);
+        init(ConfigType.GITHUB);
+    }
+
+    private void init(ConfigType configType) {
+        this.configType = configType;
+        this.report = new Report();
+        this.initialized = true;
     }
 
     public void attach(final Activity activity) {
