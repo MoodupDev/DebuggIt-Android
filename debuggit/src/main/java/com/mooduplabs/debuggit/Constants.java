@@ -32,6 +32,13 @@ interface Constants {
         String KIND_TASK = "Task";
     }
 
+    interface GitHub {
+        String JSON_FORMAT = "application/vnd.github.v3+json";
+        String AUTHORIZE_URL = "https://api.github.com/authorizations";
+        String ISSUES_URL = "https://api.github.com/repos/%1$s/%2$s/issues";
+        String ACCESS_TOKEN = "github_access_token";
+    }
+
     interface Keys {
         String TITLE = "title";
         String CONTENT = "content";
@@ -54,5 +61,6 @@ interface Constants {
         String FIELD_NAME = "name";
         String ISSUE_TYPE = "issuetype";
         String FIELDS = "fields";
+        String TOKEN = "token";
     }
 }
