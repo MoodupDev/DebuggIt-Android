@@ -42,6 +42,7 @@
     <string name="br.service.github">GitHub</string>
     <string name="br.welcome.text">An easy way to report bugs\ndebugg.it</string>
     <string name="br.welcome.button">Let\'s go!</string>
+    <string name="br.welcome.or">or</string>
 
 
 </resources>

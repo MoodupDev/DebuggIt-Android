@@ -20,17 +20,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/br.small.margin"
-            android:layout_marginTop="@dimen/br.small.margin"
+            android:layout_marginTop="@dimen/br.big.margin"
             android:src="@drawable/debugg_in_popup"/>
 
         <com.mooduplabs.debuggit.MontserratTextView
-            android:id="@+id/confirmation_dialog_message"
+            android:id="@+id/welcome_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/br.big.margin"
             android:layout_marginLeft="@dimen/br.small.margin"
             android:layout_marginRight="@dimen/br.small.margin"
-            android:layout_marginTop="@dimen/br.big.margin"
+            android:layout_marginTop="@dimen/br.small.margin"
             android:gravity="center"
             android:text="@string/br.welcome.text"
             android:textSize="@dimen/br.text.size.regular"
@@ -54,7 +54,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="or"
+                android:text="@string/br.welcome.or"
+                android:textColor="@color/br.dialog.text.color"
                 android:layout_weight="1"/>
 
             <ImageView
@@ -72,7 +73,7 @@
             android:background="@color/br.app.gray"/>
 
         <com.mooduplabs.debuggit.MontserratTextView
-            android:id="@+id/confirmation_dialog_ok_button"
+            android:id="@+id/welcome_lets_go_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
