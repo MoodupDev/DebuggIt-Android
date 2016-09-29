@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:layout_margin="@dimen/br.big.margin"
+              android:gravity="center"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/main_background"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/br.big.padding">
+
+        <ImageView
+            android:id="@+id/debuggit_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/br.small.margin"
+            android:layout_marginTop="@dimen/br.small.margin"
+            android:src="@drawable/debugg_in_popup"/>
+
+        <com.mooduplabs.debuggit.MontserratTextView
+            android:id="@+id/confirmation_dialog_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/br.big.margin"
+            android:layout_marginLeft="@dimen/br.small.margin"
+            android:layout_marginRight="@dimen/br.small.margin"
+            android:layout_marginTop="@dimen/br.big.margin"
+            android:gravity="center"
+            android:text="@string/br.welcome.text"
+            android:textSize="@dimen/br.text.size.regular"
+            android:textColor="@color/br.dialog.text.color"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/br.very.big.margin"
+            android:layout_marginRight="@dimen/br.very.big.margin"
+            android:layout_marginBottom="@dimen/br.big.margin">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/phone_tap"
+                android:layout_weight="2"/>
+            <com.mooduplabs.debuggit.MontserratTextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="or"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/phone_shake"
+                android:layout_weight="2"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/br.divider.height"
+            android:layout_marginTop="@dimen/br.small.margin"
+            android:background="@color/br.app.gray"/>
+
+        <com.mooduplabs.debuggit.MontserratTextView
+            android:id="@+id/confirmation_dialog_ok_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/br.regular.padding"
+            android:text="@string/br.welcome.button"
+            android:textColor="@drawable/dialog_text_color"
+            android:textSize="@dimen/br.text.size.regular"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+</LinearLayout>
