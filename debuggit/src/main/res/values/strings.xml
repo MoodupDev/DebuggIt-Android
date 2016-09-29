@@ -24,11 +24,12 @@
     <string name="br.upload.audio.failed">Audio upload failed!</string>
     <string name="br.login.hint.password">Password</string>
     <string name="br.login.hint.email">Email</string>
+    <string name="br.login.hint.email.username">Email/Username</string>
     <string name="br.login.sign.in">Sign in</string>
     <string name="br.login.error.wrong.credentials">Invalid email or password,\ncan\'t log in</string>
     <string name="br.error.no.internet">No internet connection</string>
     <string name="br.login.error">It\'s not possible to sign you in!\nCheck your Internet connection</string>
-    <string name="br.login.info">Sign in to Bitbucket account\nand report bugs from the phone</string>
+    <string name="br.login.info">Sign in to %s account\nand report bugs from the phone</string>
     <string name="br.login.loading.info">Signing in to account...</string>
     <string name="br.login.successful">Signed in!\nNow let\'s smash some bugs</string>
     <string name="br.generating.screenshot">Generating your screenshot...</string>
@@ -36,6 +37,9 @@
     <string name="br.cant.check.version">Can\'t check is your debugg.it version supported!\nCheck your Internet connection</string>
     <string name="br.error.invalid.repo.owner.issue.tracker">Invalid repository/owner or issue tracker isn\'t enabled in your repository settings</string>
     <string name="br.error.access.token.expired">Your access token expired, please relogin in debugg.it</string>
+    <string name="br.service.bitbucket">Bitbucket</string>
+    <string name="br.service.jira">JIRA</string>
+    <string name="br.service.github">GitHub</string>
 
 
 </resources>
