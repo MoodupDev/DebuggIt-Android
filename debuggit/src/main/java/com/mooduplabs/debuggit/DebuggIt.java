@@ -120,6 +120,17 @@ public class DebuggIt {
         ScreenshotUtils.getScreenshotPermission(activity);
         initScreenshotLoadingDialog();
         Thread.setDefaultUncaughtExceptionHandler(UncaughtExceptionHandler.with(activity.getApplicationContext()));
+        showWelcomeScreen();
+    }
+
+    private void showWelcomeScreen() {
+        if(shouldShowWelcomeScreen()) {
+            new WelcomeDialog().show(((FragmentActivity) this.activity).getSupportFragmentManager(), WelcomeDialog.TAG);
+        }
+    }
+
+    private boolean shouldShowWelcomeScreen() {
+        return !Utils.getBoolean(this.activity, Constants.Keys.HAS_WELCOME_SCREEN, false) && !isFragmentShown(WelcomeDialog.TAG);
     }
 
     private void checkIfInitialized(String callingMethodName) {

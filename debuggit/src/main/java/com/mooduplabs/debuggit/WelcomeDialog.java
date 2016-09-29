@@ -6,7 +6,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 
-public class WelcomeDialog extends DialogFragment {
+public class WelcomeDialog extends DialogFragment implements View.OnClickListener {
     //region Consts
 
     public static final String TAG = WelcomeDialog.class.getSimpleName();
@@ -21,7 +21,23 @@ public class WelcomeDialog extends DialogFragment {
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_br_welcome, null);
         dialog.setContentView(v);
 
+        setCancelable(false);
+
+        MontserratTextView letsGoButton = (MontserratTextView) v.findViewById(R.id.welcome_lets_go_button);
+        letsGoButton.setOnClickListener(this);
+
         return dialog;
+    }
+
+    @Override
+    public void onClick(View v) {
+        dismiss();
+    }
+
+    @Override
+    public void dismiss() {
+        Utils.putBoolean(getActivity(), Constants.Keys.HAS_WELCOME_SCREEN, true);
+        super.dismiss();
     }
 
     //endregion

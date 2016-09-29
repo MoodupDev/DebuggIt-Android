@@ -77,5 +77,6 @@ interface Constants {
         String NOTE_URL = "note_url";
         String LABELS = "labels";
         String BODY = "body";
+        String HAS_WELCOME_SCREEN = "has_welcome_screen";
     }
 }
