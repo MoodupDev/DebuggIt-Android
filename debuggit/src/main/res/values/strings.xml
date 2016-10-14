@@ -28,6 +28,7 @@
     <string name="br.login.hint.email.username">Email/Username</string>
     <string name="br.login.sign.in">Sign in</string>
     <string name="br.login.error.wrong.credentials">Invalid email or password,\ncan\'t log in</string>
+    <string name="br.login.error.2fa.required">Please enter your two-factor authorization code</string>
     <string name="br.error.no.internet">No internet connection</string>
     <string name="br.login.error">It\'s not possible to sign you in!\nCheck your Internet connection</string>
     <string name="br.login.info">Sign in to %s account\nand report bugs from the phone</string>

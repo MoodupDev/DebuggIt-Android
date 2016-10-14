@@ -8,6 +8,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +27,8 @@ public class LoginFragment extends DialogFragment {
     private LoadingDialog loadingDialog;
     private MontserratEditText email;
     private MontserratEditText password;
+    private LinearLayout twoFactorAuthCodeLayout;
+    private MontserratEditText twoFactorAuthCode;
 
     //endregion
 
@@ -57,11 +60,7 @@ public class LoginFragment extends DialogFragment {
 
     private void initView(View view) {
         initLogoSection(view);
-        email = (MontserratEditText) view.findViewById(R.id.bitbucket_email);
-        if(DebuggIt.getInstance().getConfigType() == DebuggIt.ConfigType.GITHUB) {
-            email.setHint(R.string.br_login_hint_email_username);
-        }
-        password = (MontserratEditText) view.findViewById(R.id.bitbucket_password);
+        initLoginFields(view);
         MontserratTextView loginButton = (MontserratTextView) view.findViewById(R.id.bitbucket_login_button);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -71,6 +70,7 @@ public class LoginFragment extends DialogFragment {
                 loadingDialog.show(getChildFragmentManager(), LoadingDialog.TAG);
                 final String email = LoginFragment.this.email.getText().toString();
                 final String password = LoginFragment.this.password.getText().toString();
+                saveTwoFactorCode();
                 DebuggIt.getInstance().getApiService().login(
                         email,
                         password,
@@ -95,9 +95,19 @@ public class LoginFragment extends DialogFragment {
 
                             @Override
                             public void onFailure(int responseCode, String errorMessage) {
+                                loadingDialog.dismiss();
                                 if(responseCode == HttpsURLConnection.HTTP_BAD_REQUEST || responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-                                    ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(errorMessage, getString(R.string.br_login_error_wrong_credentials)), true)
-                                            .show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                    if(DebuggIt.getInstance().getConfigType() == DebuggIt.ConfigType.GITHUB && errorMessage.contains("two-factor")) {
+                                        ConfirmationDialog.newInstance(getString(R.string.br_login_error_2fa_required), true, new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                twoFactorAuthCodeLayout.setVisibility(View.VISIBLE);
+                                            }
+                                        }).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                    } else {
+                                        ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(errorMessage, getString(R.string.br_login_error_wrong_credentials)), true)
+                                                .show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                    }
                                 } else {
                                     ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                                 }
@@ -105,12 +115,31 @@ public class LoginFragment extends DialogFragment {
 
                             @Override
                             public void onException(Exception ex) {
+                                loadingDialog.dismiss();
                                 ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                             }
                         }
                 );
             }
         });
+    }
+
+    private void saveTwoFactorCode() {
+        String code = twoFactorAuthCode.getText().toString();
+        if(!code.isEmpty()) {
+            Utils.putString(getActivity(), Constants.GitHub.TWO_FACTOR_AUTH_CODE, code);
+            DebuggIt.getInstance().applySavedTokens();
+        }
+    }
+
+    private void initLoginFields(View view) {
+        email = (MontserratEditText) view.findViewById(R.id.login_email);
+        password = (MontserratEditText) view.findViewById(R.id.login_password);
+        twoFactorAuthCodeLayout = (LinearLayout) view.findViewById(R.id.login_2fa_layout);
+        twoFactorAuthCode = (MontserratEditText) view.findViewById(R.id.login_2fa_code);
+        if(DebuggIt.getInstance().getConfigType() == DebuggIt.ConfigType.GITHUB) {
+            email.setHint(R.string.br_login_hint_email_username);
+        }
     }
 
     private void initLogoSection(View view) {
