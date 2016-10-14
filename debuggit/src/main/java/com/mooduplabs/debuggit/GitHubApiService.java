@@ -69,7 +69,7 @@ public class GitHubApiService implements ApiService {
     //region Methods
 
 
-    public GitHubApiService(String accountName, String repoSlug) {
+    protected GitHubApiService(String accountName, String repoSlug) {
         this.accountName = accountName;
         this.repoSlug = repoSlug;
     }
@@ -103,11 +103,7 @@ public class GitHubApiService implements ApiService {
         return issue;
     }
 
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(String accessToken) {
+    protected void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
     }
 

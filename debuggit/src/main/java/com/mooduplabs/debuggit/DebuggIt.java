@@ -196,7 +196,7 @@ public class DebuggIt {
         return activity;
     }
 
-    public ConfigType getConfigType() {
+    protected ConfigType getConfigType() {
         return configType;
     }
 
@@ -204,7 +204,7 @@ public class DebuggIt {
         return activityOrientation;
     }
 
-    public ApiService getApiService() {
+    protected ApiService getApiService() {
         return apiService;
     }
 
