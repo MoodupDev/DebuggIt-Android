@@ -54,7 +54,7 @@
 
                 <com.mooduplabs.debuggit.MontserratEditText
                     style="@style/BrBaseEditText"
-                    android:id="@+id/bitbucket_email"
+                    android:id="@+id/login_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/br.login.hint.email"
@@ -79,11 +79,37 @@
 
                 <com.mooduplabs.debuggit.MontserratEditText
                     style="@style/BrBaseEditText"
-                    android:id="@+id/bitbucket_password"
+                    android:id="@+id/login_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/br.login.hint.password"
                     android:inputType="textPassword"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/login_2fa_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/br.big.margin"
+                android:layout_marginRight="@dimen/br.big.margin"
+                android:layout_marginTop="@dimen/br.small.margin"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/br.small.margin"
+                    android:src="@drawable/login_password"/>
+
+                <com.mooduplabs.debuggit.MontserratEditText
+                    style="@style/BrBaseEditText"
+                    android:id="@+id/login_2fa_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/br.login.hint.2fa.code"
+                    android:inputType="textEmailAddress"/>
             </LinearLayout>
 
             <View

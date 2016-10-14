@@ -24,6 +24,7 @@
     <string name="br.upload.audio.failed">Audio upload failed!</string>
     <string name="br.login.hint.password">Password</string>
     <string name="br.login.hint.email">Email</string>
+    <string name="br.login.hint.2fa.code">Two-factor auth code</string>
     <string name="br.login.hint.email.username">Email/Username</string>
     <string name="br.login.sign.in">Sign in</string>
     <string name="br.login.error.wrong.credentials">Invalid email or password,\ncan\'t log in</string>
