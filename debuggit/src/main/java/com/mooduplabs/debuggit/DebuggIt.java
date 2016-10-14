@@ -176,6 +176,7 @@ public class DebuggIt {
                 break;
             case GITHUB:
                 ((GitHubApiService) apiService).setAccessToken(Utils.getString(activity, Constants.GitHub.ACCESS_TOKEN, ""));
+                ((GitHubApiService) apiService).setTwoFactorAuthCode(Utils.getString(activity, Constants.GitHub.TWO_FACTOR_AUTH_CODE, ""));
                 break;
         }
     }

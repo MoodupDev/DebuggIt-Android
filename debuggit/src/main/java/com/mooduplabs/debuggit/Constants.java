@@ -48,6 +48,7 @@ interface Constants {
         String JSON_FORMAT = "application/vnd.github.v3+json";
 
         String ACCESS_TOKEN = "github_access_token";
+        String TWO_FACTOR_AUTH_CODE = "github_2fa_code";
         String SCOPE_REPO = "repo";
     }
 

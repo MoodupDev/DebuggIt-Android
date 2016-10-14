@@ -19,6 +19,7 @@ public class GitHubApiService implements ApiService {
     private String accessToken;
     private String accountName;
     private String repoSlug;
+    private String twoFactorAuthCode;
 
     //endregion
 
@@ -27,11 +28,14 @@ public class GitHubApiService implements ApiService {
     @Override
     public void login(String email, String password, JsonResponseCallback callback) {
         try {
-            HttpClient.post(Constants.GitHub.AUTHORIZE_URL)
+            HttpClient client = HttpClient.post(Constants.GitHub.AUTHORIZE_URL)
                     .withHeader(HttpClient.ACCEPT_HEADER, Constants.GitHub.JSON_FORMAT)
                     .authUser(email, password)
-                    .withData(getAuthJsonObject())
-                    .send(callback);
+                    .withData(getAuthJsonObject());
+            if(twoFactorAuthCode != null  && !twoFactorAuthCode.isEmpty()) {
+                client.withHeader("X-GitHub-OTP", twoFactorAuthCode);
+            }
+            client.send(callback);
         } catch(MalformedURLException e) {
             e.printStackTrace();
         }
@@ -105,6 +109,10 @@ public class GitHubApiService implements ApiService {
 
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
+    }
+
+    protected void setTwoFactorAuthCode(String twoFactorAuthCode) {
+        this.twoFactorAuthCode = twoFactorAuthCode;
     }
 
     //endregion
