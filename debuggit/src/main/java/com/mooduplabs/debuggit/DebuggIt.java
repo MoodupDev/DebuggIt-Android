@@ -117,7 +117,6 @@ public class DebuggIt {
         this.activityOrientation = activity.getRequestedOrientation();
         addReportButton();
         registerShakeDetector(activity);
-        ScreenshotUtils.getScreenshotPermission(activity);
         initScreenshotLoadingDialog();
         Thread.setDefaultUncaughtExceptionHandler(UncaughtExceptionHandler.with(activity.getApplicationContext()));
         showWelcomeScreen();
@@ -255,7 +254,7 @@ public class DebuggIt {
                                 authenticate(false);
                             } else {
                                 applySavedTokens();
-                                startDrawFragment();
+                                takeScreenshot();
                             }
                         }
                         isMoving = false;
@@ -285,6 +284,14 @@ public class DebuggIt {
                 Utils.putFloat(view.getContext(), Utils.isOrientationLandscape(activity) ? BUTTON_POSITION_LANDSCAPE : BUTTON_POSITION_PORTRAIT, newY);
             }
         });
+    }
+
+    private void takeScreenshot() {
+        if(screenshotIntentData != null) {
+            startDrawFragment();
+        } else {
+            ScreenshotUtils.getScreenshotPermission(activity);
+        }
     }
 
     private void registerShakeDetector(final Activity activity) {
