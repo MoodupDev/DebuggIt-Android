@@ -312,7 +312,9 @@ public class DebuggIt {
                 return waitingForShake
                         && !isFragmentShown(DrawFragment.TAG)
                         && !isFragmentShown(ReportFragment.TAG)
-                        && !isFragmentShown(LoadingDialog.TAG);
+                        && !isFragmentShown(LoadingDialog.TAG)
+                        && !isFragmentShown(LoginFragment.TAG)
+                        && !isFragmentShown(WelcomeDialog.TAG);
             }
         });
         if(hasAccessToken()) {
