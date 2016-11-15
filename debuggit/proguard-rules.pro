@@ -26,3 +26,5 @@
 }
 
 -keepparameternames
+
+-printmapping build/outputs/mapping/release/mapping.txt
