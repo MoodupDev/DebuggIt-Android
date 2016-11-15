@@ -476,6 +476,7 @@ public class BugDescriptionFragment extends Fragment {
                 if (null != bmp) {
                     return bmp;
                 }
+                is.close();
             } catch(Exception e) {
                 bmp = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
             }
