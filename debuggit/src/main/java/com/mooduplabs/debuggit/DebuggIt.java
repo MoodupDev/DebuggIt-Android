@@ -345,19 +345,19 @@ public class DebuggIt {
     }
 
     private void startDrawFragment() {
-        if(versionChecked && !versionSupported) {
-            showUnsupportedVersionPopup();
-            waitingForShake = true;
-            return;
-        } else if(!versionChecked) {
-            showCantCheckVersionPopup();
-            waitingForShake = true;
-            return;
-        }
-        if(!isFragmentShown(DrawFragment.TAG)) {
-            Utils.lockScreenRotation(activity, Utils.isOrientationLandscape(activity) ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            reportButton.setVisibility(View.GONE);
-            try {
+        try {
+            if(versionChecked && !versionSupported) {
+                showUnsupportedVersionPopup();
+                waitingForShake = true;
+                return;
+            } else if(!versionChecked) {
+                showCantCheckVersionPopup();
+                waitingForShake = true;
+                return;
+            }
+            if(!isFragmentShown(DrawFragment.TAG)) {
+                Utils.lockScreenRotation(activity, Utils.isOrientationLandscape(activity) ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                reportButton.setVisibility(View.GONE);
                 screenshotLoadingDialog.show(((FragmentActivity) activity).getSupportFragmentManager(), LoadingDialog.TAG);
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && screenshotIntentData != null) {
                     ScreenshotUtils.setNextScreenshotCanceled(false);
@@ -375,10 +375,9 @@ public class DebuggIt {
                 } else {
                     showDrawFragment(ScreenshotMaker.takeScreenshotBitmap(activity));
                 }
-            } catch(IllegalStateException e) {
-                e.printStackTrace();
-                reportButton.setVisibility(View.VISIBLE);
             }
+        } catch(IllegalStateException e) {
+            reportButton.setVisibility(View.VISIBLE);
         }
     }
 
