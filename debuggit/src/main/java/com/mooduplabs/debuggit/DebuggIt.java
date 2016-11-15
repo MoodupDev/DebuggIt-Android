@@ -299,7 +299,7 @@ public class DebuggIt {
             @Override
             public void shakeDetected() {
                 if(Utils.isActivityRunning(activity)) {
-                    if(!hasAccessToken()) {
+                    if(!hasAccessToken() && !isFragmentShown(WelcomeDialog.TAG)) {
                         authenticate(false);
                     } else if(shouldShowDrawFragment()) {
                         waitingForShake = false;
