@@ -199,6 +199,7 @@ public class Utils {
                 baos.write(buffer, 0, readLength);
             }
             bytes = baos.toByteArray();
+            fis.close();
         } catch(Exception e) {
             bytes = new byte[1];
         }
