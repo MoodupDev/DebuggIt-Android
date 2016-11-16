@@ -26,7 +26,7 @@
             android:background="@drawable/button_send"
             android:textColor="@android:color/white"
             android:layout_marginRight="@dimen/br.report.button.margin.horizontal"
-            android:text="@string/br.button.send" />
+            android:text="@string/br.button.next" />
     </RelativeLayout>
 
     <View

@@ -2,6 +2,7 @@
     <string name="br.lib.name">debugg.it</string>
     <string name="br.button.cancel">Cancel</string>
     <string name="br.button.send">Send</string>
+    <string name="br.button.next">Next</string>
 
     <string name="br.kind.bug">Bug</string>
     <string name="br.kind.enhancement">Enhancement</string>
