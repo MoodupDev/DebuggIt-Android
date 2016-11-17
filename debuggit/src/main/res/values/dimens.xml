@@ -21,6 +21,7 @@
     <dimen name="br.draw.line.width">3dp</dimen>
     <dimen name="br.stop.icon.size">60dp</dimen>
     <dimen name="br.button.send.width">70dp</dimen>
+    <dimen name="br.button.cancel.width">88dp</dimen>
     <dimen name="br.button.margin.horizontal">8dp</dimen>
     <dimen name="br.top.bar.height">50dp</dimen>
     <dimen name="br.divider.height">1dp</dimen>
