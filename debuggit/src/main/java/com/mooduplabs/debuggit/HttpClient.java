@@ -167,6 +167,7 @@ public class HttpClient {
                         callback.onFailure(responseCode, response);
                     }
                 }
+                connection.disconnect();
                 super.onPostExecute(aVoid);
             }
         }.execute();
@@ -195,6 +196,7 @@ public class HttpClient {
                         callback.onFailure(responseCode, response);
                     }
                 }
+                connection.disconnect();
                 super.onPostExecute(aVoid);
             }
         }.execute();
@@ -247,6 +249,7 @@ public class HttpClient {
         BufferedReader br = new BufferedReader(new InputStreamReader(stream));
         StringBuilder response = new StringBuilder();
         for(String line; (line = br.readLine()) != null; ) response.append(line).append("\n");
+        br.close();
         return response.toString();
     }
 
