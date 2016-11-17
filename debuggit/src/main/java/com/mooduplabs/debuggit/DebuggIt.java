@@ -19,6 +19,8 @@ import com.mooduplabs.debuggit.ShakeDetector.ShakeListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
+
 public class DebuggIt {
 
     // region Consts
@@ -30,7 +32,7 @@ public class DebuggIt {
 
     // region Fields
 
-    private static DebuggIt instance;
+    private static WeakReference<DebuggIt> instance;
 
     private Activity activity;
     private Intent screenshotIntentData;
@@ -56,10 +58,10 @@ public class DebuggIt {
 
     public static DebuggIt getInstance() {
         if(instance == null) {
-            instance = new DebuggIt();
+            instance = new WeakReference<>(new DebuggIt());
         }
 
-        return instance;
+        return instance.get();
     }
 
     public void initBitbucket(String clientId, String clientSecret, String repoSlug, String accountName) {

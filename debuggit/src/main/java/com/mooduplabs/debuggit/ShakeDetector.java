@@ -7,6 +7,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import java.lang.ref.WeakReference;
+
 public class ShakeDetector implements SensorEventListener {
 
     //region Consts
@@ -17,7 +19,7 @@ public class ShakeDetector implements SensorEventListener {
 
     //region Fields
 
-    private static ShakeDetector instance;
+    private static WeakReference<ShakeDetector> instance;
 
     private Activity activity;
     private ShakeListener listener;
@@ -34,9 +36,9 @@ public class ShakeDetector implements SensorEventListener {
 
     protected static ShakeDetector getInstance() {
         if(instance == null) {
-            instance = new ShakeDetector();
+            instance = new WeakReference<>(new ShakeDetector());
         }
-        return instance;
+        return instance.get();
     }
 
     protected void register(Activity activity, ShakeListener listener) {
