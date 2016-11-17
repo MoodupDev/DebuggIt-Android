@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
 
@@ -284,7 +286,8 @@ public class Utils {
             }
             return error.getJSONObject("error").getString("message");
         } catch(JSONException e) {
-            return response.isEmpty() ? defaultMessage : response;
+            Matcher matcher = Pattern.compile("<.+>").matcher(response);
+            return response.isEmpty() || matcher.find() ? defaultMessage : response;
         }
     }
 
