@@ -69,10 +69,10 @@ public class BugDescriptionFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        if(bugTitle != null) {
+        if (bugTitle != null) {
             bugTitle.removeTextChangedListener(contentTextWatcher);
         }
-        if(actualBehaviour != null) {
+        if (actualBehaviour != null) {
             actualBehaviour.removeTextChangedListener(contentTextWatcher);
             stepsToReproduce.removeTextChangedListener(contentTextWatcher);
             expectedBehaviour.removeTextChangedListener(contentTextWatcher);
@@ -118,7 +118,7 @@ public class BugDescriptionFragment extends Fragment {
         bugTitle.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(keyCode == KeyEvent.KEYCODE_ENTER) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                     v.clearFocus();
@@ -134,30 +134,37 @@ public class BugDescriptionFragment extends Fragment {
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                if(!areRecordPermissionsGranted(getActivity())) {
-                    requestRecordPermissions(getActivity());
-                } else {
-                    v.setSelected(!v.isSelected());
-                    AudioCaptureFragment.newInstance(new AudioCaptureFragment.AudioRecordListener() {
-                        @Override
-                        public void onRecordUploaded(String audioUrl) {
-                            addAudioMiniature(itemsContainer, audioUrl);
-                            v.setSelected(!v.isSelected());
-                        }
+                if (DebuggIt.getInstance().isRecordingEnabled()) {
+                    if (!areRecordPermissionsGranted(getActivity())) {
+                        requestRecordPermissions(getActivity());
+                    } else {
+                        v.setSelected(!v.isSelected());
+                        AudioCaptureFragment.newInstance(new AudioCaptureFragment.AudioRecordListener() {
+                            @Override
+                            public void onRecordUploaded(String audioUrl) {
+                                addAudioMiniature(itemsContainer, audioUrl);
+                                v.setSelected(!v.isSelected());
+                            }
 
-                        @Override
-                        public void onFailed(final boolean canceled) {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if(!canceled) {
-                                        ConfirmationDialog.newInstance(getString(R.string.br_upload_audio_failed), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                            @Override
+                            public void onFailed(final boolean canceled) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (!canceled) {
+                                            ConfirmationDialog.newInstance(getString(R.string.br_upload_audio_failed), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                        }
+                                        v.setSelected(!v.isSelected());
                                     }
-                                    v.setSelected(!v.isSelected());
-                                }
-                            });
-                        }
-                    }).show(getChildFragmentManager(), AudioCaptureFragment.TAG);
+                                });
+                            }
+                        }).show(getChildFragmentManager(), AudioCaptureFragment.TAG);
+                    }
+                } else {
+                    ConfirmationDialog.newInstance(getString(R.string.br_recording_disabled), true)
+                            .show(getChildFragmentManager(), ConfirmationDialog.TAG);
+//                    ConfirmationDialog.newInstance(getString(R.string.br_recording_disabled), true)
+//                            .show(getChildFragmentManager(), ConfirmationDialog.TAG);
                 }
             }
         });
@@ -165,7 +172,7 @@ public class BugDescriptionFragment extends Fragment {
 
     public void requestRecordPermissions(Activity activity) {
         ActivityCompat.requestPermissions(activity,
-                new String[] { Manifest.permission.RECORD_AUDIO },
+                new String[]{Manifest.permission.RECORD_AUDIO},
                 RECORD_PERMISSIONS_REQUEST);
     }
 
@@ -175,7 +182,7 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     private void initBugPriorityButtons(View view) {
-        priorityButtons = new MontserratTextView[] {
+        priorityButtons = new MontserratTextView[]{
                 (MontserratTextView) view.findViewById(R.id.priority_low_button),
                 (MontserratTextView) view.findViewById(R.id.priority_medium_button),
                 (MontserratTextView) view.findViewById(R.id.priority_high_button),
@@ -287,10 +294,10 @@ public class BugDescriptionFragment extends Fragment {
         if (!report.getActualBehaviour().isEmpty()) {
             actualBehaviour.setText(report.getActualBehaviour());
         }
-        if(!report.getStepsToReproduce().isEmpty()) {
+        if (!report.getStepsToReproduce().isEmpty()) {
             stepsToReproduce.setText(report.getStepsToReproduce());
         }
-        if(!report.getExpectedBehaviour().isEmpty()) {
+        if (!report.getExpectedBehaviour().isEmpty()) {
             expectedBehaviour.setText(report.getExpectedBehaviour());
         }
     }
@@ -347,7 +354,7 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     private void playFromUrl(final View playView, String url) {
-        if(mediaPlayer.isPlaying() && lastPlayButton != null) {
+        if (mediaPlayer.isPlaying() && lastPlayButton != null) {
             stopPlaying();
             lastPlayButton.setSelected(false);
             playView.setSelected(false);
@@ -388,7 +395,7 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     private void initBugKindButtons(View view) {
-        kindButtons = new MontserratTextView[] {
+        kindButtons = new MontserratTextView[]{
                 (MontserratTextView) view.findViewById(R.id.kind_bug_button),
                 (MontserratTextView) view.findViewById(R.id.kind_enhancement_button)
         };
@@ -396,7 +403,7 @@ public class BugDescriptionFragment extends Fragment {
             kindButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(!v.isSelected()) {
+                    if (!v.isSelected()) {
                         v.setSelected(!v.isSelected());
                         if (v.isSelected()) {
                             DebuggIt.getInstance().getReport().setKind(v.getId() == R.id.kind_bug_button ? Constants.KIND_BUG : Constants.KIND_ENHANCEMENT);
@@ -437,18 +444,18 @@ public class BugDescriptionFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(bugTitle != null && s == bugTitle.getEditableText()) {
+                if (bugTitle != null && s == bugTitle.getEditableText()) {
                     DebuggIt.getInstance().getReport().setTitle(bugTitle.getText().toString());
-                } else if(s == stepsToReproduce.getEditableText()) {
+                } else if (s == stepsToReproduce.getEditableText()) {
                     DebuggIt.getInstance().getReport().setStepsToReproduce(stepsToReproduce.getText().toString());
-                } else if(s == actualBehaviour.getEditableText()) {
+                } else if (s == actualBehaviour.getEditableText()) {
                     DebuggIt.getInstance().getReport().setActualBehaviour(actualBehaviour.getText().toString());
                 } else {
                     DebuggIt.getInstance().getReport().setExpectedBehaviour(expectedBehaviour.getText().toString());
                 }
             }
         };
-        if(firstPage) {
+        if (firstPage) {
             bugTitle.addTextChangedListener(contentTextWatcher);
         } else {
             stepsToReproduce.addTextChangedListener(contentTextWatcher);
@@ -477,7 +484,7 @@ public class BugDescriptionFragment extends Fragment {
                     return bmp;
                 }
                 is.close();
-            } catch(Exception e) {
+            } catch (Exception e) {
                 bmp = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
             }
             return bmp;

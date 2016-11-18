@@ -23,6 +23,7 @@
     <string name="br.title.empty">Issue title can\'t be empty!</string>
     <string name="br.screenshot.upload.error">Screenshot isn’t saved!\nCheck your Internet connection</string>
     <string name="br.upload.audio.failed">Audio upload failed!</string>
+    <string name="br.recording.disabled">Recording disabled.\nPlease ask your developer to enable this feature</string>
     <string name="br.login.hint.password">Password</string>
     <string name="br.login.hint.email">Email</string>
     <string name="br.login.hint.2fa.code">Two-factor auth code</string>

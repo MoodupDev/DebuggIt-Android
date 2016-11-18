@@ -44,6 +44,7 @@ public class DebuggIt {
     private boolean versionChecked = false;
     private boolean versionSupported = false;
     private boolean shouldPostInitializedEvent = true;
+    private boolean recordingEnabled = false;
 
     private ConfigType configType;
 
@@ -62,6 +63,14 @@ public class DebuggIt {
         }
 
         return instance;
+    }
+
+    public void setRecordingEnabled(boolean enabled) {
+        recordingEnabled = enabled;
+    }
+
+    protected boolean isRecordingEnabled() {
+        return recordingEnabled;
     }
 
     public void initBitbucket(String clientId, String clientSecret, String repoSlug, String accountName) {
