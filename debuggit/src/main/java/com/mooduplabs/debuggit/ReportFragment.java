@@ -107,7 +107,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                     @Override
                     public void onFailure(int responseCode, String errorMessage) {
                         if(responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                            if(retriesCount < MAX_RETRIES_COUNT) {
+                            if (retriesCount < MAX_RETRIES_COUNT) {
                                 retriesCount++;
                                 sendIssue();
                             } else {
@@ -115,6 +115,10 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                                 retriesCount = 0;
                                 showReloginMessage();
                             }
+                        } else if (responseCode == HttpURLConnection.HTTP_FORBIDDEN) {
+                            dialog.dismiss();
+                            ConfirmationDialog.newInstance(getString(R.string.br_error_repo_access_forbidden), true)
+                                    .show(getChildFragmentManager(), ConfirmationDialog.TAG);
                         } else {
                             dialog.dismiss();
                             ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(errorMessage, getString(R.string.br_confirmation_failure)), true)
