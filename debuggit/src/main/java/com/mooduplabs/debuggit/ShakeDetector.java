@@ -19,9 +19,9 @@ public class ShakeDetector implements SensorEventListener {
 
     //region Fields
 
-    private static WeakReference<ShakeDetector> instance;
+    private static ShakeDetector instance;
 
-    private Activity activity;
+    private WeakReference<Activity> activity;
     private ShakeListener listener;
 
     private long lastUpdate;
@@ -36,13 +36,13 @@ public class ShakeDetector implements SensorEventListener {
 
     protected static ShakeDetector getInstance() {
         if(instance == null) {
-            instance = new WeakReference<>(new ShakeDetector());
+            instance = new ShakeDetector();
         }
-        return instance.get();
+        return instance;
     }
 
     protected void register(Activity activity, ShakeListener listener) {
-        if(this.activity != null && this.activity != activity) {
+        if(this.activity != null && getActivity() != activity) {
             unregister();
         } else if(activity == null) {
             return;
@@ -50,11 +50,16 @@ public class ShakeDetector implements SensorEventListener {
         SensorManager sensorManager = getSensorManager(activity);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_FASTEST);
         this.listener = listener;
-        this.activity = activity;
+        this.activity = new WeakReference<>(activity);
     }
 
-    private void unregister() {
-        getSensorManager(activity).unregisterListener(this);
+    protected void unregister() {
+        getSensorManager(getActivity()).unregisterListener(this);
+        listener = null;
+    }
+
+    private Activity getActivity() {
+        return activity.get();
     }
 
     private SensorManager getSensorManager(Activity activity) {
