@@ -40,7 +40,7 @@
     <string name="br.cant.check.version">Can\'t check is your debugg.it version supported!\nCheck your Internet connection</string>
     <string name="br.error.invalid.repo.owner.issue.tracker">Invalid repository/owner or issue tracker isn\'t enabled in your repository settings</string>
     <string name="br.error.access.token.expired">Your access token expired, please relogin in debugg.it</string>
-    <string name="br.error.repo.access.forbidden">You don\'t have access to the repository\nPlease contact your developer</string>
+    <string name="br.error.repo.access.forbidden">You don\'t have access to the repository. Please contact your developer</string>
     <string name="br.service.bitbucket">Bitbucket</string>
     <string name="br.service.jira">JIRA</string>
     <string name="br.service.github">GitHub</string>
