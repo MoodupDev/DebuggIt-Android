@@ -163,8 +163,6 @@ public class BugDescriptionFragment extends Fragment {
                 } else {
                     ConfirmationDialog.newInstance(getString(R.string.br_recording_disabled), true)
                             .show(getChildFragmentManager(), ConfirmationDialog.TAG);
-//                    ConfirmationDialog.newInstance(getString(R.string.br_recording_disabled), true)
-//                            .show(getChildFragmentManager(), ConfirmationDialog.TAG);
                 }
             }
         });

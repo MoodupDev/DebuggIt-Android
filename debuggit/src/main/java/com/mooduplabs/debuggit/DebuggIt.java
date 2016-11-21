@@ -198,6 +198,12 @@ public class DebuggIt {
         waitingForShake = true;
     }
 
+    protected void saveTokens(String accessToken) {
+        ((BitBucketApiService) apiService).setAccessToken(accessToken);
+        Utils.putString(getActivity(), Constants.BitBucket.ACCESS_TOKEN, accessToken);
+        waitingForShake = true;
+    }
+
     protected Report getReport() {
         return report;
     }
