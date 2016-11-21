@@ -75,7 +75,7 @@ public class LoginFragment extends DialogFragment {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.contains(ACCESS_TOKEN_STRING)) {
-                    String token = url.substring(url.indexOf(ACCESS_TOKEN_STRING) + ACCESS_TOKEN_STRING.length(), url.indexOf("&"));
+                    String token = url.substring(url.indexOf(ACCESS_TOKEN_STRING) + ACCESS_TOKEN_STRING.length(), url.indexOf("&")).replaceAll("%3D", "=");
 
                     switch (DebuggIt.getInstance().getConfigType()) {
                         case BITBUCKET:
@@ -111,7 +111,7 @@ public class LoginFragment extends DialogFragment {
     }
 
     private void handleBitBucketLoginResponse(String token) {
-        DebuggIt.getInstance().saveTokens(token);
+        DebuggIt.getInstance().saveToken(token);
         ConfirmationDialog.newInstance(getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
     }
 

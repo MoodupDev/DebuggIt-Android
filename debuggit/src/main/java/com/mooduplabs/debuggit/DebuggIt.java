@@ -198,7 +198,7 @@ public class DebuggIt {
         waitingForShake = true;
     }
 
-    protected void saveTokens(String accessToken) {
+    protected void saveToken(String accessToken) {
         ((BitBucketApiService) apiService).setAccessToken(accessToken);
         Utils.putString(getActivity(), Constants.BitBucket.ACCESS_TOKEN, accessToken);
         waitingForShake = true;
