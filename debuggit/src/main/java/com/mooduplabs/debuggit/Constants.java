@@ -43,11 +43,15 @@ interface Constants {
 
     interface GitHub {
         String AUTHORIZE_URL = "https://api.github.com/authorizations";
+
+        String ACCESS_TOKEN_URL = "https://github.com/login/oauth/access_token";
         String ISSUES_URL = "https://api.github.com/repos/%1$s/%2$s/issues";
 
         String JSON_FORMAT = "application/vnd.github.v3+json";
+        String JSON_STANDARD_FORMAT = "application/json";
 
-        String ACCESS_TOKEN = "github_access_token";
+        String ACCESS_TOKEN = "access_token";
+        String GITHUB_ACCESS_TOKEN = "github_access_token";
         String TWO_FACTOR_AUTH_CODE = "github_2fa_code";
         String SCOPE_REPO = "repo";
     }
@@ -79,5 +83,8 @@ interface Constants {
         String LABELS = "labels";
         String BODY = "body";
         String HAS_WELCOME_SCREEN = "has_welcome_screen";
+        String CLIENT_ID = "client_id";
+        String CLIENT_SECRET = "client_secret";
+        String CODE = "code";
     }
 }

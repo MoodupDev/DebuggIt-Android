@@ -167,7 +167,7 @@ public class OldLoginFragment extends DialogFragment {
 
     private void handleGitHubLoginResponse(JSONObject response) {
         try {
-            Utils.putString(getActivity(), Constants.GitHub.ACCESS_TOKEN, response.getString(Constants.Keys.TOKEN));
+            Utils.putString(getActivity(), Constants.GitHub.GITHUB_ACCESS_TOKEN, response.getString(Constants.Keys.TOKEN));
             ConfirmationDialog.newInstance(getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
         } catch(JSONException e) {
             ConfirmationDialog.newInstance(getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);

@@ -45,6 +45,11 @@ class JiraApiService implements ApiService {
     }
 
     @Override
+    public void loginWithOAuth(String code, JsonResponseCallback callback) {
+
+    }
+
+    @Override
     public void addIssue(String title, String content, String priority, String kind, StringResponseCallback callback) {
         try {
             HttpClient.post(getUrlWithCorrectProtocol(String.format(Constants.Jira.ISSUES_URL, host)))

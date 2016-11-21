@@ -170,7 +170,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                 Utils.putString(getContext(), Constants.Jira.PASSWORD, "");
                 break;
             case GITHUB:
-                Utils.putString(getContext(), Constants.GitHub.ACCESS_TOKEN, "");
+                Utils.putString(getContext(), Constants.GitHub.GITHUB_ACCESS_TOKEN, "");
                 break;
         }
     }

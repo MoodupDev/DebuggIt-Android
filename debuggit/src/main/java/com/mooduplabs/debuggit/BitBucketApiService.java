@@ -60,6 +60,11 @@ public class BitBucketApiService implements ApiService {
         }
     }
 
+    @Override
+    public void loginWithOAuth(String code, JsonResponseCallback callback) {
+
+    }
+
     //endregion
 
     //region Methods

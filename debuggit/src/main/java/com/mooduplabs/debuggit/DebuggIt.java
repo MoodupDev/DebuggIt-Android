@@ -58,7 +58,7 @@ public class DebuggIt {
     // region Methods
 
     public static DebuggIt getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new DebuggIt();
         }
 
@@ -88,8 +88,8 @@ public class DebuggIt {
         initJira(host, projectKey, true);
     }
 
-    public void initGitHub(String repoSlug, String accountName) {
-        this.apiService = new GitHubApiService(accountName, repoSlug);
+    public void initGitHub(String clientId, String clientSecret, String repoSlug, String accountName) {
+        this.apiService = new GitHubApiService(clientId, clientSecret, accountName, repoSlug);
         init(ConfigType.GITHUB);
     }
 
@@ -101,11 +101,11 @@ public class DebuggIt {
 
     public void attach(final Activity activity) {
         checkIfInitialized("attach");
-        if(shouldPostInitializedEvent) {
+        if (shouldPostInitializedEvent) {
             ApiClient.postEvent(activity, ApiClient.EventType.INITIALIZED);
             shouldPostInitializedEvent = false;
         }
-        if(!versionChecked) {
+        if (!versionChecked) {
             ApiClient.checkVersion(BuildConfig.VERSION_CODE, new StringResponseCallback() {
                 @Override
                 public void onSuccess(String response) {
@@ -134,7 +134,7 @@ public class DebuggIt {
     }
 
     private void showWelcomeScreen() {
-        if(shouldShowWelcomeScreen()) {
+        if (shouldShowWelcomeScreen()) {
             new WelcomeDialog().show(((FragmentActivity) getActivity()).getSupportFragmentManager(), WelcomeDialog.TAG);
         }
     }
@@ -144,15 +144,15 @@ public class DebuggIt {
     }
 
     private void checkIfInitialized(String callingMethodName) {
-        if(!initialized) {
+        if (!initialized) {
             throw new IllegalStateException(String.format("debugg.it must be initialized with init(...) before using %s() method", callingMethodName));
         }
     }
 
     public void getScreenshotPermission(int requestCode, int resultCode, Intent data) {
         checkIfInitialized("getScreenshotPermission");
-        if(requestCode == ScreenshotUtils.SCREENSHOT_REQUEST_CODE) {
-            if(resultCode == Activity.RESULT_OK) {
+        if (requestCode == ScreenshotUtils.SCREENSHOT_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
                 this.screenshotIntentData = data;
             } else {
                 screenshotIntentData = null;
@@ -161,12 +161,12 @@ public class DebuggIt {
     }
 
     protected void authenticate(boolean refresh) {
-        if(refresh) {
+        if (refresh) {
             refreshAccessToken();
             return;
         }
-        if(!hasAccessToken()) {
-            if(!isFragmentShown(LoginFragment.TAG)) {
+        if (!hasAccessToken()) {
+            if (!isFragmentShown(LoginFragment.TAG)) {
                 LoginFragment.newInstance().show(((FragmentActivity) getActivity()).getSupportFragmentManager(), LoginFragment.TAG);
             }
         } else {
@@ -175,7 +175,7 @@ public class DebuggIt {
     }
 
     protected void applySavedTokens() {
-        switch(DebuggIt.getInstance().getConfigType()) {
+        switch (DebuggIt.getInstance().getConfigType()) {
 
             case BITBUCKET:
                 ((BitBucketApiService) apiService).setAccessToken(Utils.getString(getActivity(), Constants.BitBucket.ACCESS_TOKEN, ""));
@@ -185,7 +185,7 @@ public class DebuggIt {
                 ((JiraApiService) apiService).setPassword(Utils.getString(getActivity(), Constants.Jira.PASSWORD, ""));
                 break;
             case GITHUB:
-                ((GitHubApiService) apiService).setAccessToken(Utils.getString(getActivity(), Constants.GitHub.ACCESS_TOKEN, ""));
+                ((GitHubApiService) apiService).setAccessToken(Utils.getString(getActivity(), Constants.GitHub.GITHUB_ACCESS_TOKEN, ""));
                 ((GitHubApiService) apiService).setTwoFactorAuthCode(Utils.getString(getActivity(), Constants.GitHub.TWO_FACTOR_AUTH_CODE, ""));
                 break;
         }
@@ -199,8 +199,18 @@ public class DebuggIt {
     }
 
     protected void saveToken(String accessToken) {
-        ((BitBucketApiService) apiService).setAccessToken(accessToken);
-        Utils.putString(getActivity(), Constants.BitBucket.ACCESS_TOKEN, accessToken);
+        switch (DebuggIt.getInstance().getConfigType()) {
+
+            case BITBUCKET:
+                ((BitBucketApiService) apiService).setAccessToken(accessToken);
+                Utils.putString(getActivity(), Constants.BitBucket.ACCESS_TOKEN, accessToken);
+                break;
+            case GITHUB:
+                ((GitHubApiService) apiService).setAccessToken(accessToken);
+                Utils.putString(getActivity(), Constants.GitHub.GITHUB_ACCESS_TOKEN, accessToken);
+                break;
+        }
+
         waitingForShake = true;
     }
 
@@ -232,12 +242,12 @@ public class DebuggIt {
     private void addReportButton() {
         final FrameLayout rootLayout = (FrameLayout) getActivity().findViewById(android.R.id.content);
         reportButton = new WeakReference<>(rootLayout.findViewById(R.id.report_button));
-        if(getReportButton() == null) {
+        if (getReportButton() == null) {
             reportButton = new WeakReference<>(LayoutInflater.from(getActivity()).inflate(R.layout.layout_br_report_button, rootLayout, false));
             rootLayout.addView(getReportButton());
             initReportButtonOnTouchListener(rootLayout);
         }
-        if(!report.getScreensUrls().isEmpty()) {
+        if (!report.getScreensUrls().isEmpty()) {
             ((ImageView) getReportButton()).setImageDrawable(ResourcesCompat.getDrawable(getActivity().getResources(), R.drawable.next_screenshoot, null));
         }
         initButtonPosition();
@@ -245,7 +255,7 @@ public class DebuggIt {
 
     private void initButtonPosition() {
         float buttonPosition = Utils.getFloat(getReportButton().getContext(), Utils.isOrientationLandscape(getActivity()) ? BUTTON_POSITION_LANDSCAPE : BUTTON_POSITION_PORTRAIT, 0);
-        if(buttonPosition == 0) {
+        if (buttonPosition == 0) {
             Rect visibleFrame = new Rect();
             getActivity().getWindow().getDecorView().getWindowVisibleDisplayFrame(visibleFrame);
             getReportButton().setY(visibleFrame.bottom / 2);
@@ -263,15 +273,15 @@ public class DebuggIt {
 
             @Override
             public boolean onTouch(View view, MotionEvent event) {
-                switch(event.getAction()) {
+                switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         dY = view.getY() - event.getRawY();
                         previousY = view.getY();
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        if(!isMoving || Math.abs(previousY - view.getY()) <= MOVE_TOLERANCE) {
-                            if(!hasAccessToken()) {
+                        if (!isMoving || Math.abs(previousY - view.getY()) <= MOVE_TOLERANCE) {
+                            if (!hasAccessToken()) {
                                 authenticate(false);
                             } else {
                                 applySavedTokens();
@@ -308,7 +318,7 @@ public class DebuggIt {
     }
 
     private void takeScreenshot() {
-        if(screenshotIntentData != null) {
+        if (screenshotIntentData != null) {
             startDrawFragment();
         } else {
             ScreenshotUtils.getScreenshotPermission(getActivity());
@@ -319,10 +329,10 @@ public class DebuggIt {
         ShakeDetector.getInstance().register(activity, new ShakeListener() {
             @Override
             public void shakeDetected() {
-                if(Utils.isActivityRunning(activity)) {
-                    if(!hasAccessToken() && !isFragmentShown(WelcomeDialog.TAG)) {
+                if (Utils.isActivityRunning(activity)) {
+                    if (!hasAccessToken() && !isFragmentShown(WelcomeDialog.TAG)) {
                         authenticate(false);
-                    } else if(shouldShowDrawFragment()) {
+                    } else if (shouldShowDrawFragment()) {
                         waitingForShake = false;
                         startDrawFragment();
                     }
@@ -338,7 +348,7 @@ public class DebuggIt {
                         && !isFragmentShown(WelcomeDialog.TAG);
             }
         });
-        if(hasAccessToken()) {
+        if (hasAccessToken()) {
             waitingForShake = true;
         }
     }
@@ -350,7 +360,7 @@ public class DebuggIt {
             public void onSuccess(JSONObject response) {
                 try {
                     saveTokens(response);
-                } catch(JSONException e) {
+                } catch (JSONException e) {
                     // ignored
                 }
             }
@@ -369,25 +379,25 @@ public class DebuggIt {
 
     private void startDrawFragment() {
         try {
-            if(versionChecked && !versionSupported) {
+            if (versionChecked && !versionSupported) {
                 showUnsupportedVersionPopup();
                 waitingForShake = true;
                 return;
-            } else if(!versionChecked) {
+            } else if (!versionChecked) {
                 showCantCheckVersionPopup();
                 waitingForShake = true;
                 return;
             }
-            if(!isFragmentShown(DrawFragment.TAG)) {
+            if (!isFragmentShown(DrawFragment.TAG)) {
                 Utils.lockScreenRotation(getActivity(), Utils.isOrientationLandscape(getActivity()) ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 getReportButton().setVisibility(View.GONE);
                 screenshotLoadingDialog.show(((FragmentActivity) getActivity()).getSupportFragmentManager(), LoadingDialog.TAG);
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && screenshotIntentData != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && screenshotIntentData != null) {
                     ScreenshotUtils.setNextScreenshotCanceled(false);
                     ScreenshotUtils.takeScreenshot(getActivity(), screenshotIntentData, new ScreenshotUtils.ScreenshotListener() {
                         @Override
                         public void onScreenshotReady(Bitmap bitmap) {
-                            if(bitmap != null) {
+                            if (bitmap != null) {
                                 showDrawFragment(bitmap);
                             } else {
                                 screenshotLoadingDialog.dismiss();
@@ -399,7 +409,7 @@ public class DebuggIt {
                     showDrawFragment(ScreenshotMaker.takeScreenshotBitmap(getActivity()));
                 }
             }
-        } catch(IllegalStateException e) {
+        } catch (IllegalStateException e) {
             getReportButton().setVisibility(View.VISIBLE);
         }
     }
@@ -408,7 +418,7 @@ public class DebuggIt {
         screenshotLoadingDialog = LoadingDialog.newInstance(getActivity().getString(R.string.br_generating_screenshot), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(screenshotIntentData != null) {
+                if (screenshotIntentData != null) {
                     ScreenshotUtils.setNextScreenshotCanceled(true);
                 }
                 getReportButton().setVisibility(View.VISIBLE);
@@ -429,7 +439,7 @@ public class DebuggIt {
     }
 
     private boolean hasAccessToken() {
-        switch(DebuggIt.getInstance().getConfigType()) {
+        switch (DebuggIt.getInstance().getConfigType()) {
 
             case BITBUCKET:
                 return !Utils.getString(getActivity(), Constants.BitBucket.ACCESS_TOKEN, "").isEmpty();
@@ -437,7 +447,7 @@ public class DebuggIt {
                 return !Utils.getString(getActivity(), Constants.Jira.EMAIL, "").isEmpty()
                         && !Utils.getString(getActivity(), Constants.Jira.PASSWORD, "").isEmpty();
             case GITHUB:
-                return !Utils.getString(getActivity(), Constants.GitHub.ACCESS_TOKEN, "").isEmpty();
+                return !Utils.getString(getActivity(), Constants.GitHub.GITHUB_ACCESS_TOKEN, "").isEmpty();
         }
         return false;
     }

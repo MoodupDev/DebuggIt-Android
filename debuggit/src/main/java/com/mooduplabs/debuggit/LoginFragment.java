@@ -12,14 +12,20 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import javax.net.ssl.HttpsURLConnection;
+
 public class LoginFragment extends DialogFragment {
     //region Consts
 
     public static final String TAG = LoginFragment.class.getSimpleName();
     public static final String BITBUCKET_LOGIN_PAGE = "https://bitbucket.org/site/oauth2/authorize?client_id=Jz9hKhxwAWgRNcS6m8&response_type=token";
-    public static final String GITHUB_LOGIN_PAGE = "";
+    public static final String GITHUB_LOGIN_PAGE = "https://github.com/login/oauth/authorize?client_id=8aac9632491f7d954664&scope=repo";
     public static final String JIRA_LOGIN_PAGE = "";
     public static final String ACCESS_TOKEN_STRING = "access_token=";
+    public static final String CODE_STRING = "code=";
 
     //endregion
 
@@ -60,42 +66,77 @@ public class LoginFragment extends DialogFragment {
 
         webView.setWebChromeClient(new WebChromeClient());
         webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-                webViewProgressBar.setVisibility(View.VISIBLE);
-            }
+                                     @Override
+                                     public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                                         super.onPageStarted(view, url, favicon);
+                                         webViewProgressBar.setVisibility(View.VISIBLE);
+                                     }
 
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                webViewProgressBar.setVisibility(View.GONE);
-                super.onPageFinished(view, url);
-            }
+                                     @Override
+                                     public void onPageFinished(WebView view, String url) {
+                                         webViewProgressBar.setVisibility(View.GONE);
+                                         super.onPageFinished(view, url);
+                                     }
 
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (url.contains(ACCESS_TOKEN_STRING)) {
-                    String token = url.substring(url.indexOf(ACCESS_TOKEN_STRING) + ACCESS_TOKEN_STRING.length(), url.indexOf("&")).replaceAll("%3D", "=");
+                                     @Override
+                                     public boolean shouldOverrideUrlLoading(WebView view, final String url) {
+                                         if (url.contains(ACCESS_TOKEN_STRING)) {
 
-                    switch (DebuggIt.getInstance().getConfigType()) {
-                        case BITBUCKET:
-                            handleBitBucketLoginResponse(token);
-                            break;
-                        case JIRA:
-                            handleJiraLoginResponse();
-                            break;
-                        case GITHUB:
-                            handleGitHubLoginResponse();
-                            break;
-                    }
+                                             String token;
 
-                    webView.stopLoading();
-                    return true;
-                }
+                                             switch (DebuggIt.getInstance().getConfigType()) {
+                                                 case BITBUCKET:
+                                                     token = url.substring(url.indexOf(ACCESS_TOKEN_STRING) + ACCESS_TOKEN_STRING.length(), url.indexOf("&")).replaceAll("%3D", "=");
+                                                     handleBitBucketLoginResponse(token);
+                                                     break;
+                                                 case JIRA:
+                                                     handleJiraLoginResponse();
+                                                     break;
+                                             }
 
-                return false;
-            }
-        });
+                                             webView.stopLoading();
+                                             return true;
+                                         } else if (DebuggIt.getInstance().getConfigType() == DebuggIt.ConfigType.GITHUB && url.contains(CODE_STRING)) {
+                                             webView.stopLoading();
+
+                                             String code = url.substring(url.indexOf(CODE_STRING) + CODE_STRING.length());
+
+                                             DebuggIt.getInstance().getApiService().loginWithOAuth(
+                                                     code,
+                                                     new JsonResponseCallback() {
+                                                         @Override
+                                                         public void onSuccess(JSONObject response) {
+                                                             try {
+                                                                 handleGitHubLoginResponse(response.getString(Constants.GitHub.ACCESS_TOKEN));
+                                                             } catch (JSONException e) {
+                                                                 e.printStackTrace();
+                                                             }
+                                                         }
+
+                                                         @Override
+                                                         public void onFailure(int responseCode, String errorMessage) {
+                                                             if (responseCode == HttpsURLConnection.HTTP_BAD_REQUEST || responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
+                                                                 ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(errorMessage, getString(R.string.br_login_error_wrong_credentials)), true)
+                                                                         .show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                                             } else {
+                                                                 ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                                             }
+                                                         }
+
+                                                         @Override
+                                                         public void onException(Exception ex) {
+                                                             ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                                         }
+                                                     });
+
+                                             return true;
+                                         }
+
+                                         return false;
+                                     }
+                                 }
+
+        );
 
         switch (DebuggIt.getInstance().getConfigType()) {
             case BITBUCKET:
@@ -108,6 +149,7 @@ public class LoginFragment extends DialogFragment {
                 webView.loadUrl(GITHUB_LOGIN_PAGE);
                 break;
         }
+
     }
 
     private void handleBitBucketLoginResponse(String token) {
@@ -118,7 +160,9 @@ public class LoginFragment extends DialogFragment {
     private void handleJiraLoginResponse() {
     }
 
-    private void handleGitHubLoginResponse() {
+    private void handleGitHubLoginResponse(String token) {
+        DebuggIt.getInstance().saveToken(token);
+        ConfirmationDialog.newInstance(getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
     }
 
     protected static LoginFragment newInstance() {

@@ -4,7 +4,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.util.HashMap;
 
 public class GitHubApiService implements ApiService {
     //region Consts
@@ -16,6 +18,8 @@ public class GitHubApiService implements ApiService {
 
     //region Fields
 
+    private String clientId;
+    private String clientSecret;
     private String accessToken;
     private String accountName;
     private String repoSlug;
@@ -32,11 +36,23 @@ public class GitHubApiService implements ApiService {
                     .withHeader(HttpClient.ACCEPT_HEADER, Constants.GitHub.JSON_FORMAT)
                     .authUser(email, password)
                     .withData(getAuthJsonObject());
-            if(twoFactorAuthCode != null  && !twoFactorAuthCode.isEmpty()) {
+            if (twoFactorAuthCode != null && !twoFactorAuthCode.isEmpty()) {
                 client.withHeader("X-GitHub-OTP", twoFactorAuthCode);
             }
             client.send(callback);
-        } catch(MalformedURLException e) {
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void loginWithOAuth(String code, JsonResponseCallback callback) {
+        try {
+            HttpClient client = HttpClient.post(Constants.GitHub.ACCESS_TOKEN_URL)
+                    .withHeader(HttpClient.ACCEPT_HEADER, Constants.GitHub.JSON_STANDARD_FORMAT)
+                    .withData(getAuthHashMap(code));
+            client.send(callback);
+        } catch (MalformedURLException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
@@ -49,7 +65,7 @@ public class GitHubApiService implements ApiService {
                     .withHeader(HttpClient.AUTHORIZATION_HEADER, String.format(TOKEN_FORMAT, accessToken))
                     .withData(getIssueJsonObject(title, content, kind))
                     .send(callback);
-        } catch(MalformedURLException e) {
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
     }
@@ -69,9 +85,11 @@ public class GitHubApiService implements ApiService {
     //region Methods
 
 
-    protected GitHubApiService(String accountName, String repoSlug) {
-        this.accountName = accountName;
+    protected GitHubApiService(String clientId, String clientSecret, String accountName, String repoSlug) {
+        this.clientId = clientId;
+        this.clientSecret = clientSecret;
         this.repoSlug = repoSlug;
+        this.accountName = accountName;
     }
 
     private JSONObject getAuthJsonObject() {
@@ -82,12 +100,21 @@ public class GitHubApiService implements ApiService {
             auth.put(Constants.Keys.SCOPES, scopes);
             auth.put(Constants.Keys.NOTE, String.format(AUTH_NOTE_FORMAT, Utils.getDateString(System.currentTimeMillis())));
             auth.put(Constants.Keys.NOTE_URL, Constants.DEBUGGIT_URL);
-        } catch(JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return auth;
     }
 
+    private HashMap<String, String> getAuthHashMap(String code) {
+        HashMap<String, String> auth = new HashMap<>();
+
+        auth.put(Constants.Keys.CLIENT_ID, clientId);
+        auth.put(Constants.Keys.CLIENT_SECRET, clientSecret);
+        auth.put(Constants.Keys.CODE, code);
+
+        return auth;
+    }
 
     private JSONObject getIssueJsonObject(String title, String content, String kind) {
         JSONObject issue = new JSONObject();
@@ -97,7 +124,7 @@ public class GitHubApiService implements ApiService {
             JSONArray labels = new JSONArray();
             labels.put(kind);
             issue.put(Constants.Keys.LABELS, labels);
-        } catch(JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return issue;
