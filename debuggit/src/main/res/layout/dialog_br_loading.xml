@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center"
-              android:layout_margin="@dimen/br.big.margin"
-              android:gravity="center"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="@dimen/br.big.margin"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/main_background"
         android:orientation="vertical"
-        android:paddingTop="@dimen/br.big.padding"
-        android:background="@drawable/main_background">
+        android:paddingTop="@dimen/br.big.padding">
 
 
         <com.mooduplabs.debuggit.MontserratTextView
             android:id="@+id/confirmation_dialog_message"
             style="@style/BrDialogText"
-            android:text="@string/br.loading.dialog.message.report"/>
+            android:text="@string/br.loading.dialog.message.report" />
 
         <ProgressBar
             android:id="@+id/loading_spinner"
@@ -28,15 +28,13 @@
             android:layout_gravity="center"
             android:layout_marginBottom="@dimen/br.big.margin"
             android:layout_marginTop="@dimen/br.small.margin"
-            android:indeterminate="true"
-            android:indeterminateTint="@color/br.app.orange"
-            android:indeterminateTintMode="src_atop"/>
+            android:indeterminate="true" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/br.divider.height"
             android:layout_marginTop="@dimen/br.small.margin"
-            android:background="@color/br.app.gray"/>
+            android:background="@color/br.app.gray" />
 
         <com.mooduplabs.debuggit.MontserratTextView
             android:id="@+id/loading_dialog_cancel_button"
@@ -47,7 +45,7 @@
             android:text="@string/br.button.cancel"
             android:textColor="@drawable/dialog_text_color"
             android:textSize="@dimen/br.text.size.regular"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
     </LinearLayout>
 

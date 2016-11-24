@@ -1,12 +1,18 @@
 package com.mooduplabs.debuggit;
 
 import android.app.Dialog;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
 
 
 public class LoadingDialog extends DialogFragment {
@@ -66,6 +72,15 @@ public class LoadingDialog extends DialogFragment {
     private void initViews(View view) {
         MontserratTextView message = (MontserratTextView) view.findViewById(R.id.confirmation_dialog_message);
         MontserratTextView cancelButton = (MontserratTextView) view.findViewById(R.id.loading_dialog_cancel_button);
+        ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.loading_spinner);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            Drawable wrapDrawable = DrawableCompat.wrap(progressBar.getIndeterminateDrawable());
+            DrawableCompat.setTint(wrapDrawable, ContextCompat.getColor(getContext(), R.color.br_app_orange));
+            progressBar.setIndeterminateDrawable(DrawableCompat.unwrap(wrapDrawable));
+        } else {
+            progressBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getContext(), R.color.br_app_orange), PorterDuff.Mode.SRC_ATOP);
+        }
 
         message.setText(getArguments().getString("message", ""));
         cancelButton.setOnClickListener(new View.OnClickListener() {

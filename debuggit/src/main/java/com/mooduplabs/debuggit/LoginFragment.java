@@ -2,9 +2,14 @@ package com.mooduplabs.debuggit;
 
 import android.app.Dialog;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -40,6 +45,7 @@ public class LoginFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_br_login_webview, null);
         dialog.setContentView(view);
 
+        initWebViewProgressBar(view);
         initWebView(view);
 
         return dialog;
@@ -53,9 +59,20 @@ public class LoginFragment extends DialogFragment {
         // Required empty public constructor
     }
 
+    private void initWebViewProgressBar(View view) {
+        webViewProgressBar = (ProgressBar) view.findViewById(R.id.webview_progress_bar);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            Drawable wrapDrawable = DrawableCompat.wrap(webViewProgressBar.getIndeterminateDrawable());
+            DrawableCompat.setTint(wrapDrawable, ContextCompat.getColor(getContext(), R.color.br_app_orange));
+            webViewProgressBar.setIndeterminateDrawable(DrawableCompat.unwrap(wrapDrawable));
+        } else {
+            webViewProgressBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getContext(), R.color.br_app_orange), PorterDuff.Mode.SRC_ATOP);
+        }
+    }
+
     private void initWebView(View view) {
         webView = (WebView) view.findViewById(R.id.webview);
-        webViewProgressBar = (ProgressBar) view.findViewById(R.id.webview_progress_bar);
 
         webView.getSettings().setJavaScriptEnabled(true);
 
