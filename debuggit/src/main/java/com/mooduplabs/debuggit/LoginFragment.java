@@ -33,6 +33,7 @@ public class LoginFragment extends DialogFragment {
 
     private WebView webView;
     private ProgressBar webViewProgressBar;
+    private boolean keepProgressBarVisible = false;
 
     //endregion
 
@@ -86,7 +87,11 @@ public class LoginFragment extends DialogFragment {
 
                                      @Override
                                      public void onPageFinished(WebView view, String url) {
-                                         webViewProgressBar.setVisibility(View.GONE);
+                                         if (keepProgressBarVisible) {
+                                             keepProgressBarVisible = false;
+                                         } else {
+                                             webViewProgressBar.setVisibility(View.GONE);
+                                         }
                                          super.onPageFinished(view, url);
                                      }
 
@@ -131,6 +136,7 @@ public class LoginFragment extends DialogFragment {
                                                          }
                                                      });
 
+                                             keepProgressBarVisible = true;
                                              webView.stopLoading();
                                              return true;
                                          }
