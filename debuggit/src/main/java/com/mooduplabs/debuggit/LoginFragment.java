@@ -75,84 +75,47 @@ public class LoginFragment extends DialogFragment {
 
                                      @Override
                                      public boolean shouldOverrideUrlLoading(WebView view, final String url) {
-                                         switch (DebuggIt.getInstance().getConfigType()) {
-                                             case BITBUCKET:
-                                                 if (url.contains(Constants.Keys.CODE + "=")) {
-                                                     String code = url.substring(url.indexOf(Constants.Keys.CODE) + Constants.Keys.CODE.length() + 1);
+                                         if (url.contains(Constants.Keys.CODE + "=")) {
+                                             String code = url.substring(url.indexOf(Constants.Keys.CODE) + Constants.Keys.CODE.length() + 1);
 
-                                                     DebuggIt.getInstance().getApiService().exchangeAuthCodeForToken(
-                                                             code,
-                                                             new JsonResponseCallback() {
-                                                                 @Override
-                                                                 public void onSuccess(JSONObject response) {
-                                                                     try {
+                                             DebuggIt.getInstance().getApiService().exchangeAuthCodeForToken(
+                                                     code,
+                                                     new JsonResponseCallback() {
+                                                         @Override
+                                                         public void onSuccess(JSONObject response) {
+                                                             try {
+                                                                 switch (DebuggIt.getInstance().getConfigType()) {
+                                                                     case BITBUCKET:
                                                                          handleBitBucketLoginResponse(response);
-                                                                     } catch (JSONException e) {
-                                                                         e.printStackTrace();
-                                                                         onException(new Exception());
-                                                                     }
-                                                                 }
-
-                                                                 @Override
-                                                                 public void onFailure(int responseCode, String errorMessage) {
-                                                                     if (responseCode == HttpsURLConnection.HTTP_BAD_REQUEST || responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-                                                                         ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(errorMessage, getString(R.string.br_login_error_wrong_credentials)), true)
-                                                                                 .show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                                                                     } else {
-                                                                         ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                                                                     }
-                                                                 }
-
-                                                                 @Override
-                                                                 public void onException(Exception ex) {
-                                                                     ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                                                                 }
-                                                             });
-
-                                                     webView.stopLoading();
-                                                     return true;
-                                                 }
-                                                 break;
-                                             case JIRA:
-                                                 handleJiraLoginResponse();
-                                                 break;
-                                             case GITHUB:
-                                                 if (url.contains(Constants.Keys.CODE + "=")) {
-                                                     String code = url.substring(url.indexOf(Constants.Keys.CODE) + Constants.Keys.CODE.length() + 1);
-
-                                                     DebuggIt.getInstance().getApiService().exchangeAuthCodeForToken(
-                                                             code,
-                                                             new JsonResponseCallback() {
-                                                                 @Override
-                                                                 public void onSuccess(JSONObject response) {
-                                                                     try {
+                                                                         break;
+                                                                     case GITHUB:
                                                                          handleGitHubLoginResponse(response);
-                                                                     } catch (JSONException e) {
-                                                                         e.printStackTrace();
-                                                                         onException(new Exception());
-                                                                     }
+                                                                         break;
                                                                  }
+                                                             } catch (JSONException e) {
+                                                                 e.printStackTrace();
+                                                                 onException(new Exception());
+                                                             }
+                                                         }
 
-                                                                 @Override
-                                                                 public void onFailure(int responseCode, String errorMessage) {
-                                                                     if (responseCode == HttpsURLConnection.HTTP_BAD_REQUEST || responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-                                                                         ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(errorMessage, getString(R.string.br_login_error_wrong_credentials)), true)
-                                                                                 .show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                                                                     } else {
-                                                                         ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                                                                     }
-                                                                 }
+                                                         @Override
+                                                         public void onFailure(int responseCode, String errorMessage) {
+                                                             if (responseCode == HttpsURLConnection.HTTP_BAD_REQUEST || responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
+                                                                 ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(errorMessage, getString(R.string.br_login_error_wrong_credentials)), true)
+                                                                         .show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                                             } else {
+                                                                 ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                                             }
+                                                         }
 
-                                                                 @Override
-                                                                 public void onException(Exception ex) {
-                                                                     ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                                                                 }
-                                                             });
+                                                         @Override
+                                                         public void onException(Exception ex) {
+                                                             ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                                         }
+                                                     });
 
-                                                     webView.stopLoading();
-                                                     return true;
-                                                 }
-                                                 break;
+                                             webView.stopLoading();
+                                             return true;
                                          }
                                          return false;
                                      }
