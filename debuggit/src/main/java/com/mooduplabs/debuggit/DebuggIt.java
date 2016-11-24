@@ -311,10 +311,14 @@ public class DebuggIt {
     }
 
     private void takeScreenshot() {
-        if (screenshotIntentData != null) {
-            startDrawFragment();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (screenshotIntentData != null) {
+                startDrawFragment();
+            } else {
+                ScreenshotUtils.getScreenshotPermission(getActivity());
+            }
         } else {
-            ScreenshotUtils.getScreenshotPermission(getActivity());
+            startDrawFragment();
         }
     }
 
