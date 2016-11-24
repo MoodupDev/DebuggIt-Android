@@ -79,10 +79,12 @@ public class ConfirmationDialog extends DialogFragment {
         MontserratTextView message = (MontserratTextView) view.findViewById(R.id.confirmation_dialog_message);
         MontserratTextView okButton = (MontserratTextView) view.findViewById(R.id.confirmation_dialog_ok_button);
 
+        final boolean isTypeSuccess = type == TYPE_SUCCESS;
+
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (type == TYPE_SUCCESS) {
+                if (isTypeSuccess) {
                     ((DialogFragment)getParentFragment()).dismiss();
                 }
                 if(onOkClickListener != null) {
@@ -92,10 +94,10 @@ public class ConfirmationDialog extends DialogFragment {
             }
         });
 
-        icon.setRotation(type == TYPE_SUCCESS ? 0 : 180.0f);
+        icon.setRotation(isTypeSuccess ? 0 : 180.0f);
         String text = getArguments().getString(MESSAGE, "");
         if(text.isEmpty()) {
-            message.setText(getString(type == TYPE_SUCCESS ? R.string.br_confirmation_success : R.string.br_confirmation_failure));
+            message.setText(getString(isTypeSuccess ? R.string.br_confirmation_success : R.string.br_confirmation_failure));
         } else {
             message.setText(text);
         }

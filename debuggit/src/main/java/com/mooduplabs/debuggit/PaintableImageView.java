@@ -42,6 +42,91 @@ public class PaintableImageView extends ImageView {
     private Paint paint;
     private float x, y;
 
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if(isEnabled()) {
+            float x = event.getX();
+            float y = event.getY();
+
+            if(type == TYPE_FREE_DRAW) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        freeDrawTouchStart(x, y);
+                        invalidate();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        freeDrawTouchMove(x, y);
+                        invalidate();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        freeDrawTouchUp();
+                        invalidate();
+                        break;
+                }
+            } else if(type == TYPE_RECTANGLE_DRAW) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        rectanglesDrawTouchStart(x, y);
+                        invalidate();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        rectanglesDrawTouchMove(x, y);
+                        invalidate();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        invalidate();
+                        break;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        canvas = new Canvas(bitmap);
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        canvas.drawColor(0x00FFFFFF);
+        canvas.drawBitmap(bitmap, 0, 0, bitmapPaint);
+        canvas.drawPath(path, paint);
+
+        if(points[3] == null)
+            return;
+
+        int left, top, right, bottom;
+        left = points[0].x;
+        top = points[0].y;
+        right = points[0].x;
+        bottom = points[0].y;
+
+        for (Point point : points) {
+            left = left > point.x ? point.x : left;
+            top = top > point.y ? point.y : top;
+            right = right < point.x ? point.x : right;
+            bottom = bottom < point.y ? point.y : bottom;
+        }
+
+        canvas.drawRect(
+                left + corners.get(0).getCornerImageWidth() / 2,
+                top + corners.get(0).getCornerImageWidth() / 2,
+                right + corners.get(2).getCornerImageWidth() / 2,
+                bottom + corners.get(2).getCornerImageWidth() / 2, paint);
+
+        for(int i = 0; i < corners.size(); i++) {
+            Corner corner = corners.get(i);
+            canvas.drawBitmap(corner.getBitmap(), corner.getX(), corner.getY(),
+                    paint);
+        }
+
+    }
+
     public PaintableImageView(Context context) {
         super(context);
         init(context);
@@ -89,48 +174,6 @@ public class PaintableImageView extends ImageView {
             lastDrawings.add(TYPE_RECTANGLE_DRAW);
             invalidate();
         }
-    }
-
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        canvas = new Canvas(bitmap);
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        canvas.drawColor(0x00FFFFFF);
-        canvas.drawBitmap(bitmap, 0, 0, bitmapPaint);
-        canvas.drawPath(path, paint);
-
-        if(points[3] == null)
-            return;
-
-        int left, top, right, bottom;
-        left = points[0].x;
-        top = points[0].y;
-        right = points[0].x;
-        bottom = points[0].y;
-        for(int i = 0; i < points.length; i++) {
-            left = left > points[i].x ? points[i].x : left;
-            top = top > points[i].y ? points[i].y : top;
-            right = right < points[i].x ? points[i].x : right;
-            bottom = bottom < points[i].y ? points[i].y : bottom;
-        }
-
-        canvas.drawRect(
-                left + corners.get(0).getCornerImageWidth() / 2,
-                top + corners.get(0).getCornerImageWidth() / 2,
-                right + corners.get(2).getCornerImageWidth() / 2,
-                bottom + corners.get(2).getCornerImageWidth() / 2, paint);
-
-        for(int i = 0; i < corners.size(); i++) {
-            Corner corner = corners.get(i);
-            canvas.drawBitmap(corner.getBitmap(), corner.getX(), corner.getY(),
-                    paint);
-        }
-
     }
 
     private void freeDrawTouchStart(float x, float y) {
@@ -209,47 +252,6 @@ public class PaintableImageView extends ImageView {
         for(Path pathToDraw : pathHistory) {
             canvas.drawPath(pathToDraw, paint);
         }
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if(isEnabled()) {
-            float x = event.getX();
-            float y = event.getY();
-
-            if(type == TYPE_FREE_DRAW) {
-                switch(event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        freeDrawTouchStart(x, y);
-                        invalidate();
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        freeDrawTouchMove(x, y);
-                        invalidate();
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        freeDrawTouchUp();
-                        invalidate();
-                        break;
-                }
-            } else if(type == TYPE_RECTANGLE_DRAW) {
-                switch(event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        rectanglesDrawTouchStart(x, y);
-                        invalidate();
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        rectanglesDrawTouchMove(x, y);
-                        invalidate();
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        invalidate();
-                        break;
-                }
-            }
-            return true;
-        }
-        return false;
     }
 
     private void rectanglesDrawTouchMove(float x, float y) {
@@ -343,11 +345,11 @@ public class PaintableImageView extends ImageView {
             top = points[0].y;
             right = points[0].x;
             bottom = points[0].y;
-            for(int i = 0; i < points.length; i++) {
-                left = left > points[i].x ? points[i].x : left;
-                top = top > points[i].y ? points[i].y : top;
-                right = right < points[i].x ? points[i].x : right;
-                bottom = bottom < points[i].y ? points[i].y : bottom;
+            for (Point point : points) {
+                left = left > point.x ? point.x : left;
+                top = top > point.y ? point.y : top;
+                right = right < point.x ? point.x : right;
+                bottom = bottom < point.y ? point.y : bottom;
             }
 
             RectF rectangle = new RectF(
