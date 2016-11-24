@@ -44,7 +44,7 @@ public class GitHubApiService implements ApiService {
     }
 
     @Override
-    public void loginWithOAuth(String code, JsonResponseCallback callback) {
+    public void exchangeAuthCodeForToken(String code, JsonResponseCallback callback) {
         try {
             HttpClient client = HttpClient.post(Constants.GitHub.ACCESS_TOKEN_URL)
                     .withHeader(HttpClient.ACCEPT_HEADER, Constants.GitHub.JSON_STANDARD_FORMAT)

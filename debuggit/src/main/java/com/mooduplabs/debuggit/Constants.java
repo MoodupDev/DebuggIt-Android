@@ -18,7 +18,7 @@ interface Constants {
         String CLIENT_SECRET = "dzyS7K5mnvcEWFtsS6veUM8RDJxRzwXQ";
 
         // URLS
-        String LOGIN_PAGE = "https://bitbucket.org/site/oauth2/authorize?client_id=%s&response_type=token";
+        String LOGIN_PAGE = "https://bitbucket.org/site/oauth2/authorize?client_id=%s&response_type=code";
         String AUTHORIZE_URL = "https://bitbucket.org/site/oauth2/access_token";
         String ISSUES_URL = "https://api.bitbucket.org/1.0/repositories/%1$s/%2$s/issues";
 
@@ -29,6 +29,7 @@ interface Constants {
 
         // AUTH
         String GRANT_TYPE_PASSWORD = "password";
+        String GRANT_TYPE_AUTHORIZATION_CODE = "authorization_code";
         String GRANT_TYPE_REFRESH_TOKEN = "refresh_token";
 
         String ACCESS_TOKEN = "access_token";

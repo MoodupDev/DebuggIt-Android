@@ -26,7 +26,7 @@ public class BitBucketApiService implements ApiService {
 
         try {
             HttpClient.post(String.format(Constants.BitBucket.ISSUES_URL, accountName, repoSlug)).withData(map).authUser(accessToken).send(callback);
-        } catch(UnsupportedEncodingException | MalformedURLException e) {
+        } catch (UnsupportedEncodingException | MalformedURLException e) {
             callback.onException(e);
         }
     }
@@ -39,7 +39,7 @@ public class BitBucketApiService implements ApiService {
 
         try {
             HttpClient.post(Constants.BitBucket.AUTHORIZE_URL).withData(map).authUser(Constants.BitBucket.CLIENT_ID, Constants.BitBucket.CLIENT_SECRET).send(callback);
-        } catch(UnsupportedEncodingException | MalformedURLException e) {
+        } catch (UnsupportedEncodingException | MalformedURLException e) {
             callback.onException(e);
         }
     }
@@ -53,14 +53,25 @@ public class BitBucketApiService implements ApiService {
 
         try {
             HttpClient.post(Constants.BitBucket.AUTHORIZE_URL).withData(map).authUser(Constants.BitBucket.CLIENT_ID, Constants.BitBucket.CLIENT_SECRET).send(callback);
-        } catch(UnsupportedEncodingException | MalformedURLException e) {
+        } catch (UnsupportedEncodingException | MalformedURLException e) {
             callback.onException(e);
         }
     }
 
     @Override
-    public void loginWithOAuth(String code, JsonResponseCallback callback) {
+    public void exchangeAuthCodeForToken(String code, JsonResponseCallback callback) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put(Constants.Keys.GRANT_TYPE, Constants.BitBucket.GRANT_TYPE_AUTHORIZATION_CODE);
+        map.put(Constants.Keys.CODE, code);
 
+        try {
+            HttpClient.post(Constants.BitBucket.AUTHORIZE_URL)
+                    .withData(map)
+                    .authUser(Constants.BitBucket.CLIENT_ID, Constants.BitBucket.CLIENT_SECRET)
+                    .send(callback);
+        } catch (UnsupportedEncodingException | MalformedURLException e) {
+            callback.onException(e);
+        }
     }
 
     //endregion

@@ -45,7 +45,7 @@ class JiraApiService implements ApiService {
     }
 
     @Override
-    public void loginWithOAuth(String code, JsonResponseCallback callback) {
+    public void exchangeAuthCodeForToken(String code, JsonResponseCallback callback) {
 
     }
 

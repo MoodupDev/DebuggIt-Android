@@ -192,22 +192,16 @@ public class DebuggIt {
     }
 
     protected void saveTokens(JSONObject response) throws JSONException {
-        ((BitBucketApiService) apiService).setAccessToken(response.getString(Constants.BitBucket.ACCESS_TOKEN));
-        Utils.putString(getActivity(), Constants.BitBucket.ACCESS_TOKEN, response.getString(Constants.BitBucket.ACCESS_TOKEN));
-        Utils.putString(getActivity(), Constants.BitBucket.REFRESH_TOKEN, response.getString(Constants.BitBucket.REFRESH_TOKEN));
-        waitingForShake = true;
-    }
-
-    protected void saveToken(String accessToken) {
         switch (DebuggIt.getInstance().getConfigType()) {
 
             case BITBUCKET:
-                ((BitBucketApiService) apiService).setAccessToken(accessToken);
-                Utils.putString(getActivity(), Constants.BitBucket.ACCESS_TOKEN, accessToken);
+                ((BitBucketApiService) apiService).setAccessToken(response.getString(Constants.BitBucket.ACCESS_TOKEN));
+                Utils.putString(getActivity(), Constants.BitBucket.ACCESS_TOKEN, response.getString(Constants.BitBucket.ACCESS_TOKEN));
+                Utils.putString(getActivity(), Constants.BitBucket.REFRESH_TOKEN, response.getString(Constants.BitBucket.REFRESH_TOKEN));
                 break;
             case GITHUB:
-                ((GitHubApiService) apiService).setAccessToken(accessToken);
-                Utils.putString(getActivity(), Constants.GitHub.GITHUB_ACCESS_TOKEN, accessToken);
+                ((GitHubApiService) apiService).setAccessToken(response.getString(Constants.BitBucket.ACCESS_TOKEN));
+                Utils.putString(getActivity(), Constants.GitHub.GITHUB_ACCESS_TOKEN, response.getString(Constants.BitBucket.ACCESS_TOKEN));
                 break;
         }
 
@@ -237,7 +231,6 @@ public class DebuggIt {
     private View getReportButton() {
         return reportButton.get();
     }
-
 
     private void addReportButton() {
         final FrameLayout rootLayout = (FrameLayout) getActivity().findViewById(android.R.id.content);

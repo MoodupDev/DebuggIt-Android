@@ -77,11 +77,37 @@ public class LoginFragment extends DialogFragment {
                                      public boolean shouldOverrideUrlLoading(WebView view, final String url) {
                                          switch (DebuggIt.getInstance().getConfigType()) {
                                              case BITBUCKET:
-                                                 if (url.contains(Constants.BitBucket.ACCESS_TOKEN)) {
-                                                     String token = url.substring(url.indexOf(Constants.BitBucket.ACCESS_TOKEN) + Constants.BitBucket.ACCESS_TOKEN.length() + 1, url.indexOf("&"))
-                                                             .replaceAll("%3D", "=");
+                                                 if (url.contains(Constants.Keys.CODE + "=")) {
+                                                     String code = url.substring(url.indexOf(Constants.Keys.CODE) + Constants.Keys.CODE.length() + 1);
 
-                                                     handleBitBucketLoginResponse(token);
+                                                     DebuggIt.getInstance().getApiService().exchangeAuthCodeForToken(
+                                                             code,
+                                                             new JsonResponseCallback() {
+                                                                 @Override
+                                                                 public void onSuccess(JSONObject response) {
+                                                                     try {
+                                                                         handleBitBucketLoginResponse(response);
+                                                                     } catch (JSONException e) {
+                                                                         e.printStackTrace();
+                                                                         onException(new Exception());
+                                                                     }
+                                                                 }
+
+                                                                 @Override
+                                                                 public void onFailure(int responseCode, String errorMessage) {
+                                                                     if (responseCode == HttpsURLConnection.HTTP_BAD_REQUEST || responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
+                                                                         ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(errorMessage, getString(R.string.br_login_error_wrong_credentials)), true)
+                                                                                 .show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                                                     } else {
+                                                                         ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                                                     }
+                                                                 }
+
+                                                                 @Override
+                                                                 public void onException(Exception ex) {
+                                                                     ConfirmationDialog.newInstance(getContext().getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                                                                 }
+                                                             });
 
                                                      webView.stopLoading();
                                                      return true;
@@ -91,18 +117,19 @@ public class LoginFragment extends DialogFragment {
                                                  handleJiraLoginResponse();
                                                  break;
                                              case GITHUB:
-                                                 if (url.contains(Constants.Keys.CODE)) {
+                                                 if (url.contains(Constants.Keys.CODE + "=")) {
                                                      String code = url.substring(url.indexOf(Constants.Keys.CODE) + Constants.Keys.CODE.length() + 1);
 
-                                                     DebuggIt.getInstance().getApiService().loginWithOAuth(
+                                                     DebuggIt.getInstance().getApiService().exchangeAuthCodeForToken(
                                                              code,
                                                              new JsonResponseCallback() {
                                                                  @Override
                                                                  public void onSuccess(JSONObject response) {
                                                                      try {
-                                                                         handleGitHubLoginResponse(response.getString(Constants.GitHub.ACCESS_TOKEN));
+                                                                         handleGitHubLoginResponse(response);
                                                                      } catch (JSONException e) {
                                                                          e.printStackTrace();
+                                                                         onException(new Exception());
                                                                      }
                                                                  }
 
@@ -147,16 +174,16 @@ public class LoginFragment extends DialogFragment {
 
     }
 
-    private void handleBitBucketLoginResponse(String token) {
-        DebuggIt.getInstance().saveToken(token);
+    private void handleBitBucketLoginResponse(JSONObject response) throws JSONException {
+        DebuggIt.getInstance().saveTokens(response);
         ConfirmationDialog.newInstance(getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
     }
 
     private void handleJiraLoginResponse() {
     }
 
-    private void handleGitHubLoginResponse(String token) {
-        DebuggIt.getInstance().saveToken(token);
+    private void handleGitHubLoginResponse(JSONObject response) throws JSONException {
+        DebuggIt.getInstance().saveTokens(response);
         ConfirmationDialog.newInstance(getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
     }
 
