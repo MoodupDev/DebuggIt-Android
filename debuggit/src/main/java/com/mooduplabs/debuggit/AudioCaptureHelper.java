@@ -11,7 +11,7 @@ public class AudioCaptureHelper {
 
     private MediaRecorder mediaRecorder = null;
     private String filePath = null;
-    private boolean recording = false;
+    private boolean isRecording = false;
 
     protected AudioCaptureHelper() {
     }
@@ -19,7 +19,7 @@ public class AudioCaptureHelper {
 
     protected void startRecording(String filePath) {
         this.filePath = filePath;
-        recording = true;
+        isRecording = true;
         mediaRecorder = new MediaRecorder();
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
@@ -36,8 +36,8 @@ public class AudioCaptureHelper {
     }
 
     protected void stopRecording() {
-        if (recording) {
-            recording = false;
+        if (isRecording) {
+            isRecording = false;
             mediaRecorder.stop();
             mediaRecorder.release();
             mediaRecorder = null;
