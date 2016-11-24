@@ -6,6 +6,9 @@ import java.io.IOException;
 
 public class AudioCaptureHelper {
 
+    private static final int SAMPLING_RATE = 44100;
+    private static final int BIT_RATE = 96000;
+
     private MediaRecorder mediaRecorder = null;
     private String filePath = null;
     private boolean recording = false;
@@ -20,8 +23,8 @@ public class AudioCaptureHelper {
         mediaRecorder = new MediaRecorder();
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        mediaRecorder.setAudioSamplingRate(44100);
-        mediaRecorder.setAudioEncodingBitRate(96000);
+        mediaRecorder.setAudioSamplingRate(SAMPLING_RATE);
+        mediaRecorder.setAudioEncodingBitRate(BIT_RATE);
         mediaRecorder.setOutputFile(filePath);
         mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         try {
