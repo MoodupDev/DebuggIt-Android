@@ -13,7 +13,11 @@ interface Constants {
     String DEBUGGIT_URL = "http://debugg.it";
 
     interface BitBucket {
+        // CREDENTIALS
+        String CLIENT_ID = "Jz9hKhxwAWgRNcS6m8";
+
         // URLS
+        String LOGIN_PAGE = "https://bitbucket.org/site/oauth2/authorize?client_id=%s&response_type=token";
         String AUTHORIZE_URL = "https://bitbucket.org/site/oauth2/access_token";
         String ISSUES_URL = "https://api.bitbucket.org/1.0/repositories/%1$s/%2$s/issues";
 
@@ -28,9 +32,11 @@ interface Constants {
 
         String ACCESS_TOKEN = "access_token";
         String REFRESH_TOKEN = "refresh_token";
+        String CODE = "code";
     }
 
     interface Jira {
+        String LOGIN_PAGE = "";
         String ISSUES_URL = "https://%s/rest/api/2/issue";
         String CONFIGURATION_URL = "https://%s/rest/api/2/configuration";
 
@@ -42,8 +48,12 @@ interface Constants {
     }
 
     interface GitHub {
-        String AUTHORIZE_URL = "https://api.github.com/authorizations";
+        // CREDENTIALS
+        String CLIENT_ID = "8aac9632491f7d954664";
 
+        // URLS
+        String LOGIN_PAGE = "https://github.com/login/oauth/authorize?client_id=%s&scope=repo";
+        String AUTHORIZE_URL = "https://api.github.com/authorizations";
         String ACCESS_TOKEN_URL = "https://github.com/login/oauth/access_token";
         String ISSUES_URL = "https://api.github.com/repos/%1$s/%2$s/issues";
 
@@ -54,6 +64,7 @@ interface Constants {
         String GITHUB_ACCESS_TOKEN = "github_access_token";
         String TWO_FACTOR_AUTH_CODE = "github_2fa_code";
         String SCOPE_REPO = "repo";
+        String CODE = "code";
     }
 
     interface Keys {
