@@ -11,7 +11,7 @@ public class ApiClient {
 
     public static final String UPLOAD_IMAGE_URL = BuildConfig.API_BASE_URL + "/api/v1/upload/image";
     public static final String UPLOAD_AUDIO_URL = BuildConfig.API_BASE_URL + "/api/v1/upload/audio";
-    public static final String EVENTS_URL = BuildConfig.API_BASE_URL + "/api/v1/events";
+    public static final String EVENTS_URL = BuildConfig.API_BASE_URL + "/api/v2/events";
     public static final String SUPPORTED_VERSION_URL = BuildConfig.API_BASE_URL + "/api/v1/supported_versions/%d";
 
     protected enum EventType {
@@ -38,7 +38,7 @@ public class ApiClient {
     protected static void checkVersion(int currentVersion, StringResponseCallback callback) {
         try {
             HttpClient.get(String.format(SUPPORTED_VERSION_URL, currentVersion)).send(callback);
-        } catch(MalformedURLException e) {
+        } catch (MalformedURLException e) {
             callback.onException(e);
         }
     }
@@ -51,13 +51,14 @@ public class ApiClient {
         HashMap<String, String> params = new HashMap<>();
         params.put(Constants.Keys.EVENT_TYPE, eventType.name().toLowerCase());
         params.put(Constants.Keys.APP_ID, context.getPackageName());
-        params.put(Constants.Keys.ANDROID_SDK, String.valueOf(Build.VERSION.SDK_INT));
+        params.put(Constants.Keys.SYSTEM_VERSION, String.valueOf(Build.VERSION.RELEASE));
+        params.put(Constants.Keys.SYSTEM, Constants.Keys.ANDROID);
         params.put(Constants.Keys.DEVICE, Utils.getDeviceName());
-        if(value != null) params.put(Constants.Keys.VALUE, String.valueOf(value));
+        if (value != null) params.put(Constants.Keys.VALUE, String.valueOf(value));
 
         try {
             HttpClient.post(EVENTS_URL).withData(params).send();
-        } catch(UnsupportedEncodingException | MalformedURLException e) {
+        } catch (UnsupportedEncodingException | MalformedURLException e) {
             e.printStackTrace();
         }
     }
@@ -70,7 +71,7 @@ public class ApiClient {
 
         try {
             HttpClient.post(UPLOAD_IMAGE_URL).withData(data).send(callback);
-        } catch(UnsupportedEncodingException | MalformedURLException e) {
+        } catch (UnsupportedEncodingException | MalformedURLException e) {
             callback.onException(e);
         }
     }
@@ -82,7 +83,7 @@ public class ApiClient {
 
         try {
             HttpClient.post(UPLOAD_AUDIO_URL).withData(data).send(callback);
-        } catch(UnsupportedEncodingException | MalformedURLException e) {
+        } catch (UnsupportedEncodingException | MalformedURLException e) {
             callback.onException(e);
         }
     }

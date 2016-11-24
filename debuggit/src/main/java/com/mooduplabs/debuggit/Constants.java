@@ -9,7 +9,7 @@ interface Constants {
     // ISSUE KINDS
     String KIND_BUG = "bug";
     String KIND_ENHANCEMENT = "enhancement";
-    
+
     String DEBUGGIT_URL = "http://debugg.it";
 
     interface BitBucket {
@@ -76,7 +76,9 @@ interface Constants {
         String USERNAME = "username";
         String EVENT_TYPE = "event_type";
         String APP_ID = "app_id";
-        String ANDROID_SDK = "android_sdk";
+        String SYSTEM_VERSION = "system_version";
+        String SYSTEM = "system";
+        String ANDROID = "android";
         String DEVICE = "device";
         String VALUE = "value";
         String DATA = "data";
