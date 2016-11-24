@@ -15,6 +15,7 @@ interface Constants {
     interface BitBucket {
         // CREDENTIALS
         String CLIENT_ID = "Jz9hKhxwAWgRNcS6m8";
+        String CLIENT_SECRET = "dzyS7K5mnvcEWFtsS6veUM8RDJxRzwXQ";
 
         // URLS
         String LOGIN_PAGE = "https://bitbucket.org/site/oauth2/authorize?client_id=%s&response_type=token";
@@ -32,7 +33,6 @@ interface Constants {
 
         String ACCESS_TOKEN = "access_token";
         String REFRESH_TOKEN = "refresh_token";
-        String CODE = "code";
     }
 
     interface Jira {
@@ -50,6 +50,7 @@ interface Constants {
     interface GitHub {
         // CREDENTIALS
         String CLIENT_ID = "8aac9632491f7d954664";
+        String CLIENT_SECRET = "1b7bdf305e08971b3c95c1cfc06fc05eebd59707";
 
         // URLS
         String LOGIN_PAGE = "https://github.com/login/oauth/authorize?client_id=%s&scope=repo";
@@ -64,7 +65,6 @@ interface Constants {
         String GITHUB_ACCESS_TOKEN = "github_access_token";
         String TWO_FACTOR_AUTH_CODE = "github_2fa_code";
         String SCOPE_REPO = "repo";
-        String CODE = "code";
     }
 
     interface Keys {

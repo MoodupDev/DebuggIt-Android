@@ -73,8 +73,8 @@ public class DebuggIt {
         return recordingEnabled;
     }
 
-    public void initBitbucket(String clientId, String clientSecret, String repoSlug, String accountName) {
-        this.apiService = new BitBucketApiService(clientId, clientSecret, repoSlug, accountName);
+    public void initBitbucket(String repoSlug, String accountName) {
+        this.apiService = new BitBucketApiService(repoSlug, accountName);
         init(ConfigType.BITBUCKET);
     }
 
@@ -88,8 +88,8 @@ public class DebuggIt {
         initJira(host, projectKey, true);
     }
 
-    public void initGitHub(String clientId, String clientSecret, String repoSlug, String accountName) {
-        this.apiService = new GitHubApiService(clientId, clientSecret, accountName, repoSlug);
+    public void initGitHub(String repoSlug, String accountName) {
+        this.apiService = new GitHubApiService(accountName, repoSlug);
         init(ConfigType.GITHUB);
     }
 

@@ -8,8 +8,6 @@ public class BitBucketApiService implements ApiService {
 
     //region Fields
 
-    private String clientId;
-    private String clientSecret;
     private String repoSlug;
     private String accountName;
     private String accessToken;
@@ -40,7 +38,7 @@ public class BitBucketApiService implements ApiService {
         map.put(Constants.BitBucket.GRANT_TYPE_REFRESH_TOKEN, refreshToken);
 
         try {
-            HttpClient.post(Constants.BitBucket.AUTHORIZE_URL).withData(map).authUser(clientId, clientSecret).send(callback);
+            HttpClient.post(Constants.BitBucket.AUTHORIZE_URL).withData(map).authUser(Constants.BitBucket.CLIENT_ID, Constants.BitBucket.CLIENT_SECRET).send(callback);
         } catch(UnsupportedEncodingException | MalformedURLException e) {
             callback.onException(e);
         }
@@ -54,7 +52,7 @@ public class BitBucketApiService implements ApiService {
         map.put(Constants.BitBucket.GRANT_TYPE_PASSWORD, password);
 
         try {
-            HttpClient.post(Constants.BitBucket.AUTHORIZE_URL).withData(map).authUser(clientId, clientSecret).send(callback);
+            HttpClient.post(Constants.BitBucket.AUTHORIZE_URL).withData(map).authUser(Constants.BitBucket.CLIENT_ID, Constants.BitBucket.CLIENT_SECRET).send(callback);
         } catch(UnsupportedEncodingException | MalformedURLException e) {
             callback.onException(e);
         }
@@ -69,15 +67,9 @@ public class BitBucketApiService implements ApiService {
 
     //region Methods
 
-    public BitBucketApiService(String clientId, String clientSecret, String repoSlug, String accountName) {
-        this.clientId = clientId;
-        this.clientSecret = clientSecret;
+    public BitBucketApiService(String repoSlug, String accountName) {
         this.repoSlug = repoSlug;
         this.accountName = accountName;
-    }
-
-    public String getAccessToken() {
-        return accessToken;
     }
 
     public void setAccessToken(String accessToken) {

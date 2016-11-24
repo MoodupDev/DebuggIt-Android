@@ -18,8 +18,6 @@ public class GitHubApiService implements ApiService {
 
     //region Fields
 
-    private String clientId;
-    private String clientSecret;
     private String accessToken;
     private String accountName;
     private String repoSlug;
@@ -85,9 +83,7 @@ public class GitHubApiService implements ApiService {
     //region Methods
 
 
-    protected GitHubApiService(String clientId, String clientSecret, String accountName, String repoSlug) {
-        this.clientId = clientId;
-        this.clientSecret = clientSecret;
+    protected GitHubApiService(String accountName, String repoSlug) {
         this.repoSlug = repoSlug;
         this.accountName = accountName;
     }
@@ -109,8 +105,8 @@ public class GitHubApiService implements ApiService {
     private HashMap<String, String> getAuthHashMap(String code) {
         HashMap<String, String> auth = new HashMap<>();
 
-        auth.put(Constants.Keys.CLIENT_ID, clientId);
-        auth.put(Constants.Keys.CLIENT_SECRET, clientSecret);
+        auth.put(Constants.Keys.CLIENT_ID, Constants.GitHub.CLIENT_ID);
+        auth.put(Constants.Keys.CLIENT_SECRET, Constants.GitHub.CLIENT_SECRET);
         auth.put(Constants.Keys.CODE, code);
 
         return auth;

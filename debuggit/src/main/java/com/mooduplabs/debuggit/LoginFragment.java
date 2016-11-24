@@ -91,8 +91,8 @@ public class LoginFragment extends DialogFragment {
                                                  handleJiraLoginResponse();
                                                  break;
                                              case GITHUB:
-                                                 if (url.contains(Constants.GitHub.CODE)) {
-                                                     String code = url.substring(url.indexOf(Constants.GitHub.CODE) + Constants.GitHub.CODE.length() + 1);
+                                                 if (url.contains(Constants.Keys.CODE)) {
+                                                     String code = url.substring(url.indexOf(Constants.Keys.CODE) + Constants.Keys.CODE.length() + 1);
 
                                                      DebuggIt.getInstance().getApiService().loginWithOAuth(
                                                              code,
