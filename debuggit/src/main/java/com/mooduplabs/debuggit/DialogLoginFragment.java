@@ -15,10 +15,10 @@ import org.json.JSONObject;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class OldLoginFragment extends DialogFragment {
+public class DialogLoginFragment extends DialogFragment {
     //region Consts
 
-    public static final String TAG = OldLoginFragment.class.getSimpleName();
+    public static final String TAG = DialogLoginFragment.class.getSimpleName();
 
     //endregion
 
@@ -50,12 +50,12 @@ public class OldLoginFragment extends DialogFragment {
 
     //region Methods
 
-    public OldLoginFragment() {
+    public DialogLoginFragment() {
         // Required empty public constructor
     }
 
-    protected static OldLoginFragment newInstance() {
-        return new OldLoginFragment();
+    protected static DialogLoginFragment newInstance() {
+        return new DialogLoginFragment();
     }
 
     private void initView(View view) {
@@ -68,8 +68,8 @@ public class OldLoginFragment extends DialogFragment {
             public void onClick(View v) {
                 loadingDialog = LoadingDialog.newInstance(getContext().getString(R.string.br_login_loading_info));
                 loadingDialog.show(getChildFragmentManager(), LoadingDialog.TAG);
-                final String email = OldLoginFragment.this.email.getText().toString();
-                final String password = OldLoginFragment.this.password.getText().toString();
+                final String email = DialogLoginFragment.this.email.getText().toString();
+                final String password = DialogLoginFragment.this.password.getText().toString();
                 saveTwoFactorCode();
                 DebuggIt.getInstance().getApiService().login(
                         email,

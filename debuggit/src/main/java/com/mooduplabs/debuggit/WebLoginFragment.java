@@ -22,10 +22,10 @@ import org.json.JSONObject;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class LoginFragment extends DialogFragment {
+public class WebLoginFragment extends DialogFragment {
     //region Consts
 
-    public static final String TAG = LoginFragment.class.getSimpleName();
+    public static final String TAG = WebLoginFragment.class.getSimpleName();
 
     //endregion
 
@@ -56,7 +56,7 @@ public class LoginFragment extends DialogFragment {
 
     //region Methods
 
-    public LoginFragment() {
+    public WebLoginFragment() {
         // Required empty public constructor
     }
 
@@ -150,9 +150,6 @@ public class LoginFragment extends DialogFragment {
             case BITBUCKET:
                 webView.loadUrl(String.format(Constants.BitBucket.LOGIN_PAGE, Constants.BitBucket.CLIENT_ID));
                 break;
-            case JIRA:
-                webView.loadUrl(Constants.Jira.LOGIN_PAGE);
-                break;
             case GITHUB:
                 webView.loadUrl(String.format(Constants.GitHub.LOGIN_PAGE, Constants.GitHub.CLIENT_ID));
                 break;
@@ -165,16 +162,13 @@ public class LoginFragment extends DialogFragment {
         ConfirmationDialog.newInstance(getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
     }
 
-    private void handleJiraLoginResponse() {
-    }
-
     private void handleGitHubLoginResponse(JSONObject response) throws JSONException {
         DebuggIt.getInstance().saveTokens(response);
         ConfirmationDialog.newInstance(getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
     }
 
-    protected static LoginFragment newInstance() {
-        return new LoginFragment();
+    protected static WebLoginFragment newInstance() {
+        return new WebLoginFragment();
     }
 
     //endregion

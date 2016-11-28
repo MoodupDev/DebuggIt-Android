@@ -166,8 +166,18 @@ public class DebuggIt {
             return;
         }
         if (!hasAccessToken()) {
-            if (!isFragmentShown(LoginFragment.TAG)) {
-                LoginFragment.newInstance().show(((FragmentActivity) getActivity()).getSupportFragmentManager(), LoginFragment.TAG);
+            switch (DebuggIt.getInstance().getConfigType()) {
+                case BITBUCKET:
+                case GITHUB:
+                    if (!isFragmentShown(WebLoginFragment.TAG)) {
+                        WebLoginFragment.newInstance().show(((FragmentActivity) getActivity()).getSupportFragmentManager(), WebLoginFragment.TAG);
+                    }
+                    break;
+                case JIRA:
+                    if (!isFragmentShown(DialogLoginFragment.TAG)) {
+                        DialogLoginFragment.newInstance().show(((FragmentActivity) getActivity()).getSupportFragmentManager(), DialogLoginFragment.TAG);
+                    }
+                    break;
             }
         } else {
             applySavedTokens();
@@ -341,7 +351,8 @@ public class DebuggIt {
                         && !isFragmentShown(DrawFragment.TAG)
                         && !isFragmentShown(ReportFragment.TAG)
                         && !isFragmentShown(LoadingDialog.TAG)
-                        && !isFragmentShown(LoginFragment.TAG)
+                        && !isFragmentShown(WebLoginFragment.TAG)
+                        && !isFragmentShown(DialogLoginFragment.TAG)
                         && !isFragmentShown(WelcomeDialog.TAG);
             }
         });

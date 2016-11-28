@@ -37,7 +37,6 @@ interface Constants {
     }
 
     interface Jira {
-        String LOGIN_PAGE = "";
         String ISSUES_URL = "https://%s/rest/api/2/issue";
         String CONFIGURATION_URL = "https://%s/rest/api/2/configuration";
 
