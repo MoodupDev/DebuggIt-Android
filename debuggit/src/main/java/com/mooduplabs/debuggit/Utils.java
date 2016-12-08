@@ -154,7 +154,7 @@ public class Utils {
                         .append("\n");
                 break;
             case GITHUB:
-                builder.append(" | | | |")
+                builder.append("Key | Value | Key | Value")
                         .append("\n")
                         .append("----|----|----|----")
                         .append("\n");
