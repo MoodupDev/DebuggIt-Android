@@ -3,6 +3,7 @@ package com.mooduplabs.debuggit;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,6 +15,7 @@ public class ConfirmationDialog extends DialogFragment {
     protected static final int TYPE_FAILURE = 0;
     protected static final int TYPE_SUCCESS = 1;
     private static final String MESSAGE = "message";
+    private static final String CONTAINS_LINKS = "contains_links";
     private static final String TYPE = "type";
 
     //endregion
@@ -62,6 +64,18 @@ public class ConfirmationDialog extends DialogFragment {
         return dialog;
     }
 
+    protected static ConfirmationDialog newInstance(String message, boolean error, boolean link) {
+        ConfirmationDialog dialog = new ConfirmationDialog();
+
+        Bundle bundle = new Bundle();
+        bundle.putString(MESSAGE, message);
+        bundle.putBoolean(CONTAINS_LINKS, link);
+        bundle.putInt(TYPE, error ? TYPE_FAILURE : TYPE_SUCCESS);
+
+        dialog.setArguments(bundle);
+        return dialog;
+    }
+
     protected static ConfirmationDialog newInstance(String message, boolean error, View.OnClickListener onOkClickListener) {
         ConfirmationDialog dialog = ConfirmationDialog.newInstance(message, error);
         dialog.setOnOkClickListener(onOkClickListener);
@@ -95,11 +109,18 @@ public class ConfirmationDialog extends DialogFragment {
         });
 
         icon.setRotation(isTypeSuccess ? 0 : 180.0f);
+
         String text = getArguments().getString(MESSAGE, "");
         if(text.isEmpty()) {
             message.setText(getString(isTypeSuccess ? R.string.br_confirmation_success : R.string.br_confirmation_failure));
         } else {
             message.setText(text);
+        }
+
+        boolean containsLinks = getArguments().getBoolean(CONTAINS_LINKS, false);
+
+        if(containsLinks) {
+            Linkify.addLinks(message, Linkify.WEB_URLS);
         }
     }
     //endregion

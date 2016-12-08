@@ -38,7 +38,7 @@
     <string name="br.login.successful">Signed in!\nNow let\'s smash some bugs</string>
     <string name="br.generating.screenshot">Generating your screenshot...</string>
     <string name="br.unsupported.version">Your debugg.it version isn\'t the latest version, check debugg.it website</string>
-    <string name="br.cant.check.version">Can\'t check is your debugg.it version supported!\nCheck your Internet connection</string>
+    <string name="br.cant.check.version">Can\'t check if your debugg.it version is supported!\nCheck your Internet connection</string>
     <string name="br.error.invalid.repo.owner.issue.tracker">Invalid repository/owner or issue tracker isn\'t enabled in your repository settings</string>
     <string name="br.error.access.token.expired">Your access token expired, please relogin in debugg.it</string>
     <string name="br.error.repo.access.forbidden">You don\'t have access to the repository. Please contact your developer</string>

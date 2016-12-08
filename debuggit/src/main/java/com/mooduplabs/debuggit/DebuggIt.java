@@ -461,7 +461,7 @@ public class DebuggIt {
     }
 
     private void showUnsupportedVersionPopup() {
-        ConfirmationDialog.newInstance(getActivity().getString(R.string.br_unsupported_version), true)
+        ConfirmationDialog.newInstance(getActivity().getString(R.string.br_unsupported_version), true, true)
                 .show(((FragmentActivity) getActivity()).getSupportFragmentManager(), ConfirmationDialog.TAG);
         ApiClient.postEvent(getActivity(), ApiClient.EventType.HAS_UNSUPPORTED_VERSION);
     }
