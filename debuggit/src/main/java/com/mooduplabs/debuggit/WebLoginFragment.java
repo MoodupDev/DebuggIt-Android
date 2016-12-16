@@ -96,6 +96,13 @@ public class WebLoginFragment extends DialogFragment {
                                      }
 
                                      @Override
+                                     public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                                         webViewProgressBar.setVisibility(View.GONE);
+                                         ConfirmationDialog.newInstance(getContext().getString(R.string.br_webview_page_error), true).show(getFragmentManager(), ConfirmationDialog.TAG);
+                                         WebLoginFragment.this.dismiss();
+                                     }
+
+                                     @Override
                                      public boolean shouldOverrideUrlLoading(WebView view, final String url) {
                                          if (url.contains(Constants.Keys.CODE + "=")) {
                                              String code = url.substring(url.indexOf(Constants.Keys.CODE) + Constants.Keys.CODE.length() + 1);

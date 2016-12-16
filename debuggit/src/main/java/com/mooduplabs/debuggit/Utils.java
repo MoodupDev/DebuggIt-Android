@@ -88,7 +88,7 @@ public class Utils {
         try {
             PackageInfo info = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0);
             return String.format(Locale.getDefault(), APPLICATION_VERSION_FORMAT, info.versionName, info.versionCode);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return "";
         }
@@ -96,12 +96,12 @@ public class Utils {
 
     protected static String getActiveFragmentName(Activity activity) {
         FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
-        if(fragmentManager.getBackStackEntryCount() == 0) {
+        if (fragmentManager.getBackStackEntryCount() == 0) {
             return activity.getClass().getSimpleName();
         }
         return fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
     }
-    
+
     protected static String getDeviceInfoString(Activity activity) {
         HashMap<String, String> deviceInfo = getDeviceInfo(activity);
 
@@ -115,10 +115,10 @@ public class Utils {
     private static void appendDeviceInfo(HashMap<String, String> deviceInfo, StringBuilder builder) {
         int lineCounter = 0;
 
-        switch(DebuggIt.getInstance().getConfigType()) {
+        switch (DebuggIt.getInstance().getConfigType()) {
             case JIRA:
                 builder.append(JIRA_CELL_SEPARATOR);
-                for(Map.Entry<String, String> entry : deviceInfo.entrySet()) {
+                for (Map.Entry<String, String> entry : deviceInfo.entrySet()) {
                     builder.append(JIRA_BOLD).append(entry.getKey()).append(JIRA_BOLD)
                             .append(JIRA_CELL_SEPARATOR).append(entry.getValue()).append(lineCounter % 2 == 1 ? JIRA_CELL_SEPARATOR + "\n" + JIRA_CELL_SEPARATOR : JIRA_CELL_SEPARATOR);
                     lineCounter++;
@@ -127,22 +127,22 @@ public class Utils {
                 break;
             case GITHUB:
             case BITBUCKET:
-                default:
-                    for(Map.Entry<String, String> entry : deviceInfo.entrySet()) {
-                        builder.append(MARKDOWN_BOLD)
-                                .append(entry.getKey())
-                                .append(MARKDOWN_BOLD)
-                                .append(MARKDOWN_CELL_SEPARATOR)
-                                .append(entry.getValue())
-                                .append(lineCounter % 2 == 1 ? "\n" : MARKDOWN_CELL_SEPARATOR);
-                        lineCounter++;
-                    }
+            default:
+                for (Map.Entry<String, String> entry : deviceInfo.entrySet()) {
+                    builder.append(MARKDOWN_BOLD)
+                            .append(entry.getKey())
+                            .append(MARKDOWN_BOLD)
+                            .append(MARKDOWN_CELL_SEPARATOR)
+                            .append(entry.getValue())
+                            .append(lineCounter % 2 == 1 ? "\n" : MARKDOWN_CELL_SEPARATOR);
+                    lineCounter++;
+                }
                 break;
         }
     }
 
     private static StringBuilder appendTableHeader(StringBuilder builder) {
-        switch(DebuggIt.getInstance().getConfigType()) {
+        switch (DebuggIt.getInstance().getConfigType()) {
             case JIRA:
                 builder.append("|| Key || Value || Key || Value ||")
                         .append("\n");
@@ -168,7 +168,7 @@ public class Utils {
         deviceInfo.put("Device", getDeviceName());
         deviceInfo.put("Android version", String.format(Locale.getDefault(), API_VERSION_FORMAT, Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
         deviceInfo.put("Application version", getApplicationVersion(activity));
-        deviceInfo.put("Current view", getActiveFragmentName(activity));
+        //deviceInfo.put("Current view", getActiveFragmentName(activity));
         return deviceInfo;
     }
 
@@ -183,7 +183,7 @@ public class Utils {
     protected static int getStatusBarHeight(Context context) {
         int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
         int statusBarHeight = 0;
-        if(resourceId > 0) {
+        if (resourceId > 0) {
             statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
         }
         return statusBarHeight;
@@ -197,12 +197,12 @@ public class Utils {
 
             byte[] buffer = new byte[1024];
             int readLength;
-            while(-1 != (readLength = fis.read(buffer))) {
+            while (-1 != (readLength = fis.read(buffer))) {
                 baos.write(buffer, 0, readLength);
             }
             bytes = baos.toByteArray();
             fis.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             bytes = new byte[1];
         }
         return bytes;
@@ -239,13 +239,14 @@ public class Utils {
 
     protected static String getUrlAsStrings(List<String> urls, boolean isAudioUrl) {
         StringBuilder builder = new StringBuilder();
-        if(urls != null) {
-            for(String s : urls) {
-                if(!isAudioUrl) {
-                    appendImageLink(builder, s)
+        if (urls != null) {
+            for (int i = 0; i < urls.size(); i++) {
+                if (!isAudioUrl) {
+                    appendImageLink(builder, urls.get(i))
                             .append("\n\n");
                 } else {
-                    builder.append(s)
+                    builder.append("[").append("audio ").append(i).append("]")
+                            .append("[").append(urls.get(i)).append("]")
                             .append("\n\n");
                 }
             }
@@ -255,7 +256,7 @@ public class Utils {
     }
 
     private static StringBuilder appendImageLink(StringBuilder builder, String url) {
-        switch(DebuggIt.getInstance().getConfigType()) {
+        switch (DebuggIt.getInstance().getConfigType()) {
             case JIRA:
                 builder.append("!")
                         .append(url)
@@ -278,23 +279,23 @@ public class Utils {
     protected static String getBitbucketErrorMessage(String response, String defaultMessage) {
         try {
             JSONObject error = new JSONObject(response);
-            if(error.has("error_description")) {
+            if (error.has("error_description")) {
                 return error.getString("error_description");
             }
-            if(error.has("message")) {
+            if (error.has("message")) {
                 return error.getString("message");
             }
             return error.getJSONObject("error").getString("message");
-        } catch(JSONException e) {
+        } catch (JSONException e) {
             Matcher matcher = Pattern.compile("<.+>").matcher(response);
             return response.isEmpty() || matcher.find() ? defaultMessage : response;
         }
     }
 
     protected static String convertPriorityName(String priority) {
-        switch(DebuggIt.getInstance().getConfigType()) {
+        switch (DebuggIt.getInstance().getConfigType()) {
             case BITBUCKET:
-                switch(priority) {
+                switch (priority) {
                     case Constants.PRIORITY_LOW:
                         return Constants.BitBucket.PRIORITY_MINOR;
                     case Constants.PRIORITY_MEDIUM:
@@ -304,7 +305,7 @@ public class Utils {
                 }
             case JIRA:
             case GITHUB:
-                default:
+            default:
                 return priority;
         }
     }
