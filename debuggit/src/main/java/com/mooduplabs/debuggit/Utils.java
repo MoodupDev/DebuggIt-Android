@@ -34,15 +34,15 @@ public class Utils {
     private static final String APPLICATION_VERSION_FORMAT = "%s (%d)";
     private static final String MARKDOWN_BOLD = "**";
     private static final String MARKDOWN_CELL_SEPARATOR = " | ";
-    public static final String JIRA_BOLD = "*";
-    public static final String JIRA_CELL_SEPARATOR = "|";
+    private static final String JIRA_BOLD = "*";
+    private static final String JIRA_CELL_SEPARATOR = "|";
 
     protected static void putString(Context context, String key, String value) {
         SharedPreferences prefs = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
         editor.putString(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     protected static String getString(Context context, String key, String defValue) {
@@ -54,7 +54,7 @@ public class Utils {
         SharedPreferences.Editor editor = prefs.edit();
 
         editor.putBoolean(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     protected static boolean getBoolean(Context context, String key, boolean defValue) {
@@ -66,7 +66,7 @@ public class Utils {
         SharedPreferences.Editor editor = prefs.edit();
 
         editor.putFloat(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     protected static float getFloat(Context context, String key, float defValue) {
