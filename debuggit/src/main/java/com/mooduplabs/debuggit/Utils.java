@@ -241,7 +241,7 @@ public class Utils {
 
         if (screens != null) {
             for (int i = 0; i < screens.size(); i++) {
-                builder.append(screens.get(i).getTitle()).append("\n\n");
+                builder.append("**View:** ").append(screens.get(i).getTitle()).append("\n\n");
                 appendImageLink(builder, screens.get(i).getUrl())
                         .append("\n\n");
             }
