@@ -21,6 +21,7 @@
     <string name="br.loading.dialog.message.record">Sending record...</string>
     <string name="br.loading.dialog.message.play.audio">Loading recording...</string>
     <string name="br.title.empty">Issue title can\'t be empty!</string>
+    <string name="br.title.too.long">Issue title is too long,\nensure it has at most 255 characters (it has %d).</string>
     <string name="br.screenshot.upload.error">Screenshot isn’t saved!\nCheck your Internet connection</string>
     <string name="br.upload.audio.failed">Audio upload failed!</string>
     <string name="br.recording.disabled">Recording is disabled.\nPlease ask your developer to enable this feature</string>

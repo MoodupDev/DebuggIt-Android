@@ -44,7 +44,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     @Override
     public void onResume() {
         super.onResume();
-        if(getDialog() == null) {
+        if (getDialog() == null) {
             return;
         }
 
@@ -66,8 +66,12 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(DebuggIt.getInstance().getReport().getTitle().isEmpty()) {
+                String issueTitle = DebuggIt.getInstance().getReport().getTitle();
+
+                if (issueTitle.isEmpty()) {
                     ConfirmationDialog.newInstance(getString(R.string.br_title_empty), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                } else if (issueTitle.length() > 255) {
+                    ConfirmationDialog.newInstance(getString(R.string.br_title_too_long, issueTitle.length()), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                 } else {
                     dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
                     sendIssue();
@@ -106,7 +110,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
                     @Override
                     public void onFailure(int responseCode, String errorMessage) {
-                        if(responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                        if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
                             if (retriesCount < MAX_RETRIES_COUNT) {
                                 retriesCount++;
                                 sendIssue();
@@ -136,13 +140,13 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     }
 
     private void postEventsAfterSendingReport(Report report) {
-        if(!report.getActualBehaviour().isEmpty()) {
+        if (!report.getActualBehaviour().isEmpty()) {
             ApiClient.postEvent(getContext(), ApiClient.EventType.ACTUAL_BEHAVIOUR_FILLED);
         }
-        if(!report.getStepsToReproduce().isEmpty()) {
+        if (!report.getStepsToReproduce().isEmpty()) {
             ApiClient.postEvent(getContext(), ApiClient.EventType.STEPS_TO_REPRODUCE_FILLED);
         }
-        if(!report.getExpectedBehaviour().isEmpty()) {
+        if (!report.getExpectedBehaviour().isEmpty()) {
             ApiClient.postEvent(getContext(), ApiClient.EventType.EXPECTED_BEHAVIOUR_FILLED);
         }
         ApiClient.postEvent(getContext(), ApiClient.EventType.SCREENSHOT_AMOUNT, report.getScreensUrls().size());
@@ -161,7 +165,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     }
 
     private void clearToken() {
-        switch(DebuggIt.getInstance().getConfigType()) {
+        switch (DebuggIt.getInstance().getConfigType()) {
             case BITBUCKET:
                 Utils.putString(getContext(), Constants.BitBucket.ACCESS_TOKEN, "");
                 break;
