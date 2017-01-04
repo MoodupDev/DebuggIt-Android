@@ -245,8 +245,8 @@ public class Utils {
                     appendImageLink(builder, urls.get(i))
                             .append("\n\n");
                 } else {
-                    builder.append("[").append("audio ").append(i).append("]")
-                            .append("[").append(urls.get(i)).append("]")
+                    builder.append("[").append("Audio ").append(i + 1).append("]")
+                            .append("(").append(urls.get(i)).append(")")
                             .append("\n\n");
                 }
             }
