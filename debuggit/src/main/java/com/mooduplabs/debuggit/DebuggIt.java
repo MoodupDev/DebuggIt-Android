@@ -106,7 +106,7 @@ public class DebuggIt {
             shouldPostInitializedEvent = false;
         }
         if (!versionChecked) {
-            ApiClient.checkVersion(BuildConfig.VERSION_CODE, new StringResponseCallback() {
+            ApiClient.checkVersion(new StringResponseCallback() {
                 @Override
                 public void onSuccess(String response) {
                     versionChecked = versionSupported = true;

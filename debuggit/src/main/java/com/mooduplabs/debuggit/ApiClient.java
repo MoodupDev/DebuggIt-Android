@@ -12,7 +12,7 @@ public class ApiClient {
     public static final String UPLOAD_IMAGE_URL = BuildConfig.API_BASE_URL + "/api/v1/upload/image";
     public static final String UPLOAD_AUDIO_URL = BuildConfig.API_BASE_URL + "/api/v1/upload/audio";
     public static final String EVENTS_URL = BuildConfig.API_BASE_URL + "/api/v2/events";
-    public static final String SUPPORTED_VERSION_URL = BuildConfig.API_BASE_URL + "/api/v1/supported_versions/%d";
+    public static final String SUPPORTED_VERSION_URL = BuildConfig.API_BASE_URL + "/api/v2/supported_versions/android/%s";
 
     protected enum EventType {
         INITIALIZED,
@@ -35,9 +35,9 @@ public class ApiClient {
         APP_CRASHED
     }
 
-    protected static void checkVersion(int currentVersion, StringResponseCallback callback) {
+    protected static void checkVersion(StringResponseCallback callback) {
         try {
-            HttpClient.get(String.format(SUPPORTED_VERSION_URL, currentVersion)).send(callback);
+            HttpClient.get(String.format(SUPPORTED_VERSION_URL, BuildConfig.VERSION_NAME)).send(callback);
         } catch (MalformedURLException e) {
             callback.onException(e);
         }
