@@ -245,9 +245,20 @@ public class Utils {
                     appendImageLink(builder, urls.get(i))
                             .append("\n\n");
                 } else {
-                    builder.append("[").append("Audio ").append(i + 1).append("]")
-                            .append("(").append(urls.get(i)).append(")")
-                            .append("\n\n");
+                    switch (DebuggIt.getInstance().getConfigType()) {
+                        case JIRA:
+                            builder.append("[").append("Audio ").append(i + 1).append("|")
+                                    .append(urls.get(i)).append("]")
+                                    .append("\n\n");
+                            break;
+                        case GITHUB:
+                        case BITBUCKET:
+                            builder.append("[").append("Audio ").append(i + 1).append("]")
+                                    .append("(").append(urls.get(i)).append(")")
+                                    .append("\n\n");
+                            break;
+                    }
+
                 }
             }
         }
