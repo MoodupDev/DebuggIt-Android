@@ -197,7 +197,7 @@ public class DrawFragment extends DialogFragment {
                                         dialog.dismiss();
                                         try {
                                             String url = response.getString("url");
-                                            DebuggIt.getInstance().getReport().getScreensUrls().add(url);
+                                            DebuggIt.getInstance().getReport().getScreens().add(new ScreenModel(Utils.getActiveFragmentName(getActivity()), url));
                                             new ReportFragment().show(getActivity().getSupportFragmentManager(), ReportFragment.TAG);
                                             postEventsAfterAddingScreenshot();
                                             dismiss();

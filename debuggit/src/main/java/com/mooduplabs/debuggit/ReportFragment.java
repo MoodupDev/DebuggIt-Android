@@ -149,7 +149,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         if (!report.getExpectedBehaviour().isEmpty()) {
             ApiClient.postEvent(getContext(), ApiClient.EventType.EXPECTED_BEHAVIOUR_FILLED);
         }
-        ApiClient.postEvent(getContext(), ApiClient.EventType.SCREENSHOT_AMOUNT, report.getScreensUrls().size());
+        ApiClient.postEvent(getContext(), ApiClient.EventType.SCREENSHOT_AMOUNT, report.getScreens().size());
         ApiClient.postEvent(getContext(), ApiClient.EventType.AUDIO_AMOUNT, report.getAudioUrls().size());
         ApiClient.postEvent(getContext(), ApiClient.EventType.REPORT_SENT);
     }

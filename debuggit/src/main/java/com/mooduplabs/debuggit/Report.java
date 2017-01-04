@@ -20,7 +20,7 @@ public class Report {
     private String actualBehaviour;
     private String expectedBehaviour;
     private List<String> audioUrls;
-    private List<String> screensUrls;
+    private List<ScreenModel> screensUrls;
 
     protected Report() {
         this.audioUrls = new ArrayList<>();
@@ -79,7 +79,7 @@ public class Report {
         this.expectedBehaviour = expectedBehaviour;
     }
 
-    protected List<String> getScreensUrls() {
+    protected List<ScreenModel> getScreens() {
         return screensUrls;
     }
 
@@ -114,8 +114,8 @@ public class Report {
                     ? String.format(PRIORITY_TITLE, boldMark) + getPriority() + END_LINE
                     : ""
                 )
-                + Utils.getUrlAsStrings(screensUrls, false)
-                + Utils.getUrlAsStrings(audioUrls, true)
+                + Utils.getScreenModelsAsStrings(screensUrls)
+                + Utils.getAudioUrlsAsStrings(audioUrls)
                 + Utils.getDeviceInfoString(activity);
     }
 }

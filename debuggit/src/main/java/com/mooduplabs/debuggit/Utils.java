@@ -168,7 +168,6 @@ public class Utils {
         deviceInfo.put("Device", getDeviceName());
         deviceInfo.put("Android version", String.format(Locale.getDefault(), API_VERSION_FORMAT, Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
         deviceInfo.put("Application version", getApplicationVersion(activity));
-        //deviceInfo.put("Current view", getActiveFragmentName(activity));
         return deviceInfo;
     }
 
@@ -237,28 +236,37 @@ public class Utils {
         return phrase;
     }
 
-    protected static String getUrlAsStrings(List<String> urls, boolean isAudioUrl) {
+    protected static String getScreenModelsAsStrings(List<ScreenModel> screens) {
         StringBuilder builder = new StringBuilder();
-        if (urls != null) {
-            for (int i = 0; i < urls.size(); i++) {
-                if (!isAudioUrl) {
-                    appendImageLink(builder, urls.get(i))
-                            .append("\n\n");
-                } else {
-                    switch (DebuggIt.getInstance().getConfigType()) {
-                        case JIRA:
-                            builder.append("[").append("Audio ").append(i + 1).append("|")
-                                    .append(urls.get(i)).append("]")
-                                    .append("\n\n");
-                            break;
-                        case GITHUB:
-                        case BITBUCKET:
-                            builder.append("[").append("Audio ").append(i + 1).append("]")
-                                    .append("(").append(urls.get(i)).append(")")
-                                    .append("\n\n");
-                            break;
-                    }
 
+        if (screens != null) {
+            for (int i = 0; i < screens.size(); i++) {
+                builder.append(screens.get(i).getTitle()).append("\n\n");
+                appendImageLink(builder, screens.get(i).getUrl())
+                        .append("\n\n");
+            }
+        }
+
+        return builder.toString();
+    }
+
+    protected static String getAudioUrlsAsStrings(List<String> audioUrls) {
+        StringBuilder builder = new StringBuilder();
+
+        if (audioUrls != null) {
+            for (int i = 0; i < audioUrls.size(); i++) {
+                switch (DebuggIt.getInstance().getConfigType()) {
+                    case JIRA:
+                        builder.append("[").append("Audio ").append(i + 1).append("|")
+                                .append(audioUrls.get(i)).append("]")
+                                .append("\n\n");
+                        break;
+                    case GITHUB:
+                    case BITBUCKET:
+                        builder.append("[").append("Audio ").append(i + 1).append("]")
+                                .append("(").append(audioUrls.get(i)).append(")")
+                                .append("\n\n");
+                        break;
                 }
             }
         }

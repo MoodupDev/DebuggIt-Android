@@ -216,8 +216,8 @@ public class BugDescriptionFragment extends Fragment {
         itemsContainer = (LinearLayout) view.findViewById(R.id.bug_items_container);
         Report report = DebuggIt.getInstance().getReport();
 
-        for (String screenshotUrl : report.getScreensUrls()) {
-            addScreenshotMiniature(itemsContainer, screenshotUrl);
+        for (ScreenModel screenshot : report.getScreens()) {
+            addScreenshotMiniature(itemsContainer, screenshot.getUrl());
         }
 
         for (String audioUrl : report.getAudioUrls()) {
@@ -311,7 +311,7 @@ public class BugDescriptionFragment extends Fragment {
             public void onClick(View v) {
                 parent.removeView(itemScreenParent);
                 parent.invalidate();
-                DebuggIt.getInstance().getReport().getScreensUrls().remove(screenUrl);
+                DebuggIt.getInstance().getReport().getScreens().remove(screenUrl);
                 ApiClient.postEvent(getContext(), ApiClient.EventType.SCREENSHOT_REMOVED);
             }
         });
