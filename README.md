@@ -16,7 +16,7 @@ Add this library into your project as module (`File -> New -> Import Module`).
 
 Download `debuggit.aar` file from [here](http://debugg.it/downloads/debuggit.aar).
 
-Put your file in `libs` directory (`app/libs`). If you don't have this directory, create it.
+Put your file in `libs` directory (`<your project path>/app/libs`). If you don't have this directory, create it.
 
 Add these lines to your `build.gradle`:
 ```groovy
@@ -37,57 +37,68 @@ dependencies {
 
 ```
 
+Sync your gradle files.
+
 ### Initialize debugg.it in your project ###
 
-Init debugg.it in your `Application` class
+Create class which extends `Application` class.
 
-```java
-public class App extends Application {
+Add application name into your `AndroidManifest.xml` file
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        DebuggIt.getInstance().init("clientId", "secret", "repoName", "ownerName");
-    }
-}
+```xml
+<manifest … >
+
+  <uses-permission … />
+  <uses-permission … />
+
+  <application
+    android:name=".MyApplication"
+    … >
+      <activity … />
+      <activity … />
+   </application>
+</manifest>
 ```
 
-To get your client ID and secret key, you must create **OAuth consumer** for your team (or individual user). You can find it in:
+Add these permissions to `AndroidManifest.xml` file
 
-`Your Profile -> BitBucket settings -> ACCESS MANAGEMENT -> OAuth`
-
-**This is already done for @MoodUp team, check line below.**
-
-Owner name it's your team (or user) name.
-
-For example, if you want to add issues to this repository, your `init()` should looks like
-```java
-DebuggIt.getInstance().init("Jz9hKhxwAWgRNcS6m8", "dzyS7K5mnvcEWFtsS6veUM8RDJxRzwXQ", "bugreporter", "moodup");
+```xml
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
 ```
 
-Attach BugReporter to your activities in `onStart()` method (it's perfect if your activities extends some `BaseActivity` class)
+Add one of this methods to your Application `onCreate()` method
 
-```java
-public class MainActivity extends FragmentActivity {
++ Bitbucket
+    * `DebuggIt.getInstance().initBitbucket("repoName", "ownerName");`
+    * where
+        * `repoName` is **your repository name**
+        * `ownerName` is **username of repository owner**
+    * [Enable an issue tracker](https://confluence.atlassian.com/bitbucket/enable-an-issue-tracker-223216498.html) on the Bitbucket repository that will use debugg.it
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        // ...
-    }
++ GitHub
+    * `DebuggIt.getInstance().initGitHub("repoName", "ownerName");`
+    * where
+        * `repoName` is **your repository name**
+        * `ownerName` is **username of repository owner**
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        DebuggIt.getInstance().attach(this);
-    }
++ JIRA
+    * `DebuggIt.getInstance().initJira("host", "projectKey");`
+    * where
+        * `host` hostname of your **JIRA server** (e.g. `yourcompany.atlassian.net`)
+        * `projectKey` is **key** of your project
+    * If your host don't use **SSL** use this method:
+      `DebuggIt.getInstance().initJira("host", "projectKey", false);`
 
-}
-```
+Add these methods in your `Activity` classes
+
+* Add this method to `onStart()` method of your activities 
+  `DebuggIt.getInstance().attach(this);`
+
+* Add this method to `onActivityResult()` method of your activities
+  `DebuggIt.getInstance().getScreenshotPermission(requestCode, resultCode, data);`
 
 ### Include dialogs, popups etc.
-
 
 You can take screenshot with your custom or system dialogs for devices with **Android API > 20**. To get this working, you must add this line to your `Activity` `onActivityResult` method:
 
