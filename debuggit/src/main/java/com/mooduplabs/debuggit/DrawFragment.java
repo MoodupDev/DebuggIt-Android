@@ -30,17 +30,20 @@ public class DrawFragment extends DialogFragment {
     private ImageView freeDraw;
     private ImageView rectanglesDraw;
     private LoadingDialog dialog;
+    private JSONObject savedResponse;
 
     private Bitmap screenshot;
 
     private boolean uploadCancelled;
+    private boolean uploadedImagePending;
+    private boolean savedInstanceStateDone;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         CustomDialog dialog = new CustomDialog(getActivity(), R.style.BrCustomDialog);
         View rootView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_br_draw, null);
         dialog.setContentView(rootView);
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             screenshot = savedInstanceState.getParcelable(SCREENSHOT);
         }
         initViews(rootView);
@@ -51,14 +54,22 @@ public class DrawFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(getDialog() == null) {
+        savedInstanceStateDone = false;
+
+        if (getDialog() == null) {
             return;
         }
-        if(Utils.isOrientationLandscape(getContext())) {
+
+        if (Utils.isOrientationLandscape(getContext())) {
             getDialog().getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.br_confirmation_dialog_width_landscape), WindowManager.LayoutParams.WRAP_CONTENT);
         } else {
             getDialog().getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.br_confirmation_dialog_width), WindowManager.LayoutParams.WRAP_CONTENT);
         }
+
+        if (uploadedImagePending) {
+            onImageUploaded(savedResponse);
+        }
+
     }
 
     @Override
@@ -71,6 +82,7 @@ public class DrawFragment extends DialogFragment {
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(SCREENSHOT, screenshot);
         super.onSaveInstanceState(outState);
+        savedInstanceStateDone = true;
     }
 
     protected static DrawFragment newInstance(Bitmap screenshot) {
@@ -112,11 +124,11 @@ public class DrawFragment extends DialogFragment {
     private void initDrawingSurface() {
         View rootView = getActivity().findViewById(android.R.id.content);
         ImageView reportButton = (ImageView) rootView.findViewById(R.id.report_button);
-        if(reportButton != null) {
+        if (reportButton != null) {
             reportButton.setVisibility(View.INVISIBLE);
         }
         screenSurface.setImageBitmap(screenshot);
-        if(reportButton != null) {
+        if (reportButton != null) {
             reportButton.setVisibility(View.VISIBLE);
         }
     }
@@ -168,7 +180,7 @@ public class DrawFragment extends DialogFragment {
 
     private void setDrawingSurfaceEnabled(View v) {
         boolean isFreeDrawClicked = v.getId() == R.id.draw_free;
-        if(isFreeDrawClicked) {
+        if (isFreeDrawClicked) {
             rectanglesDraw.setSelected(false);
         } else {
             freeDraw.setSelected(false);
@@ -177,11 +189,27 @@ public class DrawFragment extends DialogFragment {
         drawingSurface.setType(isFreeDrawClicked ? PaintableImageView.TYPE_FREE_DRAW : PaintableImageView.TYPE_RECTANGLE_DRAW);
     }
 
+    private void onImageUploaded(JSONObject response) {
+        dialog.dismiss();
+
+        try {
+            String url = response.getString("url");
+            DebuggIt.getInstance().getReport().getScreens().add(new ScreenModel(Utils.getActiveFragmentName(getActivity()), url));
+            new ReportFragment().show(getActivity().getSupportFragmentManager(), ReportFragment.TAG);
+            postEventsAfterAddingScreenshot();
+            savedResponse = null;
+            uploadedImagePending = false;
+            dismiss();
+        } catch (JSONException e) {
+            // ignored
+        }
+    }
+
     private void uploadScreenshotAndGetUrl() {
         ScreenshotUtils.trimBitmap(getActivity(), Utils.getBitmapFromView(surfaceRoot), new ScreenshotUtils.ScreenshotListener() {
             @Override
             public void onScreenshotReady(Bitmap bitmap) {
-                if(!uploadCancelled) {
+                if (!uploadCancelled) {
                     ByteArrayOutputStream bos = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos);
 
@@ -193,16 +221,12 @@ public class DrawFragment extends DialogFragment {
                             new JsonResponseCallback() {
                                 @Override
                                 public void onSuccess(JSONObject response) {
-                                    if(!uploadCancelled) {
-                                        dialog.dismiss();
-                                        try {
-                                            String url = response.getString("url");
-                                            DebuggIt.getInstance().getReport().getScreens().add(new ScreenModel(Utils.getActiveFragmentName(getActivity()), url));
-                                            new ReportFragment().show(getActivity().getSupportFragmentManager(), ReportFragment.TAG);
-                                            postEventsAfterAddingScreenshot();
-                                            dismiss();
-                                        } catch(JSONException e) {
-                                            // ignored
+                                    if (!uploadCancelled) {
+                                        if (!savedInstanceStateDone) {
+                                            onImageUploaded(response);
+                                        } else {
+                                            savedResponse = response;
+                                            uploadedImagePending = true;
                                         }
                                     }
                                     uploadCancelled = false;
@@ -210,7 +234,7 @@ public class DrawFragment extends DialogFragment {
 
                                 @Override
                                 public void onFailure(int responseCode, String errorMessage) {
-                                    if(!uploadCancelled) {
+                                    if (!uploadCancelled) {
                                         dialog.dismiss();
                                         ConfirmationDialog.newInstance(getString(R.string.br_screenshot_upload_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                                     }
@@ -219,7 +243,7 @@ public class DrawFragment extends DialogFragment {
 
                                 @Override
                                 public void onException(Exception ex) {
-                                    if(!uploadCancelled) {
+                                    if (!uploadCancelled) {
                                         dialog.dismiss();
                                         ConfirmationDialog.newInstance(getString(R.string.br_screenshot_upload_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
                                     }
