@@ -236,12 +236,23 @@ public class Utils {
         return phrase;
     }
 
+    private static String getBoldMarkdown() {
+        switch (DebuggIt.getInstance().getConfigType()) {
+            case JIRA:
+                return JIRA_BOLD;
+            default:
+                return MARKDOWN_BOLD;
+        }
+    }
+
     protected static String getScreenModelsAsStrings(List<ScreenModel> screens) {
         StringBuilder builder = new StringBuilder();
 
         if (screens != null) {
             for (int i = 0; i < screens.size(); i++) {
-                builder.append("**View:** ").append(screens.get(i).getTitle()).append("\n\n");
+                builder.append(getBoldMarkdown()).append("View:").append(getBoldMarkdown())
+                        .append(" ").append(screens.get(i).getTitle())
+                        .append("\n\n");
                 appendImageLink(builder, screens.get(i).getUrl())
                         .append("\n\n");
             }
