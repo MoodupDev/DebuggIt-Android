@@ -45,6 +45,7 @@ public class DebuggIt {
     private boolean versionSupported = false;
     private boolean shouldPostInitializedEvent = true;
     private boolean recordingEnabled = false;
+    private boolean waitingForCheckVersionResponse = false;
 
     private ConfigType configType;
 
@@ -52,6 +53,7 @@ public class DebuggIt {
 
     private Report report;
     private LoadingDialog screenshotLoadingDialog;
+    private LoadingDialog checkVersionLoadingDialog;
 
     // endregion
 
@@ -101,29 +103,14 @@ public class DebuggIt {
 
     public void attach(final Activity activity) {
         checkIfInitialized("attach");
+
         if (shouldPostInitializedEvent) {
             ApiClient.postEvent(activity, ApiClient.EventType.INITIALIZED);
             shouldPostInitializedEvent = false;
         }
-        if (!versionChecked) {
-            ApiClient.checkVersion(new StringResponseCallback() {
-                @Override
-                public void onSuccess(String response) {
-                    versionChecked = versionSupported = true;
-                }
 
-                @Override
-                public void onFailure(int responseCode, String errorMessage) {
-                    versionChecked = true;
-                    versionSupported = false;
-                }
+        checkVersion();
 
-                @Override
-                public void onException(Exception exception) {
-                    versionChecked = versionSupported = false;
-                }
-            });
-        }
         this.activity = new WeakReference<>(activity);
         this.activityOrientation = activity.getRequestedOrientation();
         addReportButton();
@@ -131,6 +118,41 @@ public class DebuggIt {
         initScreenshotLoadingDialog();
         Thread.setDefaultUncaughtExceptionHandler(UncaughtExceptionHandler.with(activity.getApplicationContext()));
         showWelcomeScreen();
+    }
+
+    private void checkVersion() {
+        if (!versionChecked) {
+            waitingForCheckVersionResponse = true;
+            ApiClient.checkVersion(new StringResponseCallback() {
+                @Override
+                public void onSuccess(String response) {
+                    versionChecked = versionSupported = true;
+                    onCheckVersionResult();
+                }
+
+                @Override
+                public void onFailure(int responseCode, String errorMessage) {
+                    versionChecked = true;
+                    versionSupported = false;
+                    onCheckVersionResult();
+                }
+
+                @Override
+                public void onException(Exception exception) {
+                    versionChecked = versionSupported = false;
+                    onCheckVersionResult();
+                }
+            });
+        }
+    }
+
+    private void onCheckVersionResult() {
+        waitingForCheckVersionResponse = false;
+
+        if (checkVersionLoadingDialog != null) {
+            checkVersionLoadingDialog.dismiss();
+            checkIfVersionUnsupportedOrNotChecked();
+        }
     }
 
     private void showWelcomeScreen() {
@@ -385,17 +407,22 @@ public class DebuggIt {
         });
     }
 
+    private boolean checkIfVersionUnsupportedOrNotChecked() {
+        if (versionChecked && !versionSupported) {
+            showUnsupportedVersionPopup();
+            waitingForShake = true;
+            return true;
+        } else if (!versionChecked) {
+            showCantCheckVersionPopup();
+            waitingForShake = true;
+            return true;
+        } else return false;
+    }
+
     private void startDrawFragment() {
         try {
-            if (versionChecked && !versionSupported) {
-                showUnsupportedVersionPopup();
-                waitingForShake = true;
-                return;
-            } else if (!versionChecked) {
-                showCantCheckVersionPopup();
-                waitingForShake = true;
-                return;
-            }
+            if (checkIfVersionUnsupportedOrNotChecked()) return;
+
             if (!isFragmentShown(DrawFragment.TAG)) {
                 Utils.lockScreenRotation(getActivity(), Utils.isOrientationLandscape(getActivity()) ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 getReportButton().setVisibility(View.GONE);
@@ -467,8 +494,21 @@ public class DebuggIt {
     }
 
     private void showCantCheckVersionPopup() {
-        ConfirmationDialog.newInstance(getActivity().getString(R.string.br_cant_check_version), true)
-                .show(((FragmentActivity) getActivity()).getSupportFragmentManager(), ConfirmationDialog.TAG);
+        final CustomAlertDialog cantCheckVersionDialog = CustomAlertDialog.newInstance(getActivity().getString(R.string.br_cant_check_version), true);
+        cantCheckVersionDialog.setOnRetryClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cantCheckVersionDialog.dismiss();
+                checkVersionLoadingDialog = LoadingDialog.newInstance(getActivity().getString(R.string.br_loading_dialog_message_version));
+                checkVersionLoadingDialog.show(((FragmentActivity) getActivity()).getSupportFragmentManager(), LoadingDialog.TAG);
+
+                if (!waitingForCheckVersionResponse) {
+                    checkVersion();
+                }
+            }
+        });
+
+        cantCheckVersionDialog.show(((FragmentActivity) getActivity()).getSupportFragmentManager(), CustomAlertDialog.TAG);
     }
 
     private DebuggIt() {
