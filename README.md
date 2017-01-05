@@ -14,11 +14,11 @@ Add this library into your project as module (`File -> New -> Import Module`).
 
 ### As `aar` & gradle dependency ###
 
-Download `debuggit.aar` file from [here](http://debugg.it/downloads/debuggit.aar).
+Download `debuggit-{latest-version}.aar` file from [here](http://debugg.it/downloads/debuggit-v.0.5.1.aar).
 
 Put your file in `libs` directory (`<your project path>/app/libs`). If you don't have this directory, create it.
 
-Add these lines to your `build.gradle`:
+Add these lines to your `app/build.gradle` file:
 ```groovy
 repositories {
     ...
@@ -31,7 +31,7 @@ repositories {
 
 dependencies {
     ...
-    compile(name:'debuggit', ext:'aar')
+    compile(name:'debuggit-{latest-version}', ext:'aar')
 
 }
 
@@ -72,15 +72,15 @@ Add one of this methods to your Application `onCreate()` method
 + Bitbucket
     * `DebuggIt.getInstance().initBitbucket("repoName", "ownerName");`
     * where
-        * `repoName` is **your repository name**
-        * `ownerName` is **username of repository owner**
+        * `repoName` is your **repository name**
+        * `ownerName` is username of **repository owner**
     * [Enable an issue tracker](https://confluence.atlassian.com/bitbucket/enable-an-issue-tracker-223216498.html) on the Bitbucket repository that will use debugg.it
 
 + GitHub
     * `DebuggIt.getInstance().initGitHub("repoName", "ownerName");`
     * where
-        * `repoName` is **your repository name**
-        * `ownerName` is **username of repository owner**
+        * `repoName` is your **repository name**
+        * `ownerName` is username of **repository owner**
 
 + JIRA
     * `DebuggIt.getInstance().initJira("host", "projectKey");`
@@ -97,18 +97,5 @@ Add these methods in your `Activity` classes
 
 * Add this method to `onActivityResult()` method of your activities
   `DebuggIt.getInstance().getScreenshotPermission(requestCode, resultCode, data);`
-
-### Include dialogs, popups etc.
-
-You can take screenshot with your custom or system dialogs for devices with **Android API > 20**. To get this working, you must add this line to your `Activity` `onActivityResult` method:
-
-```java
-@Override
-protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    DebuggIt.getInstance().getScreenshotPermission(requestCode, resultCode, data);
-}
-
-```
 
 ## That's all. Your debugg.it is ready to work. ##
