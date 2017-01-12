@@ -176,6 +176,7 @@ public class DebuggIt {
         if (requestCode == ScreenshotUtils.SCREENSHOT_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 this.screenshotIntentData = data;
+                startDrawFragment();
             } else {
                 screenshotIntentData = null;
             }
@@ -343,11 +344,9 @@ public class DebuggIt {
     }
 
     private void takeScreenshot() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && ScreenshotUtils.canTakeScreenshot(getActivity())) {
             if (screenshotIntentData != null) {
                 startDrawFragment();
-            } else {
-                ScreenshotUtils.getScreenshotPermission(getActivity());
             }
         } else {
             startDrawFragment();

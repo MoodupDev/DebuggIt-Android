@@ -2,6 +2,7 @@ package com.mooduplabs.debuggit;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -45,6 +46,7 @@ public class ScreenshotUtils {
 
     private static Handler handler;
     private static boolean nextScreenshotCanceled;
+    private static Boolean canTakeScreenshot = null;
 
     //endregion
 
@@ -56,11 +58,17 @@ public class ScreenshotUtils {
         return rect;
     }
 
-    protected static void getScreenshotPermission(Activity activity) {
+    private static boolean getScreenshotPermission(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            MediaProjectionManager projectionManager = (MediaProjectionManager) activity.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-            activity.startActivityForResult(projectionManager.createScreenCaptureIntent(), SCREENSHOT_REQUEST_CODE);
+            try {
+                MediaProjectionManager projectionManager = (MediaProjectionManager) activity.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+                activity.startActivityForResult(projectionManager.createScreenCaptureIntent(), SCREENSHOT_REQUEST_CODE);
+                return true;
+            } catch(ActivityNotFoundException e) {
+                return false;
+            }
         }
+        return false;
     }
 
     protected static void takeScreenshot(final Activity activity, Intent data, final ScreenshotListener listener) {
@@ -252,6 +260,13 @@ public class ScreenshotUtils {
                 });
             }
         });
+    }
+
+    public static boolean canTakeScreenshot(Activity activity) {
+        if(canTakeScreenshot == null) {
+            canTakeScreenshot = getScreenshotPermission(activity);
+        }
+        return canTakeScreenshot;
     }
 
     //endregion
