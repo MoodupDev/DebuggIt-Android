@@ -1,0 +1,153 @@
+#!/usr/bin/ruby
+require 'net/ftp'
+require 'net/http'
+require 'io/console'
+
+## LOG COLORS
+
+def colored(color_code, text)
+  "\e[#{color_code}m#{text}\e[0m"
+end
+
+def done(text)
+  colored(32, "DONE: #{text}") # green
+end
+
+def info(text)
+  colored(33, "INFO: #{text}") # yellow
+end
+
+def error(text)
+  colored(31, "ERROR: #{text}\a") # red
+end
+
+def question(text)
+  colored(35, "QUESTION: #{text}") # purple
+end
+
+## ADD SUPPORTED VERSION
+
+def add_supported_version(version, pipeline)
+  puts info("Adding #{version} version to supported in #{pipeline}...")
+  uri = URI("https://#{pipeline}.herokuapp.com/api/v2/supported_versions/")
+  req = Net::HTTP::Post.new(uri)
+  req.set_form_data('system' => 'android', 'version_name' => version)
+
+  res = Net::HTTP.start(uri.hostname, uri.port, :use_ssl => true) do |http|
+    http.request(req)
+  end
+
+  case res
+  when Net::HTTPSuccess
+    puts done("Added #{version} version to supported successfully.")
+  else
+    puts error("Couldn't add #{version} version to supported on #{pipeline}")
+  end
+  puts info("Output:")
+  puts info(res.body)
+  
+end
+
+## CHECK ARGUMENTS
+
+input_aar_name = 'debuggit-release.aar'
+aar_name = 'debuggit.aar'
+
+version = ARGV.first
+if version == nil || version.empty?
+  puts error("No version supplied.")
+  puts info("Usage: ./deploy <version>")
+  puts info("Example: ./deploy 1.0.0")
+  abort
+elsif /^\d+\.\d+\.\d+/.match(version) == nil
+  puts error("Supplied version has bad format. See semver.org (http://semver.org)")
+  puts info("Examples of correct format: 1.0.0, 1.2.3-beta, 1.0.1-rc")
+  abort
+else
+  puts info("Deploying #{aar_name} (#{version})...")
+end
+
+## ZIP FILES
+
+aar_dir = './debuggit/build/outputs/aar'
+aar_file_path = "#{aar_dir}/#{input_aar_name}"
+
+
+if !File.exist?(aar_file_path)
+  puts error("No such file: #{aar_file_path}. Make sure to build #{aar_name} first.")
+  puts error("Aborting.")
+  abort
+end
+
+## UPLOAD TO FTP
+
+host = '***REMOVED***'
+username = '***REMOVED***'
+password = '***REMOVED***'
+
+remote_downloads_path = 'web/debugg.it/public_html/downloads/android/'
+
+begin
+  puts info("Start uploading to remote server...")
+  ftp = Net::FTP.new
+  ftp.connect(host)
+  puts info("Connected to remote host: #{host}")
+
+  ftp.passive = true
+  ftp.login(username, password)
+  puts info("Logged in as #{username}")
+
+  ftp.chdir(remote_downloads_path)
+  if ftp.nlst.include?(version) 
+    puts error("Version #{version} already exists on remote server.")
+    puts question("Do you want to override it? (y/n)")
+    if STDIN.getch.downcase != 'y'
+      puts error("Aborting.")
+      ftp.close
+      abort
+    else
+      puts info("Deleting remote folder #{version}...")
+      ftp.delete("#{version}/#{aar_name}")
+      ftp.rmdir(version)
+      puts done("Deleted #{version} folder")
+    end
+    puts
+  end
+
+  puts info("Creating #{version} directory...")
+  ftp.mkdir(version)
+  ftp.chdir(version)
+
+  puts info("Uploading #{aar_name} file...")
+  ftp.put(aar_file_path, aar_name)
+  ftp.close
+
+  puts done("Deployed #{aar_name} (#{version}) successfully")
+  puts "#{done("Download URL:")} http://debugg.it/downloads/android/#{version}/#{aar_name}"
+rescue Exception => err
+  puts error(err.message)
+  abort
+end
+
+puts question("Add this version to supported? (y/n)") 
+if STDIN.getch == 'y'
+  pipelines = { staging: "debuggit-api-staging", production: "debuggit-api"}
+  puts question("Which enviroment?")
+  puts "\t1. Staging"
+  puts "\t2. Production"
+  puts "\t3. Both"
+  puts "\t4. Cancel"
+  case(STDIN.getch)
+    when '1'
+      add_supported_version(version, pipelines[:staging])
+    when '2'
+      add_supported_version(version, pipelines[:production])
+    when '3'
+      add_supported_version(version, pipelines[:staging])
+      add_supported_version(version, pipelines[:production])
+    else
+      puts info("Canceled.")
+  end
+end
+
+puts done("That's all. Thank you for using this script.")
