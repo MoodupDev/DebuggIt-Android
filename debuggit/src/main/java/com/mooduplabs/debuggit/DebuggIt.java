@@ -52,7 +52,6 @@ public class DebuggIt {
     private ApiService apiService;
 
     private Report report;
-    private LoadingDialog screenshotLoadingDialog;
     private LoadingDialog checkVersionLoadingDialog;
 
     // endregion
@@ -115,7 +114,6 @@ public class DebuggIt {
         this.activityOrientation = activity.getRequestedOrientation();
         addReportButton();
         registerShakeDetector(activity);
-        initScreenshotLoadingDialog();
         Thread.setDefaultUncaughtExceptionHandler(UncaughtExceptionHandler.with(activity.getApplicationContext()));
         showWelcomeScreen();
     }
@@ -425,13 +423,15 @@ public class DebuggIt {
             if (!isFragmentShown(DrawFragment.TAG)) {
                 Utils.lockScreenRotation(getActivity(), Utils.isOrientationLandscape(getActivity()) ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 getReportButton().setVisibility(View.GONE);
-                screenshotLoadingDialog.show(((FragmentActivity) getActivity()).getSupportFragmentManager(), LoadingDialog.TAG);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && screenshotIntentData != null) {
                     ScreenshotUtils.setNextScreenshotCanceled(false);
+                    final LoadingDialog screenshotLoadingDialog = getScreenshotLoadingDialog();
+                    screenshotLoadingDialog.show(((FragmentActivity) getActivity()).getSupportFragmentManager(), LoadingDialog.TAG);
                     ScreenshotUtils.takeScreenshot(getActivity(), screenshotIntentData, new ScreenshotUtils.ScreenshotListener() {
                         @Override
                         public void onScreenshotReady(Bitmap bitmap) {
                             if (bitmap != null) {
+                                screenshotLoadingDialog.dismiss();
                                 showDrawFragment(bitmap);
                             } else {
                                 screenshotLoadingDialog.dismiss();
@@ -448,8 +448,8 @@ public class DebuggIt {
         }
     }
 
-    private void initScreenshotLoadingDialog() {
-        screenshotLoadingDialog = LoadingDialog.newInstance(getActivity().getString(R.string.br_generating_screenshot), new View.OnClickListener() {
+    private LoadingDialog getScreenshotLoadingDialog() {
+        return LoadingDialog.newInstance(getActivity().getString(R.string.br_generating_screenshot), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (screenshotIntentData != null) {
@@ -465,7 +465,6 @@ public class DebuggIt {
     }
 
     private void showDrawFragment(Bitmap bitmap) {
-        screenshotLoadingDialog.dismiss();
         DrawFragment.newInstance(bitmap)
                 .show(((FragmentActivity) getActivity()).getSupportFragmentManager(), DrawFragment.TAG);
         getReportButton().setVisibility(View.VISIBLE);
