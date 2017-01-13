@@ -14,7 +14,7 @@ Add this library into your project as module (`File -> New -> Import Module`).
 
 ### As `aar` & gradle dependency ###
 
-Download `debuggit-{latest-version}.aar` file from [here](http://debugg.it/downloads/debuggit-v.0.5.1.aar).
+Download `debuggit.aar` file from [here](http://debugg.it/downloads/android/0.6.0/debuggit.aar).
 
 Put your file in `libs` directory (`<your project path>/app/libs`). If you don't have this directory, create it.
 
@@ -31,7 +31,7 @@ repositories {
 
 dependencies {
     ...
-    compile(name:'debuggit-{latest-version}', ext:'aar')
+    compile(name:'debuggit', ext:'aar')
 
 }
 
