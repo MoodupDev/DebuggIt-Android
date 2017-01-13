@@ -3,6 +3,7 @@ package com.mooduplabs.debuggit;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -77,6 +78,7 @@ public class BugDescriptionFragment extends Fragment {
             stepsToReproduce.removeTextChangedListener(contentTextWatcher);
             expectedBehaviour.removeTextChangedListener(contentTextWatcher);
         }
+        Utils.lockScreenRotation(getActivity(), DebuggIt.getInstance().getActivityOrientation());
         super.onDestroyView();
     }
 
@@ -88,6 +90,7 @@ public class BugDescriptionFragment extends Fragment {
 
     private View initViews(LayoutInflater inflater, ViewGroup container, int position) {
         View view;
+        Utils.lockScreenRotation(getActivity(), ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         switch (position) {
             case 0:
                 view = inflater.inflate(R.layout.fragment_br_bug_description_page1, container, false);
