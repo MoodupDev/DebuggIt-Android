@@ -12,6 +12,49 @@ Clone this repo.
 
 Add this library into your project as module (`File -> New -> Import Module`).
 
+Add to your app-level `build.gradle` file in `dependencies` method this line:
+
+```groovy
+dependencies {
+    //...
+    compile project(path: ':debuggit')
+}
+```
+#### Configurations
+
+**debugg.it** is delivered with 2 configurations: `debug` and `release`. 
+
+The `debug` configuration is not minified by ProGuard. If you want to use this configuration, add `configuration` parameter to your `compile project` method and set it to `'debug'`:
+
+```groovy
+dependencies {
+    //...
+    compile project(path: ':debuggit', configuration: 'debug')
+}
+```
+
+##### Flavours
+
+If your project has many product flavors, you can use this syntax:
+
+```groovy
+    productFlavors {
+        staging {
+            applicationId "com.example.app.staging"
+        }
+
+        production {
+            applicationId "com.example.app"
+        }
+    }
+
+dependencies {
+    //...
+    stagingCompile project(path: ':debuggit', configuration: 'debug')
+    productionCompile project(path: ':debuggit', configuration: 'release')
+}
+```
+
 ### As `aar` & gradle dependency ###
 
 Download `debuggit-{latest-version}.aar` file from [here](http://debugg.it/downloads/debuggit-v.0.5.1.aar).
