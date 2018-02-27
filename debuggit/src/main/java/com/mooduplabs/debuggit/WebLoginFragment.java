@@ -104,8 +104,14 @@ public class WebLoginFragment extends DialogFragment {
 
                                      @Override
                                      public boolean shouldOverrideUrlLoading(WebView view, final String url) {
-                                         if (url.contains(Constants.Keys.CODE + "=")) {
-                                             String code = url.substring(url.indexOf(Constants.Keys.CODE) + Constants.Keys.CODE.length() + 1);
+                                         if (url.contains(Constants.Keys.CALLBACK) && url.contains(Constants.Keys.CODE + "=")) {
+                                             String code;
+
+                                             if (url.substring(url.length() - 1).equals("#")) {
+                                                 code = url.substring(url.indexOf(Constants.Keys.CODE) + Constants.Keys.CODE.length() + 1, url.length() - 1);
+                                             } else {
+                                                 code = url.substring(url.indexOf(Constants.Keys.CODE) + Constants.Keys.CODE.length() + 1);
+                                             }
 
                                              DebuggIt.getInstance().getApiService().exchangeAuthCodeForToken(
                                                      code,

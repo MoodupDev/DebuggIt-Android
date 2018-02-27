@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         applicationId "com.mooduplabs.bugtracker"
@@ -18,6 +18,8 @@ android {
         }
     }
 
+    flavorDimensions "client"
+
     productFlavors {
         staging {
             applicationId "com.mooduplabs.bugtracker.staging"
@@ -31,8 +33,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    stagingCompile project(path: ':debuggit', configuration: 'debug')
-    productionCompile project(path: ':debuggit', configuration: 'release')
+    implementation project(path: ':debuggit')
     testCompile 'junit:junit:4.12'
 
     compile 'com.android.support:appcompat-v7:25.1.0'

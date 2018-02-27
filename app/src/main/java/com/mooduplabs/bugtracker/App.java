@@ -10,8 +10,8 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         DebuggIt.getInstance().setRecordingEnabled(true);
-        //DebuggIt.getInstance().initBitbucket("bugreporter", "moodup");
+        DebuggIt.getInstance().initBitbucket("bugreporter", "moodup");
         //DebuggIt.getInstance().initJira("januszowy.atlassian.net", "TP");
-        DebuggIt.getInstance().initGitHub("test", "MoodupDev");
+        //DebuggIt.getInstance().initGitHub("test", "MoodupDev");
     }
 }

@@ -99,5 +99,6 @@ interface Constants {
         String CLIENT_ID = "client_id";
         String CLIENT_SECRET = "client_secret";
         String CODE = "code";
+        String CALLBACK = "callback.moodup.com";
     }
 }
