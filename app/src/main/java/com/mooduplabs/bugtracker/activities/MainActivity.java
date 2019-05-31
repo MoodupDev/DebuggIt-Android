@@ -1,12 +1,15 @@
-package com.mooduplabs.bugtracker;
+package com.mooduplabs.bugtracker.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 
+import com.mooduplabs.bugtracker.helpers.DebuggItWebViewClient;
+import com.mooduplabs.bugtracker.R;
 import com.mooduplabs.debuggit.DebuggIt;
 
 public class MainActivity extends AppCompatActivity {
@@ -15,8 +18,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+        configureWebView();
 
         findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -24,8 +27,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, SecondActivity.class));
             }
         });
-
-        Snackbar.make(findViewById(android.R.id.content), "Snackbar", Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -38,5 +39,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         DebuggIt.getInstance().getScreenshotPermission(requestCode, resultCode, data);
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private void configureWebView() {
+        WebView webView = findViewById(R.id.mc_web);
+        webView.loadUrl("https://debugg.it/");
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+
+        webView.setWebViewClient(new DebuggItWebViewClient(getApplicationContext()));
     }
 }
