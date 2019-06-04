@@ -1,25 +1,25 @@
 package com.mooduplabs.bugtracker.activities;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.mooduplabs.bugtracker.R;
 import com.mooduplabs.bugtracker.helpers.DebuggItWebViewClient;
-import com.mooduplabs.debuggit.DebuggIt;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    protected int getLayout() {
+        return R.layout.activity_main;
+    }
 
+    @Override
+    protected void onActivityReady(@Nullable Bundle savedInstanceState) {
         configureWebView();
 
         new AlertDialog.Builder(this)
@@ -31,21 +31,9 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SecondActivity.class));
+                runActivity(SecondActivity.class);
             }
         });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        DebuggIt.getInstance().attach(this);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        DebuggIt.getInstance().getScreenshotPermission(requestCode, resultCode, data);
     }
 
     @SuppressLint("SetJavaScriptEnabled")
