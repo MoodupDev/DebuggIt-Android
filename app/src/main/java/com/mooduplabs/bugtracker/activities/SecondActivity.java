@@ -1,10 +1,8 @@
 package com.mooduplabs.bugtracker.activities;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -21,16 +19,6 @@ public class SecondActivity extends AppCompatActivity {
         setContentView(R.layout.activity_secondary);
 
         configureWebView();
-
-        new AlertDialog.Builder(this)
-                .setTitle("Dialog")
-                .setMessage("Shake your phone to take screenshot")
-                .setPositiveButton("Crash me", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        throw new RuntimeException("crash button clicked");
-                    }
-                }).show();
     }
 
     @Override
