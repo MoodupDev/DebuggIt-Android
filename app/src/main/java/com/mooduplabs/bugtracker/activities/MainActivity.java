@@ -3,7 +3,6 @@ package com.mooduplabs.bugtracker.activities;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -21,12 +20,6 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onActivityReady(@Nullable Bundle savedInstanceState) {
         configureWebView();
-
-        new AlertDialog.Builder(this)
-                .setTitle("Dialog")
-                .setMessage("Shake your phone to take screenshot")
-                .setPositiveButton(getString(android.R.string.ok), null)
-                .show();
 
         findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
