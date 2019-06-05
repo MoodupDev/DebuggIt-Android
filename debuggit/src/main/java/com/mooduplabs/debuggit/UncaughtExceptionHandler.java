@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import java.util.Map;
 import java.util.Set;
 
-public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
+class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
     private static UncaughtExceptionHandler instance;
     private Thread.UncaughtExceptionHandler defaultHandler;
     private Context context;

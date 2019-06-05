@@ -26,7 +26,7 @@ import android.os.Looper;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
-public class ScreenshotUtils {
+class ScreenshotUtils {
     protected static final int SCREENSHOT_REQUEST_CODE = 345;
     private static final String SCREENSHOT_VIRTUAL_DISPLAY_NAME = "screenshot-virtual-display";
     private static final String SCREENSHOT_HANDLER_NAME = "ScreenshotHandler";

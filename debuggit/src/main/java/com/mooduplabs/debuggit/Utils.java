@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Utils {
+class Utils {
     protected static final String MEDIA_FILE_FORMAT = ".mpeg";
     private static final String API_VERSION_FORMAT = "%s (API %d)";
     private static final String APPLICATION_VERSION_FORMAT = "%s (%d)";

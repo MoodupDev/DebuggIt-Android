@@ -21,7 +21,7 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HttpClient {
+class HttpClient {
     public static final String ACCEPT_HEADER = "Accept";
     public static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String CHARSET_UTF8 = "UTF-8";

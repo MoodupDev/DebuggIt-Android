@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatEditText;
 
-public class MontserratEditText extends AppCompatEditText {
+class MontserratEditText extends AppCompatEditText {
     private static final String REGULAR_FONT = "Montserrat-Regular.ttf";
     private static final String BOLD_FONT = "Montserrat-Bold.ttf";
 

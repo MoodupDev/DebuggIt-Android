@@ -4,7 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 
-public class BitBucketApiService implements ApiService {
+class BitBucketApiService implements ApiService {
     private String repoSlug;
     private String accountName;
     private String accessToken;
