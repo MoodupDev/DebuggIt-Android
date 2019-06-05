@@ -93,13 +93,13 @@ public class DrawFragment extends DialogFragment {
 
     private void initViews(View view) {
         surfaceRoot = view.findViewById(R.id.surface_root);
-        screenSurface = (ImageView) view.findViewById(R.id.image_surface);
-        drawingSurface = (PaintableImageView) view.findViewById(R.id.draw_surface);
-        cancel = (MontserratTextView) view.findViewById(R.id.draw_cancel);
-        confirm = (MontserratTextView) view.findViewById(R.id.draw_confirm);
-        rubber = (ImageView) view.findViewById(R.id.draw_rubber);
-        freeDraw = (ImageView) view.findViewById(R.id.draw_free);
-        rectanglesDraw = (ImageView) view.findViewById(R.id.draw_rectangles);
+        screenSurface = view.findViewById(R.id.image_surface);
+        drawingSurface = view.findViewById(R.id.draw_surface);
+        cancel = view.findViewById(R.id.draw_cancel);
+        confirm = view.findViewById(R.id.draw_confirm);
+        rubber = view.findViewById(R.id.draw_rubber);
+        freeDraw = view.findViewById(R.id.draw_free);
+        rectanglesDraw = view.findViewById(R.id.draw_rectangles);
         dialog = LoadingDialog.newInstance(getString(R.string.br_loading_dialog_message_screenshot), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,7 +123,7 @@ public class DrawFragment extends DialogFragment {
 
     private void initDrawingSurface() {
         View rootView = getActivity().findViewById(android.R.id.content);
-        ImageView reportButton = (ImageView) rootView.findViewById(R.id.report_button);
+        ImageView reportButton = rootView.findViewById(R.id.report_button);
         if (reportButton != null) {
             reportButton.setVisibility(View.INVISIBLE);
         }

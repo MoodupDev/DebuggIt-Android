@@ -23,7 +23,7 @@ public class WelcomeDialog extends DialogFragment implements View.OnClickListene
 
         setCancelable(false);
 
-        MontserratTextView letsGoButton = (MontserratTextView) v.findViewById(R.id.welcome_lets_go_button);
+        MontserratTextView letsGoButton = v.findViewById(R.id.welcome_lets_go_button);
         letsGoButton.setOnClickListener(this);
 
         return dialog;

@@ -89,9 +89,9 @@ public class ConfirmationDialog extends DialogFragment {
     private void initViews(View view) {
         final int type = getArguments().getInt(TYPE, TYPE_SUCCESS);
 
-        ImageView icon = (ImageView) view.findViewById(R.id.confirmation_dialog_icon);
-        MontserratTextView message = (MontserratTextView) view.findViewById(R.id.confirmation_dialog_message);
-        MontserratTextView okButton = (MontserratTextView) view.findViewById(R.id.confirmation_dialog_ok_button);
+        ImageView icon = view.findViewById(R.id.confirmation_dialog_icon);
+        MontserratTextView message = view.findViewById(R.id.confirmation_dialog_message);
+        MontserratTextView okButton = view.findViewById(R.id.confirmation_dialog_ok_button);
 
         final boolean isTypeSuccess = type == TYPE_SUCCESS;
 

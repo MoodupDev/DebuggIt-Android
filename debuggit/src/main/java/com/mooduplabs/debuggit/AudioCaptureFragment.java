@@ -51,10 +51,10 @@ public class AudioCaptureFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_br_report_audio_capture, container, false);
         initRecording();
         setCancelable(false);
-        timer = (MontserratTextView) view.findViewById(R.id.timer_text);
-        recordDot = (ImageView) view.findViewById(R.id.record_dot);
+        timer = view.findViewById(R.id.timer_text);
+        recordDot = view.findViewById(R.id.record_dot);
 
-        ImageView recordButton = (ImageView) view.findViewById(R.id.record_btn);
+        ImageView recordButton = view.findViewById(R.id.record_btn);
 
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override

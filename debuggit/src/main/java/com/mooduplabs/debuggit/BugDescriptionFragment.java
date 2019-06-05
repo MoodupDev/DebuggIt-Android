@@ -117,7 +117,7 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     private void initBugTitle(View view) {
-        bugTitle = (MontserratEditText) view.findViewById(R.id.bug_title);
+        bugTitle = view.findViewById(R.id.bug_title);
         bugTitle.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -133,7 +133,7 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     private void initRecordButton(View view) {
-        ImageView recordButton = (ImageView) view.findViewById(R.id.record_button);
+        ImageView recordButton = view.findViewById(R.id.record_button);
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -184,9 +184,9 @@ public class BugDescriptionFragment extends Fragment {
 
     private void initBugPriorityButtons(View view) {
         priorityButtons = new MontserratTextView[]{
-                (MontserratTextView) view.findViewById(R.id.priority_low_button),
-                (MontserratTextView) view.findViewById(R.id.priority_medium_button),
-                (MontserratTextView) view.findViewById(R.id.priority_high_button),
+                view.findViewById(R.id.priority_low_button),
+                view.findViewById(R.id.priority_medium_button),
+                view.findViewById(R.id.priority_high_button),
         };
 
         for (MontserratTextView priorityButton : priorityButtons) {
@@ -216,7 +216,7 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     private void initReportItems(View view) {
-        itemsContainer = (LinearLayout) view.findViewById(R.id.bug_items_container);
+        itemsContainer = view.findViewById(R.id.bug_items_container);
         Report report = DebuggIt.getInstance().getReport();
 
         for (ScreenModel screenshot : report.getScreens()) {
@@ -232,7 +232,7 @@ public class BugDescriptionFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 View rootView = getActivity().findViewById(android.R.id.content);
-                ImageView reportButton = (ImageView) rootView.findViewById(R.id.report_button);
+                ImageView reportButton = rootView.findViewById(R.id.report_button);
                 reportButton.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.next_screenshoot, null));
                 ((DialogFragment) getParentFragment()).dismiss();
             }
@@ -305,8 +305,8 @@ public class BugDescriptionFragment extends Fragment {
 
     private void addScreenshotMiniature(final ViewGroup parent, final String screenUrl) {
         final RelativeLayout itemScreenParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_br_screenshot, parent, false);
-        ImageView itemScreenshot = (ImageView) itemScreenParent.findViewById(R.id.item_screenshot_image);
-        ImageView itemScreenshotRemove = (ImageView) itemScreenParent.findViewById(R.id.item_screenshot_close);
+        ImageView itemScreenshot = itemScreenParent.findViewById(R.id.item_screenshot_image);
+        ImageView itemScreenshotRemove = itemScreenParent.findViewById(R.id.item_screenshot_close);
 
         new DownloadImagesTask(itemScreenshot).execute(screenUrl);
         itemScreenshotRemove.setOnClickListener(new View.OnClickListener() {
@@ -324,8 +324,8 @@ public class BugDescriptionFragment extends Fragment {
 
     private void addAudioMiniature(final ViewGroup parent, final String audioUrl) {
         final RelativeLayout itemAudioParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_br_audio, parent, false);
-        ImageButton playButton = (ImageButton) itemAudioParent.findViewById(R.id.item_audio_button);
-        final ImageView itemAudioRemove = (ImageView) itemAudioParent.findViewById(R.id.item_audio_close);
+        ImageButton playButton = itemAudioParent.findViewById(R.id.item_audio_button);
+        final ImageView itemAudioRemove = itemAudioParent.findViewById(R.id.item_audio_close);
 
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -397,8 +397,8 @@ public class BugDescriptionFragment extends Fragment {
 
     private void initBugKindButtons(View view) {
         kindButtons = new MontserratTextView[]{
-                (MontserratTextView) view.findViewById(R.id.kind_bug_button),
-                (MontserratTextView) view.findViewById(R.id.kind_enhancement_button)
+                view.findViewById(R.id.kind_bug_button),
+                view.findViewById(R.id.kind_enhancement_button)
         };
         for (MontserratTextView kindButton : kindButtons) {
             kindButton.setOnClickListener(new View.OnClickListener() {
@@ -425,9 +425,9 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     private void initSecondPage(View view) {
-        stepsToReproduce = (MontserratEditText) view.findViewById(R.id.steps_text);
-        actualBehaviour = (MontserratEditText) view.findViewById(R.id.actual_behaviour_text);
-        expectedBehaviour = (MontserratEditText) view.findViewById(R.id.expected_behaviour_text);
+        stepsToReproduce = view.findViewById(R.id.steps_text);
+        actualBehaviour = view.findViewById(R.id.actual_behaviour_text);
+        expectedBehaviour = view.findViewById(R.id.expected_behaviour_text);
         initTextWatchers(false);
     }
 

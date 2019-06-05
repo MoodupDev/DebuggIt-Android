@@ -60,8 +60,8 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     }
 
     private void initButtons(View view) {
-        MontserratTextView send = (MontserratTextView) view.findViewById(R.id.report_confirm);
-        MontserratTextView cancel = (MontserratTextView) view.findViewById(R.id.report_cancel);
+        MontserratTextView send = view.findViewById(R.id.report_confirm);
+        MontserratTextView cancel = view.findViewById(R.id.report_cancel);
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,8 +180,8 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     }
 
     private void initViewPager(View view) {
-        viewPagerIndicator = (ImageView) view.findViewById(R.id.view_pager_indicator);
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.report_view_pager);
+        viewPagerIndicator = view.findViewById(R.id.view_pager_indicator);
+        ViewPager viewPager = view.findViewById(R.id.report_view_pager);
         viewPager.addOnPageChangeListener(this);
         ReportViewPagerAdapter adapter = new ReportViewPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
@@ -189,7 +189,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
     private void resetReportButtonImage() {
         View rootView = getActivity().findViewById(android.R.id.content);
-        ImageView reportButton = (ImageView) rootView.findViewById(R.id.report_button);
+        ImageView reportButton = rootView.findViewById(R.id.report_button);
         reportButton.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.logo_bug_small, null));
     }
 

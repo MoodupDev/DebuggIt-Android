@@ -264,7 +264,7 @@ public class DebuggIt {
     }
 
     private void addReportButton() {
-        final FrameLayout rootLayout = (FrameLayout) getActivity().findViewById(android.R.id.content);
+        final FrameLayout rootLayout = getActivity().findViewById(android.R.id.content);
         reportButton = new WeakReference<>(rootLayout.findViewById(R.id.report_button));
         if (getReportButton() == null) {
             reportButton = new WeakReference<>(LayoutInflater.from(getActivity()).inflate(R.layout.layout_br_report_button, rootLayout, false));

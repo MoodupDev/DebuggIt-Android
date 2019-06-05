@@ -70,9 +70,9 @@ public class LoadingDialog extends DialogFragment {
     }
 
     private void initViews(View view) {
-        MontserratTextView message = (MontserratTextView) view.findViewById(R.id.confirmation_dialog_message);
-        MontserratTextView cancelButton = (MontserratTextView) view.findViewById(R.id.loading_dialog_cancel_button);
-        ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.loading_spinner);
+        MontserratTextView message = view.findViewById(R.id.confirmation_dialog_message);
+        MontserratTextView cancelButton = view.findViewById(R.id.loading_dialog_cancel_button);
+        ProgressBar progressBar = view.findViewById(R.id.loading_spinner);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             Drawable wrapDrawable = DrawableCompat.wrap(progressBar.getIndeterminateDrawable());

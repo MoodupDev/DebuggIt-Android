@@ -95,10 +95,10 @@ public class CustomAlertDialog extends DialogFragment {
     private void initViews(View view) {
         final int type = getArguments().getInt(TYPE, TYPE_SUCCESS);
 
-        ImageView icon = (ImageView) view.findViewById(R.id.alert_dialog_icon);
-        MontserratTextView message = (MontserratTextView) view.findViewById(R.id.alert_dialog_message);
-        MontserratTextView okButton = (MontserratTextView) view.findViewById(R.id.alert_dialog_ok_button);
-        MontserratTextView retryButton = (MontserratTextView) view.findViewById(R.id.alert_dialog_retry_button);
+        ImageView icon = view.findViewById(R.id.alert_dialog_icon);
+        MontserratTextView message = view.findViewById(R.id.alert_dialog_message);
+        MontserratTextView okButton = view.findViewById(R.id.alert_dialog_ok_button);
+        MontserratTextView retryButton = view.findViewById(R.id.alert_dialog_retry_button);
 
         final boolean isTypeSuccess = type == TYPE_SUCCESS;
 

@@ -61,7 +61,7 @@ public class WebLoginFragment extends DialogFragment {
     }
 
     private void initWebViewProgressBar(View view) {
-        webViewProgressBar = (ProgressBar) view.findViewById(R.id.webview_progress_bar);
+        webViewProgressBar = view.findViewById(R.id.webview_progress_bar);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             Drawable wrapDrawable = DrawableCompat.wrap(webViewProgressBar.getIndeterminateDrawable());
@@ -73,7 +73,7 @@ public class WebLoginFragment extends DialogFragment {
     }
 
     private void initWebView(View view) {
-        webView = (WebView) view.findViewById(R.id.webview);
+        webView = view.findViewById(R.id.webview);
 
         webView.getSettings().setJavaScriptEnabled(true);
 

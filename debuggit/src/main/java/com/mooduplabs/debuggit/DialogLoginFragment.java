@@ -61,7 +61,7 @@ public class DialogLoginFragment extends DialogFragment {
     private void initView(View view) {
         initLogoSection(view);
         initLoginFields(view);
-        MontserratTextView loginButton = (MontserratTextView) view.findViewById(R.id.bitbucket_login_button);
+        MontserratTextView loginButton = view.findViewById(R.id.bitbucket_login_button);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,17 +133,17 @@ public class DialogLoginFragment extends DialogFragment {
     }
 
     private void initLoginFields(View view) {
-        email = (MontserratEditText) view.findViewById(R.id.login_email);
-        password = (MontserratEditText) view.findViewById(R.id.login_password);
-        twoFactorAuthCodeLayout = (LinearLayout) view.findViewById(R.id.login_2fa_layout);
-        twoFactorAuthCode = (MontserratEditText) view.findViewById(R.id.login_2fa_code);
+        email = view.findViewById(R.id.login_email);
+        password = view.findViewById(R.id.login_password);
+        twoFactorAuthCodeLayout = view.findViewById(R.id.login_2fa_layout);
+        twoFactorAuthCode = view.findViewById(R.id.login_2fa_code);
         if(DebuggIt.getInstance().getConfigType() == DebuggIt.ConfigType.GITHUB) {
             email.setHint(R.string.br_login_hint_email_username);
         }
     }
 
     private void initLogoSection(View view) {
-        ImageView serviceLogo = (ImageView) view.findViewById(R.id.service_logo);
+        ImageView serviceLogo = view.findViewById(R.id.service_logo);
         int logoResId = 0;
         String serviceName = "";
         switch(DebuggIt.getInstance().getConfigType()) {
@@ -161,7 +161,7 @@ public class DialogLoginFragment extends DialogFragment {
                 break;
         }
         serviceLogo.setImageDrawable(ResourcesCompat.getDrawable(getResources(), logoResId, null));
-        MontserratTextView loginInfo = (MontserratTextView) view.findViewById(R.id.login_info);
+        MontserratTextView loginInfo = view.findViewById(R.id.login_info);
         loginInfo.setText(getString(R.string.br_login_info, serviceName));
     }
 
