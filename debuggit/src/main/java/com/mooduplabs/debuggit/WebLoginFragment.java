@@ -24,20 +24,15 @@ import org.json.JSONObject;
 import javax.net.ssl.HttpsURLConnection;
 
 public class WebLoginFragment extends DialogFragment {
-
-
     public static final String TAG = WebLoginFragment.class.getSimpleName();
-
 
     private WebView webView;
     private ProgressBar webViewProgressBar;
     private boolean keepProgressBarVisible = false;
 
-
     public WebLoginFragment() {
         // Required empty public constructor
     }
-
 
     protected static WebLoginFragment newInstance() {
         return new WebLoginFragment();
@@ -175,6 +170,4 @@ public class WebLoginFragment extends DialogFragment {
         DebuggIt.getInstance().saveTokens(response);
         ConfirmationDialog.newInstance(getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
     }
-
-
 }

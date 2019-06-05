@@ -17,7 +17,6 @@ import androidx.appcompat.widget.AppCompatImageView;
 import java.util.ArrayList;
 
 public class PaintableImageView extends AppCompatImageView {
-
     protected static final int TYPE_FREE_DRAW = 0;
     protected static final int TYPE_RECTANGLE_DRAW = 1;
 
@@ -42,7 +41,6 @@ public class PaintableImageView extends AppCompatImageView {
     private Paint bitmapPaint;
     private Paint paint;
     private float x, y;
-
 
     public PaintableImageView(Context context) {
         super(context);
@@ -447,5 +445,4 @@ public class PaintableImageView extends AppCompatImageView {
             return id;
         }
     }
-
 }

@@ -9,17 +9,13 @@ import java.net.MalformedURLException;
 import java.util.HashMap;
 
 public class GitHubApiService implements ApiService {
-
-
     private static final String TOKEN_FORMAT = "token %s";
     private static final String AUTH_NOTE_FORMAT = "debugg.it library at %s";
-
 
     private String accessToken;
     private String accountName;
     private String repoSlug;
     private String twoFactorAuthCode;
-
 
     protected GitHubApiService(String accountName, String repoSlug) {
         this.repoSlug = repoSlug;
@@ -117,6 +113,4 @@ public class GitHubApiService implements ApiService {
     protected void setTwoFactorAuthCode(String twoFactorAuthCode) {
         this.twoFactorAuthCode = twoFactorAuthCode;
     }
-
-
 }

@@ -18,12 +18,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 public class HttpClient {
-
     public static final String ACCEPT_HEADER = "Accept";
     public static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String CHARSET_UTF8 = "UTF-8";

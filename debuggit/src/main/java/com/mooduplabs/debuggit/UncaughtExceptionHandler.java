@@ -14,17 +14,13 @@ import java.util.Map;
 import java.util.Set;
 
 public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
-
-
     private static UncaughtExceptionHandler instance;
     private Thread.UncaughtExceptionHandler defaultHandler;
     private Context context;
 
-
     private UncaughtExceptionHandler() {
         defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
     }
-
 
     public static UncaughtExceptionHandler with(Context context) {
         if (instance == null) {
@@ -97,6 +93,4 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
         }
         return (stats.getAvailableBlocks() * (long) stats.getBlockSize());
     }
-
-
 }

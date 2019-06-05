@@ -17,7 +17,6 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 
 public class DrawFragment extends DialogFragment {
-
     public static final String SCREENSHOT = "screenshot";
     protected static final String TAG = DrawFragment.class.getSimpleName();
     protected static final String FREE_DRAW_ACTIVE = "free_draw_active";
@@ -75,7 +74,6 @@ public class DrawFragment extends DialogFragment {
         if (uploadedImagePending) {
             onImageUploaded(savedResponse);
         }
-
     }
 
     @Override

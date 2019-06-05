@@ -8,10 +8,7 @@ import android.view.View;
 import androidx.fragment.app.DialogFragment;
 
 public class WelcomeDialog extends DialogFragment implements View.OnClickListener {
-
-
     public static final String TAG = WelcomeDialog.class.getSimpleName();
-
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -37,6 +34,4 @@ public class WelcomeDialog extends DialogFragment implements View.OnClickListene
         Utils.putBoolean(getActivity(), Constants.Keys.HAS_WELCOME_SCREEN, true);
         super.dismiss();
     }
-
-
 }

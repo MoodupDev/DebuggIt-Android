@@ -5,7 +5,6 @@ import android.media.MediaRecorder;
 import java.io.IOException;
 
 public class AudioCaptureHelper {
-
     private static final int SAMPLING_RATE = 44100;
     private static final int BIT_RATE = 96000;
 
@@ -15,7 +14,6 @@ public class AudioCaptureHelper {
 
     protected AudioCaptureHelper() {
     }
-
 
     protected void startRecording(String filePath) {
         this.filePath = filePath;

@@ -10,8 +10,6 @@ import android.widget.ImageView;
 import androidx.fragment.app.DialogFragment;
 
 public class CustomAlertDialog extends DialogFragment {
-
-
     protected static final String TAG = CustomAlertDialog.class.getSimpleName();
     protected static final int TYPE_FAILURE = 0;
     protected static final int TYPE_SUCCESS = 1;
@@ -19,10 +17,8 @@ public class CustomAlertDialog extends DialogFragment {
     private static final String CONTAINS_LINKS = "contains_links";
     private static final String TYPE = "type";
 
-
     private View.OnClickListener onOkClickListener;
     private View.OnClickListener onRetryClickListener;
-
 
     protected static CustomAlertDialog newInstance(int type) {
         CustomAlertDialog dialog = new CustomAlertDialog();
@@ -34,7 +30,6 @@ public class CustomAlertDialog extends DialogFragment {
 
         return dialog;
     }
-
 
     protected static CustomAlertDialog newInstance(String message, boolean error) {
         CustomAlertDialog dialog = new CustomAlertDialog();
@@ -135,6 +130,4 @@ public class CustomAlertDialog extends DialogFragment {
             Linkify.addLinks(message, Linkify.WEB_URLS);
         }
     }
-
-
 }

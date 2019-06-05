@@ -10,10 +10,7 @@ import android.hardware.SensorManager;
 import java.lang.ref.WeakReference;
 
 public class ShakeDetector implements SensorEventListener {
-
-
     private static final int SHAKE_THRESHOLD = 3000;
-
 
     private static ShakeDetector instance;
 
@@ -24,7 +21,6 @@ public class ShakeDetector implements SensorEventListener {
     private float lastX;
     private float lastY;
     private float lastZ;
-
 
     protected static ShakeDetector getInstance() {
         if (instance == null) {
@@ -87,9 +83,7 @@ public class ShakeDetector implements SensorEventListener {
 
     }
 
-
     interface ShakeListener {
         void shakeDetected();
     }
-
 }

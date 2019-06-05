@@ -6,7 +6,6 @@ import org.json.JSONObject;
 import java.net.MalformedURLException;
 
 class JiraApiService implements ApiService {
-
     private String host;
     private String projectKey;
     private String username;

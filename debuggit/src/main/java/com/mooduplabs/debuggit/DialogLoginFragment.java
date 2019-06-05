@@ -17,10 +17,7 @@ import org.json.JSONObject;
 import javax.net.ssl.HttpsURLConnection;
 
 public class DialogLoginFragment extends DialogFragment {
-
-
     public static final String TAG = DialogLoginFragment.class.getSimpleName();
-
 
     private LoadingDialog loadingDialog;
     private MontserratEditText email;
@@ -28,11 +25,9 @@ public class DialogLoginFragment extends DialogFragment {
     private LinearLayout twoFactorAuthCodeLayout;
     private MontserratEditText twoFactorAuthCode;
 
-
     public DialogLoginFragment() {
         // Required empty public constructor
     }
-
 
     protected static DialogLoginFragment newInstance() {
         return new DialogLoginFragment();
@@ -180,6 +175,4 @@ public class DialogLoginFragment extends DialogFragment {
             ConfirmationDialog.newInstance(getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
         }
     }
-
-
 }

@@ -36,7 +36,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class BugDescriptionFragment extends Fragment {
-
     public static final String POSITION = "position";
     public static final int RECORD_PERMISSIONS_REQUEST = 145;
     private static final int PRIORITY_LOW_INDEX = 0;
@@ -106,7 +105,6 @@ public class BugDescriptionFragment extends Fragment {
         }
         return view;
     }
-
 
     private void initFirstPage(View view) {
         mediaPlayer = new MediaPlayer();
@@ -362,13 +360,17 @@ public class BugDescriptionFragment extends Fragment {
             playView.setSelected(false);
             return;
         }
+
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
         try {
             mediaPlayer.setDataSource(url);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         final LoadingDialog dialog = LoadingDialog.newInstance(getString(R.string.br_loading_dialog_message_play_audio));
+
         dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
         lastPlayButton = playView;
         mediaPlayer.prepareAsync();
@@ -401,6 +403,7 @@ public class BugDescriptionFragment extends Fragment {
                 view.findViewById(R.id.kind_bug_button),
                 view.findViewById(R.id.kind_enhancement_button)
         };
+
         for (MontserratTextView kindButton : kindButtons) {
             kindButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -467,7 +470,6 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     protected class DownloadImagesTask extends AsyncTask<String, Void, Bitmap> {
-
         private ImageView imageView;
 
         protected DownloadImagesTask(ImageView imageView) {
@@ -497,5 +499,4 @@ public class BugDescriptionFragment extends Fragment {
             imageView.setImageBitmap(result);
         }
     }
-
 }

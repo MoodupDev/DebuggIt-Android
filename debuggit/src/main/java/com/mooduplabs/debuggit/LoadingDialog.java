@@ -17,18 +17,13 @@ import androidx.fragment.app.DialogFragment;
 
 
 public class LoadingDialog extends DialogFragment {
-
-
     protected static final String TAG = LoadingDialog.class.getSimpleName();
 
-
     private View.OnClickListener onCancelClickListener;
-
 
     protected static LoadingDialog newInstance(String message) {
         return newInstance(message, null);
     }
-
 
     protected static LoadingDialog newInstance(String message, View.OnClickListener onCancelClickListener) {
 
@@ -85,6 +80,4 @@ public class LoadingDialog extends DialogFragment {
             }
         });
     }
-
-
 }

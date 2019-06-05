@@ -20,7 +20,6 @@ import androidx.viewpager.widget.ViewPager;
 import java.net.HttpURLConnection;
 
 public class ReportFragment extends DialogFragment implements ViewPager.OnPageChangeListener {
-
     protected static final String TAG = ReportFragment.class.getSimpleName();
     protected static final int MAX_RETRIES_COUNT = 3;
 
@@ -51,7 +50,6 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
         getDialog().getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.br_confirmation_dialog_width), WindowManager.LayoutParams.WRAP_CONTENT);
     }
-
 
     private View initViews(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.fragment_br_reporter, container, false);

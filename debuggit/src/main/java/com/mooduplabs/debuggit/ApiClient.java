@@ -8,7 +8,6 @@ import java.net.MalformedURLException;
 import java.util.HashMap;
 
 public class ApiClient {
-
     public static final String UPLOAD_IMAGE_URL = BuildConfig.API_BASE_URL + "/api/v1/upload/image";
     public static final String UPLOAD_AUDIO_URL = BuildConfig.API_BASE_URL + "/api/v1/upload/audio";
     public static final String EVENTS_URL = BuildConfig.API_BASE_URL + "/api/v2/events";

@@ -10,8 +10,6 @@ import android.widget.ImageView;
 import androidx.fragment.app.DialogFragment;
 
 public class ConfirmationDialog extends DialogFragment {
-
-
     protected static final String TAG = ConfirmationDialog.class.getSimpleName();
     protected static final int TYPE_FAILURE = 0;
     protected static final int TYPE_SUCCESS = 1;
@@ -19,9 +17,7 @@ public class ConfirmationDialog extends DialogFragment {
     private static final String CONTAINS_LINKS = "contains_links";
     private static final String TYPE = "type";
 
-
     private View.OnClickListener onOkClickListener;
-
 
     protected static ConfirmationDialog newInstance(int type) {
         ConfirmationDialog dialog = new ConfirmationDialog();
@@ -33,7 +29,6 @@ public class ConfirmationDialog extends DialogFragment {
 
         return dialog;
     }
-
 
     protected static ConfirmationDialog newInstance(String message, boolean error) {
         ConfirmationDialog dialog = new ConfirmationDialog();
@@ -116,6 +111,4 @@ public class ConfirmationDialog extends DialogFragment {
             Linkify.addLinks(message, Linkify.WEB_URLS);
         }
     }
-
-
 }

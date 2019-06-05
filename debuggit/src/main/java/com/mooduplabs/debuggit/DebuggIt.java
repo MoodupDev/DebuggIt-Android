@@ -23,15 +23,8 @@ import org.json.JSONObject;
 import java.lang.ref.WeakReference;
 
 public class DebuggIt {
-
-    // region Consts
-
     protected static final String BUTTON_POSITION_PORTRAIT = "button_position_portrait";
     protected static final String BUTTON_POSITION_LANDSCAPE = "button_position_landscape";
-
-    // endregion
-
-    // region Fields
 
     private static DebuggIt instance;
 
@@ -54,10 +47,6 @@ public class DebuggIt {
 
     private Report report;
     private LoadingDialog checkVersionLoadingDialog;
-
-    // endregion
-
-    // region Methods
 
     private DebuggIt() {
         // one instance
@@ -512,8 +501,6 @@ public class DebuggIt {
 
         cantCheckVersionDialog.show(((FragmentActivity) getActivity()).getSupportFragmentManager(), CustomAlertDialog.TAG);
     }
-
-    // endregion
 
     enum ConfigType {
         BITBUCKET,
