@@ -3,9 +3,10 @@ package com.mooduplabs.debuggit;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.widget.EditText;
 
-public class MontserratEditText extends EditText {
+import androidx.appcompat.widget.AppCompatEditText;
+
+public class MontserratEditText extends AppCompatEditText {
 
     private static final String REGULAR_FONT = "Montserrat-Regular.ttf";
     private static final String BOLD_FONT = "Montserrat-Bold.ttf";
@@ -27,16 +28,16 @@ public class MontserratEditText extends EditText {
 
     private void setCustomFont(Context context, int defStyleAttr) {
         String style = "fonts/";
-        switch(defStyleAttr) {
-            case Typeface.BOLD:
-                style += BOLD_FONT;
-                break;
-            default:
-                style += REGULAR_FONT;
-                break;
+
+        if (defStyleAttr == Typeface.BOLD) {
+            style += BOLD_FONT;
+        } else {
+            style += REGULAR_FONT;
         }
+
         Typeface tf = Typeface.createFromAsset(context.getAssets(), style);
-        if(tf != null) {
+
+        if (tf != null) {
             this.setTypeface(tf);
         }
     }
