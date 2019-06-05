@@ -18,18 +18,18 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 public class HttpClient {
 
+    public static final String ACCEPT_HEADER = "Accept";
+    public static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String CHARSET_UTF8 = "UTF-8";
     private static final int DEFAULT_TIMEOUT_MILLIS = 15000;
     private static final String CONTENT_TYPE_KEY = "Content-type";
     private static final String CONTENT_TYPE_APPLICATION_JSON = "application/json";
-    public static final String ACCEPT_HEADER = "Accept";
-    public static final String AUTHORIZATION_HEADER = "Authorization";
-
     private URL url;
     private HttpURLConnection connection;
     private OutputStream os;
@@ -40,10 +40,6 @@ public class HttpClient {
     private Exception exception;
     private int responseCode;
     private int timeout;
-
-    private enum Method {
-        POST, PUT, DELETE, GET
-    }
 
     private HttpClient(String url, Method method) throws MalformedURLException {
         this.url = new URL(url);
@@ -307,5 +303,9 @@ public class HttpClient {
                 e.printStackTrace();
             }
         }
+    }
+
+    private enum Method {
+        POST, PUT, DELETE, GET
     }
 }

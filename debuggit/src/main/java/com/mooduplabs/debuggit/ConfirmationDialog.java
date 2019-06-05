@@ -2,14 +2,15 @@ package com.mooduplabs.debuggit;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import androidx.fragment.app.DialogFragment;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.fragment.app.DialogFragment;
+
 public class ConfirmationDialog extends DialogFragment {
-    //region Consts
+
 
     protected static final String TAG = ConfirmationDialog.class.getSimpleName();
     protected static final int TYPE_FAILURE = 0;
@@ -18,30 +19,10 @@ public class ConfirmationDialog extends DialogFragment {
     private static final String CONTAINS_LINKS = "contains_links";
     private static final String TYPE = "type";
 
-    //endregion
-
-    //region Fields
 
     private View.OnClickListener onOkClickListener;
 
-    //endregion
 
-    //region Override Methods
-
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        CustomDialog dialog = new CustomDialog(getActivity(), R.style.BrCustomDialog);
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_br_confirmation, null);
-        dialog.setContentView(v);
-
-        initViews(v);
-
-        return dialog;
-    }
-
-    //endregion
-
-    //region Methods
     protected static ConfirmationDialog newInstance(int type) {
         ConfirmationDialog dialog = new ConfirmationDialog();
 
@@ -52,6 +33,7 @@ public class ConfirmationDialog extends DialogFragment {
 
         return dialog;
     }
+
 
     protected static ConfirmationDialog newInstance(String message, boolean error) {
         ConfirmationDialog dialog = new ConfirmationDialog();
@@ -82,6 +64,17 @@ public class ConfirmationDialog extends DialogFragment {
         return dialog;
     }
 
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        CustomDialog dialog = new CustomDialog(getActivity(), R.style.BrCustomDialog);
+        View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_br_confirmation, null);
+        dialog.setContentView(v);
+
+        initViews(v);
+
+        return dialog;
+    }
+
     protected void setOnOkClickListener(View.OnClickListener onOkClickListener) {
         this.onOkClickListener = onOkClickListener;
     }
@@ -99,9 +92,9 @@ public class ConfirmationDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if (isTypeSuccess) {
-                    ((DialogFragment)getParentFragment()).dismiss();
+                    ((DialogFragment) getParentFragment()).dismiss();
                 }
-                if(onOkClickListener != null) {
+                if (onOkClickListener != null) {
                     onOkClickListener.onClick(null);
                 }
                 dismiss();
@@ -111,7 +104,7 @@ public class ConfirmationDialog extends DialogFragment {
         icon.setRotation(isTypeSuccess ? 0 : 180.0f);
 
         String text = getArguments().getString(MESSAGE, "");
-        if(text.isEmpty()) {
+        if (text.isEmpty()) {
             message.setText(getString(isTypeSuccess ? R.string.br_confirmation_success : R.string.br_confirmation_failure));
         } else {
             message.setText(text);
@@ -119,11 +112,10 @@ public class ConfirmationDialog extends DialogFragment {
 
         boolean containsLinks = getArguments().getBoolean(CONTAINS_LINKS, false);
 
-        if(containsLinks) {
+        if (containsLinks) {
             Linkify.addLinks(message, Linkify.WEB_URLS);
         }
     }
-    //endregion
 
 
 }

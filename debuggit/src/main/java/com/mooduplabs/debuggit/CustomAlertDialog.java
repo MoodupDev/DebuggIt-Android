@@ -2,14 +2,15 @@ package com.mooduplabs.debuggit;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import androidx.fragment.app.DialogFragment;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.fragment.app.DialogFragment;
+
 public class CustomAlertDialog extends DialogFragment {
-    //region Consts
+
 
     protected static final String TAG = CustomAlertDialog.class.getSimpleName();
     protected static final int TYPE_FAILURE = 0;
@@ -18,31 +19,10 @@ public class CustomAlertDialog extends DialogFragment {
     private static final String CONTAINS_LINKS = "contains_links";
     private static final String TYPE = "type";
 
-    //endregion
-
-    //region Fields
 
     private View.OnClickListener onOkClickListener;
     private View.OnClickListener onRetryClickListener;
 
-    //endregion
-
-    //region Override Methods
-
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        CustomDialog dialog = new CustomDialog(getActivity(), R.style.BrCustomDialog);
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_br_alert, null);
-        dialog.setContentView(v);
-
-        initViews(v);
-
-        return dialog;
-    }
-
-    //endregion
-
-    //region Methods
 
     protected static CustomAlertDialog newInstance(int type) {
         CustomAlertDialog dialog = new CustomAlertDialog();
@@ -54,6 +34,7 @@ public class CustomAlertDialog extends DialogFragment {
 
         return dialog;
     }
+
 
     protected static CustomAlertDialog newInstance(String message, boolean error) {
         CustomAlertDialog dialog = new CustomAlertDialog();
@@ -81,6 +62,17 @@ public class CustomAlertDialog extends DialogFragment {
     protected static CustomAlertDialog newInstance(String message, boolean error, View.OnClickListener onRetryClickListener) {
         CustomAlertDialog dialog = CustomAlertDialog.newInstance(message, error);
         dialog.setOnRetryClickListener(onRetryClickListener);
+        return dialog;
+    }
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        CustomDialog dialog = new CustomDialog(getActivity(), R.style.BrCustomDialog);
+        View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_br_alert, null);
+        dialog.setContentView(v);
+
+        initViews(v);
+
         return dialog;
     }
 
@@ -143,7 +135,6 @@ public class CustomAlertDialog extends DialogFragment {
             Linkify.addLinks(message, Linkify.WEB_URLS);
         }
     }
-    //endregion
 
 
 }

@@ -6,13 +6,14 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Build;
-import androidx.fragment.app.FragmentActivity;
-import androidx.core.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+
+import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.FragmentActivity;
 
 import com.mooduplabs.debuggit.ShakeDetector.ShakeListener;
 
@@ -58,6 +59,10 @@ public class DebuggIt {
 
     // region Methods
 
+    private DebuggIt() {
+        // one instance
+    }
+
     public static DebuggIt getInstance() {
         if (instance == null) {
             instance = new DebuggIt();
@@ -66,19 +71,18 @@ public class DebuggIt {
         return instance;
     }
 
-    public void setRecordingEnabled(boolean enabled) {
-        recordingEnabled = enabled;
-    }
-
     protected boolean isRecordingEnabled() {
         return recordingEnabled;
+    }
+
+    public void setRecordingEnabled(boolean enabled) {
+        recordingEnabled = enabled;
     }
 
     public void initBitbucket(String repoSlug, String accountName) {
         this.apiService = new BitBucketApiService(repoSlug, accountName);
         init(ConfigType.BITBUCKET);
     }
-
 
     public void initJira(String host, String projectKey, boolean usesHttps) {
         this.apiService = new JiraApiService(host, projectKey, usesHttps);
@@ -290,10 +294,10 @@ public class DebuggIt {
 
     private void initReportButtonOnTouchListener(final FrameLayout rootLayout) {
         getReportButton().setOnTouchListener(new View.OnTouchListener() {
+            final int MOVE_TOLERANCE = 5;
             float dY;
             float previousY;
             boolean isMoving = false;
-            final int MOVE_TOLERANCE = 5;
 
             @Override
             public boolean onTouch(View view, MotionEvent event) {
@@ -507,10 +511,6 @@ public class DebuggIt {
         });
 
         cantCheckVersionDialog.show(((FragmentActivity) getActivity()).getSupportFragmentManager(), CustomAlertDialog.TAG);
-    }
-
-    private DebuggIt() {
-        // one instance
     }
 
     // endregion

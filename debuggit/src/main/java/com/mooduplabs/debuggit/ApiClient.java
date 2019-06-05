@@ -14,27 +14,6 @@ public class ApiClient {
     public static final String EVENTS_URL = BuildConfig.API_BASE_URL + "/api/v2/events";
     public static final String SUPPORTED_VERSION_URL = BuildConfig.API_BASE_URL + "/api/v2/supported_versions/android/%s";
 
-    protected enum EventType {
-        INITIALIZED,
-        HAS_UNSUPPORTED_VERSION,
-        SCREENSHOT_ADDED,
-        SCREENSHOT_ADDED_RECTANGLE,
-        SCREENSHOT_ADDED_DRAW,
-        SCREENSHOT_REMOVED,
-        SCREENSHOT_AMOUNT,
-        AUDIO_ADDED,
-        AUDIO_RECORD_TIME,
-        AUDIO_PLAYED,
-        AUDIO_REMOVED,
-        AUDIO_AMOUNT,
-        REPORT_SENT,
-        REPORT_CANCELED,
-        ACTUAL_BEHAVIOUR_FILLED,
-        STEPS_TO_REPRODUCE_FILLED,
-        EXPECTED_BEHAVIOUR_FILLED,
-        APP_CRASHED
-    }
-
     protected static void checkVersion(StringResponseCallback callback) {
         try {
             HttpClient.get(String.format(SUPPORTED_VERSION_URL, BuildConfig.VERSION_NAME)).send(callback);
@@ -63,7 +42,6 @@ public class ApiClient {
         }
     }
 
-
     protected static void uploadImage(String imageData, String appId, JsonResponseCallback callback) {
         HashMap<String, String> data = new HashMap<>();
         data.put(Constants.Keys.DATA, imageData);
@@ -86,5 +64,26 @@ public class ApiClient {
         } catch (UnsupportedEncodingException | MalformedURLException e) {
             callback.onException(e);
         }
+    }
+
+    protected enum EventType {
+        INITIALIZED,
+        HAS_UNSUPPORTED_VERSION,
+        SCREENSHOT_ADDED,
+        SCREENSHOT_ADDED_RECTANGLE,
+        SCREENSHOT_ADDED_DRAW,
+        SCREENSHOT_REMOVED,
+        SCREENSHOT_AMOUNT,
+        AUDIO_ADDED,
+        AUDIO_RECORD_TIME,
+        AUDIO_PLAYED,
+        AUDIO_REMOVED,
+        AUDIO_AMOUNT,
+        REPORT_SENT,
+        REPORT_CANCELED,
+        ACTUAL_BEHAVIOUR_FILLED,
+        STEPS_TO_REPRODUCE_FILLED,
+        EXPECTED_BEHAVIOUR_FILLED,
+        APP_CRASHED
     }
 }

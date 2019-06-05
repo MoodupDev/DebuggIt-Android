@@ -44,6 +44,21 @@ public class PaintableImageView extends AppCompatImageView {
     private float x, y;
 
 
+    public PaintableImageView(Context context) {
+        super(context);
+        init(context);
+    }
+
+    public PaintableImageView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(context);
+    }
+
+    public PaintableImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(context);
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (isEnabled()) {
@@ -129,21 +144,6 @@ public class PaintableImageView extends AppCompatImageView {
         }
     }
 
-    public PaintableImageView(Context context) {
-        super(context);
-        init(context);
-    }
-
-    public PaintableImageView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init(context);
-    }
-
-    public PaintableImageView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init(context);
-    }
-
     private void init(Context context) {
         path = new Path();
         bitmapPaint = new Paint(Paint.DITHER_FLAG);
@@ -160,13 +160,13 @@ public class PaintableImageView extends AppCompatImageView {
         points = new Point[4];
     }
 
+    protected int getType() {
+        return type;
+    }
+
     protected void setType(int type) {
         drawActiveRectangle();
         this.type = type;
-    }
-
-    protected int getType() {
-        return type;
     }
 
     protected void drawActiveRectangle() {
@@ -405,10 +405,9 @@ public class PaintableImageView extends AppCompatImageView {
     static class Corner {
 
         static int count;
-
+        int id;
         private Bitmap bitmap;
         private Point point;
-        int id;
 
         public Corner(Context context, int resourceId, Point point) {
             this.bitmap = BitmapFactory.decodeResource(context.getResources(), resourceId);
@@ -432,20 +431,20 @@ public class PaintableImageView extends AppCompatImageView {
             return point.x;
         }
 
-        protected int getY() {
-            return point.y;
-        }
-
-        protected int getID() {
-            return id;
-        }
-
         protected void setX(int x) {
             point.x = x;
         }
 
+        protected int getY() {
+            return point.y;
+        }
+
         protected void setY(int y) {
             point.y = y;
+        }
+
+        protected int getID() {
+            return id;
         }
     }
 

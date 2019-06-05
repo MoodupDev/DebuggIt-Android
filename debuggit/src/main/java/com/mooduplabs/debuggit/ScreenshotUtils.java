@@ -27,7 +27,7 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 public class ScreenshotUtils {
-    //region Consts
+
 
     protected static final int SCREENSHOT_REQUEST_CODE = 345;
     private static final String SCREENSHOT_VIRTUAL_DISPLAY_NAME = "screenshot-virtual-display";
@@ -40,17 +40,11 @@ public class ScreenshotUtils {
             0, 0, 0, 1f, 0
     };
 
-    //endregion
-
-    //region Fields
 
     private static Handler handler;
     private static boolean nextScreenshotCanceled;
     private static Boolean canTakeScreenshot = null;
 
-    //endregion
-
-    //region Methods
 
     private static Rect getScreenSize(Activity activity) {
         Rect rect = new Rect();
@@ -64,7 +58,7 @@ public class ScreenshotUtils {
                 MediaProjectionManager projectionManager = (MediaProjectionManager) activity.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
                 activity.startActivityForResult(projectionManager.createScreenCaptureIntent(), SCREENSHOT_REQUEST_CODE);
                 return true;
-            } catch(ActivityNotFoundException e) {
+            } catch (ActivityNotFoundException e) {
                 return false;
             }
         }
@@ -263,13 +257,12 @@ public class ScreenshotUtils {
     }
 
     public static boolean canTakeScreenshot(Activity activity) {
-        if(canTakeScreenshot == null) {
+        if (canTakeScreenshot == null) {
             canTakeScreenshot = getScreenshotPermission(activity);
         }
         return canTakeScreenshot;
     }
 
-    //endregion
 
     interface ScreenshotListener {
         void onScreenshotReady(Bitmap bitmap);

@@ -3,12 +3,13 @@ package com.mooduplabs.debuggit;
 import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import androidx.fragment.app.DialogFragment;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+
+import androidx.fragment.app.DialogFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,10 +18,9 @@ import java.io.ByteArrayOutputStream;
 
 public class DrawFragment extends DialogFragment {
 
+    public static final String SCREENSHOT = "screenshot";
     protected static final String TAG = DrawFragment.class.getSimpleName();
     protected static final String FREE_DRAW_ACTIVE = "free_draw_active";
-    public static final String SCREENSHOT = "screenshot";
-
     private View surfaceRoot;
     private ImageView screenSurface;
     private PaintableImageView drawingSurface;
@@ -37,6 +37,12 @@ public class DrawFragment extends DialogFragment {
     private boolean uploadCancelled;
     private boolean uploadedImagePending;
     private boolean savedInstanceStateDone;
+
+    protected static DrawFragment newInstance(Bitmap screenshot) {
+        DrawFragment fragment = new DrawFragment();
+        fragment.screenshot = screenshot;
+        return fragment;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -83,12 +89,6 @@ public class DrawFragment extends DialogFragment {
         outState.putParcelable(SCREENSHOT, screenshot);
         super.onSaveInstanceState(outState);
         savedInstanceStateDone = true;
-    }
-
-    protected static DrawFragment newInstance(Bitmap screenshot) {
-        DrawFragment fragment = new DrawFragment();
-        fragment.screenshot = screenshot;
-        return fragment;
     }
 
     private void initViews(View view) {

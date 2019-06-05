@@ -5,16 +5,14 @@ import java.net.MalformedURLException;
 import java.util.HashMap;
 
 public class BitBucketApiService implements ApiService {
-
-    //region Fields
-
     private String repoSlug;
     private String accountName;
     private String accessToken;
 
-    //endregion
-
-    //region Override Methods
+    public BitBucketApiService(String repoSlug, String accountName) {
+        this.repoSlug = repoSlug;
+        this.accountName = accountName;
+    }
 
     @Override
     public void addIssue(String title, String content, String priority, String kind, StringResponseCallback callback) {
@@ -74,20 +72,7 @@ public class BitBucketApiService implements ApiService {
         }
     }
 
-    //endregion
-
-    //region Methods
-
-    public BitBucketApiService(String repoSlug, String accountName) {
-        this.repoSlug = repoSlug;
-        this.accountName = accountName;
-    }
-
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
     }
-
-    //endregion
-
-
 }

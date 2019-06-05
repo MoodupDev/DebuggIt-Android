@@ -2,13 +2,14 @@ package com.mooduplabs.debuggit;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
-import androidx.core.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.DialogFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,13 +17,10 @@ import org.json.JSONObject;
 import javax.net.ssl.HttpsURLConnection;
 
 public class DialogLoginFragment extends DialogFragment {
-    //region Consts
+
 
     public static final String TAG = DialogLoginFragment.class.getSimpleName();
 
-    //endregion
-
-    //region Fields
 
     private LoadingDialog loadingDialog;
     private MontserratEditText email;
@@ -30,9 +28,15 @@ public class DialogLoginFragment extends DialogFragment {
     private LinearLayout twoFactorAuthCodeLayout;
     private MontserratEditText twoFactorAuthCode;
 
-    //endregion
 
-    //region Override Methods
+    public DialogLoginFragment() {
+        // Required empty public constructor
+    }
+
+
+    protected static DialogLoginFragment newInstance() {
+        return new DialogLoginFragment();
+    }
 
     @NonNull
     @Override
@@ -44,18 +48,6 @@ public class DialogLoginFragment extends DialogFragment {
         initView(view);
 
         return dialog;
-    }
-
-    //endregion
-
-    //region Methods
-
-    public DialogLoginFragment() {
-        // Required empty public constructor
-    }
-
-    protected static DialogLoginFragment newInstance() {
-        return new DialogLoginFragment();
     }
 
     private void initView(View view) {
@@ -78,7 +70,7 @@ public class DialogLoginFragment extends DialogFragment {
                             @Override
                             public void onSuccess(JSONObject response) {
                                 loadingDialog.dismiss();
-                                switch(DebuggIt.getInstance().getConfigType()) {
+                                switch (DebuggIt.getInstance().getConfigType()) {
 
                                     case BITBUCKET:
                                         handleBitBucketLoginResponse(response);
@@ -96,8 +88,8 @@ public class DialogLoginFragment extends DialogFragment {
                             @Override
                             public void onFailure(int responseCode, String errorMessage) {
                                 loadingDialog.dismiss();
-                                if(responseCode == HttpsURLConnection.HTTP_BAD_REQUEST || responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-                                    if(DebuggIt.getInstance().getConfigType() == DebuggIt.ConfigType.GITHUB && errorMessage.contains("two-factor")) {
+                                if (responseCode == HttpsURLConnection.HTTP_BAD_REQUEST || responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
+                                    if (DebuggIt.getInstance().getConfigType() == DebuggIt.ConfigType.GITHUB && errorMessage.contains("two-factor")) {
                                         ConfirmationDialog.newInstance(getString(R.string.br_login_error_2fa_required), true, new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
@@ -126,7 +118,7 @@ public class DialogLoginFragment extends DialogFragment {
 
     private void saveTwoFactorCode() {
         String code = twoFactorAuthCode.getText().toString();
-        if(!code.isEmpty()) {
+        if (!code.isEmpty()) {
             Utils.putString(getActivity(), Constants.GitHub.TWO_FACTOR_AUTH_CODE, code);
             DebuggIt.getInstance().applySavedTokens();
         }
@@ -137,7 +129,7 @@ public class DialogLoginFragment extends DialogFragment {
         password = view.findViewById(R.id.login_password);
         twoFactorAuthCodeLayout = view.findViewById(R.id.login_2fa_layout);
         twoFactorAuthCode = view.findViewById(R.id.login_2fa_code);
-        if(DebuggIt.getInstance().getConfigType() == DebuggIt.ConfigType.GITHUB) {
+        if (DebuggIt.getInstance().getConfigType() == DebuggIt.ConfigType.GITHUB) {
             email.setHint(R.string.br_login_hint_email_username);
         }
     }
@@ -146,7 +138,7 @@ public class DialogLoginFragment extends DialogFragment {
         ImageView serviceLogo = view.findViewById(R.id.service_logo);
         int logoResId = 0;
         String serviceName = "";
-        switch(DebuggIt.getInstance().getConfigType()) {
+        switch (DebuggIt.getInstance().getConfigType()) {
             case BITBUCKET:
                 logoResId = R.drawable.debugg_and_bitbucket;
                 serviceName = getString(R.string.br_service_bitbucket);
@@ -169,7 +161,7 @@ public class DialogLoginFragment extends DialogFragment {
         try {
             Utils.putString(getActivity(), Constants.GitHub.GITHUB_ACCESS_TOKEN, response.getString(Constants.Keys.TOKEN));
             ConfirmationDialog.newInstance(getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-        } catch(JSONException e) {
+        } catch (JSONException e) {
             ConfirmationDialog.newInstance(getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
         }
     }
@@ -184,12 +176,10 @@ public class DialogLoginFragment extends DialogFragment {
         try {
             DebuggIt.getInstance().saveTokens(response);
             ConfirmationDialog.newInstance(getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-        } catch(JSONException e) {
+        } catch (JSONException e) {
             ConfirmationDialog.newInstance(getString(R.string.br_login_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
         }
     }
-
-    //endregion
 
 
 }
