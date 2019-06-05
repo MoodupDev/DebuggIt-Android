@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center"
-              android:layout_margin="@dimen/br.big.margin"
-              android:gravity="center"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="@dimen/br.big.margin"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,50 +19,51 @@
             android:id="@+id/debuggit_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/br.small.margin"
             android:layout_marginTop="@dimen/br.big.margin"
-            android:src="@drawable/debugg_in_popup"/>
+            android:layout_marginBottom="@dimen/br.small.margin"
+            android:src="@drawable/debugg_in_popup" />
 
         <com.mooduplabs.debuggit.MontserratTextView
             android:id="@+id/welcome_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/br.big.margin"
             android:layout_marginLeft="@dimen/br.small.margin"
-            android:layout_marginRight="@dimen/br.small.margin"
             android:layout_marginTop="@dimen/br.small.margin"
+            android:layout_marginRight="@dimen/br.small.margin"
+            android:layout_marginBottom="@dimen/br.big.margin"
             android:gravity="center"
             android:text="@string/br.welcome.text"
-            android:textSize="@dimen/br.text.size.regular"
             android:textColor="@color/br.dialog.text.color"
-            android:textStyle="bold"/>
+            android:textSize="@dimen/br.text.size.regular"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
             android:layout_marginLeft="@dimen/br.very.big.margin"
             android:layout_marginRight="@dimen/br.very.big.margin"
-            android:layout_marginBottom="@dimen/br.big.margin">
+            android:layout_marginBottom="@dimen/br.big.margin"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/phone_tap"
-                android:layout_weight="2"/>
+                android:layout_weight="2"
+                android:src="@drawable/phone_tap" />
+
             <com.mooduplabs.debuggit.MontserratTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/br.welcome.or"
-                android:textColor="@color/br.dialog.text.color"
-                android:layout_weight="1"/>
+                android:textColor="@color/br.dialog.text.color" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/phone_shake"
-                android:layout_weight="2"/>
+                android:layout_weight="2"
+                android:src="@drawable/phone_shake" />
 
         </LinearLayout>
 
@@ -70,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/br.divider.height"
             android:layout_marginTop="@dimen/br.small.margin"
-            android:background="@color/br.app.gray"/>
+            android:background="@color/br.app.gray" />
 
         <com.mooduplabs.debuggit.MontserratTextView
             android:id="@+id/welcome_lets_go_button"
@@ -81,7 +82,7 @@
             android:text="@string/br.welcome.button"
             android:textColor="@drawable/dialog_text_color"
             android:textSize="@dimen/br.text.size.regular"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
     </LinearLayout>
 </LinearLayout>

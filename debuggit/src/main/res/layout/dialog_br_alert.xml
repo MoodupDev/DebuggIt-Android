@@ -20,8 +20,8 @@
             android:id="@+id/alert_dialog_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/br.big.margin"
             android:layout_marginTop="@dimen/br.small.margin"
+            android:layout_marginBottom="@dimen/br.big.margin"
             android:src="@drawable/thumbs_up" />
 
         <com.mooduplabs.debuggit.MontserratTextView

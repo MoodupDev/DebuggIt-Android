@@ -23,10 +23,10 @@
             android:id="@+id/draw_confirm"
             style="@style/BrBarTextButton"
             android:layout_alignParentRight="true"
-            android:background="@drawable/button_send"
-            android:textColor="@android:color/white"
             android:layout_marginRight="@dimen/br.report.button.margin.horizontal"
-            android:text="@string/br.button.next" />
+            android:background="@drawable/button_send"
+            android:text="@string/br.button.next"
+            android:textColor="@android:color/white" />
     </RelativeLayout>
 
     <View
