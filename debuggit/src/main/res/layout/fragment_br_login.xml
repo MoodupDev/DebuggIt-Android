@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="@dimen/br.confirmation.dialog.width"
-              android:layout_height="wrap_content"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_gravity="center"
-              android:gravity="center"
-              android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/br.confirmation.dialog.width"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -25,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="@dimen/br.big.margin"
-                tools:src="@drawable/debugg_and_bitbucket"/>
+                tools:src="@drawable/debugg_and_bitbucket" />
 
             <com.mooduplabs.debuggit.MontserratTextView
                 android:id="@+id/login_info"
@@ -35,14 +34,14 @@
                 android:layout_margin="@dimen/br.small.margin"
                 android:gravity="center_horizontal"
                 android:text="@string/br.login.info"
-                android:textColor="@color/br.dialog.text.color"/>
+                android:textColor="@color/br.dialog.text.color" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/br.big.margin"
-                android:layout_marginRight="@dimen/br.big.margin"
                 android:layout_marginTop="@dimen/br.small.margin"
+                android:layout_marginRight="@dimen/br.big.margin"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -50,24 +49,24 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="@dimen/br.small.margin"
-                    android:src="@drawable/login_email"/>
+                    android:src="@drawable/login_email" />
 
                 <com.mooduplabs.debuggit.MontserratEditText
-                    style="@style/BrBaseEditText"
                     android:id="@+id/login_email"
+                    style="@style/BrBaseEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/br.login.hint.email"
-                    android:inputType="textEmailAddress"/>
+                    android:inputType="textEmailAddress" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/br.small.margin"
                 android:layout_marginLeft="@dimen/br.big.margin"
-                android:layout_marginRight="@dimen/br.big.margin"
                 android:layout_marginTop="@dimen/br.small.margin"
+                android:layout_marginRight="@dimen/br.big.margin"
+                android:layout_marginBottom="@dimen/br.small.margin"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -75,15 +74,15 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="@dimen/br.small.margin"
-                    android:src="@drawable/login_password"/>
+                    android:src="@drawable/login_password" />
 
                 <com.mooduplabs.debuggit.MontserratEditText
-                    style="@style/BrBaseEditText"
                     android:id="@+id/login_password"
+                    style="@style/BrBaseEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/br.login.hint.password"
-                    android:inputType="textPassword"/>
+                    android:inputType="textPassword" />
             </LinearLayout>
 
             <LinearLayout
@@ -91,8 +90,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/br.big.margin"
-                android:layout_marginRight="@dimen/br.big.margin"
                 android:layout_marginTop="@dimen/br.small.margin"
+                android:layout_marginRight="@dimen/br.big.margin"
                 android:orientation="horizontal"
                 android:visibility="gone">
 
@@ -101,22 +100,22 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="@dimen/br.small.margin"
-                    android:src="@drawable/login_password"/>
+                    android:src="@drawable/login_password" />
 
                 <com.mooduplabs.debuggit.MontserratEditText
-                    style="@style/BrBaseEditText"
                     android:id="@+id/login_2fa_code"
+                    style="@style/BrBaseEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/br.login.hint.2fa.code"
-                    android:inputType="textEmailAddress"/>
+                    android:inputType="textEmailAddress" />
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/br.divider.height"
                 android:layout_marginTop="@dimen/br.small.margin"
-                android:background="@color/br.app.gray"/>
+                android:background="@color/br.app.gray" />
 
             <com.mooduplabs.debuggit.MontserratTextView
                 android:id="@+id/bitbucket_login_button"
@@ -128,7 +127,7 @@
                 android:padding="@dimen/br.small.padding"
                 android:text="@string/br.login.sign.in"
                 android:textColor="@color/br.dialog.text.color"
-                android:textSize="@dimen/br.text.size.regular"/>
+                android:textSize="@dimen/br.text.size.regular" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

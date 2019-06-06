@@ -9,23 +9,18 @@ import java.net.MalformedURLException;
 import java.util.HashMap;
 
 public class GitHubApiService implements ApiService {
-    //region Consts
-
     private static final String TOKEN_FORMAT = "token %s";
     private static final String AUTH_NOTE_FORMAT = "debugg.it library at %s";
-
-    //endregion
-
-    //region Fields
 
     private String accessToken;
     private String accountName;
     private String repoSlug;
     private String twoFactorAuthCode;
 
-    //endregion
-
-    //region Override Methods
+    protected GitHubApiService(String accountName, String repoSlug) {
+        this.repoSlug = repoSlug;
+        this.accountName = accountName;
+    }
 
     @Override
     public void login(String email, String password, JsonResponseCallback callback) {
@@ -73,21 +68,6 @@ public class GitHubApiService implements ApiService {
         // tokens don't have to expire
     }
 
-
-    //endregion
-
-    //region Events
-
-    //endregion
-
-    //region Methods
-
-
-    protected GitHubApiService(String accountName, String repoSlug) {
-        this.repoSlug = repoSlug;
-        this.accountName = accountName;
-    }
-
     private JSONObject getAuthJsonObject() {
         JSONObject auth = new JSONObject();
         JSONArray scopes = new JSONArray();
@@ -133,8 +113,4 @@ public class GitHubApiService implements ApiService {
     protected void setTwoFactorAuthCode(String twoFactorAuthCode) {
         this.twoFactorAuthCode = twoFactorAuthCode;
     }
-
-    //endregion
-
-
 }

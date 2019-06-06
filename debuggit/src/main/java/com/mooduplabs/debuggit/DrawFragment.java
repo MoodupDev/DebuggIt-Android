@@ -3,12 +3,13 @@ package com.mooduplabs.debuggit;
 import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import androidx.fragment.app.DialogFragment;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+
+import androidx.fragment.app.DialogFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,11 +17,9 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 
 public class DrawFragment extends DialogFragment {
-
+    public static final String SCREENSHOT = "screenshot";
     protected static final String TAG = DrawFragment.class.getSimpleName();
     protected static final String FREE_DRAW_ACTIVE = "free_draw_active";
-    public static final String SCREENSHOT = "screenshot";
-
     private View surfaceRoot;
     private ImageView screenSurface;
     private PaintableImageView drawingSurface;
@@ -37,6 +36,12 @@ public class DrawFragment extends DialogFragment {
     private boolean uploadCancelled;
     private boolean uploadedImagePending;
     private boolean savedInstanceStateDone;
+
+    protected static DrawFragment newInstance(Bitmap screenshot) {
+        DrawFragment fragment = new DrawFragment();
+        fragment.screenshot = screenshot;
+        return fragment;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -69,7 +74,6 @@ public class DrawFragment extends DialogFragment {
         if (uploadedImagePending) {
             onImageUploaded(savedResponse);
         }
-
     }
 
     @Override
@@ -85,21 +89,15 @@ public class DrawFragment extends DialogFragment {
         savedInstanceStateDone = true;
     }
 
-    protected static DrawFragment newInstance(Bitmap screenshot) {
-        DrawFragment fragment = new DrawFragment();
-        fragment.screenshot = screenshot;
-        return fragment;
-    }
-
     private void initViews(View view) {
         surfaceRoot = view.findViewById(R.id.surface_root);
-        screenSurface = (ImageView) view.findViewById(R.id.image_surface);
-        drawingSurface = (PaintableImageView) view.findViewById(R.id.draw_surface);
-        cancel = (MontserratTextView) view.findViewById(R.id.draw_cancel);
-        confirm = (MontserratTextView) view.findViewById(R.id.draw_confirm);
-        rubber = (ImageView) view.findViewById(R.id.draw_rubber);
-        freeDraw = (ImageView) view.findViewById(R.id.draw_free);
-        rectanglesDraw = (ImageView) view.findViewById(R.id.draw_rectangles);
+        screenSurface = view.findViewById(R.id.image_surface);
+        drawingSurface = view.findViewById(R.id.draw_surface);
+        cancel = view.findViewById(R.id.draw_cancel);
+        confirm = view.findViewById(R.id.draw_confirm);
+        rubber = view.findViewById(R.id.draw_rubber);
+        freeDraw = view.findViewById(R.id.draw_free);
+        rectanglesDraw = view.findViewById(R.id.draw_rectangles);
         dialog = LoadingDialog.newInstance(getString(R.string.br_loading_dialog_message_screenshot), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,7 +121,7 @@ public class DrawFragment extends DialogFragment {
 
     private void initDrawingSurface() {
         View rootView = getActivity().findViewById(android.R.id.content);
-        ImageView reportButton = (ImageView) rootView.findViewById(R.id.report_button);
+        ImageView reportButton = rootView.findViewById(R.id.report_button);
         if (reportButton != null) {
             reportButton.setVisibility(View.INVISIBLE);
         }

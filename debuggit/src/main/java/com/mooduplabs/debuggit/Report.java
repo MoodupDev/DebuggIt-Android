@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Report {
-
     private static final String STEPS_TO_REPRODUCE_TITLE = "%1$sSteps to reproduce%1$s: ";
     private static final String ACTUAL_BEHAVIOUR_TITLE = "%1$sActual behaviour%1$s: ";
     private static final String EXPECTED_BEHAVIOUR_TITLE = "%1$sExpected behaviour%1$s: ";
@@ -96,7 +95,7 @@ public class Report {
 
     protected String getContent(Activity activity) {
         String boldMark;
-        switch(DebuggIt.getInstance().getConfigType()) {
+        switch (DebuggIt.getInstance().getConfigType()) {
             case JIRA:
                 boldMark = "*";
                 break;
@@ -110,10 +109,10 @@ public class Report {
                 String.format(ACTUAL_BEHAVIOUR_TITLE, boldMark) + getActualBehaviour() + END_LINE +
                 String.format(EXPECTED_BEHAVIOUR_TITLE, boldMark) + getExpectedBehaviour() + END_LINE
                 + (
-                    DebuggIt.getInstance().getConfigType() == DebuggIt.ConfigType.GITHUB
-                    ? String.format(PRIORITY_TITLE, boldMark) + getPriority() + END_LINE
-                    : ""
-                )
+                DebuggIt.getInstance().getConfigType() == DebuggIt.ConfigType.GITHUB
+                        ? String.format(PRIORITY_TITLE, boldMark) + getPriority() + END_LINE
+                        : ""
+        )
                 + Utils.getScreenModelsAsStrings(screensUrls)
                 + Utils.getAudioUrlsAsStrings(audioUrls)
                 + Utils.getDeviceInfoString(activity);

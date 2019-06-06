@@ -22,14 +22,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpClient {
-
+    public static final String ACCEPT_HEADER = "Accept";
+    public static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String CHARSET_UTF8 = "UTF-8";
     private static final int DEFAULT_TIMEOUT_MILLIS = 15000;
     private static final String CONTENT_TYPE_KEY = "Content-type";
     private static final String CONTENT_TYPE_APPLICATION_JSON = "application/json";
-    public static final String ACCEPT_HEADER = "Accept";
-    public static final String AUTHORIZATION_HEADER = "Authorization";
-
     private URL url;
     private HttpURLConnection connection;
     private OutputStream os;
@@ -40,10 +38,6 @@ public class HttpClient {
     private Exception exception;
     private int responseCode;
     private int timeout;
-
-    private enum Method {
-        POST, PUT, DELETE, GET
-    }
 
     private HttpClient(String url, Method method) throws MalformedURLException {
         this.url = new URL(url);
@@ -75,7 +69,7 @@ public class HttpClient {
 
     public HttpClient withData(String data) {
         this.data = data;
-        if(isDataJson(data)) {
+        if (isDataJson(data)) {
             setContentTypeToJson();
         }
         return this;
@@ -85,7 +79,7 @@ public class HttpClient {
         try {
             JSONObject object = new JSONObject(data);
             return true;
-        } catch(JSONException e) {
+        } catch (JSONException e) {
             return false;
         }
     }
@@ -158,10 +152,10 @@ public class HttpClient {
 
             @Override
             protected void onPostExecute(Void aVoid) {
-                if(exception != null) {
+                if (exception != null) {
                     callback.onException(exception);
                 } else {
-                    if(isSuccessful()) {
+                    if (isSuccessful()) {
                         callback.onSuccess(response);
                     } else {
                         callback.onFailure(responseCode, response);
@@ -183,13 +177,13 @@ public class HttpClient {
 
             @Override
             protected void onPostExecute(Void aVoid) {
-                if(exception != null) {
+                if (exception != null) {
                     callback.onException(exception);
                 } else {
-                    if(isSuccessful()) {
+                    if (isSuccessful()) {
                         try {
                             callback.onSuccess(new JSONObject(response));
-                        } catch(JSONException e) {
+                        } catch (JSONException e) {
                             callback.onException(e);
                         }
                     } else {
@@ -206,22 +200,22 @@ public class HttpClient {
         try {
             connect();
             readResponse();
-        } catch(IOException e) {
+        } catch (IOException e) {
             exception = e;
         }
     }
 
     private void readResponse() throws IOException {
-        if(isSuccessful()) {
+        if (isSuccessful()) {
             try {
                 response = readStringResponse(connection.getInputStream());
-            } catch(IOException e) {
+            } catch (IOException e) {
                 exception = e;
             }
         } else {
             try {
                 response = readStringResponse(connection.getErrorStream());
-            } catch(Exception e) {
+            } catch (Exception e) {
                 exception = e;
             }
         }
@@ -236,7 +230,7 @@ public class HttpClient {
     }
 
     private void setHeaders() {
-        for(Map.Entry<String, String> header : headers.entrySet()) {
+        for (Map.Entry<String, String> header : headers.entrySet()) {
             connection.addRequestProperty(header.getKey(), header.getValue());
         }
     }
@@ -248,7 +242,7 @@ public class HttpClient {
     private String readStringResponse(InputStream stream) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(stream));
         StringBuilder response = new StringBuilder();
-        for(String line; (line = br.readLine()) != null; ) response.append(line).append("\n");
+        for (String line; (line = br.readLine()) != null; ) response.append(line).append("\n");
         br.close();
         return response.toString();
     }
@@ -262,7 +256,7 @@ public class HttpClient {
         connection.setRequestMethod(method.name());
         connection.setReadTimeout(timeout);
         connection.setConnectTimeout(timeout);
-        if(method == Method.POST || method == Method.PUT) {
+        if (method == Method.POST || method == Method.PUT) {
             connection.setDoOutput(true);
             os = connection.getOutputStream();
         }
@@ -275,8 +269,8 @@ public class HttpClient {
     private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
         StringBuilder result = new StringBuilder();
         boolean first = true;
-        for(Map.Entry<String, String> entry : params.entrySet()) {
-            if(first) {
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            if (first) {
                 first = false;
             } else {
                 result.append("&");
@@ -295,7 +289,7 @@ public class HttpClient {
     }
 
     private void writeToOutputStream(String data) {
-        if((method == Method.POST || method == Method.PUT) && data != null) {
+        if ((method == Method.POST || method == Method.PUT) && data != null) {
             BufferedWriter writer;
             try {
                 writer = new BufferedWriter(new OutputStreamWriter(os, CHARSET_UTF8));
@@ -303,9 +297,13 @@ public class HttpClient {
                 writer.flush();
                 writer.close();
                 os.close();
-            } catch(IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private enum Method {
+        POST, PUT, DELETE, GET
     }
 }

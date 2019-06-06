@@ -6,13 +6,14 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Build;
-import androidx.fragment.app.FragmentActivity;
-import androidx.core.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+
+import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.FragmentActivity;
 
 import com.mooduplabs.debuggit.ShakeDetector.ShakeListener;
 
@@ -22,15 +23,8 @@ import org.json.JSONObject;
 import java.lang.ref.WeakReference;
 
 public class DebuggIt {
-
-    // region Consts
-
     protected static final String BUTTON_POSITION_PORTRAIT = "button_position_portrait";
     protected static final String BUTTON_POSITION_LANDSCAPE = "button_position_landscape";
-
-    // endregion
-
-    // region Fields
 
     private static DebuggIt instance;
 
@@ -54,9 +48,9 @@ public class DebuggIt {
     private Report report;
     private LoadingDialog checkVersionLoadingDialog;
 
-    // endregion
-
-    // region Methods
+    private DebuggIt() {
+        // one instance
+    }
 
     public static DebuggIt getInstance() {
         if (instance == null) {
@@ -66,19 +60,18 @@ public class DebuggIt {
         return instance;
     }
 
-    public void setRecordingEnabled(boolean enabled) {
-        recordingEnabled = enabled;
-    }
-
     protected boolean isRecordingEnabled() {
         return recordingEnabled;
+    }
+
+    public void setRecordingEnabled(boolean enabled) {
+        recordingEnabled = enabled;
     }
 
     public void initBitbucket(String repoSlug, String accountName) {
         this.apiService = new BitBucketApiService(repoSlug, accountName);
         init(ConfigType.BITBUCKET);
     }
-
 
     public void initJira(String host, String projectKey, boolean usesHttps) {
         this.apiService = new JiraApiService(host, projectKey, usesHttps);
@@ -264,7 +257,7 @@ public class DebuggIt {
     }
 
     private void addReportButton() {
-        final FrameLayout rootLayout = (FrameLayout) getActivity().findViewById(android.R.id.content);
+        final FrameLayout rootLayout = getActivity().findViewById(android.R.id.content);
         reportButton = new WeakReference<>(rootLayout.findViewById(R.id.report_button));
         if (getReportButton() == null) {
             reportButton = new WeakReference<>(LayoutInflater.from(getActivity()).inflate(R.layout.layout_br_report_button, rootLayout, false));
@@ -290,10 +283,10 @@ public class DebuggIt {
 
     private void initReportButtonOnTouchListener(final FrameLayout rootLayout) {
         getReportButton().setOnTouchListener(new View.OnTouchListener() {
+            final int MOVE_TOLERANCE = 5;
             float dY;
             float previousY;
             boolean isMoving = false;
-            final int MOVE_TOLERANCE = 5;
 
             @Override
             public boolean onTouch(View view, MotionEvent event) {
@@ -508,12 +501,6 @@ public class DebuggIt {
 
         cantCheckVersionDialog.show(((FragmentActivity) getActivity()).getSupportFragmentManager(), CustomAlertDialog.TAG);
     }
-
-    private DebuggIt() {
-        // one instance
-    }
-
-    // endregion
 
     enum ConfigType {
         BITBUCKET,

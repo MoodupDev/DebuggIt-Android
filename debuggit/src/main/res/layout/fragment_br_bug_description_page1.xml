@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/br.bar.background">
@@ -19,12 +18,12 @@
             <com.mooduplabs.debuggit.MontserratTextView
                 android:id="@+id/kind_bug_button"
                 style="@style/BrReportButton"
-                android:text="@string/br.kind.bug"/>
+                android:text="@string/br.kind.bug" />
 
             <com.mooduplabs.debuggit.MontserratTextView
                 android:id="@+id/kind_enhancement_button"
                 style="@style/BrReportButton"
-                android:text="@string/br.kind.enhancement"/>
+                android:text="@string/br.kind.enhancement" />
 
         </LinearLayout>
 
@@ -37,17 +36,17 @@
             <com.mooduplabs.debuggit.MontserratTextView
                 android:id="@+id/priority_low_button"
                 style="@style/BrReportButton"
-                android:text="@string/br.priority.low"/>
+                android:text="@string/br.priority.low" />
 
             <com.mooduplabs.debuggit.MontserratTextView
                 android:id="@+id/priority_medium_button"
                 style="@style/BrReportButton"
-                android:text="@string/br.priority.medium"/>
+                android:text="@string/br.priority.medium" />
 
             <com.mooduplabs.debuggit.MontserratTextView
                 android:id="@+id/priority_high_button"
                 style="@style/BrReportButton"
-                android:text="@string/br.priority.high"/>
+                android:text="@string/br.priority.high" />
         </LinearLayout>
 
         <LinearLayout
@@ -58,12 +57,12 @@
             android:weightSum="7">
 
             <com.mooduplabs.debuggit.MontserratEditText
-                style="@style/BrBaseEditText"
                 android:id="@+id/bug_title"
+                style="@style/BrBaseEditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="6"
-                android:hint="@string/br.bug.description.hint"/>
+                android:hint="@string/br.bug.description.hint" />
 
             <ImageView
                 android:id="@+id/record_button"
@@ -71,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
-                android:src="@drawable/button_micro"/>
+                android:src="@drawable/button_micro" />
         </LinearLayout>
 
         <HorizontalScrollView
@@ -85,7 +84,7 @@
                 android:id="@+id/bug_items_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"/>
+                android:orientation="horizontal" />
         </HorizontalScrollView>
     </LinearLayout>
 </ScrollView>

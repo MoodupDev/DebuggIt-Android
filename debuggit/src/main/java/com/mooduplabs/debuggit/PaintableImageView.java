@@ -11,18 +11,18 @@ import android.graphics.Point;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.widget.ImageView;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 import java.util.ArrayList;
 
-public class PaintableImageView extends ImageView {
-
+public class PaintableImageView extends AppCompatImageView {
     protected static final int TYPE_FREE_DRAW = 0;
     protected static final int TYPE_RECTANGLE_DRAW = 1;
 
     private static final float TOUCH_TOLERANCE = 4;
-    private static final int GROUP_HORIZONTAL = 2;
 
+    private static final int GROUP_HORIZONTAL = 2;
     private static final int GROUP_VERTICAL = 1;
 
     private Point[] points;
@@ -42,15 +42,29 @@ public class PaintableImageView extends ImageView {
     private Paint paint;
     private float x, y;
 
+    public PaintableImageView(Context context) {
+        super(context);
+        init(context);
+    }
+
+    public PaintableImageView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(context);
+    }
+
+    public PaintableImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(context);
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if(isEnabled()) {
+        if (isEnabled()) {
             float x = event.getX();
             float y = event.getY();
 
-            if(type == TYPE_FREE_DRAW) {
-                switch(event.getAction()) {
+            if (type == TYPE_FREE_DRAW) {
+                switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         freeDrawTouchStart(x, y);
                         invalidate();
@@ -64,8 +78,8 @@ public class PaintableImageView extends ImageView {
                         invalidate();
                         break;
                 }
-            } else if(type == TYPE_RECTANGLE_DRAW) {
-                switch(event.getAction()) {
+            } else if (type == TYPE_RECTANGLE_DRAW) {
+                switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         rectanglesDrawTouchStart(x, y);
                         invalidate();
@@ -97,7 +111,7 @@ public class PaintableImageView extends ImageView {
         canvas.drawBitmap(bitmap, 0, 0, bitmapPaint);
         canvas.drawPath(path, paint);
 
-        if(points[3] == null)
+        if (points[3] == null)
             return;
 
         int left, top, right, bottom;
@@ -114,32 +128,18 @@ public class PaintableImageView extends ImageView {
         }
 
         canvas.drawRect(
-                left + corners.get(0).getCornerImageWidth() / 2,
-                top + corners.get(0).getCornerImageWidth() / 2,
-                right + corners.get(2).getCornerImageWidth() / 2,
-                bottom + corners.get(2).getCornerImageWidth() / 2, paint);
+                left + (float) corners.get(0).getCornerImageWidth() / 2,
+                top + (float) corners.get(0).getCornerImageWidth() / 2,
+                right + (float) corners.get(2).getCornerImageWidth() / 2,
+                bottom + (float) corners.get(2).getCornerImageWidth() / 2,
+                paint
+        );
 
-        for(int i = 0; i < corners.size(); i++) {
+        for (int i = 0; i < corners.size(); i++) {
             Corner corner = corners.get(i);
             canvas.drawBitmap(corner.getBitmap(), corner.getX(), corner.getY(),
                     paint);
         }
-
-    }
-
-    public PaintableImageView(Context context) {
-        super(context);
-        init(context);
-    }
-
-    public PaintableImageView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init(context);
-    }
-
-    public PaintableImageView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init(context);
     }
 
     private void init(Context context) {
@@ -158,17 +158,17 @@ public class PaintableImageView extends ImageView {
         points = new Point[4];
     }
 
+    protected int getType() {
+        return type;
+    }
+
     protected void setType(int type) {
         drawActiveRectangle();
         this.type = type;
     }
 
-    protected int getType() {
-        return type;
-    }
-
     protected void drawActiveRectangle() {
-        if(isRectangleActive()) {
+        if (isRectangleActive()) {
             drawRectangle();
             clearRectangle();
             lastDrawings.add(TYPE_RECTANGLE_DRAW);
@@ -186,7 +186,8 @@ public class PaintableImageView extends ImageView {
     private void freeDrawTouchMove(float x, float y) {
         float dx = Math.abs(x - this.x);
         float dy = Math.abs(y - this.y);
-        if(dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
+
+        if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
             path.quadTo(this.x, this.y, (x + this.x) / 2, (y + this.y) / 2);
             this.x = x;
             this.y = y;
@@ -214,8 +215,9 @@ public class PaintableImageView extends ImageView {
     protected void previousDrawing() {
         drawActiveRectangle();
         clear();
-        if(pathHistory.size() > 0 || rectanglesHistory.size() > 0) {
-            switch(lastDrawings.get(lastDrawings.size() - 1)) {
+
+        if (pathHistory.size() > 0 || rectanglesHistory.size() > 0) {
+            switch (lastDrawings.get(lastDrawings.size() - 1)) {
                 case TYPE_FREE_DRAW:
                     pathHistory.remove(pathHistory.size() - 1);
                     break;
@@ -237,7 +239,7 @@ public class PaintableImageView extends ImageView {
     }
 
     private void redrawRectangles() {
-        for(RectF rectangle : rectanglesHistory) {
+        for (RectF rectangle : rectanglesHistory) {
             canvas.drawRect(
                     rectangle.left,
                     rectangle.top,
@@ -249,13 +251,13 @@ public class PaintableImageView extends ImageView {
     }
 
     private void redrawPaths() {
-        for(Path pathToDraw : pathHistory) {
+        for (Path pathToDraw : pathHistory) {
             canvas.drawPath(pathToDraw, paint);
         }
     }
 
     private void rectanglesDrawTouchMove(float x, float y) {
-        if(cornerId > -1 && cornerId < corners.size()) {
+        if (cornerId > -1 && cornerId < corners.size()) {
             int cornerImageSize = corners.get(0).getCornerImageWidth();
 
             x = x > bitmap.getWidth() - cornerImageSize ? bitmap.getWidth() - cornerImageSize : x;
@@ -266,12 +268,12 @@ public class PaintableImageView extends ImageView {
             corners.get(cornerId).setX((int) x);
             corners.get(cornerId).setY((int) y);
 
-            if(groupId == GROUP_VERTICAL) {
+            if (groupId == GROUP_VERTICAL) {
                 corners.get(1).setX(corners.get(0).getX());
                 corners.get(1).setY(corners.get(2).getY());
                 corners.get(3).setX(corners.get(2).getX());
                 corners.get(3).setY(corners.get(0).getY());
-            } else if(groupId == GROUP_HORIZONTAL) {
+            } else if (groupId == GROUP_HORIZONTAL) {
                 corners.get(0).setX(corners.get(1).getX());
                 corners.get(0).setY(corners.get(3).getY());
                 corners.get(2).setX(corners.get(3).getX());
@@ -281,24 +283,24 @@ public class PaintableImageView extends ImageView {
     }
 
     private void rectanglesDrawTouchStart(float x, float y) {
-        if(points[0] == null) {
+        if (points[0] == null) {
             initPoints(x, y);
             initCorners();
         } else {
             cornerId = -1;
             groupId = -1;
-            for(Corner corner : corners) {
+            for (Corner corner : corners) {
                 // check if inside the bounds of the corner
-                if(isNearCorner(x, y, corner)) {
+                if (isNearCorner(x, y, corner)) {
 
                     cornerId = corner.getID();
-                    if(cornerId == 1 || cornerId == 3) {
+                    if (cornerId == 1 || cornerId == 3) {
                         groupId = GROUP_HORIZONTAL;
                     } else {
                         groupId = GROUP_VERTICAL;
                     }
                     break;
-                } else if(!isNearCorners(x, y)) {
+                } else if (!isNearCorners(x, y)) {
                     drawRectangle();
                     clearRectangle();
                     lastDrawings.add(TYPE_RECTANGLE_DRAW);
@@ -329,8 +331,8 @@ public class PaintableImageView extends ImageView {
 
     private boolean isNearCorners(float x, float y) {
         boolean near = false;
-        for(Corner corner : corners) {
-            if(isNearCorner(x, y, corner)) {
+        for (Corner corner : corners) {
+            if (isNearCorner(x, y, corner)) {
                 near = true;
                 break;
             }
@@ -339,7 +341,7 @@ public class PaintableImageView extends ImageView {
     }
 
     private void drawRectangle() {
-        if(points != null && points[0] != null) {
+        if (points != null && points[0] != null) {
             int left, top, right, bottom;
             left = points[0].x;
             top = points[0].y;
@@ -353,10 +355,10 @@ public class PaintableImageView extends ImageView {
             }
 
             RectF rectangle = new RectF(
-                    left + corners.get(0).getCornerImageWidth() / 2,
-                    top + corners.get(0).getCornerImageWidth() / 2,
-                    right + corners.get(2).getCornerImageWidth() / 2,
-                    bottom + corners.get(2).getCornerImageWidth() / 2
+                    left + (float) corners.get(0).getCornerImageWidth() / 2,
+                    top + (float) corners.get(0).getCornerImageWidth() / 2,
+                    right + (float) corners.get(2).getCornerImageWidth() / 2,
+                    bottom + (float) corners.get(2).getCornerImageWidth() / 2
             );
 
             rectanglesHistory.add(rectangle);
@@ -372,7 +374,7 @@ public class PaintableImageView extends ImageView {
     }
 
     private void initCorners() {
-        for(Point point : points) {
+        for (Point point : points) {
             corners.add(new Corner(getContext(), R.drawable.corner, point));
         }
     }
@@ -401,10 +403,9 @@ public class PaintableImageView extends ImageView {
     static class Corner {
 
         static int count;
-
+        int id;
         private Bitmap bitmap;
         private Point point;
-        int id;
 
         public Corner(Context context, int resourceId, Point point) {
             this.bitmap = BitmapFactory.decodeResource(context.getResources(), resourceId);
@@ -428,21 +429,20 @@ public class PaintableImageView extends ImageView {
             return point.x;
         }
 
-        protected int getY() {
-            return point.y;
-        }
-
-        protected int getID() {
-            return id;
-        }
-
         protected void setX(int x) {
             point.x = x;
+        }
+
+        protected int getY() {
+            return point.y;
         }
 
         protected void setY(int y) {
             point.y = y;
         }
-    }
 
+        protected int getID() {
+            return id;
+        }
+    }
 }

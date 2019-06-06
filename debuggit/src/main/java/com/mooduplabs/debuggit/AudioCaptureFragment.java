@@ -2,15 +2,16 @@ package com.mooduplabs.debuggit;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,12 +33,6 @@ public class AudioCaptureFragment extends DialogFragment {
     private LoadingDialog dialog;
     private ImageView recordDot;
 
-    public interface AudioRecordListener {
-        void onRecordUploaded(String audioUrl);
-
-        void onFailed(boolean canceled);
-    }
-
     public static AudioCaptureFragment newInstance(AudioRecordListener listener) {
         AudioCaptureFragment fragment = new AudioCaptureFragment();
         fragment.setListener(listener);
@@ -51,10 +46,10 @@ public class AudioCaptureFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_br_report_audio_capture, container, false);
         initRecording();
         setCancelable(false);
-        timer = (MontserratTextView) view.findViewById(R.id.timer_text);
-        recordDot = (ImageView) view.findViewById(R.id.record_dot);
+        timer = view.findViewById(R.id.timer_text);
+        recordDot = view.findViewById(R.id.record_dot);
 
-        ImageView recordButton = (ImageView) view.findViewById(R.id.record_btn);
+        ImageView recordButton = view.findViewById(R.id.record_btn);
 
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +71,7 @@ public class AudioCaptureFragment extends DialogFragment {
 
     @Override
     public void onDestroyView() {
-        if(countDownTimer != null) {
+        if (countDownTimer != null) {
             countDownTimer = null;
         }
         super.onDestroyView();
@@ -109,7 +104,7 @@ public class AudioCaptureFragment extends DialogFragment {
 
             @Override
             public void onFinish() {
-                if(getActivity() != null && !isRemoving()) {
+                if (getActivity() != null && !isRemoving()) {
                     dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
                     audioCaptureHelper.stopRecording();
 
@@ -121,13 +116,13 @@ public class AudioCaptureFragment extends DialogFragment {
                             new JsonResponseCallback() {
                                 @Override
                                 public void onSuccess(JSONObject response) {
-                                    if(isAdded()) {
+                                    if (isAdded()) {
                                         try {
                                             String url = response.getString("url");
                                             DebuggIt.getInstance().getReport().getAudioUrls().add(url);
                                             listener.onRecordUploaded(url);
                                             ApiClient.postEvent(getContext(), ApiClient.EventType.AUDIO_ADDED);
-                                        } catch(JSONException e) {
+                                        } catch (JSONException e) {
                                             // ignored
                                         }
                                         dialog.dismiss();
@@ -141,7 +136,7 @@ public class AudioCaptureFragment extends DialogFragment {
                                 }
 
                                 private void onUploadFailed() {
-                                    if(isAdded()) {
+                                    if (isAdded()) {
                                         dialog.dismiss();
                                         dismiss();
                                         listener.onFailed(false);
@@ -173,6 +168,12 @@ public class AudioCaptureFragment extends DialogFragment {
 
     public void setListener(AudioRecordListener listener) {
         this.listener = listener;
+    }
+
+    public interface AudioRecordListener {
+        void onRecordUploaded(String audioUrl);
+
+        void onFailed(boolean canceled);
     }
 }
 

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="@dimen/br.confirmation.dialog.width.landscape"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/br.big.margin"
-                android:background="@drawable/main_background"
-                android:orientation="vertical">
+    android:layout_width="@dimen/br.confirmation.dialog.width.landscape"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="@dimen/br.big.margin"
+    android:background="@drawable/main_background"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/top_bar"
@@ -23,10 +23,10 @@
             android:id="@+id/draw_confirm"
             style="@style/BrBarTextButton"
             android:layout_alignParentRight="true"
-            android:background="@drawable/button_send"
-            android:textColor="@android:color/white"
             android:layout_marginRight="@dimen/br.report.button.margin.horizontal"
-            android:text="@string/br.button.next" />
+            android:background="@drawable/button_send"
+            android:text="@string/br.button.next"
+            android:textColor="@android:color/white" />
     </RelativeLayout>
 
     <View

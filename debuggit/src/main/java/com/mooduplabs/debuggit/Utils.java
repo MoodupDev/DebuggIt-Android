@@ -7,10 +7,11 @@ import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Build;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.View;
+
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,7 +29,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utils {
-
     protected static final String MEDIA_FILE_FORMAT = ".mpeg";
     private static final String API_VERSION_FORMAT = "%s (API %d)";
     private static final String APPLICATION_VERSION_FORMAT = "%s (%d)";
@@ -347,5 +347,4 @@ public class Utils {
         calendar.setTimeInMillis(milliSeconds);
         return formatter.format(calendar.getTime());
     }
-
 }

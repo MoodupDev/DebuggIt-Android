@@ -1,7 +1,6 @@
 package com.mooduplabs.debuggit;
 
 interface Constants {
-
     String PRIORITY_LOW = "Low";
     String PRIORITY_MEDIUM = "Medium";
     String PRIORITY_HIGH = "High";

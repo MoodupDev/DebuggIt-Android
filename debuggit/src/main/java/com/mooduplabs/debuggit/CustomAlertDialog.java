@@ -2,15 +2,14 @@ package com.mooduplabs.debuggit;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import androidx.fragment.app.DialogFragment;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 
-public class CustomAlertDialog extends DialogFragment {
-    //region Consts
+import androidx.fragment.app.DialogFragment;
 
+public class CustomAlertDialog extends DialogFragment {
     protected static final String TAG = CustomAlertDialog.class.getSimpleName();
     protected static final int TYPE_FAILURE = 0;
     protected static final int TYPE_SUCCESS = 1;
@@ -18,31 +17,8 @@ public class CustomAlertDialog extends DialogFragment {
     private static final String CONTAINS_LINKS = "contains_links";
     private static final String TYPE = "type";
 
-    //endregion
-
-    //region Fields
-
     private View.OnClickListener onOkClickListener;
     private View.OnClickListener onRetryClickListener;
-
-    //endregion
-
-    //region Override Methods
-
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        CustomDialog dialog = new CustomDialog(getActivity(), R.style.BrCustomDialog);
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_br_alert, null);
-        dialog.setContentView(v);
-
-        initViews(v);
-
-        return dialog;
-    }
-
-    //endregion
-
-    //region Methods
 
     protected static CustomAlertDialog newInstance(int type) {
         CustomAlertDialog dialog = new CustomAlertDialog();
@@ -84,6 +60,17 @@ public class CustomAlertDialog extends DialogFragment {
         return dialog;
     }
 
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        CustomDialog dialog = new CustomDialog(getActivity(), R.style.BrCustomDialog);
+        View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_br_alert, null);
+        dialog.setContentView(v);
+
+        initViews(v);
+
+        return dialog;
+    }
+
     protected void setOnOkClickListener(View.OnClickListener onOkClickListener) {
         this.onOkClickListener = onOkClickListener;
     }
@@ -95,10 +82,10 @@ public class CustomAlertDialog extends DialogFragment {
     private void initViews(View view) {
         final int type = getArguments().getInt(TYPE, TYPE_SUCCESS);
 
-        ImageView icon = (ImageView) view.findViewById(R.id.alert_dialog_icon);
-        MontserratTextView message = (MontserratTextView) view.findViewById(R.id.alert_dialog_message);
-        MontserratTextView okButton = (MontserratTextView) view.findViewById(R.id.alert_dialog_ok_button);
-        MontserratTextView retryButton = (MontserratTextView) view.findViewById(R.id.alert_dialog_retry_button);
+        ImageView icon = view.findViewById(R.id.alert_dialog_icon);
+        MontserratTextView message = view.findViewById(R.id.alert_dialog_message);
+        MontserratTextView okButton = view.findViewById(R.id.alert_dialog_ok_button);
+        MontserratTextView retryButton = view.findViewById(R.id.alert_dialog_retry_button);
 
         final boolean isTypeSuccess = type == TYPE_SUCCESS;
 
@@ -143,7 +130,4 @@ public class CustomAlertDialog extends DialogFragment {
             Linkify.addLinks(message, Linkify.WEB_URLS);
         }
     }
-    //endregion
-
-
 }

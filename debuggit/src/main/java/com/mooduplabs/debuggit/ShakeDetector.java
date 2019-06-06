@@ -10,14 +10,7 @@ import android.hardware.SensorManager;
 import java.lang.ref.WeakReference;
 
 public class ShakeDetector implements SensorEventListener {
-
-    //region Consts
-
     private static final int SHAKE_THRESHOLD = 3000;
-
-    //endregion
-
-    //region Fields
 
     private static ShakeDetector instance;
 
@@ -29,22 +22,17 @@ public class ShakeDetector implements SensorEventListener {
     private float lastY;
     private float lastZ;
 
-    //endregion
-
-    //region Methods
-
-
     protected static ShakeDetector getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new ShakeDetector();
         }
         return instance;
     }
 
     protected void register(Activity activity, ShakeListener listener) {
-        if(this.activity != null && getActivity() != activity) {
+        if (this.activity != null && getActivity() != activity) {
             unregister();
-        } else if(activity == null) {
+        } else if (activity == null) {
             return;
         }
         SensorManager sensorManager = getSensorManager(activity);
@@ -81,7 +69,7 @@ public class ShakeDetector implements SensorEventListener {
 
             float speed = Math.abs(x + y + z - lastX - lastY - lastZ) / diffTime * 10000;
 
-            if(speed > SHAKE_THRESHOLD) {
+            if (speed > SHAKE_THRESHOLD) {
                 listener.shakeDetected();
             }
             lastX = x;
@@ -95,10 +83,7 @@ public class ShakeDetector implements SensorEventListener {
 
     }
 
-    //endregion
-
     interface ShakeListener {
         void shakeDetected();
     }
-
 }

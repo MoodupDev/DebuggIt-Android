@@ -2,24 +2,24 @@ package com.mooduplabs.debuggit;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import java.net.HttpURLConnection;
 
 public class ReportFragment extends DialogFragment implements ViewPager.OnPageChangeListener {
-
     protected static final String TAG = ReportFragment.class.getSimpleName();
     protected static final int MAX_RETRIES_COUNT = 3;
 
@@ -51,7 +51,6 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
         getDialog().getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.br_confirmation_dialog_width), WindowManager.LayoutParams.WRAP_CONTENT);
     }
 
-
     private View initViews(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.fragment_br_reporter, container, false);
         initViewPager(view);
@@ -60,8 +59,8 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     }
 
     private void initButtons(View view) {
-        MontserratTextView send = (MontserratTextView) view.findViewById(R.id.report_confirm);
-        MontserratTextView cancel = (MontserratTextView) view.findViewById(R.id.report_cancel);
+        MontserratTextView send = view.findViewById(R.id.report_confirm);
+        MontserratTextView cancel = view.findViewById(R.id.report_cancel);
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,8 +179,8 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     }
 
     private void initViewPager(View view) {
-        viewPagerIndicator = (ImageView) view.findViewById(R.id.view_pager_indicator);
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.report_view_pager);
+        viewPagerIndicator = view.findViewById(R.id.view_pager_indicator);
+        ViewPager viewPager = view.findViewById(R.id.report_view_pager);
         viewPager.addOnPageChangeListener(this);
         ReportViewPagerAdapter adapter = new ReportViewPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
@@ -189,7 +188,7 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
 
     private void resetReportButtonImage() {
         View rootView = getActivity().findViewById(android.R.id.content);
-        ImageView reportButton = (ImageView) rootView.findViewById(R.id.report_button);
+        ImageView reportButton = rootView.findViewById(R.id.report_button);
         reportButton.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.logo_bug_small, null));
     }
 

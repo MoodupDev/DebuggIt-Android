@@ -6,7 +6,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 public class CustomDialog extends Dialog {
-
     public CustomDialog(Context context, int theme) {
         super(context, theme);
         setCanceledOnTouchOutside(true);
@@ -17,5 +16,4 @@ public class CustomDialog extends Dialog {
         super.onCreate(savedInstanceState);
         this.getWindow().setBackgroundDrawable(new ColorDrawable(0));
     }
-
 }

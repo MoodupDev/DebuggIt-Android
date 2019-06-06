@@ -6,10 +6,6 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -17,27 +13,30 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.fragment.app.DialogFragment;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.net.ssl.HttpsURLConnection;
 
 public class WebLoginFragment extends DialogFragment {
-    //region Consts
-
     public static final String TAG = WebLoginFragment.class.getSimpleName();
-
-    //endregion
-
-    //region Fields
 
     private WebView webView;
     private ProgressBar webViewProgressBar;
     private boolean keepProgressBarVisible = false;
 
-    //endregion
+    public WebLoginFragment() {
+        // Required empty public constructor
+    }
 
-    //region Override Methods
+    protected static WebLoginFragment newInstance() {
+        return new WebLoginFragment();
+    }
 
     @NonNull
     @Override
@@ -52,16 +51,8 @@ public class WebLoginFragment extends DialogFragment {
         return dialog;
     }
 
-    //endregion
-
-    //region Methods
-
-    public WebLoginFragment() {
-        // Required empty public constructor
-    }
-
     private void initWebViewProgressBar(View view) {
-        webViewProgressBar = (ProgressBar) view.findViewById(R.id.webview_progress_bar);
+        webViewProgressBar = view.findViewById(R.id.webview_progress_bar);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             Drawable wrapDrawable = DrawableCompat.wrap(webViewProgressBar.getIndeterminateDrawable());
@@ -73,7 +64,7 @@ public class WebLoginFragment extends DialogFragment {
     }
 
     private void initWebView(View view) {
-        webView = (WebView) view.findViewById(R.id.webview);
+        webView = view.findViewById(R.id.webview);
 
         webView.getSettings().setJavaScriptEnabled(true);
 
@@ -179,12 +170,4 @@ public class WebLoginFragment extends DialogFragment {
         DebuggIt.getInstance().saveTokens(response);
         ConfirmationDialog.newInstance(getString(R.string.br_login_successful), false).show(getChildFragmentManager(), ConfirmationDialog.TAG);
     }
-
-    protected static WebLoginFragment newInstance() {
-        return new WebLoginFragment();
-    }
-
-    //endregion
-
-
 }

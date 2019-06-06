@@ -30,7 +30,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager.LayoutParams;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,13 +49,11 @@ import static android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND;
  * Utility class to take screenshots of activity screen
  */
 public final class ScreenshotMaker {
-    //region Constants
-
     private static final String TAG = "ScreenshotMaker";
 
-    //endregion
-
-    //region Public API
+    // No instances
+    private ScreenshotMaker() {
+    }
 
     /**
      * Takes screenshot of provided activity and saves it to provided file.
@@ -89,6 +92,7 @@ public final class ScreenshotMaker {
         Log.d(TAG, "Screenshot captured to " + toFile.getAbsolutePath());
     }
 
+
     /**
      * Takes screenshot of provided activity and puts it into bitmap.
      *
@@ -111,10 +115,6 @@ public final class ScreenshotMaker {
             throw new UnableToTakeScreenshotException(message, e);
         }
     }
-
-    //endregion
-
-    //region Methods
 
     private static Bitmap takeBitmapUnchecked(Activity activity) throws InterruptedException {
         final List<ViewRootData> viewRoots = getRootViews(activity);
@@ -341,6 +341,7 @@ public final class ScreenshotMaker {
         return field.get(target);
     }
 
+
     private static Field findField(String name, Class clazz) throws NoSuchFieldException {
         Class currentClass = clazz;
         while (currentClass != Object.class) {
@@ -356,17 +357,6 @@ public final class ScreenshotMaker {
         throw new NoSuchFieldException("Field " + name + " not found for class " + clazz);
     }
 
-    //endregion
-
-    //region Constructors
-
-    // No instances
-    private ScreenshotMaker() {
-    }
-
-    //endregion
-
-    //region Nested classes
 
     /**
      * Custom exception thrown if there is some exception thrown during
@@ -421,6 +411,4 @@ public final class ScreenshotMaker {
             return view.getContext();
         }
     }
-
-    //endregion
 }

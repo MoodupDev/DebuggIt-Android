@@ -6,7 +6,6 @@ import org.json.JSONObject;
 import java.net.MalformedURLException;
 
 class JiraApiService implements ApiService {
-
     private String host;
     private String projectKey;
     private String username;
@@ -39,7 +38,7 @@ class JiraApiService implements ApiService {
     public void login(String email, String password, JsonResponseCallback callback) {
         try {
             HttpClient.get(getUrlWithCorrectProtocol(String.format(Constants.Jira.CONFIGURATION_URL, host))).authUser(email, password).send(callback);
-        } catch(MalformedURLException e) {
+        } catch (MalformedURLException e) {
             callback.onException(e);
         }
     }
@@ -56,9 +55,9 @@ class JiraApiService implements ApiService {
                     .authUser(username, password)
                     .withData(getIssueObject(title, content, priority, kind))
                     .send(callback);
-        } catch(MalformedURLException e) {
+        } catch (MalformedURLException e) {
             callback.onException(e);
-        } catch(JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
@@ -69,7 +68,7 @@ class JiraApiService implements ApiService {
     }
 
     private String getUrlWithCorrectProtocol(String url) {
-        if(!usesHttps) {
+        if (!usesHttps) {
             url = url.replaceFirst("s", "");
         }
         return url;

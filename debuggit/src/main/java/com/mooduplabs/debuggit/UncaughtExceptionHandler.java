@@ -5,32 +5,37 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
-import androidx.annotation.NonNull;
 import android.text.format.Formatter;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import java.util.Map;
 import java.util.Set;
 
 public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
-    //region Consts
-
-    //endregion
-
-    //region Fields
-
     private static UncaughtExceptionHandler instance;
     private Thread.UncaughtExceptionHandler defaultHandler;
     private Context context;
 
-    //endregion
+    private UncaughtExceptionHandler() {
+        defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
+    }
 
-    //region Override Methods
+    public static UncaughtExceptionHandler with(Context context) {
+        if (instance == null) {
+            instance = new UncaughtExceptionHandler();
+        }
+        if (instance.context == null) {
+            instance.context = context;
+        }
+        return instance;
+    }
 
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
         ApiClient.postEvent(context, ApiClient.EventType.APP_CRASHED);
-        if(BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.d("Stack trace", getStackTrace(ex));
             Log.d("Other threads", getStackTraceFromEveryThread());
             ActivityManager.MemoryInfo mi = getMemoryInfo();
@@ -41,28 +46,10 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
         defaultHandler.uncaughtException(thread, ex);
     }
 
-    //endregion
-
-    //region Methods
-
-    public static UncaughtExceptionHandler with(Context context) {
-        if(instance == null) {
-            instance = new UncaughtExceptionHandler();
-        }
-        if(instance.context == null) {
-            instance.context = context;
-        }
-        return instance;
-    }
-
-    private UncaughtExceptionHandler() {
-        defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
-    }
-
     @NonNull
     private String getStackTrace(StackTraceElement[] stack, String indent) {
         StringBuilder builder = new StringBuilder();
-        for(StackTraceElement stackTraceElement : stack) {
+        for (StackTraceElement stackTraceElement : stack) {
             builder.append(indent).append(stackTraceElement.toString()).append("\n");
         }
         return builder.toString();
@@ -81,7 +68,7 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
     private String getStackTraceFromEveryThread() {
         StringBuilder builder = new StringBuilder();
         Set<Map.Entry<Thread, StackTraceElement[]>> entries = Thread.getAllStackTraces().entrySet();
-        for(Map.Entry<Thread, StackTraceElement[]> entry : entries) {
+        for (Map.Entry<Thread, StackTraceElement[]> entry : entries) {
             builder.append(entry.getKey()).append('\n');
             builder.append(getStackTrace(entry.getValue())).append('\n');
         }
@@ -101,13 +88,9 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
 
     private long freeInternalMemory() {
         StatFs stats = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             return stats.getAvailableBlocksLong() * (stats.getBlockSizeLong());
         }
         return (stats.getAvailableBlocks() * (long) stats.getBlockSize());
     }
-
-    //endregion
-
-
 }

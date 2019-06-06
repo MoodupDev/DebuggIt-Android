@@ -2,18 +2,13 @@ package com.mooduplabs.debuggit;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import androidx.fragment.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import androidx.fragment.app.DialogFragment;
+
 public class WelcomeDialog extends DialogFragment implements View.OnClickListener {
-    //region Consts
-
     public static final String TAG = WelcomeDialog.class.getSimpleName();
-
-    //endregion
-
-    //region Override Methods
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -23,7 +18,7 @@ public class WelcomeDialog extends DialogFragment implements View.OnClickListene
 
         setCancelable(false);
 
-        MontserratTextView letsGoButton = (MontserratTextView) v.findViewById(R.id.welcome_lets_go_button);
+        MontserratTextView letsGoButton = v.findViewById(R.id.welcome_lets_go_button);
         letsGoButton.setOnClickListener(this);
 
         return dialog;
@@ -39,7 +34,4 @@ public class WelcomeDialog extends DialogFragment implements View.OnClickListene
         Utils.putBoolean(getActivity(), Constants.Keys.HAS_WELCOME_SCREEN, true);
         super.dismiss();
     }
-
-    //endregion
-
 }
