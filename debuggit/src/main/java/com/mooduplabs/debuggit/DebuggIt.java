@@ -35,18 +35,14 @@ public class DebuggIt {
     private int activityOrientation;
     private boolean waitingForShake = false;
     private boolean initialized = false;
-    private boolean versionChecked = false;
-    private boolean versionSupported = false;
     private boolean shouldPostInitializedEvent = true;
     private boolean recordingEnabled = false;
-    private boolean waitingForCheckVersionResponse = false;
 
     private ConfigType configType;
 
     private ApiService apiService;
 
     private Report report;
-    private LoadingDialog checkVersionLoadingDialog;
 
     private DebuggIt() {
         // one instance
@@ -66,6 +62,10 @@ public class DebuggIt {
 
     public void setRecordingEnabled(boolean enabled) {
         recordingEnabled = enabled;
+    }
+
+    public void setBaseUrl(String baseUrl) {
+        ApiClient.setBaseUrl(baseUrl);
     }
 
     public void initBitbucket(String repoSlug, String accountName) {
@@ -101,49 +101,12 @@ public class DebuggIt {
             shouldPostInitializedEvent = false;
         }
 
-        checkVersion();
-
         this.activity = new WeakReference<>(activity);
         this.activityOrientation = activity.getRequestedOrientation();
         addReportButton();
         registerShakeDetector(activity);
         Thread.setDefaultUncaughtExceptionHandler(UncaughtExceptionHandler.with(activity.getApplicationContext()));
         showWelcomeScreen();
-    }
-
-    private void checkVersion() {
-        if (!versionChecked) {
-            waitingForCheckVersionResponse = true;
-            ApiClient.checkVersion(new StringResponseCallback() {
-                @Override
-                public void onSuccess(String response) {
-                    versionChecked = versionSupported = true;
-                    onCheckVersionResult();
-                }
-
-                @Override
-                public void onFailure(int responseCode, String errorMessage) {
-                    versionChecked = true;
-                    versionSupported = false;
-                    onCheckVersionResult();
-                }
-
-                @Override
-                public void onException(Exception exception) {
-                    versionChecked = versionSupported = false;
-                    onCheckVersionResult();
-                }
-            });
-        }
-    }
-
-    private void onCheckVersionResult() {
-        waitingForCheckVersionResponse = false;
-
-        if (checkVersionLoadingDialog != null) {
-            checkVersionLoadingDialog.dismiss();
-            checkIfVersionUnsupportedOrNotChecked();
-        }
     }
 
     private void showWelcomeScreen() {
@@ -368,6 +331,7 @@ public class DebuggIt {
                         && !isFragmentShown(WelcomeDialog.TAG);
             }
         });
+
         if (hasAccessToken()) {
             waitingForShake = true;
         }
@@ -397,22 +361,8 @@ public class DebuggIt {
         });
     }
 
-    private boolean checkIfVersionUnsupportedOrNotChecked() {
-        if (versionChecked && !versionSupported) {
-            showUnsupportedVersionPopup();
-            waitingForShake = true;
-            return true;
-        } else if (!versionChecked) {
-            showCantCheckVersionPopup();
-            waitingForShake = true;
-            return true;
-        } else return false;
-    }
-
     private void startDrawFragment() {
         try {
-            if (checkIfVersionUnsupportedOrNotChecked()) return;
-
             if (!isFragmentShown(DrawFragment.TAG)) {
                 Utils.lockScreenRotation(getActivity(), Utils.isOrientationLandscape(getActivity()) ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 getReportButton().setVisibility(View.GONE);
@@ -466,7 +416,6 @@ public class DebuggIt {
 
     private boolean hasAccessToken() {
         switch (DebuggIt.getInstance().getConfigType()) {
-
             case BITBUCKET:
                 return !Utils.getString(getActivity(), Constants.BitBucket.ACCESS_TOKEN, "").isEmpty();
             case JIRA:
@@ -475,31 +424,8 @@ public class DebuggIt {
             case GITHUB:
                 return !Utils.getString(getActivity(), Constants.GitHub.GITHUB_ACCESS_TOKEN, "").isEmpty();
         }
+
         return false;
-    }
-
-    private void showUnsupportedVersionPopup() {
-        ConfirmationDialog.newInstance(getActivity().getString(R.string.br_unsupported_version), true, true)
-                .show(((FragmentActivity) getActivity()).getSupportFragmentManager(), ConfirmationDialog.TAG);
-        ApiClient.postEvent(getActivity(), ApiClient.EventType.HAS_UNSUPPORTED_VERSION);
-    }
-
-    private void showCantCheckVersionPopup() {
-        final CustomAlertDialog cantCheckVersionDialog = CustomAlertDialog.newInstance(getActivity().getString(R.string.br_cant_check_version), true);
-        cantCheckVersionDialog.setOnRetryClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cantCheckVersionDialog.dismiss();
-                checkVersionLoadingDialog = LoadingDialog.newInstance(getActivity().getString(R.string.br_loading_dialog_message_version));
-                checkVersionLoadingDialog.show(((FragmentActivity) getActivity()).getSupportFragmentManager(), LoadingDialog.TAG);
-
-                if (!waitingForCheckVersionResponse) {
-                    checkVersion();
-                }
-            }
-        });
-
-        cantCheckVersionDialog.show(((FragmentActivity) getActivity()).getSupportFragmentManager(), CustomAlertDialog.TAG);
     }
 
     enum ConfigType {
