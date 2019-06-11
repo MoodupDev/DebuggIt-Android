@@ -17,13 +17,11 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField 'String', 'API_BASE_URL', '"https://debuggit-api.herokuapp.com"'
         }
 
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField 'String', 'API_BASE_URL', '"https://debuggit-api-staging.herokuapp.com"'
         }
     }
 
