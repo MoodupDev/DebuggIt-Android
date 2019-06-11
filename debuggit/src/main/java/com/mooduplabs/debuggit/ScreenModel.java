@@ -1,6 +1,6 @@
 package com.mooduplabs.debuggit;
 
-public class ScreenModel {
+class ScreenModel {
     private String title;
     private String url;
 

@@ -6,8 +6,7 @@ import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatTextView;
 
-public class MontserratTextView extends AppCompatTextView {
-
+class MontserratTextView extends AppCompatTextView {
     private static final String REGULAR_FONT = "Montserrat-Regular.ttf";
     private static final String BOLD_FONT = "Montserrat-Bold.ttf";
 
@@ -25,7 +24,6 @@ public class MontserratTextView extends AppCompatTextView {
         setCustomFont(context, defStyleAttr);
     }
 
-
     private void setCustomFont(Context context, int defStyleAttr) {
         String style = "fonts/";
 
@@ -41,5 +39,4 @@ public class MontserratTextView extends AppCompatTextView {
             this.setTypeface(tf);
         }
     }
-
 }

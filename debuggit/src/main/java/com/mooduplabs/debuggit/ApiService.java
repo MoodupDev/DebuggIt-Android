@@ -1,6 +1,6 @@
 package com.mooduplabs.debuggit;
 
-public interface ApiService {
+interface ApiService {
     void login(String email, String password, JsonResponseCallback callback);
 
     void exchangeAuthCodeForToken(String code, JsonResponseCallback callback);

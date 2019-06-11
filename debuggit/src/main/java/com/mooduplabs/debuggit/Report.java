@@ -5,7 +5,7 @@ import android.app.Activity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Report {
+class Report {
     private static final String STEPS_TO_REPRODUCE_TITLE = "%1$sSteps to reproduce%1$s: ";
     private static final String ACTUAL_BEHAVIOUR_TITLE = "%1$sActual behaviour%1$s: ";
     private static final String EXPECTED_BEHAVIOUR_TITLE = "%1$sExpected behaviour%1$s: ";

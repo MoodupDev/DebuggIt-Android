@@ -15,7 +15,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.DialogFragment;
 
-
 public class LoadingDialog extends DialogFragment {
     protected static final String TAG = LoadingDialog.class.getSimpleName();
 

@@ -8,7 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 
-public class GitHubApiService implements ApiService {
+class GitHubApiService implements ApiService {
     private static final String TOKEN_FORMAT = "token %s";
     private static final String AUTH_NOTE_FORMAT = "debugg.it library at %s";
 

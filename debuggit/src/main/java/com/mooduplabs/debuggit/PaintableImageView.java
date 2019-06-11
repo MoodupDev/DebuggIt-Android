@@ -16,7 +16,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 import java.util.ArrayList;
 
-public class PaintableImageView extends AppCompatImageView {
+class PaintableImageView extends AppCompatImageView {
     protected static final int TYPE_FREE_DRAW = 0;
     protected static final int TYPE_RECTANGLE_DRAW = 1;
 

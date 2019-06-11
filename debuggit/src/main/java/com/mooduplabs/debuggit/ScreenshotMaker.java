@@ -48,7 +48,7 @@ import static android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND;
 /**
  * Utility class to take screenshots of activity screen
  */
-public final class ScreenshotMaker {
+final class ScreenshotMaker {
     private static final String TAG = "ScreenshotMaker";
 
     // No instances
