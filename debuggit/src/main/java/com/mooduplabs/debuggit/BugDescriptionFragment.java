@@ -314,7 +314,6 @@ public class BugDescriptionFragment extends Fragment {
                 parent.removeView(itemScreenParent);
                 parent.invalidate();
                 DebuggIt.getInstance().getReport().getScreens().remove(screenUrl);
-                ApiClient.postEvent(getContext(), ApiClient.EventType.SCREENSHOT_REMOVED);
             }
         });
 
@@ -333,7 +332,6 @@ public class BugDescriptionFragment extends Fragment {
 
                 if (v.isSelected()) {
                     playFromUrl(v, audioUrl);
-                    ApiClient.postEvent(getContext(), ApiClient.EventType.AUDIO_PLAYED);
                 } else {
                     stopPlaying();
                 }
@@ -346,7 +344,6 @@ public class BugDescriptionFragment extends Fragment {
                 parent.removeView(itemAudioParent);
                 parent.invalidate();
                 DebuggIt.getInstance().getReport().getAudioUrls().remove(audioUrl);
-                ApiClient.postEvent(getContext(), ApiClient.EventType.AUDIO_REMOVED);
             }
         });
 

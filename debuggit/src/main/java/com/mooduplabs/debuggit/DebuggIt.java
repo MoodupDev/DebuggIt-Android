@@ -35,7 +35,6 @@ public class DebuggIt {
     private int activityOrientation;
     private boolean waitingForShake = false;
     private boolean initialized = false;
-    private boolean shouldPostInitializedEvent = true;
     private boolean recordingEnabled = false;
 
     private ConfigType configType;
@@ -95,11 +94,6 @@ public class DebuggIt {
 
     public void attach(final Activity activity) {
         checkIfInitialized("attach");
-
-        if (shouldPostInitializedEvent) {
-            ApiClient.postEvent(activity, ApiClient.EventType.INITIALIZED);
-            shouldPostInitializedEvent = false;
-        }
 
         this.activity = new WeakReference<>(activity);
         this.activityOrientation = activity.getRequestedOrientation();

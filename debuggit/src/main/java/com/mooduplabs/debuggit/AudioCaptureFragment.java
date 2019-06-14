@@ -108,8 +108,6 @@ public class AudioCaptureFragment extends DialogFragment {
                     dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
                     audioCaptureHelper.stopRecording();
 
-                    ApiClient.postEvent(getContext(), ApiClient.EventType.AUDIO_RECORD_TIME, recordingTime);
-
                     ApiClient.uploadAudio(
                             Base64.encodeToString(Utils.getBytesFromFile(audioCaptureHelper.getFilePath()), Base64.NO_WRAP),
                             getContext().getPackageName(),
@@ -121,7 +119,6 @@ public class AudioCaptureFragment extends DialogFragment {
                                             String url = response.getString("url");
                                             DebuggIt.getInstance().getReport().getAudioUrls().add(url);
                                             listener.onRecordUploaded(url);
-                                            ApiClient.postEvent(getContext(), ApiClient.EventType.AUDIO_ADDED);
                                         } catch (JSONException e) {
                                             // ignored
                                         }

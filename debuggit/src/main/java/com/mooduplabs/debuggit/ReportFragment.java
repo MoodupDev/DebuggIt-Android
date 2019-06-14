@@ -83,7 +83,6 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
             public void onClick(View v) {
                 DebuggIt.getInstance().getReport().clear();
                 resetReportButtonImage();
-                ApiClient.postEvent(getContext(), ApiClient.EventType.REPORT_CANCELED);
                 dismiss();
             }
         });
@@ -100,7 +99,6 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                     @Override
                     public void onSuccess(String response) {
                         dialog.dismiss();
-                        postEventsAfterSendingReport(report);
                         report.clear();
                         resetReportButtonImage();
                         retriesCount = 0;
@@ -136,21 +134,6 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                                 .show(getChildFragmentManager(), ConfirmationDialog.TAG);
                     }
                 });
-    }
-
-    private void postEventsAfterSendingReport(Report report) {
-        if (!report.getActualBehaviour().isEmpty()) {
-            ApiClient.postEvent(getContext(), ApiClient.EventType.ACTUAL_BEHAVIOUR_FILLED);
-        }
-        if (!report.getStepsToReproduce().isEmpty()) {
-            ApiClient.postEvent(getContext(), ApiClient.EventType.STEPS_TO_REPRODUCE_FILLED);
-        }
-        if (!report.getExpectedBehaviour().isEmpty()) {
-            ApiClient.postEvent(getContext(), ApiClient.EventType.EXPECTED_BEHAVIOUR_FILLED);
-        }
-        ApiClient.postEvent(getContext(), ApiClient.EventType.SCREENSHOT_AMOUNT, report.getScreens().size());
-        ApiClient.postEvent(getContext(), ApiClient.EventType.AUDIO_AMOUNT, report.getAudioUrls().size());
-        ApiClient.postEvent(getContext(), ApiClient.EventType.REPORT_SENT);
     }
 
     private void showReloginMessage() {

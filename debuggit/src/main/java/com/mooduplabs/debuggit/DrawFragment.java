@@ -194,7 +194,6 @@ public class DrawFragment extends DialogFragment {
             String url = response.getString("url");
             DebuggIt.getInstance().getReport().getScreens().add(new ScreenModel(Utils.getActiveFragmentName(getActivity()), url));
             new ReportFragment().show(getActivity().getSupportFragmentManager(), ReportFragment.TAG);
-            postEventsAfterAddingScreenshot();
             savedResponse = null;
             uploadedImagePending = false;
             dismiss();
@@ -252,13 +251,5 @@ public class DrawFragment extends DialogFragment {
                 uploadCancelled = false;
             }
         });
-    }
-
-    private void postEventsAfterAddingScreenshot() {
-        ApiClient.postEvent(getContext(), ApiClient.EventType.SCREENSHOT_ADDED);
-        ApiClient.postEvent(getContext(),
-                DrawFragment.this.drawingSurface.getType() == PaintableImageView.TYPE_FREE_DRAW ?
-                        ApiClient.EventType.SCREENSHOT_ADDED_DRAW :
-                        ApiClient.EventType.SCREENSHOT_ADDED_RECTANGLE);
     }
 }
