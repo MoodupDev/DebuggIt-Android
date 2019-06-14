@@ -36,24 +36,4 @@ class ApiClient {
             callback.onException(e);
         }
     }
-
-    protected enum EventType {
-        INITIALIZED,
-        SCREENSHOT_ADDED,
-        SCREENSHOT_ADDED_RECTANGLE,
-        SCREENSHOT_ADDED_DRAW,
-        SCREENSHOT_REMOVED,
-        SCREENSHOT_AMOUNT,
-        AUDIO_ADDED,
-        AUDIO_RECORD_TIME,
-        AUDIO_PLAYED,
-        AUDIO_REMOVED,
-        AUDIO_AMOUNT,
-        REPORT_SENT,
-        REPORT_CANCELED,
-        ACTUAL_BEHAVIOUR_FILLED,
-        STEPS_TO_REPRODUCE_FILLED,
-        EXPECTED_BEHAVIOUR_FILLED,
-        APP_CRASHED
-    }
 }
