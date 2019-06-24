@@ -11,6 +11,7 @@ public class DebuggItDemoApp extends Application {
         super.onCreate();
         DebuggIt.getInstance().setRecordingEnabled(true);
         DebuggIt.getInstance().setBaseUrl("https://debuggit-api-staging.herokuapp.com");
+        DebuggIt.getInstance().initS3("bucketName", " accessKey", "secretKey", "region");
         DebuggIt.getInstance().initBitbucket("bugreporter", "moodup");
     }
 }

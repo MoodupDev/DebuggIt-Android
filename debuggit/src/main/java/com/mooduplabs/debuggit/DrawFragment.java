@@ -14,7 +14,9 @@ import androidx.fragment.app.DialogFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 public class DrawFragment extends DialogFragment {
     public static final String SCREENSHOT = "screenshot";
@@ -212,44 +214,60 @@ public class DrawFragment extends DialogFragment {
 
                     byte[] bitmapData = bos.toByteArray();
 
-                    ApiClient.uploadImage(
-                            Base64.encodeToString(bitmapData, Base64.NO_WRAP),
-                            getContext().getPackageName(),
-                            new JsonResponseCallback() {
-                                @Override
-                                public void onSuccess(JSONObject response) {
-                                    if (!uploadCancelled) {
-                                        if (!savedInstanceStateDone) {
-                                            onImageUploaded(response);
-                                        } else {
-                                            savedResponse = response;
-                                            uploadedImagePending = true;
-                                        }
-                                    }
-                                    uploadCancelled = false;
-                                }
+                    if (AWSClient.isAWSConfigured()) {
+                        InputStream imageInputStream = new ByteArrayInputStream(bitmapData);
 
-                                @Override
-                                public void onFailure(int responseCode, String errorMessage) {
-                                    if (!uploadCancelled) {
-                                        dialog.dismiss();
-                                        ConfirmationDialog.newInstance(getString(R.string.br_screenshot_upload_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                                    }
-                                    uploadCancelled = false;
-                                }
-
-                                @Override
-                                public void onException(Exception ex) {
-                                    if (!uploadCancelled) {
-                                        dialog.dismiss();
-                                        ConfirmationDialog.newInstance(getString(R.string.br_screenshot_upload_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
-                                    }
-                                    uploadCancelled = false;
-                                }
-                            });
+                        AWSClient.uploadImage(
+                                imageInputStream,
+                                onUploadImageResult
+                        );
+                    } else {
+                        ApiClient.uploadImage(
+                                Base64.encodeToString(bitmapData, Base64.NO_WRAP),
+                                getContext().getPackageName(),
+                                onUploadImageResult
+                        );
+                    }
                 }
+
                 uploadCancelled = false;
             }
         });
     }
+
+    private JsonResponseCallback onUploadImageResult = new JsonResponseCallback() {
+        @Override
+        public void onSuccess(JSONObject response) {
+            if (!uploadCancelled) {
+                if (!savedInstanceStateDone) {
+                    onImageUploaded(response);
+                } else {
+                    savedResponse = response;
+                    uploadedImagePending = true;
+                }
+            }
+
+            uploadCancelled = false;
+        }
+
+        @Override
+        public void onFailure(int responseCode, String errorMessage) {
+            if (!uploadCancelled) {
+                dialog.dismiss();
+                ConfirmationDialog.newInstance(getString(R.string.br_screenshot_upload_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+            }
+
+            uploadCancelled = false;
+        }
+
+        @Override
+        public void onException(Exception ex) {
+            if (!uploadCancelled) {
+                dialog.dismiss();
+                ConfirmationDialog.newInstance(getString(R.string.br_screenshot_upload_error), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+            }
+
+            uploadCancelled = false;
+        }
+    };
 }

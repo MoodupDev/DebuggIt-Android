@@ -86,6 +86,10 @@ public class DebuggIt {
         init(ConfigType.GITHUB);
     }
 
+    public void initS3(String bucketName, String accessKey, String secretKey, String region) {
+        AWSClient.configureAWS(bucketName, accessKey, secretKey, region);
+    }
+
     private void init(ConfigType configType) {
         this.configType = configType;
         this.report = new Report();
