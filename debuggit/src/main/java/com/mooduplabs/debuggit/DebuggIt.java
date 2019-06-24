@@ -63,8 +63,12 @@ public class DebuggIt {
         recordingEnabled = enabled;
     }
 
-    public void setBaseUrl(String baseUrl) {
-        ApiClient.setBaseUrl(baseUrl);
+    public void initApi(String baseUrl, String uploadImageEndpoint, String uploadAudioEndpoint) {
+        ApiClient.initApi(baseUrl, uploadImageEndpoint, uploadAudioEndpoint);
+    }
+
+    public void initCustomApi(ApiInterface customApiInterface) {
+        ApiClient.initCustomApi(customApiInterface);
     }
 
     public void initBitbucket(String repoSlug, String accountName) {
