@@ -214,7 +214,7 @@ public class DrawFragment extends DialogFragment {
 
                     byte[] bitmapData = bos.toByteArray();
 
-                    if (AWSClient.isAWSConfigured()) {
+                    if (AWSClient.isAWSClientConfigured()) {
                         InputStream imageInputStream = new ByteArrayInputStream(bitmapData);
 
                         AWSClient.uploadImage(

@@ -32,7 +32,7 @@ class AWSClient {
 
     private static String bucketName;
     private static AmazonS3Client s3Client;
-    private static Boolean awsConfigured = false;
+    private static Boolean awsClientConfigured = false;
 
     protected static void configureAWS(String bucketName, String accessKey, String secretKey, String region) {
         AWSClient.bucketName = bucketName;
@@ -42,7 +42,7 @@ class AWSClient {
                 Region.getRegion(region)
         );
 
-        AWSClient.awsConfigured = true;
+        AWSClient.awsClientConfigured = true;
     }
 
     protected static void configureAWS(String bucketName, String accessKey, String secretKey, Region region) {
@@ -53,11 +53,11 @@ class AWSClient {
                 region
         );
 
-        AWSClient.awsConfigured = true;
+        AWSClient.awsClientConfigured = true;
     }
 
-    protected static Boolean isAWSConfigured() {
-        return AWSClient.awsConfigured;
+    protected static Boolean isAWSClientConfigured() {
+        return AWSClient.awsClientConfigured;
     }
 
     protected static void uploadImage(InputStream imageStream, JsonResponseCallback callback) {

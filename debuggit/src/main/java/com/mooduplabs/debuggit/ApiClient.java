@@ -7,10 +7,22 @@ import java.util.HashMap;
 class ApiClient {
     private static String uploadImageUrl;
     private static String uploadAudioUrl;
+    private static Boolean apiClientConfigured = false;
 
     protected static void setBaseUrl(String baseUrl) {
         ApiClient.uploadImageUrl = baseUrl + "/api/v1/upload/image";
         ApiClient.uploadAudioUrl = baseUrl + "/api/v1/upload/audio";
+    }
+
+    protected static void setBaseUrl(String baseUrl, String uploadImageEndpoint, String uploadAudioEndpoint) {
+        ApiClient.uploadImageUrl = baseUrl + uploadImageEndpoint;
+        ApiClient.uploadAudioUrl = baseUrl + uploadAudioEndpoint;
+
+        ApiClient.apiClientConfigured = true;
+    }
+
+    protected static Boolean isApiClientConfigured() {
+        return ApiClient.apiClientConfigured;
     }
 
     protected static void uploadImage(String imageData, String appId, JsonResponseCallback callback) {

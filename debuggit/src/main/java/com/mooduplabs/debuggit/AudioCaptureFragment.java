@@ -110,7 +110,7 @@ public class AudioCaptureFragment extends DialogFragment {
                     dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
                     audioCaptureHelper.stopRecording();
 
-                    if (AWSClient.isAWSConfigured()) {
+                    if (AWSClient.isAWSClientConfigured()) {
                         InputStream audioInputStream = new ByteArrayInputStream(Utils.getBytesFromFile(audioCaptureHelper.getFilePath()));
 
                         AWSClient.uploadAudio(
