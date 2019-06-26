@@ -6,6 +6,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -59,45 +60,74 @@ public class DebuggIt {
         return recordingEnabled;
     }
 
-    public void setRecordingEnabled(boolean enabled) {
+    public DebuggIt setRecordingEnabled(boolean enabled) {
         recordingEnabled = enabled;
+        return this;
     }
 
-    public void initApi(String baseUrl, String uploadImageEndpoint, String uploadAudioEndpoint) {
+    public DebuggIt configureDefaultApi(String baseUrl, String uploadImageEndpoint, String uploadAudioEndpoint) {
         ApiClient.initApi(baseUrl, uploadImageEndpoint, uploadAudioEndpoint);
+        return this;
     }
 
-    public void initCustomApi(ApiInterface customApiInterface) {
+    public DebuggIt configureCustomApi(ApiInterface customApiInterface) {
         ApiClient.initCustomApi(customApiInterface);
+        return this;
     }
 
-    public void initBitbucket(String repoSlug, String accountName) {
+    public DebuggIt configureBitbucket(String repoSlug, String accountName) {
         this.apiService = new BitBucketApiService(repoSlug, accountName);
-        init(ConfigType.BITBUCKET);
+        this.configType = ConfigType.BITBUCKET;
+        return this;
     }
 
-    public void initJira(String host, String projectKey, boolean usesHttps) {
+    public DebuggIt configureJira(String host, String projectKey, boolean usesHttps) {
         this.apiService = new JiraApiService(host, projectKey, usesHttps);
-        init(ConfigType.JIRA);
+        this.configType = ConfigType.JIRA;
+        return this;
     }
 
-    public void initJira(String host, String projectKey) {
-        initJira(host, projectKey, true);
+    public DebuggIt configureJira(String host, String projectKey) {
+        return configureJira(host, projectKey, true);
     }
 
-    public void initGitHub(String repoSlug, String accountName) {
+    public DebuggIt configureGitHub(String repoSlug, String accountName) {
         this.apiService = new GitHubApiService(accountName, repoSlug);
-        init(ConfigType.GITHUB);
+        this.configType = ConfigType.GITHUB;
+        return this;
     }
 
-    public void initS3(String bucketName, String accessKey, String secretKey, String region) {
+    public DebuggIt configureS3Bucket(String bucketName, String accessKey, String secretKey, String region) {
         AWSClient.configureAWS(bucketName, accessKey, secretKey, region);
+        return this;
     }
 
-    private void init(ConfigType configType) {
-        this.configType = configType;
-        this.report = new Report();
-        this.initialized = true;
+    public void init() {
+        if (checkIfCanInitialize()) {
+            this.report = new Report();
+            this.initialized = true;
+        }
+    }
+
+    private boolean checkIfCanInitialize() {
+        if (this.apiService != null) {
+            if (AWSClient.isAWSClientConfigured() && !ApiClient.isDefaultApiClientConfigured() && !ApiClient.isCustomApiClientConfigured()) {
+                return true;
+            } else if (!AWSClient.isAWSClientConfigured() && ApiClient.isDefaultApiClientConfigured() && !ApiClient.isCustomApiClientConfigured()) {
+                return true;
+            } else if (!AWSClient.isAWSClientConfigured() && !ApiClient.isDefaultApiClientConfigured() && ApiClient.isCustomApiClientConfigured()) {
+                return true;
+            }
+
+            Log.e(DebuggIt.class.getSimpleName(), "Initialization error. API / AWS client not configured or more than one client is configured.");
+            Log.e(DebuggIt.class.getSimpleName(), "Default API Client: " + (ApiClient.isDefaultApiClientConfigured() ? "configured" : "not configured"));
+            Log.e(DebuggIt.class.getSimpleName(), "Custom API Client: " + (ApiClient.isCustomApiClientConfigured() ? "configured" : "not configured"));
+            Log.e(DebuggIt.class.getSimpleName(), "AWS Client: " + (AWSClient.isAWSClientConfigured() ? "configured" : "not configured"));
+        } else {
+            Log.e(DebuggIt.class.getSimpleName(), "Initialization error. BitBucket / JIRA / GitHub not configured.");
+        }
+
+        return false;
     }
 
     public void attach(final Activity activity) {

@@ -7,7 +7,8 @@ import java.util.HashMap;
 class ApiClient {
     private static ApiInterface apiInterface;
 
-    private static Boolean apiClientConfigured = false;
+    private static Boolean defaultApiClientConfigured = false;
+    private static Boolean customApiClientConfigured = false;
 
     protected static void initApi(final String baseUrl, final String uploadImageEndpoint, final String uploadAudioEndpoint) {
         ApiClient.apiInterface = new ApiInterface() {
@@ -41,16 +42,20 @@ class ApiClient {
             }
         };
 
-        ApiClient.apiClientConfigured = true;
+        ApiClient.defaultApiClientConfigured = true;
     }
 
     protected static void initCustomApi(ApiInterface customApiInterface) {
         ApiClient.apiInterface = customApiInterface;
-        ApiClient.apiClientConfigured = true;
+        ApiClient.customApiClientConfigured = true;
     }
 
-    protected static Boolean isApiClientConfigured() {
-        return ApiClient.apiClientConfigured;
+    protected static Boolean isDefaultApiClientConfigured() {
+        return ApiClient.defaultApiClientConfigured;
+    }
+
+    protected static Boolean isCustomApiClientConfigured() {
+        return ApiClient.customApiClientConfigured;
     }
 
     protected static void uploadImage(String imageData, String appId, JsonResponseCallback callback) {
