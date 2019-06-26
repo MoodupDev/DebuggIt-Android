@@ -16,10 +16,9 @@ class ApiClient {
             private String uploadAudioUrl = baseUrl + uploadAudioEndpoint;
 
             @Override
-            public void uploadImage(String imageData, String appId, JsonResponseCallback callback) {
+            public void uploadImage(String imageData, JsonResponseCallback callback) {
                 HashMap<String, String> data = new HashMap<>();
                 data.put(Constants.Keys.DATA, imageData);
-                data.put(Constants.Keys.APP_ID, appId);
 
                 try {
                     HttpClient.post(uploadImageUrl).withData(data).send(callback);
@@ -29,10 +28,9 @@ class ApiClient {
             }
 
             @Override
-            public void uploadAudio(String audioData, String appId, JsonResponseCallback callback) {
+            public void uploadAudio(String audioData, JsonResponseCallback callback) {
                 HashMap<String, String> data = new HashMap<>();
                 data.put(Constants.Keys.DATA, audioData);
-                data.put(Constants.Keys.APP_ID, appId);
 
                 try {
                     HttpClient.post(uploadAudioUrl).withData(data).send(callback);
@@ -58,11 +56,11 @@ class ApiClient {
         return ApiClient.customApiClientConfigured;
     }
 
-    protected static void uploadImage(String imageData, String appId, JsonResponseCallback callback) {
-        ApiClient.apiInterface.uploadImage(imageData, appId, callback);
+    protected static void uploadImage(String imageData, JsonResponseCallback callback) {
+        ApiClient.apiInterface.uploadImage(imageData, callback);
     }
 
-    protected static void uploadAudio(String audioData, String appId, JsonResponseCallback callback) {
-        ApiClient.apiInterface.uploadAudio(audioData, appId, callback);
+    protected static void uploadAudio(String audioData, JsonResponseCallback callback) {
+        ApiClient.apiInterface.uploadAudio(audioData, callback);
     }
 }

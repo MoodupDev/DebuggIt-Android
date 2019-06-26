@@ -224,7 +224,6 @@ public class DrawFragment extends DialogFragment {
                     } else {
                         ApiClient.uploadImage(
                                 Base64.encodeToString(bitmapData, Base64.NO_WRAP),
-                                getContext().getPackageName(),
                                 onUploadImageResult
                         );
                     }

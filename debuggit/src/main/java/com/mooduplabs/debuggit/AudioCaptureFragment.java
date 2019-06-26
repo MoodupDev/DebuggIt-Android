@@ -120,7 +120,6 @@ public class AudioCaptureFragment extends DialogFragment {
                     } else {
                         ApiClient.uploadAudio(
                                 Base64.encodeToString(Utils.getBytesFromFile(audioCaptureHelper.getFilePath()), Base64.NO_WRAP),
-                                getContext().getPackageName(),
                                 onUploadAudioResult
                         );
                     }

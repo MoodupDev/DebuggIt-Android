@@ -60,7 +60,6 @@ interface Constants {
         String JSON_FORMAT = "application/vnd.github.v3+json";
         String JSON_STANDARD_FORMAT = "application/json";
 
-        String ACCESS_TOKEN = "access_token";
         String GITHUB_ACCESS_TOKEN = "github_access_token";
         String TWO_FACTOR_AUTH_CODE = "github_2fa_code";
         String SCOPE_REPO = "repo";
@@ -73,13 +72,6 @@ interface Constants {
         String KIND = "kind";
         String GRANT_TYPE = "grant_type";
         String USERNAME = "username";
-        String EVENT_TYPE = "event_type";
-        String APP_ID = "app_id";
-        String SYSTEM_VERSION = "system_version";
-        String SYSTEM = "system";
-        String ANDROID = "android";
-        String DEVICE = "device";
-        String VALUE = "value";
         String DATA = "data";
         String PROJECT_KEY = "key";
         String PROJECT = "project";

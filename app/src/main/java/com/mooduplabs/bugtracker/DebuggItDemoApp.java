@@ -15,7 +15,7 @@ public class DebuggItDemoApp extends Application {
                 .configureDefaultApi("https://url-to-backend.com/api", "/debuggit/uploadImage", "/debuggit/uploadAudio")
 //                .configureCustomApi(new ApiInterface() {
 //                    @Override
-//                    public void uploadImage(String imageData, String appId, JsonResponseCallback callback) {
+//                    public void uploadImage(String imageData, JsonResponseCallback callback) {
 //                        JSONObject response = new JSONObject();
 //
 //                        try {
@@ -27,7 +27,7 @@ public class DebuggItDemoApp extends Application {
 //                    }
 //
 //                    @Override
-//                    public void uploadAudio(String audioData, String appId, JsonResponseCallback callback) {
+//                    public void uploadAudio(String audioData, JsonResponseCallback callback) {
 //                        JSONObject response = new JSONObject();
 //
 //                        try {
