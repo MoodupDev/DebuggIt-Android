@@ -44,7 +44,6 @@ dependencies {
 
     // AWS
     implementation "com.amazonaws:aws-android-sdk-core:$AWS_SDK_LIBRARY_VERSION"
-    implementation "com.amazonaws:aws-android-sdk-cognito:$AWS_SDK_LIBRARY_VERSION"
     implementation "com.amazonaws:aws-android-sdk-s3:$AWS_SDK_LIBRARY_VERSION"
 
     // Testing dependencies
