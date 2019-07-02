@@ -16,6 +16,8 @@ import androidx.fragment.app.FragmentTransaction;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -108,50 +110,58 @@ public class AudioCaptureFragment extends DialogFragment {
                     dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
                     audioCaptureHelper.stopRecording();
 
-                    ApiClient.postEvent(getContext(), ApiClient.EventType.AUDIO_RECORD_TIME, recordingTime);
+                    if (AWSClient.isAWSClientConfigured()) {
+                        InputStream audioInputStream = new ByteArrayInputStream(Utils.getBytesFromFile(audioCaptureHelper.getFilePath()));
 
-                    ApiClient.uploadAudio(
-                            Base64.encodeToString(Utils.getBytesFromFile(audioCaptureHelper.getFilePath()), Base64.NO_WRAP),
-                            getContext().getPackageName(),
-                            new JsonResponseCallback() {
-                                @Override
-                                public void onSuccess(JSONObject response) {
-                                    if (isAdded()) {
-                                        try {
-                                            String url = response.getString("url");
-                                            DebuggIt.getInstance().getReport().getAudioUrls().add(url);
-                                            listener.onRecordUploaded(url);
-                                            ApiClient.postEvent(getContext(), ApiClient.EventType.AUDIO_ADDED);
-                                        } catch (JSONException e) {
-                                            // ignored
-                                        }
-                                        dialog.dismiss();
-                                        dismiss();
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(int responseCode, String errorMessage) {
-                                    onUploadFailed();
-                                }
-
-                                private void onUploadFailed() {
-                                    if (isAdded()) {
-                                        dialog.dismiss();
-                                        dismiss();
-                                        listener.onFailed(false);
-                                    }
-                                }
-
-                                @Override
-                                public void onException(Exception ex) {
-                                    onUploadFailed();
-                                }
-                            });
+                        AWSClient.uploadAudio(
+                                audioInputStream,
+                                onUploadAudioResult
+                        );
+                    } else {
+                        ApiClient.uploadAudio(
+                                Base64.encodeToString(Utils.getBytesFromFile(audioCaptureHelper.getFilePath()), Base64.NO_WRAP),
+                                onUploadAudioResult
+                        );
+                    }
                 }
             }
         }.start();
     }
+
+    private JsonResponseCallback onUploadAudioResult = new JsonResponseCallback() {
+        @Override
+        public void onSuccess(JSONObject response) {
+            if (isAdded()) {
+                try {
+                    String url = response.getString("url");
+                    DebuggIt.getInstance().getReport().getAudioUrls().add(url);
+                    listener.onRecordUploaded(url);
+                } catch (JSONException e) {
+                    // ignored
+                }
+                dialog.dismiss();
+                dismiss();
+            }
+        }
+
+        @Override
+        public void onFailure(int responseCode, String errorMessage) {
+            onUploadFailed();
+        }
+
+        private void onUploadFailed() {
+            if (isAdded()) {
+                dialog.dismiss();
+                dismiss();
+                listener.onFailed(false);
+            }
+        }
+
+        @Override
+        public void onException(Exception ex) {
+            onUploadFailed();
+        }
+    };
 
     @Override
     public void onDetach() {

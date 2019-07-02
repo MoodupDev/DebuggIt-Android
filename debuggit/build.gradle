@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 12
-        versionName "0.6.2"
+        versionCode 10000
+        versionName "1.0.0"
     }
 
     publishNonDefault true
@@ -36,9 +36,15 @@ android {
 }
 
 dependencies {
+    final AWS_SDK_LIBRARY_VERSION = '2.13.6'
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'androidx.appcompat:appcompat:1.0.2'
+
+    // AWS
+    implementation "com.amazonaws:aws-android-sdk-core:$AWS_SDK_LIBRARY_VERSION"
+    implementation "com.amazonaws:aws-android-sdk-s3:$AWS_SDK_LIBRARY_VERSION"
 
     // Testing dependencies
     testImplementation 'junit:junit:4.12'

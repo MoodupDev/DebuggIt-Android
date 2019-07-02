@@ -34,7 +34,6 @@ class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
-        ApiClient.postEvent(context, ApiClient.EventType.APP_CRASHED);
         if (BuildConfig.DEBUG) {
             Log.d("Stack trace", getStackTrace(ex));
             Log.d("Other threads", getStackTraceFromEveryThread());

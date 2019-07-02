@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
@@ -289,17 +290,28 @@ class Utils {
         switch (DebuggIt.getInstance().getConfigType()) {
             case JIRA:
                 builder.append("!")
-                        .append(url)
+                        .append(encodeUrl(url))
                         .append("!");
                 break;
             case GITHUB:
             case BITBUCKET:
                 builder.append("![Alt text](")
-                        .append(url)
+                        .append(encodeUrl(url))
                         .append(")");
                 break;
         }
         return builder;
+    }
+
+    private static String encodeUrl(String url) {
+        Uri parsedUri = Uri.parse(url);
+
+        return new Uri.Builder()
+                .scheme(parsedUri.getScheme())
+                .authority(parsedUri.getAuthority())
+                .path(parsedUri.getPath())
+                .query(parsedUri.getQuery())
+                .build().toString();
     }
 
     protected static boolean isActivityRunning(Activity activity) {
