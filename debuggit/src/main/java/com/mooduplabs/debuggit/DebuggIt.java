@@ -117,11 +117,11 @@ public class DebuggIt {
 
     private boolean checkIfCanInitialize() {
         if (this.apiService != null) {
-            if (AWSClient.isAWSClientConfigured() && !ApiClient.isDefaultApiClientConfigured() && !ApiClient.isCustomApiClientConfigured()) {
-                return true;
-            } else if (!AWSClient.isAWSClientConfigured() && ApiClient.isDefaultApiClientConfigured() && !ApiClient.isCustomApiClientConfigured()) {
-                return true;
-            } else if (!AWSClient.isAWSClientConfigured() && !ApiClient.isDefaultApiClientConfigured() && ApiClient.isCustomApiClientConfigured()) {
+            if (
+                    (AWSClient.isAWSClientConfigured() && !ApiClient.isDefaultApiClientConfigured() && !ApiClient.isCustomApiClientConfigured()) ||
+                            (!AWSClient.isAWSClientConfigured() && ApiClient.isDefaultApiClientConfigured() && !ApiClient.isCustomApiClientConfigured()) ||
+                            (!AWSClient.isAWSClientConfigured() && !ApiClient.isDefaultApiClientConfigured() && ApiClient.isCustomApiClientConfigured())
+            ) {
                 return true;
             }
 
