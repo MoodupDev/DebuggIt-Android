@@ -1,5 +1,8 @@
 package com.mooduplabs.debuggit;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.util.HashMap;
@@ -16,15 +19,20 @@ class BitBucketApiService implements ApiService {
 
     @Override
     public void addIssue(String title, String content, String priority, String kind, StringResponseCallback callback) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put(Constants.Keys.TITLE, title);
-        map.put(Constants.Keys.CONTENT, content);
-        map.put(Constants.Keys.PRIORITY, priority);
-        map.put(Constants.Keys.KIND, kind);
-
         try {
-            HttpClient.post(String.format(Constants.BitBucket.ISSUES_URL, accountName, repoSlug)).withData(map).authUser(accessToken).send(callback);
-        } catch (UnsupportedEncodingException | MalformedURLException e) {
+            JSONObject data = new JSONObject();
+            data.put(Constants.Keys.TITLE, title);
+
+            JSONObject contentData = new JSONObject();
+            contentData.put(Constants.Keys.RAW, content);
+            contentData.put(Constants.Keys.MARKUP, Constants.Keys.MARKDOWN);
+
+            data.put(Constants.Keys.CONTENT, contentData);
+            data.put(Constants.Keys.PRIORITY, priority);
+            data.put(Constants.Keys.KIND, kind);
+
+            HttpClient.post(String.format(Constants.BitBucket.ISSUES_URL, accountName, repoSlug)).withData(data).authUser(accessToken).send(callback);
+        } catch (JSONException | MalformedURLException e) {
             callback.onException(e);
         }
     }
