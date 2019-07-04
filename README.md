@@ -93,7 +93,7 @@ Sync your gradle files.
 1. Create a class which extends `Application` class
 2. Add newly created application class name into your `AndroidManifest.xml` file
 3. Add permissions to `AndroidManifest.xml` file
-4. Configure and init debugg.it in Application class
+4. Configure and init debugg.it in `Application` class
 5. Attach debugg.it to `Activity` class
 
 ### Create a class which extends `Application` class ###
@@ -137,9 +137,9 @@ Add these permissions to `AndroidManifest.xml` file:
 <uses-permission android:name="android.permission.INTERNET" />
 ```
 
-### Configure and init debugg.it in Application class ###
+### Configure and init debugg.it in `Application` class ###
 
-In Application `onCreate()` method, you have to configure and init debugg.it. There are two things that needs to be configured:
+In `Application` class `onCreate()` method, you have to configure and init debugg.it. There are two things that needs to be configured:
 
 + Service where issues will be reported
 + API for uploading image files and (optionally) audio files
