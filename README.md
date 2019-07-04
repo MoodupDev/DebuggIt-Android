@@ -182,7 +182,7 @@ debugg.it requires an API where it can send image files and (optionally) audio f
             * `bucketName` is a name of your bucket (e.g. `https://url-to-backend.com`)
             * `accessKey` is your user's access key
             * `secretKey` is your user's secret key
-            * `region` is a region where your S3 bucket is hosted. It can be either a `String` or a `Region` from `com.amazonaws.regions.Region` AWS core SDK dependency.
+            * `region` is a region where your S3 bucket is hosted
 
     We recommend that you create a separate user for debugg.it via AWS Identity and Access Management (IAM) with Read and Write Access to your S3 bucket.
 ##
