@@ -39,7 +39,7 @@ dependencies {
 }
 ```
 
-##### Flavours #####
+##### Flavors #####
 
 If your project has many product flavors, you can use this syntax:
 
