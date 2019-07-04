@@ -19,7 +19,7 @@ interface Constants {
         // URLS
         String LOGIN_PAGE = "https://bitbucket.org/site/oauth2/authorize?client_id=%s&response_type=code";
         String AUTHORIZE_URL = "https://bitbucket.org/site/oauth2/access_token";
-        String ISSUES_URL = "https://api.bitbucket.org/1.0/repositories/%1$s/%2$s/issues";
+        String ISSUES_URL = "https://api.bitbucket.org/2.0/repositories/%1$s/%2$s/issues";
 
         // PRIORITIES
         String PRIORITY_MINOR = "minor";
@@ -68,6 +68,9 @@ interface Constants {
     interface Keys {
         String TITLE = "title";
         String CONTENT = "content";
+        String RAW = "raw";
+        String MARKUP = "markup";
+        String MARKDOWN = "markdown";
         String PRIORITY = "priority";
         String KIND = "kind";
         String GRANT_TYPE = "grant_type";

@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import com.amazonaws.regions.Region;
 import com.mooduplabs.debuggit.ShakeDetector.ShakeListener;
 
 import org.json.JSONException;
@@ -99,11 +98,6 @@ public class DebuggIt {
     }
 
     public DebuggIt configureS3Bucket(String bucketName, String accessKey, String secretKey, String region) {
-        AWSClient.configureAWS(bucketName, accessKey, secretKey, region);
-        return this;
-    }
-
-    public DebuggIt configureS3Bucket(String bucketName, String accessKey, String secretKey, Region region) {
         AWSClient.configureAWS(bucketName, accessKey, secretKey, region);
         return this;
     }
