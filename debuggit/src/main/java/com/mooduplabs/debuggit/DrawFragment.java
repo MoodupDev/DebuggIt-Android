@@ -194,7 +194,7 @@ public class DrawFragment extends DialogFragment {
 
         try {
             String url = response.getString("url");
-            DebuggIt.getInstance().getReport().getScreens().add(new ScreenModel(Utils.getActiveFragmentName(getActivity()), url));
+            DebuggIt.getInstance().getReport().getScreenList().add(new ScreenModel(Utils.getActiveFragmentName(getActivity()), url));
             new ReportFragment().show(getActivity().getSupportFragmentManager(), ReportFragment.TAG);
             savedResponse = null;
             uploadedImagePending = false;

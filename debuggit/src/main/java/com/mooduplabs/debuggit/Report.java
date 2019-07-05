@@ -19,11 +19,11 @@ class Report {
     private String actualBehaviour;
     private String expectedBehaviour;
     private List<String> audioUrls;
-    private List<ScreenModel> screensUrls;
+    private List<ScreenModel> screenList;
 
     protected Report() {
         this.audioUrls = new ArrayList<>();
-        this.screensUrls = new ArrayList<>();
+        this.screenList = new ArrayList<>();
     }
 
     protected String getTitle() {
@@ -78,8 +78,8 @@ class Report {
         this.expectedBehaviour = expectedBehaviour;
     }
 
-    protected List<ScreenModel> getScreens() {
-        return screensUrls;
+    protected List<ScreenModel> getScreenList() {
+        return screenList;
     }
 
     protected void clear() {
@@ -90,7 +90,7 @@ class Report {
         actualBehaviour = "";
         expectedBehaviour = "";
         audioUrls.clear();
-        screensUrls.clear();
+        screenList.clear();
     }
 
     protected String getContent(Activity activity) {
@@ -113,7 +113,7 @@ class Report {
                         ? String.format(PRIORITY_TITLE, boldMark) + getPriority() + END_LINE
                         : ""
         )
-                + Utils.getScreenModelsAsStrings(screensUrls)
+                + Utils.getScreenModelsAsStrings(screenList)
                 + Utils.getAudioUrlsAsStrings(audioUrls)
                 + Utils.getDeviceInfoString(activity);
     }
