@@ -3,8 +3,13 @@ package com.mooduplabs.debuggit;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.text.util.Linkify;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewParent;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import androidx.fragment.app.DialogFragment;
@@ -62,16 +67,60 @@ public class ConfirmationDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         CustomDialog dialog = new CustomDialog(getActivity(), R.style.BrCustomDialog);
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_br_confirmation, null);
-        dialog.setContentView(v);
+        final View contentView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_br_confirmation, null);
 
-        initViews(v);
+        dialog.setContentView(contentView);
+
+        fixDialogWidth(contentView);
+        initViews(contentView);
 
         return dialog;
     }
 
     protected void setOnOkClickListener(View.OnClickListener onOkClickListener) {
         this.onOkClickListener = onOkClickListener;
+    }
+
+    private void fixDialogWidth(final View contentView) {
+        ViewTreeObserver vto = contentView.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            int displayHeight = -1;
+            DisplayMetrics metrics = null;
+            View containerView = null;
+
+            @Override
+            public void onGlobalLayout() {
+                if (containerView == null) {
+                    ViewParent viewParent = contentView.getParent();
+                    containerView = contentView;
+
+                    while (viewParent instanceof View) {
+                        containerView = (View) viewParent;
+                        viewParent = viewParent.getParent();
+                    }
+                }
+
+                if (metrics == null) {
+                    metrics = new DisplayMetrics();
+                }
+
+                if (getActivity() != null) {
+                    Display display = getActivity().getWindowManager().getDefaultDisplay();
+
+                    display.getMetrics(metrics);
+
+                    if (displayHeight != metrics.heightPixels) {
+                        displayHeight = metrics.heightPixels;
+
+                        WindowManager.LayoutParams params = (WindowManager.LayoutParams) containerView.getLayoutParams();
+
+                        params.height = displayHeight;
+                        containerView.setLayoutParams(params);
+                        getActivity().getWindowManager().updateViewLayout(containerView, params);
+                    }
+                }
+            }
+        });
     }
 
     private void initViews(View view) {
