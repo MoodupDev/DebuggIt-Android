@@ -1,6 +1,7 @@
 package com.mooduplabs.debuggit;
 
 import android.app.Dialog;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.text.util.Linkify;
 import android.util.DisplayMetrics;
@@ -71,7 +72,7 @@ public class ConfirmationDialog extends DialogFragment {
 
         dialog.setContentView(contentView);
 
-        fixDialogWidth(contentView);
+        fixDialogDimensions(contentView);
         initViews(contentView);
 
         return dialog;
@@ -81,9 +82,10 @@ public class ConfirmationDialog extends DialogFragment {
         this.onOkClickListener = onOkClickListener;
     }
 
-    private void fixDialogWidth(final View contentView) {
+    private void fixDialogDimensions(final View contentView) {
         ViewTreeObserver vto = contentView.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            int displayWidth = -1;
             int displayHeight = -1;
             DisplayMetrics metrics = null;
             View containerView = null;
@@ -107,14 +109,29 @@ public class ConfirmationDialog extends DialogFragment {
                 if (getActivity() != null) {
                     Display display = getActivity().getWindowManager().getDefaultDisplay();
 
-                    display.getMetrics(metrics);
-
-                    if (displayHeight != metrics.heightPixels) {
-                        displayHeight = metrics.heightPixels;
+                    if (displayHeight == -1) {
+                        display.getMetrics(metrics);
 
                         WindowManager.LayoutParams params = (WindowManager.LayoutParams) containerView.getLayoutParams();
 
+                        displayHeight = metrics.heightPixels;
                         params.height = displayHeight;
+
+                        containerView.setLayoutParams(params);
+                        getActivity().getWindowManager().updateViewLayout(containerView, params);
+                    }
+
+                    if (displayWidth == -1) {
+                        int[] attrs = {android.R.attr.minWidth};
+                        TypedArray typedArray = getActivity().obtainStyledAttributes(R.style.BrCustomDialog, attrs);
+                        int minDialogWidth = (int) typedArray.getDimension(0, getResources().getDimension(R.dimen.br_confirmation_dialog_width));
+                        typedArray.recycle();
+
+                        WindowManager.LayoutParams params = (WindowManager.LayoutParams) containerView.getLayoutParams();
+
+                        displayWidth = minDialogWidth;
+                        params.width = displayWidth;
+
                         containerView.setLayoutParams(params);
                         getActivity().getWindowManager().updateViewLayout(containerView, params);
                     }
