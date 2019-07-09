@@ -72,6 +72,7 @@ public class ConfirmationDialog extends DialogFragment {
 
         dialog.setContentView(contentView);
 
+        dialog.setCanceledOnTouchOutside(false);
         fixDialogDimensions(contentView);
         initViews(contentView);
 
