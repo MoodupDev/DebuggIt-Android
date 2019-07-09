@@ -84,6 +84,7 @@ public class ConfirmationDialog extends DialogFragment {
 
     private void fixDialogDimensions(final View contentView) {
         ViewTreeObserver vto = contentView.getViewTreeObserver();
+
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             int displayWidth = -1;
             int displayHeight = -1;
