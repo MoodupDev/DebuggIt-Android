@@ -1,1 +1,1 @@
-include ':app', ':debuggit'
+include ':demo-app', ':debuggit'
