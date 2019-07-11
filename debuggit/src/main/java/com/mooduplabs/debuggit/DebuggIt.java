@@ -111,11 +111,11 @@ public class DebuggIt {
 
     private boolean checkIfCanInitialize() {
         if (this.apiService != null) {
-            if (AWSClient.isAWSClientConfigured() && !ApiClient.isDefaultApiClientConfigured() && !ApiClient.isCustomApiClientConfigured()) {
-                return true;
-            } else if (!AWSClient.isAWSClientConfigured() && ApiClient.isDefaultApiClientConfigured() && !ApiClient.isCustomApiClientConfigured()) {
-                return true;
-            } else if (!AWSClient.isAWSClientConfigured() && !ApiClient.isDefaultApiClientConfigured() && ApiClient.isCustomApiClientConfigured()) {
+            if (
+                    (AWSClient.isAWSClientConfigured() && !ApiClient.isDefaultApiClientConfigured() && !ApiClient.isCustomApiClientConfigured()) ||
+                            (!AWSClient.isAWSClientConfigured() && ApiClient.isDefaultApiClientConfigured() && !ApiClient.isCustomApiClientConfigured()) ||
+                            (!AWSClient.isAWSClientConfigured() && !ApiClient.isDefaultApiClientConfigured() && ApiClient.isCustomApiClientConfigured())
+            ) {
                 return true;
             }
 
@@ -259,7 +259,7 @@ public class DebuggIt {
             rootLayout.addView(getReportButton());
             initReportButtonOnTouchListener(rootLayout);
         }
-        if (!report.getScreens().isEmpty()) {
+        if (!report.getScreenList().isEmpty()) {
             ((ImageView) getReportButton()).setImageDrawable(ResourcesCompat.getDrawable(getActivity().getResources(), R.drawable.next_screenshoot, null));
         }
         initButtonPosition();

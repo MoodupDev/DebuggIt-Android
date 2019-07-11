@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 10000
-        versionName "1.0.0"
+        versionCode 10100
+        versionName "1.1.0"
     }
 
     publishNonDefault true
@@ -44,7 +44,6 @@ dependencies {
 
     // AWS
     implementation "com.amazonaws:aws-android-sdk-core:$AWS_SDK_LIBRARY_VERSION"
-    implementation "com.amazonaws:aws-android-sdk-cognito:$AWS_SDK_LIBRARY_VERSION"
     implementation "com.amazonaws:aws-android-sdk-s3:$AWS_SDK_LIBRARY_VERSION"
 
     // Testing dependencies

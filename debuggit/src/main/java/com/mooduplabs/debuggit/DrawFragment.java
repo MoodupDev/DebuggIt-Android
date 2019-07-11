@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -137,6 +138,7 @@ public class DrawFragment extends DialogFragment {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                confirm.setEnabled(false);
                 dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
                 drawingSurface.drawActiveRectangle();
                 uploadScreenshotAndGetUrl();
@@ -194,7 +196,7 @@ public class DrawFragment extends DialogFragment {
 
         try {
             String url = response.getString("url");
-            DebuggIt.getInstance().getReport().getScreens().add(new ScreenModel(Utils.getActiveFragmentName(getActivity()), url));
+            DebuggIt.getInstance().getReport().getScreenList().add(new ScreenModel(Utils.getActiveFragmentName(getActivity()), url));
             new ReportFragment().show(getActivity().getSupportFragmentManager(), ReportFragment.TAG);
             savedResponse = null;
             uploadedImagePending = false;
@@ -257,6 +259,7 @@ public class DrawFragment extends DialogFragment {
             }
 
             uploadCancelled = false;
+            enableConfirmButton();
         }
 
         @Override
@@ -267,6 +270,20 @@ public class DrawFragment extends DialogFragment {
             }
 
             uploadCancelled = false;
+            enableConfirmButton();
         }
     };
+
+    private void enableConfirmButton() {
+        FragmentActivity activity = getActivity();
+
+        if (activity != null) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    confirm.setEnabled(true);
+                }
+            });
+        }
+    }
 }

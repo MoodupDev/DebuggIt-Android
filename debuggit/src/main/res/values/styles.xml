@@ -10,6 +10,10 @@
         <item name="android:paddingBottom">8dp</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:textSize">@dimen/br.text.size.regular</item>
+        <item name="autoSizeMaxTextSize">@dimen/br.text.size.regular</item>
+        <item name="autoSizeMinTextSize">@dimen/br.text.size.small</item>
+        <item name="autoSizeStepGranularity">2sp</item>
+        <item name="autoSizeTextType">uniform</item>
     </style>
 
     <style name="BrScreenshotImage">
