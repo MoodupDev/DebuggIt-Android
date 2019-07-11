@@ -23,6 +23,9 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     protected static final String TAG = ReportFragment.class.getSimpleName();
     protected static final int MAX_RETRIES_COUNT = 3;
 
+    private MontserratTextView send;
+    private MontserratTextView cancel;
+
     private ImageView viewPagerIndicator;
     private LoadingDialog dialog;
     private int retriesCount = 0;
@@ -59,18 +62,36 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     }
 
     private void initButtons(View view) {
-        MontserratTextView send = view.findViewById(R.id.report_confirm);
-        MontserratTextView cancel = view.findViewById(R.id.report_cancel);
+        send = view.findViewById(R.id.report_confirm);
+        cancel = view.findViewById(R.id.report_cancel);
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                send.setEnabled(false);
                 String issueTitle = DebuggIt.getInstance().getReport().getTitle();
 
                 if (issueTitle.isEmpty()) {
-                    ConfirmationDialog.newInstance(getString(R.string.br_title_empty), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                    ConfirmationDialog dialog = ConfirmationDialog.newInstance(getString(R.string.br_title_empty), true);
+                    dialog.setOnOkClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            send.setEnabled(true);
+                        }
+                    });
+
+                    dialog.show(getChildFragmentManager(), ConfirmationDialog.TAG);
+
                 } else if (issueTitle.length() > 255) {
-                    ConfirmationDialog.newInstance(getString(R.string.br_title_too_long, issueTitle.length()), true).show(getChildFragmentManager(), ConfirmationDialog.TAG);
+                    ConfirmationDialog dialog = ConfirmationDialog.newInstance(getString(R.string.br_title_too_long, issueTitle.length()), true);
+                    dialog.setOnOkClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            send.setEnabled(true);
+                        }
+                    });
+
+                    dialog.show(getChildFragmentManager(), ConfirmationDialog.TAG);
                 } else {
                     dialog.show(getChildFragmentManager(), LoadingDialog.TAG);
                     sendIssue();
@@ -115,23 +136,51 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
                                 dialog.dismiss();
                                 retriesCount = 0;
                                 showReloginMessage();
+                                send.setEnabled(true);
                             }
                         } else if (responseCode == HttpURLConnection.HTTP_FORBIDDEN) {
                             dialog.dismiss();
-                            ConfirmationDialog.newInstance(getString(R.string.br_error_repo_access_forbidden), true)
-                                    .show(getChildFragmentManager(), ConfirmationDialog.TAG);
+
+                            ConfirmationDialog dialog = ConfirmationDialog.newInstance(getString(R.string.br_error_repo_access_forbidden), true);
+
+                            dialog.setOnOkClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    send.setEnabled(true);
+                                }
+                            });
+
+                            dialog.show(getChildFragmentManager(), ConfirmationDialog.TAG);
                         } else {
                             dialog.dismiss();
-                            ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(errorMessage, getString(R.string.br_confirmation_failure)), true)
-                                    .show(getChildFragmentManager(), ConfirmationDialog.TAG);
+
+                            ConfirmationDialog dialog = ConfirmationDialog.newInstance(Utils.getBitbucketErrorMessage(errorMessage, getString(R.string.br_confirmation_failure)), true);
+
+                            dialog.setOnOkClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    send.setEnabled(true);
+                                }
+                            });
+
+                            dialog.show(getChildFragmentManager(), ConfirmationDialog.TAG);
                         }
                     }
 
                     @Override
                     public void onException(Exception ex) {
                         dialog.dismiss();
-                        ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_FAILURE)
-                                .show(getChildFragmentManager(), ConfirmationDialog.TAG);
+
+                        ConfirmationDialog dialog = ConfirmationDialog.newInstance(ConfirmationDialog.TYPE_FAILURE);
+
+                        dialog.setOnOkClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                send.setEnabled(true);
+                            }
+                        });
+
+                        dialog.show(getChildFragmentManager(), ConfirmationDialog.TAG);
                     }
                 });
     }

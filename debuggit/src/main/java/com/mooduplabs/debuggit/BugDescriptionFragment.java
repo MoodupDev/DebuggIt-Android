@@ -218,8 +218,8 @@ public class BugDescriptionFragment extends Fragment {
         itemsContainer = view.findViewById(R.id.bug_items_container);
         Report report = DebuggIt.getInstance().getReport();
 
-        for (ScreenModel screenshot : report.getScreens()) {
-            addScreenshotMiniature(itemsContainer, screenshot.getUrl());
+        for (ScreenModel screenshot : report.getScreenList()) {
+            addScreenshotMiniature(itemsContainer, screenshot);
         }
 
         for (String audioUrl : report.getAudioUrls()) {
@@ -302,18 +302,19 @@ public class BugDescriptionFragment extends Fragment {
         }
     }
 
-    private void addScreenshotMiniature(final ViewGroup parent, final String screenUrl) {
+    private void addScreenshotMiniature(final ViewGroup parent, final ScreenModel screenshot) {
         final RelativeLayout itemScreenParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_br_screenshot, parent, false);
-        ImageView itemScreenshot = itemScreenParent.findViewById(R.id.item_screenshot_image);
-        ImageView itemScreenshotRemove = itemScreenParent.findViewById(R.id.item_screenshot_close);
 
-        new DownloadImagesTask(itemScreenshot).execute(screenUrl);
+        final ImageView itemScreenshot = itemScreenParent.findViewById(R.id.item_screenshot_image);
+        final ImageView itemScreenshotRemove = itemScreenParent.findViewById(R.id.item_screenshot_close);
+
+        new DownloadImagesTask(itemScreenshot).execute(screenshot.getUrl());
         itemScreenshotRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 parent.removeView(itemScreenParent);
                 parent.invalidate();
-                DebuggIt.getInstance().getReport().getScreens().remove(screenUrl);
+                DebuggIt.getInstance().getReport().getScreenList().remove(screenshot);
             }
         });
 
@@ -322,7 +323,8 @@ public class BugDescriptionFragment extends Fragment {
 
     private void addAudioMiniature(final ViewGroup parent, final String audioUrl) {
         final RelativeLayout itemAudioParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_br_audio, parent, false);
-        ImageButton playButton = itemAudioParent.findViewById(R.id.item_audio_button);
+
+        final ImageButton playButton = itemAudioParent.findViewById(R.id.item_audio_button);
         final ImageView itemAudioRemove = itemAudioParent.findViewById(R.id.item_audio_close);
 
         playButton.setOnClickListener(new View.OnClickListener() {

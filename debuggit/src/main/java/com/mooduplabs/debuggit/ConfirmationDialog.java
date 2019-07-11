@@ -1,10 +1,16 @@
 package com.mooduplabs.debuggit;
 
 import android.app.Dialog;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.text.util.Linkify;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewParent;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import androidx.fragment.app.DialogFragment;
@@ -62,16 +68,78 @@ public class ConfirmationDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         CustomDialog dialog = new CustomDialog(getActivity(), R.style.BrCustomDialog);
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_br_confirmation, null);
-        dialog.setContentView(v);
+        final View contentView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_br_confirmation, null);
 
-        initViews(v);
+        dialog.setContentView(contentView);
+
+        dialog.setCanceledOnTouchOutside(false);
+        fixDialogDimensions(contentView);
+        initViews(contentView);
 
         return dialog;
     }
 
     protected void setOnOkClickListener(View.OnClickListener onOkClickListener) {
         this.onOkClickListener = onOkClickListener;
+    }
+
+    private void fixDialogDimensions(final View contentView) {
+        ViewTreeObserver vto = contentView.getViewTreeObserver();
+
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            int displayWidth = -1;
+            int displayHeight = -1;
+            DisplayMetrics metrics = null;
+            View containerView = null;
+
+            @Override
+            public void onGlobalLayout() {
+                if (containerView == null) {
+                    ViewParent viewParent = contentView.getParent();
+                    containerView = contentView;
+
+                    while (viewParent instanceof View) {
+                        containerView = (View) viewParent;
+                        viewParent = viewParent.getParent();
+                    }
+                }
+
+                if (metrics == null) {
+                    metrics = new DisplayMetrics();
+                }
+
+                if (getActivity() != null) {
+                    Display display = getActivity().getWindowManager().getDefaultDisplay();
+
+                    if (displayHeight == -1) {
+                        display.getMetrics(metrics);
+
+                        WindowManager.LayoutParams params = (WindowManager.LayoutParams) containerView.getLayoutParams();
+
+                        displayHeight = metrics.heightPixels;
+                        params.height = displayHeight;
+
+                        containerView.setLayoutParams(params);
+                        getActivity().getWindowManager().updateViewLayout(containerView, params);
+                    }
+
+                    if (displayWidth == -1) {
+                        int[] attrs = {android.R.attr.minWidth};
+                        TypedArray typedArray = getActivity().obtainStyledAttributes(R.style.BrCustomDialog, attrs);
+                        int minDialogWidth = (int) typedArray.getDimension(0, getResources().getDimension(R.dimen.br_confirmation_dialog_width));
+                        typedArray.recycle();
+
+                        WindowManager.LayoutParams params = (WindowManager.LayoutParams) containerView.getLayoutParams();
+
+                        displayWidth = minDialogWidth;
+                        params.width = displayWidth;
+
+                        containerView.setLayoutParams(params);
+                        getActivity().getWindowManager().updateViewLayout(containerView, params);
+                    }
+                }
+            }
+        });
     }
 
     private void initViews(View view) {

@@ -259,7 +259,7 @@ public class DebuggIt {
             rootLayout.addView(getReportButton());
             initReportButtonOnTouchListener(rootLayout);
         }
-        if (!report.getScreens().isEmpty()) {
+        if (!report.getScreenList().isEmpty()) {
             ((ImageView) getReportButton()).setImageDrawable(ResourcesCompat.getDrawable(getActivity().getResources(), R.drawable.next_screenshoot, null));
         }
         initButtonPosition();
