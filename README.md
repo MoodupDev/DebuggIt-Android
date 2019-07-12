@@ -1,16 +1,35 @@
 # debugg.it #
 
+[https://debugg.it](https://debugg.it)
+
 ## Table of Contents ##
 
-[TOC]
++ [What is this repository for?](#what-is-this)
++ [How do I get set up?](#setup)
+    * [As module](#setup-module)
+    * [As aar & gradle dependency](#setup-aar)
++ [Configure and initialize debugg.it in your project](#configure)
+    * [Create a class which extends Application class](#configure-create-application-class)
+    * [Add newly created application class name into your AndroidManifest.xml file](#configure-manifest)
+    * [Add permissions to AndroidManifest.xml file](#configure-permissions)
+    * [Configure and init debugg.it in Application class](#configure-application-class)
+    * [Attach debugg.it to Activity class](#configure-activity-class)
++ [Additional options](#extra-options)
++ [Licence](#licence)
+
+<a name="what-is-this"/>
 
 ## What is this repository for? ##
 
 This is a library-project, which provides a tool to report your Android application bugs directly into your BitBucket Issue Tracker.
 
+<a name="setup"/>
+
 ## How do I get set up? ##
 
 You can set up debugg.it as module or as `aar` & gradle dependency.
+
+<a name="setup-module"/>
 
 ### As module ###
 
@@ -61,6 +80,8 @@ dependencies {
 }
 ```
 
+<a name="setup-aar"/>
+
 ### As `aar` & gradle dependency ###
 
 Download `debuggit.aar` file from [here](http://debugg.it/downloads/android/0.6.0/debuggit.aar).
@@ -88,6 +109,8 @@ dependencies {
 
 Sync your gradle files.
 
+<a name="configure"/>
+
 ## Configure and initialize debugg.it in your project ##
 
 1. Create a class which extends `Application` class
@@ -95,6 +118,8 @@ Sync your gradle files.
 3. Add permissions to `AndroidManifest.xml` file
 4. Configure and init debugg.it in `Application` class
 5. Attach debugg.it to `Activity` class
+
+<a name="configure-create-application-class"/>
 
 ### Create a class which extends `Application` class ###
 
@@ -109,6 +134,8 @@ public class MyApplication extends Application {
     }
 }
 ```
+
+<a name="configure-manifest"/>
 
 ### Add newly created application class name into your `AndroidManifest.xml` file ###
 
@@ -129,6 +156,8 @@ If your new class is `MyApplication.class`:
 </manifest>
 ```
 
+<a name="configure-permissions"/>
+
 ### Add permissions to `AndroidManifest.xml` file ###
 
 Add these permissions to `AndroidManifest.xml` file:
@@ -136,6 +165,8 @@ Add these permissions to `AndroidManifest.xml` file:
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
 ```
+
+<a name="configure-application-class"/>
 
 ### Configure and init debugg.it in `Application` class ###
 
@@ -217,23 +248,9 @@ After configuration is done, call at the end:
 
 `DebuggIt.getInstance().init();`
 
-### Additional options
+#### Sample configurations
 
-**debugg.it** allows to record audio notes and add it to bug description. To enable this feature simply add this line to your configuration in `Application` class:
-
-```java
-DebuggIt.getInstance().setRecordingEnabled(true);
-
-```
-
-Ensure you have added `RECORD_AUDIO` permission in `AndroidManifest.xml` file:
-```xml
-<uses-permission android:name="android.permission.RECORD_AUDIO" />
-```
-
-### Sample configurations
-
-+ Init BitBucket with S3 and audio recordings:
++ Init BitBucket with S3:
 ##
 ```java
 DebuggIt.getInstance()
@@ -278,6 +295,8 @@ DebuggIt.getInstance()
         .init();
 ```
 
+<a name="configure-activity-class"/>
+
 ### Attach debugg.it to `Activity` class ###
 
 Add these methods in your `Activity` classes (preferably just in base activity class)
@@ -308,3 +327,39 @@ public abstract class BaseActivity extends AppCompatActivity {
 ```
 
 ## That's all. Your debugg.it is ready to work. ##
+
+<a name="extra-options"/>
+
+## Additional options
+
+**debugg.it** allows to record audio notes and add it to bug description. To enable this feature simply add this line to your configuration in `Application` class:
+
+```java
+DebuggIt.getInstance().setRecordingEnabled(true);
+```
+
+Ensure you have added `RECORD_AUDIO` permission in `AndroidManifest.xml` file:
+
+```xml
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
+```
+
+<a name="licence"/>
+
+## Licence ##
+
+```
+Copyright 2019 MoodUp Team
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
