@@ -6,8 +6,8 @@
 
 + [What is this repository for?](#what-is-this)
 + [How do I get set up?](#setup)
-    * [As module](#setup-module)
-    * [As aar & gradle dependency](#setup-aar)
+    * [As a gradle dependency](#setup-gradle)
+    * [As a module](#setup-module)
 + [Configure and initialize debugg.it in your project](#configure)
     * [Create a class which extends Application class](#configure-create-application-class)
     * [Add newly created application class name into your AndroidManifest.xml file](#configure-manifest)
@@ -21,39 +21,55 @@
 
 ## What is this repository for? ##
 
-This is a library-project, which provides a tool to report your Android application bugs directly into your BitBucket Issue Tracker.
+This is a library-project, which provides a tool to report Android application bugs directly into JIRA / GitHub/ BitBucket Issue Tracker.
 
 <a name="setup"/>
 
 ## How do I get set up? ##
 
-You can set up debugg.it as module or as `aar` & gradle dependency.
+You can set up debugg.it as gradle dependency or as a module.
+
+<a name="setup-gradle"/>
+
+### As a gradle dependency ###
+
+Add these lines to your module's `build.gradle` file:
+
+```groovy
+repositories {
+    jcenter()
+}
+```
+
+```groovy
+dependencies {
+    implementation 'com.mooduplabs:debuggit:1.1.1'
+}
+```
 
 <a name="setup-module"/>
 
-### As module ###
+### As a module ###
 
 Clone this repo.
 
 Add this library into your project as module (`File -> New -> Import Module`).
 
-Add to your app-level `build.gradle` file in `dependencies` method this line:
+Add following lines to your app-level `build.gradle` file:
 
 ```groovy
 dependencies {
-    //...
     compile project(path: ':debuggit')
 }
 ```
 ##### Configurations #####
 
-**debugg.it** is delivered with 2 configurations: `debug` and `release`. 
+**debugg.it** is delivered with 2 configurations: `debug` and `release`.
 
 The `debug` configuration is not minified by ProGuard. If you want to use this configuration, add `configuration` parameter to your `compile project` method and set it to `'debug'`:
 
 ```groovy
 dependencies {
-    //...
     compile project(path: ':debuggit', configuration: 'debug')
 }
 ```
@@ -74,40 +90,10 @@ If your project has many product flavors, you can use this syntax:
     }
 
 dependencies {
-    //...
     stagingCompile project(path: ':debuggit', configuration: 'debug')
     productionCompile project(path: ':debuggit', configuration: 'release')
 }
 ```
-
-<a name="setup-aar"/>
-
-### As `aar` & gradle dependency ###
-
-Download `debuggit.aar` file from [here](http://debugg.it/downloads/android/0.6.0/debuggit.aar).
-
-Put your file in `libs` directory (`<your project path>/app/libs`). If you don't have this directory, create it.
-
-Add these lines to your `app/build.gradle` file:
-```groovy
-repositories {
-    ...
-    flatDir {
-       dirs 'libs'
-    }
-}
-
-...
-
-dependencies {
-    ...
-    compile(name:'debuggit', ext:'aar')
-
-}
-
-```
-
-Sync your gradle files.
 
 <a name="configure"/>
 

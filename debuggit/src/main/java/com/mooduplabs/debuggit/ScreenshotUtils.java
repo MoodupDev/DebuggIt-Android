@@ -1,5 +1,6 @@
 package com.mooduplabs.debuggit;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -10,6 +11,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
+import android.graphics.ImageFormat;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
@@ -73,7 +75,7 @@ class ScreenshotUtils {
             final Rect screenSize = getScreenSize(activity);
             initHandler();
 
-            final ImageReader imageReader = ImageReader.newInstance(screenSize.width(), screenSize.height(), PixelFormat.RGBA_8888, 5);
+            @SuppressLint("WrongConstant") final ImageReader imageReader = ImageReader.newInstance(screenSize.width(), screenSize.height(), PixelFormat.RGBA_8888, 5);
             if (projection != null) {
                 projection.createVirtualDisplay(
                         SCREENSHOT_VIRTUAL_DISPLAY_NAME,
