@@ -8,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 10100
-        versionName "1.1.0"
+        versionCode 10101
+        versionName "1.1.1"
     }
 
     buildTypes {
@@ -37,7 +37,7 @@ android {
 publish {
     def groupProjectID = 'com.mooduplabs'
     def artifactProjectID = 'debuggit'
-    def publishVersionID = '1.1.0'
+    def publishVersionID = '1.1.1'
 
     Properties properties = new Properties()
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
