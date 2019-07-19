@@ -196,7 +196,7 @@ debugg.it requires an API where it can send image files and (optionally) audio f
 
     * `DebuggIt.getInstance().configureS3Bucket("bucketName", "accessKey", "secretKey", "region");`
         * where
-            * `bucketName` is a name of your bucket (e.g. `https://url-to-backend.com`)
+            * `bucketName` is a name of your bucket
             * `accessKey` is your user's access key
             * `secretKey` is your user's secret key
             * `region` is a region where your S3 bucket is hosted
