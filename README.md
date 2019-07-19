@@ -1,6 +1,8 @@
-# debugg.it #
+# ![debugg.it logo](https://github.com/MoodupDev/DebuggIt-Android/master/readme-files/app_logo.png) debugg.it #
 
 [https://debugg.it](https://debugg.it)
+
+![debugg.it demo gif](https://github.com/MoodupDev/DebuggIt-Android/master/readme-files/demo.gif)
 
 ## Table of Contents ##
 
