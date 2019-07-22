@@ -396,7 +396,7 @@ public class DebuggIt {
     private void startDrawFragment() {
         try {
             if (!isFragmentShown(DrawFragment.TAG)) {
-                Utils.lockScreenRotation(getActivity(), Utils.isOrientationLandscape(getActivity()) ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                Utils.lockScreenRotation(getActivity(), getActivityOrientation());
                 getReportButton().setVisibility(View.GONE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && screenshotIntentData != null) {
                     ScreenshotUtils.setNextScreenshotCanceled(false);
