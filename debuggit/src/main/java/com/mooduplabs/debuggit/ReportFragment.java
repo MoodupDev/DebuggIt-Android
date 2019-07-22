@@ -47,11 +47,15 @@ public class ReportFragment extends DialogFragment implements ViewPager.OnPageCh
     @Override
     public void onResume() {
         super.onResume();
-        if (getDialog() == null) {
+        if (getDialog() == null || getDialog().getWindow() == null || getContext() == null) {
             return;
         }
 
-        getDialog().getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.br_confirmation_dialog_width), WindowManager.LayoutParams.WRAP_CONTENT);
+        if (Utils.isOrientationLandscape(getContext())) {
+            getDialog().getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.br_report_layout_width_landscape), WindowManager.LayoutParams.WRAP_CONTENT);
+        } else {
+            getDialog().getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.br_report_layout_width), WindowManager.LayoutParams.WRAP_CONTENT);
+        }
     }
 
     private View initViews(LayoutInflater inflater, ViewGroup container) {
