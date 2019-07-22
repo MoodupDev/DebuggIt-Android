@@ -302,7 +302,13 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     private void addScreenshotMiniature(final ViewGroup parent, final ScreenModel screenshot) {
-        final RelativeLayout itemScreenParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_br_screenshot, parent, false);
+        final RelativeLayout itemScreenParent;
+
+        if (screenshot.isLandscape()) {
+            itemScreenParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_br_screenshot_landscape, parent, false);
+        } else {
+            itemScreenParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_br_screenshot, parent, false);
+        }
 
         final ImageView itemScreenshot = itemScreenParent.findViewById(R.id.item_screenshot_image);
         final ImageView itemScreenshotRemove = itemScreenParent.findViewById(R.id.item_screenshot_close);
