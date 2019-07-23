@@ -14,6 +14,8 @@
     <dimen name="br.report.button.margin.horizontal">10dp</dimen>
     <dimen name="br.report.layout.padding">10dp</dimen>
     <dimen name="br.report.layout.padding.horizontal">15dp</dimen>
+    <dimen name="br.report.layout.width">280dp</dimen>
+    <dimen name="br.report.layout.width.landscape">540dp</dimen>
     <dimen name="br.confirmation.dialog.width">280dp</dimen>
     <dimen name="br.confirmation.dialog.width.landscape">400dp</dimen>
     <dimen name="br.report.item.height">130dp</dimen>

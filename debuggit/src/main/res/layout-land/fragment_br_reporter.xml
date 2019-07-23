@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/br.report.layout.width.landscape"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="@dimen/br.big.margin"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/main_background"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/br.top.bar.height">
+
+            <com.mooduplabs.debuggit.MontserratTextView
+                android:id="@+id/report_cancel"
+                style="@style/BrBarTextButton"
+                android:layout_width="@dimen/br.button.cancel.width"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="@dimen/br.button.margin.horizontal"
+                android:gravity="center"
+                android:text="@string/br.button.cancel" />
+
+            <ImageView
+                android:id="@+id/view_pager_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/circles" />
+
+            <com.mooduplabs.debuggit.MontserratTextView
+                android:id="@+id/report_confirm"
+                style="@style/BrBarTextButton"
+                android:layout_width="@dimen/br.button.send.width"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/br.button.margin.horizontal"
+                android:background="@drawable/button_send"
+                android:gravity="center"
+                android:text="@string/br.button.send"
+                android:textColor="@android:color/white" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/br.divider.height"
+            android:background="@color/br.app.gray" />
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/report_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+    </LinearLayout>
+</LinearLayout>

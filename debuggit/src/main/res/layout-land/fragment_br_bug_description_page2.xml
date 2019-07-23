@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/br.bar.background"
+    android:orientation="horizontal"
+    android:padding="@dimen/br.report.layout.padding.horizontal"
+    android:weightSum="2">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <com.mooduplabs.debuggit.MontserratEditText
+            android:id="@+id/expected_behaviour_text"
+            style="@style/BrReportContentEditText"
+            android:hint="@string/br.report.behaviour.expected" />
+
+        <com.mooduplabs.debuggit.MontserratEditText
+            android:id="@+id/actual_behaviour_text"
+            style="@style/BrReportContentEditText"
+            android:hint="@string/br.report.behaviour.actual" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <com.mooduplabs.debuggit.MontserratEditText
+            android:id="@+id/steps_text"
+            style="@style/BrReportContentEditText"
+            android:hint="@string/br.report.steps" />
+    </LinearLayout>
+</LinearLayout>

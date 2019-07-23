@@ -3,7 +3,6 @@ package com.mooduplabs.debuggit;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -90,7 +89,7 @@ public class BugDescriptionFragment extends Fragment {
 
     private View initViews(LayoutInflater inflater, ViewGroup container, int position) {
         View view;
-        Utils.lockScreenRotation(getActivity(), ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         switch (position) {
             case 0:
                 view = inflater.inflate(R.layout.fragment_br_bug_description_page1, container, false);
@@ -303,7 +302,13 @@ public class BugDescriptionFragment extends Fragment {
     }
 
     private void addScreenshotMiniature(final ViewGroup parent, final ScreenModel screenshot) {
-        final RelativeLayout itemScreenParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_br_screenshot, parent, false);
+        final RelativeLayout itemScreenParent;
+
+        if (screenshot.isLandscape()) {
+            itemScreenParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_br_screenshot_landscape, parent, false);
+        } else {
+            itemScreenParent = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_br_screenshot, parent, false);
+        }
 
         final ImageView itemScreenshot = itemScreenParent.findViewById(R.id.item_screenshot_image);
         final ImageView itemScreenshotRemove = itemScreenParent.findViewById(R.id.item_screenshot_close);
