@@ -1,6 +1,15 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.novoda:bintray-release:0.9.1'
+    }
+}
+
 android {
     compileSdkVersion 29
     buildToolsVersion '29.0.0'
@@ -42,6 +51,12 @@ publish {
     Properties properties = new Properties()
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
+    // If you get "Have you created the publish closure? Missing userOrg." error or similar,
+    // Add following lines to local.properties file:
+    //
+    // bintray.user=
+    // bintray.repositoryName=
+
     userOrg = properties.getProperty('bintray.user')
     repoName = properties.getProperty('bintray.repositoryName')
 
@@ -49,7 +64,6 @@ publish {
     artifactId = artifactProjectID
     publishVersion = publishVersionID
     desc = 'A tool to report Android application bugs directly into JIRA / GitHub/ BitBucket Issue Tracker.'
-
     website = 'https://github.com/MoodupDev/DebuggIt-Android'
 }
 
